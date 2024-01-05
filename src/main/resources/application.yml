@@ -1,0 +1,45 @@
+spring:
+  profiles:
+    active: dev
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${db_username}
+    password: ${db_password}
+    url: jdbc:mysql://localhost:3306/ticket_auction
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+jwt:
+  secret:
+    key: ${jwt_secret_key}
+
+cloud: # S3
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${s3_bucket_name}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
