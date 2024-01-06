@@ -1,6 +1,7 @@
 package com.sparta.ticketauction.domain.goods.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.Comment;
@@ -67,10 +68,14 @@ public class Goods {
 
 	@Comment("공연 이미지")
 	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<GoodsImage> goodsImage;
+	private List<GoodsImage> goodsImage = new ArrayList<>();
 
-	public static Goods of(GoodsRequest goodsRequest, GoodsCategory goodsCategory, List<GoodsImage> goodsImage,
-		Places places) {
+	public static Goods of(
+		GoodsRequest goodsRequest,
+		GoodsCategory goodsCategory,
+		List<GoodsImage> goodsImage,
+		Places places
+	) {
 		return new Goods(
 			goodsRequest.getName(),
 			goodsRequest.getDescription(),
@@ -80,7 +85,8 @@ public class Goods {
 			goodsRequest.getRunningTime(),
 			goodsCategory,
 			goodsImage,
-			places);
+			places
+		);
 	}
 
 	private Goods(
