@@ -9,7 +9,6 @@ import com.sparta.ticketauction.domain.sequence.request.SequenceRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +37,7 @@ public class Sequence {
 	private LocalDateTime startDateTime;
 
 	@Comment("공연 id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
 
