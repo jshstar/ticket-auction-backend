@@ -1,19 +1,21 @@
 package com.sparta.ticketauction.domain.user.response;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class UserResponse {
 
-	private Long id;
+	private final Long id;
 
-	private String email;
+	private final String email;
 
-	private String name;
+	private final String name;
 
-	private String nickname;
+	private final String nickname;
 
-	private String phoneNumber;
+	private final String phoneNumber;
 
-	private long point;
+	private final long point;
 }
