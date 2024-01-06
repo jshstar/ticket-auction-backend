@@ -27,7 +27,7 @@ public class GoodsCategory {
 	@Column(name = "name")
 	private String name;
 
-	public GoodsCategory of(GoodsRequest goodsRequest) {
+	public static GoodsCategory of(GoodsRequest goodsRequest) {
 		return new GoodsCategory(goodsRequest.getCategoryName());
 	}
 
