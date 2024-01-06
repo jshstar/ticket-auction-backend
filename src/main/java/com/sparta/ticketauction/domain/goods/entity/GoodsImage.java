@@ -36,7 +36,7 @@ public class GoodsImage {
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
 
-	public GoodsImage of(String key, String type) {
+	public static GoodsImage of(String key, String type) {
 		return new GoodsImage(key, type);
 	}
 
