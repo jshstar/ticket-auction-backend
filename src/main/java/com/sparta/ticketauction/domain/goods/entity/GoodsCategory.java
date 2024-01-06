@@ -24,7 +24,7 @@ public class GoodsCategory {
 	private Long id;
 
 	@Comment("카테고리 종류")
-	@Column(name = "name")
+	@Column(name = "name", length = 10)
 	private String name;
 
 	public static GoodsCategory of(GoodsRequest goodsRequest) {

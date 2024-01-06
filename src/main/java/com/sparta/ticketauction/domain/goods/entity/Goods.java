@@ -33,11 +33,11 @@ public class Goods {
 	private Long id;
 
 	@Comment("공연 제목")
-	@Column(name = "name")
+	@Column(name = "name", length = 30)
 	private String name;
 
 	@Comment("공연 내용")
-	@Column(name = "description")
+	@Column(name = "description", length = 150)
 	private String description;
 
 	@Comment("공연 시작일")
