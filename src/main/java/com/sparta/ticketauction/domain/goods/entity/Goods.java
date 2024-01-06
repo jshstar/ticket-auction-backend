@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.goods.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +33,20 @@ public class Goods {
 	private Long id;
 
 	@Comment("공연 제목")
-	@Column(name = "name")
+	@Column(name = "name", length = 30)
 	private String name;
 
 	@Comment("공연 내용")
-	@Column(name = "description")
+	@Column(name = "description", length = 150)
 	private String description;
 
 	@Comment("공연 시작일")
 	@Column(name = "start_date")
-	private LocalDateTime startDate;
+	private LocalDate startDate;
 
 	@Comment("공연 마감일")
 	@Column(name = "end_date")
-	private LocalDateTime endDate;
+	private LocalDate endDate;
 
 	@Comment("연령대")
 	@Column(name = "age_grade")
@@ -54,7 +54,7 @@ public class Goods {
 
 	@Comment("공연 시간")
 	@Column(name = "running_time")
-	private String runningTime;
+	private int runningTime;
 
 	@Comment("공연 카테고리")
 	@ManyToOne
@@ -92,10 +92,10 @@ public class Goods {
 	private Goods(
 		String name,
 		String description,
-		LocalDateTime startDate,
-		LocalDateTime endDate,
+		LocalDate startDate,
+		LocalDate endDate,
 		int ageGrade,
-		String runningTime,
+		int runningTime,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
 		Places places

@@ -24,11 +24,11 @@ public class GoodsImage {
 	private Long id;
 
 	@Comment("S3 URL")
-	@Column(name = "key")
+	@Column(name = "key", length = 50)
 	private String key;
 
 	@Comment("대표 이미지 or 일반 이미지")
-	@Column(name = "type")
+	@Column(name = "type", length = 10)
 	private ImageType type;
 
 	@Comment("상품 id")
