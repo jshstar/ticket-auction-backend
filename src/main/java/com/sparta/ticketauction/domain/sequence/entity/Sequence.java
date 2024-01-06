@@ -41,7 +41,7 @@ public class Sequence {
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
 
-	public Sequence of(SequenceRequest sequenceRequest, Goods goods) {
+	public static Sequence of(SequenceRequest sequenceRequest, Goods goods) {
 		return new Sequence(sequenceRequest.getSequence(), sequenceRequest.getStartDateTime(), goods);
 	}
 
