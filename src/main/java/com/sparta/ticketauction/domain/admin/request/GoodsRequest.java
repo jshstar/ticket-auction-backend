@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.admin.request;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,11 +22,11 @@ public class GoodsRequest {
 
 	@NotBlank
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private final LocalDateTime startDate;
+	private final LocalDate startDate;
 
 	@NotBlank
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private final LocalDateTime endDate;
+	private final LocalDate endDate;
 
 	@NotBlank
 	private final Integer ageGrade;
