@@ -23,23 +23,23 @@ public class User {
 	private Long id;
 
 	@Comment("회원 이메일")
-	@Column(name = "email")
+	@Column(name = "email", length = 50)
 	private String email;
 
 	@Comment("회원 비밀번호")
-	@Column(name = "password")
+	@Column(name = "password", length = 15)
 	private String password;
 
 	@Comment("회원 이름")
-	@Column(name = "name")
+	@Column(name = "name", length = 10)
 	private String name;
 
 	@Comment("회원 닉네임")
-	@Column(name = "nickname")
+	@Column(name = "nickname", length = 10)
 	private String nickname;
 
 	@Comment("회원 전화번호")
-	@Column(name = "phone_number")
+	@Column(name = "phone_number", length = 30)
 	private String phoneNumber;
 
 	@Comment("회원 역할(관리자 or 일반 유저)")

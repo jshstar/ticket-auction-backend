@@ -1,7 +1,6 @@
 package com.sparta.ticketauction.domain.user.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserPasswordUpdateRequest {
 
-	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$")
+	@Size(min = 8, max = 15, message = "최소 8자, 최대 15자로 입력해주세요.")
 	private final String password;
-
-	private final String confirmPassword;
 }
