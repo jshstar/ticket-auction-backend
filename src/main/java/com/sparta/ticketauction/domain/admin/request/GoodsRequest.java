@@ -3,21 +3,23 @@ package com.sparta.ticketauction.domain.admin.request;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class GoodsRequest {
-	private String name;
+	private final String name;
 
-	private String description;
+	private final String description;
 
-	private LocalDateTime startDate;
+	private final LocalDateTime startDate;
 
-	private LocalDateTime endDate;
+	private final LocalDateTime endDate;
 
-	private int ageGrade;
+	private final int ageGrade;
 
-	private String runningTime;
+	private final String runningTime;
 
-	private String categoryName;
+	private final String categoryName;
 
 }
