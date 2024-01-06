@@ -54,7 +54,7 @@ public class Goods {
 
 	@Comment("공연 시간")
 	@Column(name = "running_time")
-	private String runningTime;
+	private int runningTime;
 
 	@Comment("공연 카테고리")
 	@ManyToOne
@@ -95,7 +95,7 @@ public class Goods {
 		LocalDateTime startDate,
 		LocalDateTime endDate,
 		int ageGrade,
-		String runningTime,
+		int runningTime,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
 		Places places
