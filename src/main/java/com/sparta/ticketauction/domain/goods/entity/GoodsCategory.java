@@ -1,5 +1,7 @@
 package com.sparta.ticketauction.domain.goods.entity;
 
+import org.hibernate.annotations.Comment;
+
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 
 import jakarta.persistence.Column;
@@ -21,6 +23,7 @@ public class GoodsCategory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Comment("카테고리 종류")
 	@Column(name = "name")
 	private String name;
 

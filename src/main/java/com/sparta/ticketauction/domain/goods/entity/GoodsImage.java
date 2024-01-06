@@ -1,5 +1,7 @@
 package com.sparta.ticketauction.domain.goods.entity;
 
+import org.hibernate.annotations.Comment;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,12 +23,15 @@ public class GoodsImage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Comment("S3 URL")
 	@Column(name = "key")
 	private String key;
 
+	@Comment("대표 이미지 or 일반 이미지")
 	@Column(name = "type")
-	private String type;
+	private ImageType type;
 
+	@Comment("상품 id")
 	@ManyToOne
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
@@ -37,6 +42,6 @@ public class GoodsImage {
 
 	private GoodsImage(String key, String type) {
 		this.key = key;
-		this.type = type;
+		this.type = ImageType.of(type);
 	}
 }

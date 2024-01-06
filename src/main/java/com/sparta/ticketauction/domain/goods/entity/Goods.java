@@ -3,6 +3,8 @@ package com.sparta.ticketauction.domain.goods.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.Comment;
+
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.places.entity.Places;
 
@@ -29,32 +31,41 @@ public class Goods {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Comment("공연 제목")
 	@Column(name = "name")
 	private String name;
 
+	@Comment("공연 내용")
 	@Column(name = "description")
 	private String description;
 
+	@Comment("공연 시작일")
 	@Column(name = "start_date")
 	private LocalDateTime startDate;
 
+	@Comment("공연 마감일")
 	@Column(name = "end_date")
 	private LocalDateTime endDate;
 
+	@Comment("연령대")
 	@Column(name = "age_grade")
 	private AgeGrade ageGrade;
 
+	@Comment("공연 시간")
 	@Column(name = "running_time")
 	private String runningTime;
 
+	@Comment("공연 카테고리")
 	@ManyToOne
 	@JoinColumn(name = "goods_category_id")
 	private GoodsCategory goodsCategory;
 
+	@Comment("공연장")
 	@ManyToOne
 	@JoinColumn(name = "places_id")
 	private Places places;
 
+	@Comment("공연 이미지")
 	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<GoodsImage> goodsImage;
 
