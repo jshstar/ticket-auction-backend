@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.goods.request;
+package com.sparta.ticketauction.domain.admin.request;
 
 import java.time.LocalDateTime;
 

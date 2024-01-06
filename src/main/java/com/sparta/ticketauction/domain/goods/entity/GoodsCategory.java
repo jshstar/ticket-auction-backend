@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.goods.entity;
 
-import com.sparta.ticketauction.domain.goods.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

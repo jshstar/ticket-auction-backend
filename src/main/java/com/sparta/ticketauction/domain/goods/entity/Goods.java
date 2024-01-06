@@ -3,7 +3,7 @@ package com.sparta.ticketauction.domain.goods.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.sparta.ticketauction.domain.goods.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.places.entity.Places;
 
 import jakarta.persistence.CascadeType;
