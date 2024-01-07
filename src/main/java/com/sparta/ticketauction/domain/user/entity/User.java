@@ -9,6 +9,8 @@ import com.sparta.ticketauction.domain.user.entity.constant.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -50,6 +52,7 @@ public class User {
 
 	@Comment("회원 역할(관리자 or 일반 유저)")
 	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
 	@Comment("회원 보유 포인트")
