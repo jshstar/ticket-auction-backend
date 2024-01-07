@@ -1,5 +1,8 @@
 package com.sparta.ticketauction.domain.admin.request;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,4 +19,8 @@ public class PlacesRequest {
 
 	@NotBlank
 	private final Integer countSeats;
+
+	@Valid
+	@NotBlank
+	private final List<PlacesSeatInfo> seats;
 }
