@@ -19,5 +19,5 @@ public class PlaceRequest {
 
 	@Valid
 	@NotNull(message = "좌석 정보는 필수입니다.")
-	private final List<PlaceSeatInfo> seats;
+	private final List<PlaceSeatAuctionInfo> seats;
 }
