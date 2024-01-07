@@ -10,6 +10,8 @@ import com.sparta.ticketauction.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -33,9 +35,10 @@ public class GoodsSequenceSeat extends BaseEntity {
 	@Column(name = "price")
 	private Long price;
 
-	@Comment("판매 타입 - 경매, 일반")
+	@Comment("판매 타입 - NOMAL, ACTION")
 	@Column(name = "sell_type")
-	private String sellType;
+	@Enumerated(EnumType.STRING)
+	private SellType sellType;
 
 	@Comment("판매 여부")
 	@Column(name = "is_selled")
@@ -66,7 +69,7 @@ public class GoodsSequenceSeat extends BaseEntity {
 			seat,
 			sequence,
 			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			"일반",
+			SellType.NORMAL,
 			false
 		);
 	}
@@ -80,12 +83,12 @@ public class GoodsSequenceSeat extends BaseEntity {
 			seat,
 			sequence,
 			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			"경매",
+			SellType.AUCTION,
 			false
 		);
 	}
 
-	private GoodsSequenceSeat(Seat seat, Sequence sequence, Long price, String sellType, boolean isSelled) {
+	private GoodsSequenceSeat(Seat seat, Sequence sequence, Long price, SellType sellType, boolean isSelled) {
 		this.seat = seat;
 		this.sequence = sequence;
 		this.price = price;
