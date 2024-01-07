@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class SeatRequest {
-	@NotBlank(message = "필수로 해당 구역을 입력해야 합니다.")
+	@NotBlank
 	private final String zone;
 
-	@NotNull(message = "필수로 좌석번호를 입력해야 합니다.")
+	@NotNull
 	private final Integer seatNumber;
 
 }
