@@ -1,8 +1,8 @@
-package com.sparta.ticketauction.domain.places.entity;
+package com.sparta.ticketauction.domain.place.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.PlacesRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "places")
-public class Places extends BaseEntity {
+@Table(name = "place")
+public class Place extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -36,11 +36,11 @@ public class Places extends BaseEntity {
 	@Column(name = "count_seats")
 	private int countSeats;
 
-	public static Places of(PlacesRequest placesRequest, int countSeats) {
-		return new Places(placesRequest.getName(), placesRequest.getAddress(), countSeats);
+	public static Place of(PlaceRequest placeRequest, int countSeats) {
+		return new Place(placeRequest.getName(), placeRequest.getAddress(), countSeats);
 	}
 
-	private Places(String name, String address, int countSeats) {
+	private Place(String name, String address, int countSeats) {
 		this.name = name;
 		this.address = address;
 		this.countSeats = countSeats;

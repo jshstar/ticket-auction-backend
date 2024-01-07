@@ -7,13 +7,12 @@ import java.util.List;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
-import com.sparta.ticketauction.domain.places.entity.Places;
+import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -59,14 +58,14 @@ public class Goods extends BaseEntity {
 	private int runningTime;
 
 	@Comment("공연 카테고리")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "goods_category_id")
 	private GoodsCategory goodsCategory;
 
 	@Comment("공연장")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "places_id")
-	private Places places;
+	@ManyToOne
+	@JoinColumn(name = "place_id")
+	private Place place;
 
 	@Comment("공연 이미지")
 	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -76,7 +75,7 @@ public class Goods extends BaseEntity {
 		GoodsRequest goodsRequest,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
-		Places places
+		Place place
 	) {
 		return new Goods(
 			goodsRequest.getName(),
@@ -87,7 +86,7 @@ public class Goods extends BaseEntity {
 			goodsRequest.getRunningTime(),
 			goodsCategory,
 			goodsImage,
-			places
+			place
 		);
 	}
 
@@ -100,7 +99,7 @@ public class Goods extends BaseEntity {
 		int runningTime,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
-		Places places
+		Place place
 	) {
 		this.name = name;
 		this.description = description;
@@ -110,7 +109,7 @@ public class Goods extends BaseEntity {
 		this.runningTime = runningTime;
 		this.goodsCategory = goodsCategory;
 		this.goodsImage = goodsImage;
-		this.places = places;
+		this.place = place;
 	}
 
 }
