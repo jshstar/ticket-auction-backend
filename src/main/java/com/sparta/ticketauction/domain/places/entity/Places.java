@@ -36,8 +36,8 @@ public class Places extends BaseEntity {
 	@Column(name = "count_seats")
 	private int countSeats;
 
-	public static Places of(PlacesRequest placesRequest) {
-		return new Places(placesRequest.getName(), placesRequest.getAddress(), placesRequest.getCountSeats());
+	public static Places of(PlacesRequest placesRequest, int countSeats) {
+		return new Places(placesRequest.getName(), placesRequest.getAddress(), countSeats);
 	}
 
 	private Places(String name, String address, int countSeats) {

@@ -11,14 +11,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class PlacesRequest {
-	@Size(min = 1, max = 30)
+	@Size(min = 1, max = 30, message = "공연장 이름은 필수입니다.")
 	private final String name;
 
-	@Size(min = 1, max = 150)
+	@Size(min = 1, max = 150, message = "주소 입력은 필수입니다.")
 	private final String address;
-
-	@NotBlank
-	private final Integer countSeats;
 
 	@Valid
 	@NotBlank
