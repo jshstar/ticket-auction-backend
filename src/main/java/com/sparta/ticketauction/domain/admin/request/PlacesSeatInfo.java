@@ -12,5 +12,5 @@ public class PlacesSeatInfo {
 	private final String zone;
 
 	@NotBlank
-	private final int seatNumber;
+	private final Integer seatNumber;
 }
