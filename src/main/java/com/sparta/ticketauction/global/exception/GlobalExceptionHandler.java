@@ -23,7 +23,9 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<ApiResponse<EmptyObject>> apiExceptionHandler(ApiException exception) {
 		return ResponseEntity.status(exception.getHttpStatus())
-			.body(ApiResponse.of(exception.getCode(), exception.getMessage()));
+			.body(ApiResponse.of(
+				exception.getCode(), exception.getMessage())
+			);
 	}
 
 	/*
@@ -32,8 +34,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ApiResponse<EmptyObject>> runtimeExceptionHandler(RuntimeException exception) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-			.body(ApiResponse.of(ErrorCode.INTERNAL_SERVER_ERROR.getCode(),
-				ErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
+			.body(ApiResponse.of(
+				ErrorCode.INTERNAL_SERVER_ERROR.getCode(),
+				ErrorCode.INTERNAL_SERVER_ERROR.getMessage())
+			);
 	}
 
 	/*
@@ -44,7 +48,9 @@ public class GlobalExceptionHandler {
 		IllegalArgumentException exception
 	) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-			.body(ApiResponse.of(ErrorCode.INTERNAL_BAD_REQUEST.getCode(), exception.getMessage()));
+			.body(ApiResponse.of(
+				ErrorCode.INTERNAL_BAD_REQUEST.getCode(), exception.getMessage())
+			);
 	}
 
 	/*
@@ -54,8 +60,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<Object> methodArgumentNotValidHandler(MethodArgumentNotValidException exception) {
 		BindingResult bindingResult = exception.getBindingResult();
 		Map<String, String> errors = new HashMap<>();
-		bindingResult.getAllErrors().forEach(error ->
-			errors.put(((FieldError)error).getField(), error.getDefaultMessage()));
+		bindingResult.getAllErrors()
+			.forEach(
+				error -> errors.put(
+					((FieldError)error).getField(),
+					error.getDefaultMessage()
+				)
+			);
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.body(ApiResponse.of(
