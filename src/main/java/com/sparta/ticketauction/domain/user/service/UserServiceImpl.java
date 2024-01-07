@@ -1,4 +1,36 @@
 package com.sparta.ticketauction.domain.user.service;
 
-public class UserServiceImpl {
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.repository.UserRepository;
+import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.exception.ErrorCode;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
+
+	@Override
+	public void signup(UserCreateRequest request) {
+		String email = request.getEmail();
+
+		/* 이메일 중복 검사 */
+		Optional<User> findByEmail = userRepository.findByEmail(email);
+		if (findByEmail.isPresent()) {
+			throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
+		}
+
+		User user = User.of(request, passwordEncoder);
+		userRepository.save(user);
+	}
 }
