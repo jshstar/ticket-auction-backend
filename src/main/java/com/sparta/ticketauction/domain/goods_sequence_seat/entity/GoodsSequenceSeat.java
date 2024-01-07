@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,10 @@ public class GoodsSequenceSeat extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sequence_id")
 	private Sequence sequence;
+
+	@Comment("낙관적 락 버전")
+	@Version
+	private int version;
 
 	public static GoodsSequenceSeat generalOf(
 		Seat seat,
