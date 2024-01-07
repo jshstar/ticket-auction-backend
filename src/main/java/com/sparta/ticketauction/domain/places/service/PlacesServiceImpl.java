@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PlacesServiceImpl {
+public class PlacesServiceImpl implements PlacesService {
 }
