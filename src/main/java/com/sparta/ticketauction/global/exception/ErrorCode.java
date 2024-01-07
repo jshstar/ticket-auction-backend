@@ -10,7 +10,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
 	/* USER */
-
+	EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10000", "중복된 이메일 입니다."),
 
 
 
