@@ -38,21 +38,21 @@ public class Auction extends BaseEntity {
 	private long bidPrice;
 	@Comment("시작일")
 	@Column(name = "start_date", nullable = false)
-	private LocalDateTime startDate;
+	private LocalDateTime startDateTime;
 
 	@Comment("마감일")
 	@Column(name = "end_date", nullable = false)
-	private LocalDateTime endDate;
+	private LocalDateTime endDateTime;
 
 	@Comment("종료여부 T - 종료 / F - 진행 중")
 	@Column(name = "is_ended")
 	private boolean isEnded;
 
-	private Auction(long startPrice, long bidPrice, LocalDateTime startDate, LocalDateTime endDate, boolean isEnded) {
+	private Auction(long startPrice, long bidPrice, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isEnded) {
 		this.startPrice = startPrice;
 		this.bidPrice = bidPrice;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
 		this.isEnded = isEnded;
 	}
 
@@ -60,8 +60,8 @@ public class Auction extends BaseEntity {
 		return new Auction(
 			request.getStartPrice(),
 			0,
-			request.getStartDate(),
-			request.getEndDate(),
+			request.getStartDateTime(),
+			request.getEndDateTime(),
 			false
 		);
 	}
