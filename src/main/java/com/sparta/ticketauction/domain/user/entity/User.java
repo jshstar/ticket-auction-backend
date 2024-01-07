@@ -84,4 +84,12 @@ public class User {
 			request.getBirth()
 		);
 	}
+
+	public void chargePoint(long point) {
+		this.point += point;
+	}
+
+	public void usePoint(long point) {
+		this.point -= point;
+	}
 }
