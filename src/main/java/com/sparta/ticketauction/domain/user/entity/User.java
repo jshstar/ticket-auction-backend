@@ -1,5 +1,7 @@
 package com.sparta.ticketauction.domain.user.entity;
 
+import java.time.LocalDate;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
@@ -7,6 +9,8 @@ import com.sparta.ticketauction.domain.user.entity.constant.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,8 +46,13 @@ public class User {
 	@Column(name = "phone_number", length = 30)
 	private String phoneNumber;
 
+	@Comment("회원 생년월일")
+	@Column(name = "birth")
+	private LocalDate birth;
+
 	@Comment("회원 역할(관리자 or 일반 유저)")
 	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
 	@Comment("회원 보유 포인트")

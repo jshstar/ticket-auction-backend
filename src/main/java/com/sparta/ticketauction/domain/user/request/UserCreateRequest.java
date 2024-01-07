@@ -39,6 +39,6 @@ public class UserCreateRequest {
 	private final String phoneNumber;
 
 	@NotBlank(message = "필수 입력입니다.")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private final LocalDate birth;
 }
