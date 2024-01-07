@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,30 +13,27 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class GoodsRequest {
-	@Size(max = 30)
-	@NotBlank
+	@Size(min = 1, max = 30, message = "1~30자 사이로 입력해주세요")
 	private final String name;
 
-	@Size(max = 150)
-	@NotBlank
+	@Size(min = 1, max = 150, message = "1~150자 사이로 입력해주세요")
 	private final String description;
 
-	@NotBlank
+	@NotBlank(message = "공연 시작일 기입은 필수입니다.")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private final LocalDate startDate;
 
-	@NotBlank
+	@NotBlank(message = "공연 종료일은 필수입니다.")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private final LocalDate endDate;
 
-	@NotBlank
+	@NotNull(message = "연령 입력은 필수입니다.")
 	private final Integer ageGrade;
 
-	@NotBlank
+	@NotNull(message = "상영 시간은 필수입니다")
 	private final Integer runningTime;
 
-	@Size(max = 30)
-	@NotBlank
+	@Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
 	private final String categoryName;
 
 }
