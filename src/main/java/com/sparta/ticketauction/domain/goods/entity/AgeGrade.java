@@ -8,8 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum AgeGrade {
 	AGE_ALL(0),
+
 	AGE_12(12),
+
 	AGE_15(15),
+
 	AGE_19(19);
 
 	private final int age;

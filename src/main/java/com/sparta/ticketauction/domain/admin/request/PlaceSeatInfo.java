@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PlacesSeatInfo {
-	@Size(min = 1, max = 10, message = "필수로 해당 구역을 입력해야 합니다.")
+public class PlaceSeatInfo {
+	@Size(min = 1, max = 10, message = "구역 입력은 필수입니다.")
 	private final String zone;
 
-	@NotNull(message = "필수로 좌석번호를 입력해야 합니다.")
+	@NotNull(message = "좌석 번호는 필수입니다.")
 	private final Integer seatNumber;
 }
