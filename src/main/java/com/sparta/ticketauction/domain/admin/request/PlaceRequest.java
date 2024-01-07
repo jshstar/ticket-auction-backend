@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PlacesRequest {
+public class PlaceRequest {
 	@Size(min = 1, max = 30, message = "공연장 이름은 필수입니다.")
 	private final String name;
 
@@ -18,6 +18,6 @@ public class PlacesRequest {
 	private final String address;
 
 	@Valid
-	@NotNull
-	private final List<PlacesSeatInfo> seats;
+	@NotNull(message = "좌석 정보는 필수입니다.")
+	private final List<PlaceSeatInfo> seats;
 }
