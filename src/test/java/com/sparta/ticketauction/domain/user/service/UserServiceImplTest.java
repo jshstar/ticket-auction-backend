@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.user.service;
 
+import static com.sparta.ticketauction.domain.user.UserUtil.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -49,7 +50,7 @@ class UserServiceImplTest {
 		@DisplayName("실패 - 중복 이메일")
 		void givenExistedEmail_fail() {
 			// Given
-			UserCreateRequest request = new UserCreateRequest(
+			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
 				PASSWORD,
 				NAME,
@@ -74,7 +75,7 @@ class UserServiceImplTest {
 		@DisplayName("실패 - 중복 닉네임")
 		void givenExistedNickname_fail() {
 			// Given
-			UserCreateRequest request = new UserCreateRequest(
+			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
 				PASSWORD,
 				NAME,
@@ -100,7 +101,7 @@ class UserServiceImplTest {
 		@DisplayName("회원 가입 성공")
 		void success() {
 			// Given
-			UserCreateRequest request = new UserCreateRequest(
+			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
 				PASSWORD,
 				NAME,
