@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PlaceSeatInfo {
+public class PlacesSeatInfo {
 	@Size(min = 1, max = 10, message = "구역 입력은 필수입니다.")
 	private final String zone;
 

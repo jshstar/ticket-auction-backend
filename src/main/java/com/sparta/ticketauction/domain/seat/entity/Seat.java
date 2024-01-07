@@ -2,7 +2,7 @@ package com.sparta.ticketauction.domain.seat.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.place.entity.Place;
+import com.sparta.ticketauction.domain.places.entity.Places;
 import com.sparta.ticketauction.domain.seat.request.SeatRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -37,17 +37,17 @@ public class Seat extends BaseEntity {
 	private int seatNumber;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "place_id")
-	private Place place;
+	@JoinColumn(name = "places_id")
+	private Places places;
 
-	public static Seat of(SeatRequest seatRequest, Place place) {
-		return new Seat(seatRequest.getZone(), seatRequest.getSeatNumber(), place);
+	public static Seat of(SeatRequest seatRequest, Places places) {
+		return new Seat(seatRequest.getZone(), seatRequest.getSeatNumber(), places);
 	}
 
-	private Seat(String zone, int seatNumber, Place place) {
+	private Seat(String zone, int seatNumber, Places places) {
 		this.zone = zone;
 		this.seatNumber = seatNumber;
-		this.place = place;
+		this.places = places;
 	}
 
 }

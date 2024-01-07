@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.place.service;
+package com.sparta.ticketauction.domain.places.service;
 
 import org.springframework.stereotype.Service;
 
@@ -6,5 +6,5 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PlaceServiceImpl implements PlaceService {
+public class PlacesServiceImpl implements PlacesService {
 }
