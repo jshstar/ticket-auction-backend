@@ -4,8 +4,10 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,11 +17,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
 	@Id
@@ -59,4 +64,24 @@ public class User {
 	@Column(name = "point")
 	@ColumnDefault("0")
 	private long point;
+
+	private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.nickname = nickname;
+		this.phoneNumber = phoneNumber;
+		this.birth = birth;
+	}
+
+	public static User of(UserCreateRequest request, PasswordEncoder encoder) {
+		return new User(
+			request.getEmail(),
+			encoder.encode(request.getPassword()),
+			request.getName(),
+			request.getNickname(),
+			request.getPhoneNumber(),
+			request.getBirth()
+		);
+	}
 }
