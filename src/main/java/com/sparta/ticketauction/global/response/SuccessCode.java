@@ -10,7 +10,7 @@ import lombok.Getter;
 public enum SuccessCode {
 
 	/* USER */
-	SUCCESS_USER_SIGN_UP(HttpStatus.CREATED, "U00000", "회원 가입에 성공했습니다.");
+	SUCCESS_USER_SIGN_UP(HttpStatus.CREATED, "U00000", "회원 가입에 성공했습니다."),
 
 
 
@@ -61,6 +61,7 @@ public enum SuccessCode {
 
 
 	/* GLOBAL */
+	OK(HttpStatus.OK, "", "성공");
 
 	private HttpStatus httpStatus;
 	private String code;
