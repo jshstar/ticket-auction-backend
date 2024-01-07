@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +65,10 @@ public class User {
 	@Column(name = "point")
 	@ColumnDefault("0")
 	private long point;
+
+	@Comment("삭제 여부")
+	@Column(name = "is_deleted")
+	private boolean isDeleted = false;
 
 	private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
 		this.email = email;
