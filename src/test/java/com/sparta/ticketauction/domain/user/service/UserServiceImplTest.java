@@ -5,8 +5,6 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,12 +25,6 @@ import com.sparta.ticketauction.global.exception.ApiException;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-	private static final String EMAIL = "tester@gmail.com";
-	private static final String PASSWORD = "test123!@#";
-	private static final String NAME = "김수한";
-	private static final String NICKNAME = "두루미";
-	private static final String PHONE_NUMBER = "010-1234-5678";
-	private static final LocalDate BIRTH = LocalDate.of(1990, 1, 1);
 	@Mock
 	UserRepository userRepository;
 	@Mock
