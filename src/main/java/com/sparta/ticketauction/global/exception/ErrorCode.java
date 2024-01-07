@@ -61,7 +61,8 @@ public enum ErrorCode {
 
 
 	/* GLOBAL */
-	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", "");
+	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
+	INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "", "");
 
 	private HttpStatus httpStatus;
 	private String code;
