@@ -18,6 +18,6 @@ public class PlacesRequest {
 	private final String address;
 
 	@Valid
-	@NotNull
+	@NotNull(message = "좌석 정보는 필수입니다.")
 	private final List<PlacesSeatInfo> seats;
 }
