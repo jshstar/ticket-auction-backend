@@ -22,6 +22,7 @@ import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
 
+@DisplayName("User Service Test")
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
