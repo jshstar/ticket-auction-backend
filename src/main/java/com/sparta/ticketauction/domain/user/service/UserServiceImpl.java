@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
 		/* 닉네임 중복 검사 */
 		if (userRepository.existsByNickname(nickname)) {
-			throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
+			throw new ApiException(ErrorCode.EXISTED_USER_NICKNAME);
 		}
 
 		User user = User.of(request, passwordEncoder);
