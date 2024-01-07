@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class PlacesRequest {
-	@Size(max = 30)
-	@NotBlank
+	@Size(min = 1, max = 30)
 	private final String name;
 
-	@Size(max = 150)
-	@NotBlank
+	@Size(min = 1, max = 150)
 	private final String address;
 
 	@NotBlank
