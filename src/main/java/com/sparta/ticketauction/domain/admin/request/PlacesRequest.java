@@ -3,7 +3,7 @@ package com.sparta.ticketauction.domain.admin.request;
 import java.util.List;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,6 @@ public class PlacesRequest {
 	private final String address;
 
 	@Valid
-	@NotBlank
+	@NotNull
 	private final List<PlacesSeatInfo> seats;
 }
