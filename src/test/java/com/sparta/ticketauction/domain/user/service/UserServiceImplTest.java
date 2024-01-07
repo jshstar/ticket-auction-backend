@@ -69,5 +69,61 @@ class UserServiceImplTest {
 			assertEquals(EXISTED_USER_EMAIL.getMessage(), exception.getMessage());
 		}
 
+		@Test
+		@DisplayName("실패 - 중복 닉네임")
+		void givenExistedNickname_fail() {
+			// Given
+			UserCreateRequest request = new UserCreateRequest(
+				EMAIL,
+				PASSWORD,
+				NAME,
+				NICKNAME,
+				PHONE_NUMBER,
+				BIRTH
+			);
+
+			given(userRepository.existsByEmail(request.getEmail())).willReturn(false);
+			given(userRepository.existsByNickname(request.getNickname())).willReturn(true);
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.signup(request)
+			);
+
+			// Then
+			assertEquals(EXISTED_USER_NICKNAME.getMessage(), exception.getMessage());
+		}
+
+		@Test
+		@DisplayName("회원 가입 성공")
+		void success() {
+			// Given
+			UserCreateRequest request = new UserCreateRequest(
+				EMAIL,
+				PASSWORD,
+				NAME,
+				NICKNAME,
+				PHONE_NUMBER,
+				BIRTH
+			);
+
+			User user = User.of(request, passwordEncoder);
+
+			given(userRepository.existsByEmail(request.getEmail())).willReturn(false);
+			given(userRepository.existsByNickname(request.getNickname())).willReturn(false);
+			given(userRepository.save(any(User.class))).willReturn(user);
+
+			// When
+			sut.signup(request);
+
+			// Then
+			verify(userRepository).existsByEmail(request.getEmail());
+			verify(userRepository).existsByNickname(request.getNickname());
+			verify(userRepository).save(any(User.class));
+
+			verify(userRepository).save(argumentCaptor.capture());
+			assertEquals(request.getNickname(), argumentCaptor.getValue().getNickname());
+		}
 	}
 }
