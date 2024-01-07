@@ -15,9 +15,11 @@ public class AuctionCreateRequest {
 	@NotBlank(message = "시작가를 입력해주세요.")
 	private final Long startPrice;
 
+	@NotBlank(message = "경매 시작일시를 입력해주세요.")
 	@JsonFormat(pattern = "yyyy-MM-dd HH")
 	private final LocalDateTime startDateTime;
 
+	@NotBlank(message = "경매 마감일시를 입력해주세요.")
 	@JsonFormat(pattern = "yyyy-MM-dd HH")
 	private final LocalDateTime endDateTime;
 
