@@ -17,6 +17,6 @@ public class GoodsSequenceSeatRequest {
 	private Long auctionPrice;
 
 	@Valid
-	@NotNull(message = "정확한 좌석 가격을 입력해 주세요.")
+	@NotNull(message = "정확한 경매 좌석을 입력해 주세요.")
 	private List<PlaceSeatAuctionInfo> actionSeats;
 }
