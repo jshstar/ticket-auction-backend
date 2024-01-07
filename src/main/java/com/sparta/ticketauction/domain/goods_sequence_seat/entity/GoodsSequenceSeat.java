@@ -35,7 +35,7 @@ public class GoodsSequenceSeat extends BaseEntity {
 	@Column(name = "price")
 	private Long price;
 
-	@Comment("판매 타입 - NOMAL, AUCTION")
+	@Comment("판매 타입 - NOMAL, ACTION")
 	@Column(name = "sell_type")
 	@Enumerated(EnumType.STRING)
 	private SellType sellType;
