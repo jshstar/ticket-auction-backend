@@ -68,6 +68,8 @@ public class User extends BaseEntity {
 
 	@Comment("삭제 여부")
 	@Column(name = "is_deleted")
+	@ColumnDefault("false")
+	@Builder.Default
 	private Boolean isDeleted = false;
 
 	@Builder
