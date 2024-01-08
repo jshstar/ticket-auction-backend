@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
 		String nickname = request.getNickname();
 
 		/* 이메일 중복 검사 */
-		if (userRepository.existsByEmail(email)) {
+		if (userRepository.existsByEmailAndIsDeletedIsFalse(email)) {
 			throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
 		}
 
 		/* 닉네임 중복 검사 */
-		if (userRepository.existsByNickname(nickname)) {
+		if (userRepository.existsByNicknameAndIsDeletedIsFalse(nickname)) {
 			throw new ApiException(ErrorCode.EXISTED_USER_NICKNAME);
 		}
 
