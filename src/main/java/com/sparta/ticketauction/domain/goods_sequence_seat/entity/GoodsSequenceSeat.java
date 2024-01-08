@@ -2,7 +2,6 @@ package com.sparta.ticketauction.domain.goods_sequence_seat.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsSequenceSeatRequest;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.global.entity.BaseEntity;
@@ -19,6 +18,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -60,34 +60,7 @@ public class GoodsSequenceSeat extends BaseEntity {
 	@Version
 	private int version;
 
-	public static GoodsSequenceSeat generalOf(
-		Seat seat,
-		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
-	) {
-		return new GoodsSequenceSeat(
-			seat,
-			sequence,
-			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			SellType.NORMAL,
-			false
-		);
-	}
-
-	public static GoodsSequenceSeat auctionOf(
-		Seat seat,
-		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
-	) {
-		return new GoodsSequenceSeat(
-			seat,
-			sequence,
-			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			SellType.AUCTION,
-			false
-		);
-	}
-
+	@Builder
 	private GoodsSequenceSeat(Seat seat, Sequence sequence, Long price, SellType sellType, boolean isSelled) {
 		this.seat = seat;
 		this.sequence = sequence;

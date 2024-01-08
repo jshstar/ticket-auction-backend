@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -22,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -72,25 +72,7 @@ public class Goods extends BaseEntity {
 	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<GoodsImage> goodsImage = new ArrayList<>();
 
-	public static Goods of(
-		GoodsRequest goodsRequest,
-		GoodsCategory goodsCategory,
-		List<GoodsImage> goodsImage,
-		Place place
-	) {
-		return new Goods(
-			goodsRequest.getName(),
-			goodsRequest.getDescription(),
-			goodsRequest.getStartDate(),
-			goodsRequest.getEndDate(),
-			goodsRequest.getAgeGrade(),
-			goodsRequest.getRunningTime(),
-			goodsCategory,
-			goodsImage,
-			place
-		);
-	}
-
+	@Builder
 	private Goods(
 		String name,
 		String description,

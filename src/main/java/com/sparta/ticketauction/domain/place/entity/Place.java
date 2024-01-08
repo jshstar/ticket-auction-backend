@@ -2,7 +2,6 @@ package com.sparta.ticketauction.domain.place.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -12,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,10 +36,7 @@ public class Place extends BaseEntity {
 	@Column(name = "count_seats")
 	private int countSeats;
 
-	public static Place of(PlaceRequest placeRequest, int countSeats) {
-		return new Place(placeRequest.getName(), placeRequest.getAddress(), countSeats);
-	}
-
+	@Builder
 	private Place(String name, String address, int countSeats) {
 		this.name = name;
 		this.address = address;

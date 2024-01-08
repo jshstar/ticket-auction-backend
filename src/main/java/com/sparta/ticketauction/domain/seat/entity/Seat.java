@@ -3,7 +3,6 @@ package com.sparta.ticketauction.domain.seat.entity;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.place.entity.Place;
-import com.sparta.ticketauction.domain.seat.request.SeatRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -16,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,10 +40,7 @@ public class Seat extends BaseEntity {
 	@JoinColumn(name = "place_id")
 	private Place place;
 
-	public static Seat of(SeatRequest seatRequest, Place place) {
-		return new Seat(seatRequest.getZone(), seatRequest.getSeatNumber(), place);
-	}
-
+	@Builder
 	private Seat(String zone, int seatNumber, Place place) {
 		this.zone = zone;
 		this.seatNumber = seatNumber;
