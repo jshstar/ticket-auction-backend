@@ -11,7 +11,7 @@ public enum SuccessCode {
 
 	/* USER */
 	SUCCESS_USER_SIGN_UP(HttpStatus.CREATED, "U00000", "회원 가입에 성공했습니다."),
-
+	SUCCESS_USER_LOGIN(HttpStatus.OK, "U00100", "로그인에 성공했습니다."),
 
 
 
