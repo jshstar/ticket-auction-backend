@@ -24,26 +24,26 @@ public class GoodsSequenceSeatRequest {
 
 	@Valid
 	@NotNull(message = "정확한 경매 좌석을 입력해 주세요.")
-	private List<SeatRequest> actionSeats;
+	private final List<SeatRequest> auctionSeats;
 
-	public GoodsSequenceSeat generalToEntity(Seat seat, Sequence sequence) {
+	public GoodsSequenceSeat generalToEntity(Seat seat, Sequence sequence, SellType sellType) {
 		return GoodsSequenceSeat
 			.builder()
 			.price(this.generalAuctionPrice)
 			.seat(seat)
 			.sequence(sequence)
-			.sellType(SellType.NORMAL)
+			.sellType(sellType)
 			.isSelled(false)
 			.build();
 	}
 
-	public GoodsSequenceSeat auctionToEntity(Seat seat, Sequence sequence) {
+	public GoodsSequenceSeat auctionToEntity(Seat seat, Sequence sequence, SellType sellType) {
 		return GoodsSequenceSeat
 			.builder()
 			.price(this.auctionPrice)
 			.seat(seat)
 			.sequence(sequence)
-			.sellType(SellType.AUCTION)
+			.sellType(sellType)
 			.isSelled(false)
 			.build();
 	}
