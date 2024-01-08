@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.security;
+package com.sparta.ticketauction.global.security;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
@@ -15,14 +15,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByNickname(username).orElseThrow(
-			() -> new ApiException(NOT_FOUND_USER)
+		User user = userRepository.findByEmail(username).orElseThrow(
+			() -> new ApiException(NOT_FOUND_USER_FOR_LOGIN)
 		);
 
 		return new UserDetailsImpl(user);

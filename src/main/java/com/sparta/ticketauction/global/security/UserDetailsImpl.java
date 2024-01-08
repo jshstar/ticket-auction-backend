@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.security;
+package com.sparta.ticketauction.global.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
