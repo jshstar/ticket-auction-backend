@@ -2,10 +2,10 @@ package com.sparta.ticketauction.domain.sequence.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
-import com.sparta.ticketauction.domain.sequence.request.SequenceRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +32,12 @@ public class Sequence extends BaseEntity {
 	private Long id;
 
 	@Comment("회차 수")
-	@Column(name = "sequence")
-	private int sequence;
+	@Column(name = "sequence", nullable = false)
+	@ColumnDefault("0")
+	private Integer sequence = 0;
 
 	@Comment("공연 일시")
-	@Column(name = "start_date_time")
+	@Column(name = "start_date_time", nullable = false)
 	private LocalDateTime startDateTime;
 
 	@Comment("공연 id")
@@ -43,10 +45,7 @@ public class Sequence extends BaseEntity {
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
 
-	public static Sequence of(SequenceRequest sequenceRequest, Goods goods) {
-		return new Sequence(sequenceRequest.getSequence(), sequenceRequest.getStartDateTime(), goods);
-	}
-
+	@Builder
 	private Sequence(int sequence, LocalDateTime startDateTime, Goods goods) {
 		this.sequence = sequence;
 		this.startDateTime = startDateTime;

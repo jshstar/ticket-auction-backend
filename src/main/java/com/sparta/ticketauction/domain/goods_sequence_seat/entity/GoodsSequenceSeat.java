@@ -1,8 +1,8 @@
 package com.sparta.ticketauction.domain.goods_sequence_seat.entity;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsSequenceSeatRequest;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.global.entity.BaseEntity;
@@ -19,6 +19,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,17 +33,19 @@ public class GoodsSequenceSeat extends BaseEntity {
 	private GoodsSequenceSeatID id;
 
 	@Comment("가격")
-	@Column(name = "price")
-	private Long price;
+	@Column(name = "price", nullable = false)
+	@ColumnDefault("0")
+	private Long price = 0L;
 
 	@Comment("판매 타입 - NORMAL, AUCTION")
-	@Column(name = "sell_type")
+	@Column(name = "sell_type", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private SellType sellType;
 
 	@Comment("판매 여부")
-	@Column(name = "is_selled")
-	private boolean isSelled = false;
+	@Column(name = "is_selled", nullable = false)
+	@ColumnDefault("false")
+	private Boolean isSelled = false;
 
 	@Comment("좌석")
 	@MapsId("seatId")
@@ -60,34 +63,7 @@ public class GoodsSequenceSeat extends BaseEntity {
 	@Version
 	private int version;
 
-	public static GoodsSequenceSeat generalOf(
-		Seat seat,
-		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
-	) {
-		return new GoodsSequenceSeat(
-			seat,
-			sequence,
-			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			SellType.NORMAL,
-			false
-		);
-	}
-
-	public static GoodsSequenceSeat auctionOf(
-		Seat seat,
-		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
-	) {
-		return new GoodsSequenceSeat(
-			seat,
-			sequence,
-			goodsSequenceSeatRequest.getGeneralAuctionPrice(),
-			SellType.AUCTION,
-			false
-		);
-	}
-
+	@Builder
 	private GoodsSequenceSeat(Seat seat, Sequence sequence, Long price, SellType sellType, boolean isSelled) {
 		this.seat = seat;
 		this.sequence = sequence;
