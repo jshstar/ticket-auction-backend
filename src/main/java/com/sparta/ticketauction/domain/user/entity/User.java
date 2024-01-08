@@ -32,44 +32,42 @@ public class User extends BaseEntity {
 	private Long id;
 
 	@Comment("회원 이메일")
-	@Column(name = "email", length = 50)
+	@Column(name = "email", length = 50, nullable = false)
 	private String email;
 
 	@Comment("회원 비밀번호")
-	@Column(name = "password", length = 500)
+	@Column(name = "password", length = 500, nullable = false)
 	private String password;
 
 	@Comment("회원 이름")
-	@Column(name = "name", length = 10)
+	@Column(name = "name", length = 10, nullable = false)
 	private String name;
 
 	@Comment("회원 닉네임")
-	@Column(name = "nickname", length = 10)
+	@Column(name = "nickname", length = 10, nullable = false)
 	private String nickname;
 
 	@Comment("회원 전화번호")
-	@Column(name = "phone_number", length = 30)
+	@Column(name = "phone_number", length = 30, nullable = false)
 	private String phoneNumber;
 
 	@Comment("회원 생년월일")
-	@Column(name = "birth")
+	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
 	@Comment("회원 역할(관리자 or 일반 유저)")
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
 	@Comment("회원 보유 포인트")
-	@Column(name = "point")
+	@Column(name = "point", nullable = false)
 	@ColumnDefault("0")
-	@Builder.Default
 	private Long point = 0L;
 
 	@Comment("삭제 여부")
-	@Column(name = "is_deleted")
+	@Column(name = "is_deleted", nullable = false)
 	@ColumnDefault("false")
-	@Builder.Default
 	private Boolean isDeleted = false;
 
 	@Builder
