@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.goods_sequence_seat.entity;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.seat.entity.Seat;
@@ -33,7 +34,8 @@ public class GoodsSequenceSeat extends BaseEntity {
 
 	@Comment("가격")
 	@Column(name = "price")
-	private Long price;
+	@ColumnDefault("0")
+	private Long price = 0L;
 
 	@Comment("판매 타입 - NORMAL, AUCTION")
 	@Column(name = "sell_type")
@@ -42,7 +44,7 @@ public class GoodsSequenceSeat extends BaseEntity {
 
 	@Comment("판매 여부")
 	@Column(name = "is_selled")
-	private boolean isSelled = false;
+	private Boolean isSelled = false;
 
 	@Comment("좌석")
 	@MapsId("seatId")

@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.sequence.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -32,7 +33,8 @@ public class Sequence extends BaseEntity {
 
 	@Comment("회차 수")
 	@Column(name = "sequence")
-	private int sequence;
+	@ColumnDefault("0")
+	private Integer sequence = 0;
 
 	@Comment("공연 일시")
 	@Column(name = "start_date_time")

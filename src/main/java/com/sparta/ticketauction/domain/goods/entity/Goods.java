@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.place.entity.Place;
@@ -56,7 +57,8 @@ public class Goods extends BaseEntity {
 
 	@Comment("공연 시간")
 	@Column(name = "running_time")
-	private int runningTime;
+	@ColumnDefault("0")
+	private Integer runningTime = 0;
 
 	@Comment("공연 카테고리")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -78,8 +80,8 @@ public class Goods extends BaseEntity {
 		String description,
 		LocalDate startDate,
 		LocalDate endDate,
-		int ageGrade,
-		int runningTime,
+		Integer ageGrade,
+		Integer runningTime,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
 		Place place

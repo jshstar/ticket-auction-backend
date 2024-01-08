@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.place.entity;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.global.entity.BaseEntity;
@@ -34,7 +35,8 @@ public class Place extends BaseEntity {
 
 	@Comment("총 좌석 개수")
 	@Column(name = "count_seats")
-	private int countSeats;
+	@ColumnDefault("0")
+	private Integer countSeats = 0;
 
 	@Builder
 	private Place(String name, String address, int countSeats) {
