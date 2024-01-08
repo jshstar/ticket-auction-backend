@@ -87,7 +87,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 		String result = mapper.writeValueAsString(
-			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), null));
+			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}"));
 
 		response.getWriter().write(result);
 	}
@@ -106,7 +106,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 		String result = mapper.writeValueAsString(
-			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), null));
+			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), "{}"));
 
 		response.getWriter().write(result);
 	}
