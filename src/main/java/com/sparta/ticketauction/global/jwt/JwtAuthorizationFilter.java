@@ -1,8 +1,5 @@
 package com.sparta.ticketauction.global.jwt;
 
-import static com.sparta.ticketauction.global.exception.ErrorCode.*;
-import static com.sparta.ticketauction.global.jwt.JwtUtil.*;
-
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
-import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
 import jakarta.servlet.FilterChain;
@@ -39,39 +33,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		String accessToken = jwtUtil.resolveAccessToken(request);
-		String refreshToken = jwtUtil.resolveRefreshToken(request);
-
-		if (!StringUtils.hasText(accessToken)) {
-			filterChain.doFilter(request, response);
-			return;
-		}
 
 		// 엑세스 토큰 검증
-		jwtUtil.validateToken(accessToken);
+		if (StringUtils.hasText(accessToken) && jwtUtil.validateToken(accessToken)) {
+			String username = jwtUtil.getUsernameFromToken(accessToken);
+			String logoutToken = lettuceUtils.get("Logout: " + username);
 
-		// 리프레시 토큰 검증
-		if (!StringUtils.hasText(refreshToken) || jwtUtil.validateToken(refreshToken)) {
-			throw new ApiException(INVALID_TOKEN);
+			// 로그아웃 토큰 검증
+			if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
+				setAuthentication(username);
+			}
 		}
 
-		// 로그 아웃 되어 있는지 검증
-		if (!lettuceUtils.hasKey(refreshToken)) {
-			throw new ApiException(REQUIRED_LOGIN);
-		}
-
-		// 리프레시 토큰이 만료되지 않았는데, 엑세스 토큰이 없다면 재발급하자
-		response.addHeader(ACCESS_TOKEN_HEADER, reissueAccessToken(refreshToken));
 		filterChain.doFilter(request, response);
-	}
-
-	private String reissueAccessToken(String refreshToken) {
-		String username = lettuceUtils.get(refreshToken);
-		UserDetailsImpl userDetails = (UserDetailsImpl)userDetailsService.loadUserByUsername(username);
-		Role role = userDetails.getUser().getRole();
-		String newAccessToken = jwtUtil.createAccessToken(username, role);
-
-		setAuthentication(username);
-		return newAccessToken;
 	}
 
 	/*
