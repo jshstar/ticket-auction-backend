@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user;
+package com.sparta.ticketauction.domain.user.controller;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
+import com.sparta.ticketauction.domain.user.util.JwtAuthenticationHelper;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
 
 import jakarta.transaction.Transactional;
 
