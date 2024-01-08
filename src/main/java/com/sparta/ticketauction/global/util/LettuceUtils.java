@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LettuceUtils {
 
-	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 14;
+	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 7;
 	private final RedisTemplate<String, String> lettuceTemplate;
 
 	public void save(String key, String value) {
