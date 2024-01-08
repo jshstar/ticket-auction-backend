@@ -1,10 +1,12 @@
 package com.sparta.ticketauction.domain.auction.entity;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -12,8 +14,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,12 +32,13 @@ public class Auction extends BaseEntity {
 	private Long id;
 
 	@Comment("시작가")
+	@ColumnDefault("0")
 	@Column(name = "start_price", nullable = false)
-	private long startPrice;
+	private Long startPrice = 0L;
 
 	@Comment("입찰가")
-	@Column(name = "start_price", nullable = false)
-	private long bidPrice;
+	@Column(name = "bid_price", nullable = false)
+	private Long bidPrice;
 	@Comment("시작일시")
 	@Column(name = "start_date", nullable = false)
 	private LocalDateTime startDateTime;
@@ -43,20 +48,21 @@ public class Auction extends BaseEntity {
 	private LocalDateTime endDateTime;
 
 	@Comment("종료여부 T - 종료 / F - 진행 중")
+	@ColumnDefault("false")
 	@Column(name = "is_ended")
-	private boolean isEnded;
+	private Boolean isEnded = false;
 
-	private Auction(long startPrice, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	@OneToMany(mappedBy = "auction")
+	private Set<Bid> bid = new LinkedHashSet<>();
+
+	@Builder
+	private Auction(Long startPrice, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		this.startPrice = startPrice;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 	}
 
-	public static Auction of(AuctionCreateRequest request) {
-		return new Auction(
-			request.getStartPrice(),
-			request.getStartDateTime(),
-			request.getEndDateTime()
-		);
+	public void updateBidPrice(Long bidPrice) {
+		this.bidPrice = bidPrice;
 	}
 }
