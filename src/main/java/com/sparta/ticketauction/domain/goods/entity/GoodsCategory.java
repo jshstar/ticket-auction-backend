@@ -25,7 +25,7 @@ public class GoodsCategory extends BaseEntity {
 	private Long id;
 
 	@Comment("카테고리 종류")
-	@Column(name = "name", length = 10)
+	@Column(name = "name", length = 10, nullable = false)
 	private String name;
 
 	@Builder

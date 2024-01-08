@@ -33,17 +33,17 @@ public class GoodsSequenceSeat extends BaseEntity {
 	private GoodsSequenceSeatID id;
 
 	@Comment("가격")
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	@ColumnDefault("0")
 	private Long price = 0L;
 
 	@Comment("판매 타입 - NORMAL, AUCTION")
-	@Column(name = "sell_type")
+	@Column(name = "sell_type", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private SellType sellType;
 
 	@Comment("판매 여부")
-	@Column(name = "is_selled")
+	@Column(name = "is_selled", nullable = false)
 	@ColumnDefault("false")
 	private Boolean isSelled = false;
 

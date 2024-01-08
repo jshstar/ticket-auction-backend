@@ -32,12 +32,12 @@ public class Sequence extends BaseEntity {
 	private Long id;
 
 	@Comment("회차 수")
-	@Column(name = "sequence")
+	@Column(name = "sequence", nullable = false)
 	@ColumnDefault("0")
 	private Integer sequence = 0;
 
 	@Comment("공연 일시")
-	@Column(name = "start_date_time")
+	@Column(name = "start_date_time", nullable = false)
 	private LocalDateTime startDateTime;
 
 	@Comment("공연 id")

@@ -26,15 +26,15 @@ public class Place extends BaseEntity {
 	private Long id;
 
 	@Comment("공연장 이름")
-	@Column(name = "name", length = 30)
+	@Column(name = "name", length = 30, nullable = false)
 	private String name;
 
 	@Comment("공연장 주소")
-	@Column(name = "address", length = 150)
+	@Column(name = "address", length = 150, nullable = false)
 	private String address;
 
 	@Comment("총 좌석 개수")
-	@Column(name = "count_seats")
+	@Column(name = "count_seats", nullable = false)
 	@ColumnDefault("0")
 	private Integer countSeats = 0;
 
