@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LettuceUtils {
 
-	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 7;
+	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 	private final RedisTemplate<String, String> lettuceTemplate;
 
 	public void save(String key, String value) {
@@ -22,11 +22,8 @@ public class LettuceUtils {
 		return lettuceTemplate.opsForValue().get(key);
 	}
 
-	public boolean delete(String key) {
-		return Boolean.TRUE.equals(lettuceTemplate.delete(key));
+	public void delete(String key) {
+		lettuceTemplate.opsForValue().getOperations().delete(key);
 	}
 
-	public boolean hasKey(String key) {
-		return Boolean.TRUE.equals(lettuceTemplate.hasKey(key));
-	}
 }
