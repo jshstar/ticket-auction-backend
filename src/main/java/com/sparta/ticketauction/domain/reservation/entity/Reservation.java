@@ -35,9 +35,9 @@ public class Reservation extends BaseEntity {
 	@Comment("공연 회차별 좌석")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
-		@JoinColumn(name = "seat_id", referencedColumnName = "seatId"),
-		@JoinColumn(name = "sequence_id", referencedColumnName = "sequenceId")}
-	)
+		@JoinColumn(name = "seat_id", referencedColumnName = "seat_id"),
+		@JoinColumn(name = "sequence_id", referencedColumnName = "sequence_id")
+	})
 	private GoodsSequenceSeat goodsSequenceSeat;
 
 	@Comment("유저")

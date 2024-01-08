@@ -1,8 +1,13 @@
 package com.sparta.ticketauction.domain.admin.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
+import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
+import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
+import com.sparta.ticketauction.domain.place.entity.Place;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,5 +40,21 @@ public class GoodsRequest {
 
 	@Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
 	private final String categoryName;
+
+	public Goods toEntity(List<GoodsImage> goodsImages, Place place) {
+		return Goods
+			.builder()
+			.name(this.name)
+			.description(this.description)
+			.startDate(this.startDate)
+			.endDate(this.endDate)
+			.ageGrade(this.ageGrade)
+			.runningTime(this.runningTime)
+			.goodsCategory(GoodsCategory.builder().name(this.categoryName).build())
+			.goodsImage(goodsImages)
+			.place(place)
+			.build();
+
+	}
 
 }

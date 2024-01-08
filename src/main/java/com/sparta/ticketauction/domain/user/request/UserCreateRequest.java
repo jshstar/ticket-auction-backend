@@ -2,7 +2,10 @@ package com.sparta.ticketauction.domain.user.request;
 
 import java.time.LocalDate;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.ticketauction.domain.user.entity.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -42,4 +45,16 @@ public class UserCreateRequest {
 	@NotNull(message = "필수 입력입니다.")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private final LocalDate birth;
+
+	public User toEntity(PasswordEncoder encoder) {
+		return User.builder()
+			.email(email)
+			.password(encoder.encode(password))
+			.name(name)
+			.nickname(nickname)
+			.phoneNumber(phoneNumber)
+			.birth(birth)
+			.build();
+	}
+
 }

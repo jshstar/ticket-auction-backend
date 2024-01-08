@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,28 +36,29 @@ public class Goods extends BaseEntity {
 	private Long id;
 
 	@Comment("공연 제목")
-	@Column(name = "name", length = 30)
+	@Column(name = "name", length = 30, nullable = false)
 	private String name;
 
 	@Comment("공연 내용")
-	@Column(name = "description", length = 150)
+	@Column(name = "description", length = 150, nullable = false)
 	private String description;
 
 	@Comment("공연 시작일")
-	@Column(name = "start_date")
+	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
 
 	@Comment("공연 마감일")
-	@Column(name = "end_date")
+	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
 
 	@Comment("연령대")
-	@Column(name = "age_grade")
+	@Column(name = "age_grade", nullable = false)
 	private AgeGrade ageGrade;
 
 	@Comment("공연 시간")
-	@Column(name = "running_time")
-	private int runningTime;
+	@Column(name = "running_time", nullable = false)
+	@ColumnDefault("0")
+	private Integer runningTime = 0;
 
 	@Comment("공연 카테고리")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -72,32 +74,14 @@ public class Goods extends BaseEntity {
 	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<GoodsImage> goodsImage = new ArrayList<>();
 
-	public static Goods of(
-		GoodsRequest goodsRequest,
-		GoodsCategory goodsCategory,
-		List<GoodsImage> goodsImage,
-		Place place
-	) {
-		return new Goods(
-			goodsRequest.getName(),
-			goodsRequest.getDescription(),
-			goodsRequest.getStartDate(),
-			goodsRequest.getEndDate(),
-			goodsRequest.getAgeGrade(),
-			goodsRequest.getRunningTime(),
-			goodsCategory,
-			goodsImage,
-			place
-		);
-	}
-
+	@Builder
 	private Goods(
 		String name,
 		String description,
 		LocalDate startDate,
 		LocalDate endDate,
-		int ageGrade,
-		int runningTime,
+		Integer ageGrade,
+		Integer runningTime,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
 		Place place

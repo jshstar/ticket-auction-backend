@@ -2,6 +2,9 @@ package com.sparta.ticketauction.domain.admin.request;
 
 import java.util.List;
 
+import com.sparta.ticketauction.domain.place.entity.Place;
+import com.sparta.ticketauction.domain.seat.request.SeatRequest;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,5 +22,15 @@ public class PlaceRequest {
 
 	@Valid
 	@NotNull(message = "좌석 정보는 필수입니다.")
-	private final List<PlaceSeatAuctionInfo> seats;
+	private final List<SeatRequest> seats;
+
+	public Place toEntity(int countSeats) {
+		return Place
+			.builder()
+			.name(this.name)
+			.address(this.address)
+			.countSeats(countSeats)
+			.build();
+
+	}
 }

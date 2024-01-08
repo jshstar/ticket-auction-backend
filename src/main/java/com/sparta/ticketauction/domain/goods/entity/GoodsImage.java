@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,11 +27,11 @@ public class GoodsImage extends BaseEntity {
 	private Long id;
 
 	@Comment("S3 URL")
-	@Column(name = "s3_key", length = 50)
+	@Column(name = "s3_key", length = 50, nullable = false)
 	private String s3Key;
 
 	@Comment("대표 이미지 or 일반 이미지")
-	@Column(name = "type", length = 10)
+	@Column(name = "type", length = 10, nullable = false)
 	private ImageType type;
 
 	@Comment("상품 id")
@@ -38,10 +39,7 @@ public class GoodsImage extends BaseEntity {
 	@JoinColumn(name = "goods_id")
 	private Goods goods;
 
-	public static GoodsImage of(String s3Key, String type) {
-		return new GoodsImage(s3Key, type);
-	}
-
+	@Builder
 	private GoodsImage(String s3Key, String type) {
 		this.s3Key = s3Key;
 		this.type = ImageType.of(type);

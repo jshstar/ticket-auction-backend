@@ -3,6 +3,7 @@ package com.sparta.ticketauction.domain.auction.request;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.ticketauction.domain.auction.entity.Auction;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,4 +25,11 @@ public class AuctionCreateRequest {
 	@JsonFormat(pattern = "yyyy-MM-dd HH")
 	private final LocalDateTime endDateTime;
 
+	public Auction toEntity() {
+		return Auction.builder()
+			.startPrice(startPrice)
+			.startDateTime(startDateTime)
+			.endDateTime(endDateTime)
+			.build();
+	}
 }

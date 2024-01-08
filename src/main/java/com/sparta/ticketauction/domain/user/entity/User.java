@@ -4,10 +4,8 @@ import java.time.LocalDate;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
-import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -19,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,43 +32,45 @@ public class User extends BaseEntity {
 	private Long id;
 
 	@Comment("회원 이메일")
-	@Column(name = "email", length = 50)
+	@Column(name = "email", length = 50, nullable = false)
 	private String email;
 
 	@Comment("회원 비밀번호")
-	@Column(name = "password", length = 15)
+	@Column(name = "password", length = 500, nullable = false)
 	private String password;
 
 	@Comment("회원 이름")
-	@Column(name = "name", length = 10)
+	@Column(name = "name", length = 10, nullable = false)
 	private String name;
 
 	@Comment("회원 닉네임")
-	@Column(name = "nickname", length = 10)
+	@Column(name = "nickname", length = 10, nullable = false)
 	private String nickname;
 
 	@Comment("회원 전화번호")
-	@Column(name = "phone_number", length = 30)
+	@Column(name = "phone_number", length = 30, nullable = false)
 	private String phoneNumber;
 
 	@Comment("회원 생년월일")
-	@Column(name = "birth")
+	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
 	@Comment("회원 역할(관리자 or 일반 유저)")
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
 	@Comment("회원 보유 포인트")
-	@Column(name = "point")
+	@Column(name = "point", nullable = false)
 	@ColumnDefault("0")
-	private long point;
+	private Long point = 0L;
 
 	@Comment("삭제 여부")
-	@Column(name = "is_deleted")
-	private boolean isDeleted = false;
+	@Column(name = "is_deleted", nullable = false)
+	@ColumnDefault("false")
+	private Boolean isDeleted = false;
 
+	@Builder
 	private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
 		this.email = email;
 		this.password = password;
@@ -79,22 +80,11 @@ public class User extends BaseEntity {
 		this.birth = birth;
 	}
 
-	public static User of(UserCreateRequest request, PasswordEncoder encoder) {
-		return new User(
-			request.getEmail(),
-			encoder.encode(request.getPassword()),
-			request.getName(),
-			request.getNickname(),
-			request.getPhoneNumber(),
-			request.getBirth()
-		);
-	}
-
-	public void chargePoint(long point) {
+	public void chargePoint(Long point) {
 		this.point += point;
 	}
 
-	public void usePoint(long point) {
+	public void usePoint(Long point) {
 		this.point -= point;
 	}
 }
