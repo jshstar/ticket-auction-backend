@@ -78,10 +78,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String accessToken = jwtUtil.createAccessToken(username, role);
 		String refreshToken = jwtUtil.createRefreshToken(username, role);
 
-		lettuceUtils.save(jwtUtil.substringToken(refreshToken), username);
+		lettuceUtils.save(username, jwtUtil.substringToken(refreshToken));
 
 		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
-		response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());

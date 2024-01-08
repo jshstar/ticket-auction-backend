@@ -60,7 +60,7 @@ public class AuthControllerTest {
 		assertThat(response.getStatus())
 			.isEqualTo(SUCCESS_USER_LOGIN.getHttpStatus().value());
 
-		assertThat(response.getHeader("AccessToken"))
+		assertThat(response.getHeader("Authorization"))
 			.startsWith("Bearer");
 
 		assertThat(response.getContentAsString())
@@ -98,6 +98,5 @@ public class AuthControllerTest {
 		assertThat(response.getContentAsString())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getCode())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getMessage());
-
 	}
 }
