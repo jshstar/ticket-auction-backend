@@ -18,7 +18,8 @@ public class SeatRequest {
 	private final Integer seatNumber;
 
 	public Seat toEntity(Place place) {
-		return Seat.builder()
+		return Seat
+			.builder()
 			.zone(this.zone)
 			.seatNumber(this.seatNumber)
 			.place(place)

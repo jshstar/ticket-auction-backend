@@ -42,7 +42,9 @@ public class GoodsRequest {
 	private final String categoryName;
 
 	public Goods toEntity(List<GoodsImage> goodsImages, Place place) {
-		return Goods.builder().name(this.name)
+		return Goods
+			.builder()
+			.name(this.name)
 			.description(this.description)
 			.startDate(this.startDate)
 			.endDate(this.endDate)
