@@ -5,7 +5,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
@@ -50,8 +49,10 @@ public class JwtAuthenticationHelper {
 		return accessToken;
 	}
 
-	public Role getRole(String token) {
-		Claims claims = jwtUtil.getUserInfoFromToken(token);
-		
+	public String getRole(String token) {
+		Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.substringToken(token));
+
+		return (String)claims.get("auth");
+
 	}
 }

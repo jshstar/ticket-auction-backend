@@ -101,8 +101,6 @@ public class AuthControllerTest {
 		assertThat(response.getContentAsString())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getCode())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getMessage());
-
-		// assertThat()
 	}
 
 	@Test
@@ -113,7 +111,7 @@ public class AuthControllerTest {
 			.password(ADMIN_TEST_PASSWORD)
 			.build();
 
-		helper.createAdminUser();
+		String accessToken = helper.adminLogin();
 
 		// When
 		ResultActions actions = mvc.perform(post("/api/v1/auth/login")
@@ -138,5 +136,7 @@ public class AuthControllerTest {
 			.contains(SUCCESS_USER_LOGIN.getCode())
 			.contains(SUCCESS_USER_LOGIN.getMessage());
 
+		assertThat(helper.getRole(accessToken))
+			.isEqualTo("ADMIN");
 	}
 }
