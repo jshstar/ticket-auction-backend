@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.entity.constant.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -54,7 +55,8 @@ public class UserCreateRequest {
 			.nickname(nickname)
 			.phoneNumber(phoneNumber)
 			.birth(birth)
+			.role(Role.USER)
 			.build();
 	}
-
+	
 }
