@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.user.request;
 
-import static com.sparta.ticketauction.domain.user.UserUtil.*;
+import static com.sparta.ticketauction.domain.user.util.UserUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Set;

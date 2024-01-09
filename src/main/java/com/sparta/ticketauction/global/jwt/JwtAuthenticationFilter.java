@@ -32,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+	private static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
+
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
 	private final ObjectMapper mapper = new ObjectMapper();
@@ -78,16 +80,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String accessToken = jwtUtil.createAccessToken(username, role);
 		String refreshToken = jwtUtil.createRefreshToken(username, role);
 
-		lettuceUtils.save(jwtUtil.substringToken(refreshToken), username);
+		lettuceUtils.save("RefreshToken: " + username, jwtUtil.substringToken(refreshToken), REFRESH_TOKEN_EXPIRATION);
 
 		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
-		response.addHeader(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 		String result = mapper.writeValueAsString(
-			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), null));
+			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}"));
 
 		response.getWriter().write(result);
 	}
@@ -106,7 +108,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 		String result = mapper.writeValueAsString(
-			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), null));
+			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), "{}"));
 
 		response.getWriter().write(result);
 	}

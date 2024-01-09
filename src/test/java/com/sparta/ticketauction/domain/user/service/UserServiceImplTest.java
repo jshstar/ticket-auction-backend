@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.user.service;
 
-import static com.sparta.ticketauction.domain.user.UserUtil.*;
+import static com.sparta.ticketauction.domain.user.util.UserUtil.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -21,7 +21,7 @@ import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
 
-@DisplayName("User Service Test")
+@DisplayName("회원 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
@@ -35,12 +35,10 @@ class UserServiceImplTest {
 	ArgumentCaptor<User> argumentCaptor;
 
 	@Nested
-	@DisplayName("회원 가입 검증 테스트")
-	class signupTest {
+	class 회원_가입_검증_테스트 {
 
 		@Test
-		@DisplayName("실패 - 중복 이메일")
-		void givenExistedEmail_fail() {
+		void 이미_존재하는_이메일인_경우_실패() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
@@ -64,8 +62,7 @@ class UserServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("실패 - 중복 닉네임")
-		void givenExistedNickname_fail() {
+		void 이미_존재하는_닉네임인_경우_실패() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
@@ -90,8 +87,7 @@ class UserServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("회원 가입 성공")
-		void success() {
+		void 회원가입_성공() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
 				EMAIL,
@@ -103,7 +99,7 @@ class UserServiceImplTest {
 			);
 
 			User user = request.toEntity(passwordEncoder);
-			
+
 			given(userRepository.existsByEmailAndIsDeletedIsFalse(request.getEmail())).willReturn(false);
 			given(userRepository.existsByNicknameAndIsDeletedIsFalse(request.getNickname())).willReturn(false);
 			given(userRepository.save(any(User.class))).willReturn(user);

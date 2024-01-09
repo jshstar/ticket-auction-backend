@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user;
+package com.sparta.ticketauction.domain.user.controller;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
+import com.sparta.ticketauction.domain.user.util.JwtAuthenticationHelper;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -60,7 +62,7 @@ public class AuthControllerTest {
 		assertThat(response.getStatus())
 			.isEqualTo(SUCCESS_USER_LOGIN.getHttpStatus().value());
 
-		assertThat(response.getHeader("AccessToken"))
+		assertThat(response.getHeader("Authorization"))
 			.startsWith("Bearer");
 
 		assertThat(response.getContentAsString())
@@ -98,6 +100,5 @@ public class AuthControllerTest {
 		assertThat(response.getContentAsString())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getCode())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getMessage());
-
 	}
 }

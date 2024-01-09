@@ -36,7 +36,7 @@ public class User extends BaseEntity {
 	private String email;
 
 	@Comment("회원 비밀번호")
-	@Column(name = "password", length = 500, nullable = false)
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@Comment("회원 이름")
