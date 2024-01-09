@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,7 +28,6 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
-	private final UserDetailsService userDetailsService;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
 	@Bean
@@ -51,7 +49,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-		return new JwtAuthorizationFilter(jwtUtil, lettuceUtils, userDetailsService);
+		return new JwtAuthorizationFilter(jwtUtil, lettuceUtils);
 	}
 
 	@Bean
