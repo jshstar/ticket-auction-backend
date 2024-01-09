@@ -30,13 +30,6 @@ import com.sparta.ticketauction.global.exception.ErrorCode;
 @DisplayName("[경매] 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class BidServiceTest {
-	private static final String EMAIL = "tester@gmail.com";
-	private static final String PASSWORD = "test123!@#";
-	private static final String NAME = "김수한";
-	private static final String NICKNAME = "두루미";
-	private static final String PHONE_NUMBER = "010-1234-5678";
-	private static final LocalDate BIRTH = LocalDate.of(1990, 1, 1);
-
 	@InjectMocks
 	private BidServiceImpl sut;
 
