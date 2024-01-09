@@ -4,19 +4,17 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.response.ApiResponse;
 import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -36,7 +34,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
-	private final ObjectMapper mapper = new ObjectMapper();
 
 	@PostConstruct
 	public void setup() {
@@ -71,13 +68,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response,
 		FilterChain chain,
 		Authentication authResult
-	) throws IOException, ServletException {
+	) throws ServletException, IOException {
 		log.info("Login Success, username : {}", authResult.getName());
 
-		String username = ((UserDetailsImpl)authResult.getPrincipal()).getUsername();
+		User user = ((UserDetailsImpl)authResult.getPrincipal()).getUser();
 		Role role = ((UserDetailsImpl)authResult.getPrincipal()).getUser().getRole();
+		String username = user.getEmail();
+		Long id = user.getId();
 
-		String accessToken = jwtUtil.createAccessToken(username, role);
+		String accessToken = jwtUtil.createAccessToken(id, username, role);
 		String refreshToken = jwtUtil.createRefreshToken(username, role);
 
 		lettuceUtils.save("RefreshToken: " + username, jwtUtil.substringToken(refreshToken), REFRESH_TOKEN_EXPIRATION);
@@ -85,13 +84,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
 		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
 
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-		String result = mapper.writeValueAsString(
-			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}"));
-
-		response.getWriter().write(result);
+		jwtUtil.setSuccessResponse(response, SUCCESS_USER_LOGIN);
 	}
 
 	@Override
@@ -102,14 +95,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	) throws IOException, ServletException {
 		log.info("Login Fail, msg : {}", failed.getMessage());
 
-		response.setStatus(NOT_FOUND_USER_FOR_LOGIN.getHttpStatus().value());
-
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-		String result = mapper.writeValueAsString(
-			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), "{}"));
-
-		response.getWriter().write(result);
+		jwtUtil.setExceptionResponse(response, new ApiException(NOT_FOUND_USER_FOR_LOGIN));
 	}
 }

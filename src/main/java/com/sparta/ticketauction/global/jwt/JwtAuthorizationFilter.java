@@ -7,12 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +29,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
-	private final UserDetailsService userDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -35,34 +37,49 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		String accessToken = jwtUtil.resolveAccessToken(request);
 
 		// 엑세스 토큰 검증
-		if (StringUtils.hasText(accessToken) && jwtUtil.validateToken(accessToken)) {
-			String username = jwtUtil.getUsernameFromToken(accessToken);
-			String logoutToken = lettuceUtils.get("Logout: " + username);
 
-			// 로그아웃 토큰 검증
-			if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
-				setAuthentication(username);
+		if (StringUtils.hasText(accessToken)) {
+			try {
+				jwtUtil.validateToken(accessToken);
+
+				Claims info = jwtUtil.getUserInfoFromToken(accessToken);
+				Long id = Long.parseLong(info.get("identify").toString());
+				String username = info.getSubject();
+
+				String logoutToken = lettuceUtils.get("Logout: " + username);
+				// 로그아웃 토큰 검증
+				if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
+					setAuthentication(id, username);
+				}
+			} catch (ApiException e) {
+				jwtUtil.setExceptionResponse(response, e);
+				return;
 			}
 		}
-
 		filterChain.doFilter(request, response);
 	}
 
 	/*
 	 * 인증 처리하기
 	 * */
-	private void setAuthentication(String username) {
+	private void setAuthentication(Long id, String username) {
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		Authentication authentication = createAuthentication(username);
+		Authentication authentication = createAuthentication(id, username);
 		context.setAuthentication(authentication);
 
 		SecurityContextHolder.setContext(context);
 	}
 
-	private Authentication createAuthentication(String username) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+	private Authentication createAuthentication(Long id, String username) {
+		UserDetails userDetails = new UserDetailsImpl(
+			User.builder()
+				.id(id)
+				.email(username)
+				.build()
+		);
+
 		return new UsernamePasswordAuthenticationToken(
-			userDetails, userDetails.getPassword(), userDetails.getAuthorities(
-		));
+			userDetails, null, userDetails.getAuthorities()
+		);
 	}
 }
