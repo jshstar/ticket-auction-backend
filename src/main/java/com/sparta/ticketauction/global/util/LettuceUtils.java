@@ -14,8 +14,8 @@ public class LettuceUtils {
 	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 	private final RedisTemplate<String, String> lettuceTemplate;
 
-	public void save(String key, String value) {
-		lettuceTemplate.opsForValue().set(key, value, REFRESH_TOKEN_EXPIRATION, TimeUnit.SECONDS);
+	public void save(String key, String value, Integer min) {
+		lettuceTemplate.opsForValue().set(key, value, min, TimeUnit.SECONDS);
 	}
 
 	public String get(String key) {

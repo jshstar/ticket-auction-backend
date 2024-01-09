@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user;
+package com.sparta.ticketauction.domain.user.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,8 +13,9 @@ import com.sparta.ticketauction.global.util.LettuceUtils;
 
 @Component
 public class JwtAuthenticationHelper {
+	
+	private static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 
-	private static final String BEARER_PREFIX = "Bearer ";
 	@Autowired
 	private JwtUtil jwtUtil;
 	@Autowired
@@ -40,7 +41,7 @@ public class JwtAuthenticationHelper {
 		String accessToken = jwtUtil.createAccessToken(user.getEmail(), user.getRole());
 		String refreshToken = jwtUtil.createRefreshToken(user.getEmail(), user.getRole());
 
-		lettuceUtils.save(refreshToken, user.getEmail());
+		lettuceUtils.save(user.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRATION);
 
 		return accessToken;
 	}

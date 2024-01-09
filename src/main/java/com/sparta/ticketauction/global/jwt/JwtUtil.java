@@ -38,8 +38,8 @@ public class JwtUtil {
 	public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
-	private static final long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
-	private static final long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한정
+	private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
+	private final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -149,4 +149,18 @@ public class JwtUtil {
 
 		return cookie;
 	}
+
+	public String getAccessTokenFromRequestHeader(HttpServletRequest request) {
+		String accessToken = request.getHeader(ACCESS_TOKEN_HEADER);
+		if (!StringUtils.hasText(accessToken)) {
+			return null;
+		}
+		return substringToken(accessToken);
+	}
+
+	public Integer getRemainingTime(Date expiration) {
+		Date now = new Date();
+		return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
+	}
+
 }
