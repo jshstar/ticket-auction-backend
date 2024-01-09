@@ -18,3 +18,4 @@ insert into users
         where users.email = init.email
     );
 
+-- 비밀번호는 18Iamadmin18!@#

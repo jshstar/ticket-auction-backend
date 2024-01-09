@@ -21,19 +21,22 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  sql:
+    init:
+      mode: never
 
 jwt:
   secret:
     key: ${jwt_secret_key}
 
-#cloud: # S3
-#  aws:
-#    credentials:
-#      access-key: ${AWS_ACCESS_KEY_ID}
-#      secret-key: ${AWS_SECRET_ACCESS_KEY}
-#    s3:
-#      bucket: ${s3_bucket_name}
-#    region:
-#      static: ap-northeast-2
-#    stack:
-#      auto: false
+cloud: # S3
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${s3_bucket_name}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
