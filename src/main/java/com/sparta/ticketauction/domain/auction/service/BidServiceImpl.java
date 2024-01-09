@@ -63,7 +63,12 @@ public class BidServiceImpl implements BidService {
 	}
 
 	private static void validateBid(long point, long increaseBidPrice, long bidPrice) {
-		if (increaseBidPrice > bidPrice && point >= bidPrice) {
+		if (increaseBidPrice > bidPrice) {
+			throw new ApiException(BAD_REQUEST_BID);
+		}
+
+		//포인트가 부족한 경우
+		if (point < bidPrice) {
 			throw new ApiException(BAD_REQUEST_BID);
 		}
 	}
