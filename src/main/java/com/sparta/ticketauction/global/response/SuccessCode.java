@@ -41,7 +41,7 @@ public enum SuccessCode {
 
 
 	/* AUCTION */
-
+	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
 
 
 
