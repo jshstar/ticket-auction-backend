@@ -6,6 +6,8 @@ import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +34,7 @@ public class GoodsImage extends BaseEntity {
 
 	@Comment("대표 이미지 or 일반 이미지")
 	@Column(name = "type", length = 10, nullable = false)
+	@Enumerated(value = EnumType.STRING)
 	private ImageType type;
 
 	@Comment("상품 id")
