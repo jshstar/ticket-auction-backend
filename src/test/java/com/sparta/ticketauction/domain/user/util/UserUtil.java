@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.user.util;
 
 import java.time.LocalDate;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.ticketauction.domain.user.entity.User;
@@ -15,8 +16,17 @@ public class UserUtil {
 	public static final String NICKNAME = "두루미";
 	public static final String PHONE_NUMBER = "010-1234-5678";
 	public static final LocalDate BIRTH = LocalDate.of(1990, 1, 1);
+	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	public static final User TEST_USER = User.builder()
+		.email(EMAIL)
+		.password(passwordEncoder.encode(PASSWORD))
+		.name(NAME)
+		.nickname(NICKNAME)
+		.phoneNumber(PHONE_NUMBER)
+		.birth(BIRTH)
+		.build();
 
-	public static User createUser(PasswordEncoder passwordEncoder) {
+	public static User createUser() {
 		return getUserCreateRequest().toEntity(passwordEncoder);
 	}
 
