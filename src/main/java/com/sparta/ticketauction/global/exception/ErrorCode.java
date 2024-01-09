@@ -61,7 +61,12 @@ public enum ErrorCode {
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
 	INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "", ""),
-	;
+
+	/* TOKEN */
+	INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10000", "유효하지 않는 JWT 토큰입니다."),
+	EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10001", "만료된 JWT 토큰입니다."),
+	UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10002", "지원하지 않는 JWT 토큰입니다."),
+	NON_ILLEGAL_ARGUMENT_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10003", "잘못된 JWT 토큰입니다.");
 
 	private HttpStatus httpStatus;
 	private String code;
