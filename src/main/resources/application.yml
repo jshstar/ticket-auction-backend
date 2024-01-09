@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: local
 
 ---
 
@@ -19,7 +19,7 @@ spring:
     url: jdbc:mysql://localhost:3306/ticket_auction
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true

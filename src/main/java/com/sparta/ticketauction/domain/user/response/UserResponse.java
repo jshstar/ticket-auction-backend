@@ -17,5 +17,5 @@ public class UserResponse {
 
 	private final String phoneNumber;
 
-	private final long point;
+	private final Long point;
 }
