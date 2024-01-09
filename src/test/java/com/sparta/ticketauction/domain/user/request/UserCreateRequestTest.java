@@ -38,12 +38,12 @@ class UserCreateRequestTest {
 	void success() {
 		// Given
 		UserCreateRequest request = getUserCreateRequest(
-			EMAIL,
-			PASSWORD,
-			NAME,
-			NICKNAME,
-			PHONE_NUMBER,
-			BIRTH
+			TEST_EMAIL,
+			TEST_PASSWORD,
+			TEST_NAME,
+			TEST_NICKNAME,
+			TEST_PHONE_NUMBER,
+			TEST_BIRTH
 		);
 
 		// When
@@ -63,11 +63,11 @@ class UserCreateRequestTest {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
 				"eeeee",
-				PASSWORD,
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_PASSWORD,
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -83,11 +83,11 @@ class UserCreateRequestTest {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
 				"",
-				PASSWORD,
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_PASSWORD,
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -108,12 +108,12 @@ class UserCreateRequestTest {
 		void givenUnder8Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
+				TEST_EMAIL,
 				"a1!",
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -128,12 +128,12 @@ class UserCreateRequestTest {
 		void givenOver15Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
+				TEST_EMAIL,
 				"abcd1234!@#$1111",
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -148,12 +148,12 @@ class UserCreateRequestTest {
 		void givenNonAlphabet_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
+				TEST_EMAIL,
 				"1234!@#$1111",
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -168,12 +168,12 @@ class UserCreateRequestTest {
 		void givenNonSpecialCharacter_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
+				TEST_EMAIL,
 				"1234abc1111",
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -188,12 +188,12 @@ class UserCreateRequestTest {
 		void givenKorean_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
+				TEST_EMAIL,
 				"abc123!@#ㄱㄴ",
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -213,12 +213,12 @@ class UserCreateRequestTest {
 		void givenNonEmailType_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
+				TEST_EMAIL,
+				TEST_PASSWORD,
 				"name",
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -233,12 +233,12 @@ class UserCreateRequestTest {
 		void givenUnder2Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
+				TEST_EMAIL,
+				TEST_PASSWORD,
 				"김",
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -253,12 +253,12 @@ class UserCreateRequestTest {
 		void givenOver10Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
+				TEST_EMAIL,
+				TEST_PASSWORD,
 				"김수한무두루미와거북이",
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -278,12 +278,12 @@ class UserCreateRequestTest {
 		void givenNonEmailType_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
 				"nickname",
-				PHONE_NUMBER,
-				BIRTH
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -298,12 +298,12 @@ class UserCreateRequestTest {
 		void givenUnder2Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
 				"닉",
-				PHONE_NUMBER,
-				BIRTH
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -318,12 +318,12 @@ class UserCreateRequestTest {
 		void givenOver10Len_fail() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
 				"김수한무두루미와거북이",
-				PHONE_NUMBER,
-				BIRTH
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			// When
@@ -343,12 +343,12 @@ class UserCreateRequestTest {
 		void givenNonPhoneType() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NICKNAME,
-				NAME,
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NICKNAME,
+				TEST_NAME,
 				"01012345678",
-				BIRTH
+				TEST_BIRTH
 			);
 
 			// When
@@ -363,12 +363,12 @@ class UserCreateRequestTest {
 		void givenAnotherCharactersType() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NICKNAME,
-				NAME,
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NICKNAME,
+				TEST_NAME,
 				"asdㄴㅇㄴ",
-				BIRTH
+				TEST_BIRTH
 			);
 
 			// When
