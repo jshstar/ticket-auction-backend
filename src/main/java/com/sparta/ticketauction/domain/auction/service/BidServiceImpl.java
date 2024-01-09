@@ -3,8 +3,6 @@ package com.sparta.ticketauction.domain.auction.service;
 import static com.sparta.ticketauction.domain.auction.constant.AuctionConstant.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
-import java.time.Duration;
-
 import org.springframework.stereotype.Service;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
@@ -60,6 +58,7 @@ public class BidServiceImpl implements BidService {
 			.build();
 
 		bidRepository.save(bid);
+		loginUser.deductPoint(bidPrice);
 		redissonRepository.setValue(key, bidPrice);
 	}
 
