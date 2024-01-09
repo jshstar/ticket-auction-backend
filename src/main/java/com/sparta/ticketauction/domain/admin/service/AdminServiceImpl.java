@@ -1,7 +1,13 @@
 package com.sparta.ticketauction.domain.admin.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +17,8 @@ import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
+import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
-import com.sparta.ticketauction.domain.goods.entity.ImageType;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
 import com.sparta.ticketauction.domain.goods_sequence_seat.service.GoodsSequenceSeatServiceImpl;
 import com.sparta.ticketauction.domain.place.entity.Place;
@@ -20,6 +26,7 @@ import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.seat.request.SeatRequest;
 import com.sparta.ticketauction.domain.seat.service.SeatServiceImpl;
+import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.domain.sequence.service.SequenceServiceImpl;
 import com.sparta.ticketauction.global.util.S3Uploader;
 
@@ -69,10 +76,10 @@ public class AdminServiceImpl implements AdminService {
 		return placeResponseList;
 	}
 
-	// 공연 생성
+	// 공연 및 회차 생성
 	@Override
 	@Transactional
-	public void createGoods(GoodsRequest goodsRequest, Long placeId, List<MultipartFile> files) {
+	public void createGoodsAndSequence(GoodsRequest goodsRequest, Long placeId, List<MultipartFile> files) {
 		Place place = placeService.findPlace(placeId);
 
 		Goods goods = goodsRequest.toEntity(place);
@@ -80,9 +87,35 @@ public class AdminServiceImpl implements AdminService {
 
 		List<String> fileUrl = s3tUpload(files, saveGoods.getId());
 		List<GoodsImage> goodsImageList = saveAllGoodsImage(fileUrl, saveGoods);
-
 		saveGoods.createGoodsImage(goodsImageList);
 
+		GoodsCategory goodsCategory = createGoodsCategory(goodsRequest.getCategoryName());
+		saveGoods.createGoodsCategory(goodsCategory);
+
+		createSequence(saveGoods, goodsRequest.getStartTime());
+	}
+
+	// 총 좌석 개수 연산
+	private Integer totalCountSeat(List<SeatRequest> seatRequests) {
+		Integer totalSeat = 0;
+
+		for (SeatRequest seat : seatRequests) {
+			totalSeat += seat.getZoneCountSeat();
+		}
+
+		return totalSeat;
+	}
+
+	// 좌석 생성
+	private List<Seat> createSeat(List<SeatRequest> seats, Place place) {
+		List<Seat> seatList = new ArrayList<>();
+
+		seatList = seats.stream()
+			.flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
+				.mapToObj(i -> seat.toEntity(place, i)))
+			.collect(Collectors.toList());
+
+		return seatList;
 	}
 
 	// 이미지 저장
@@ -94,7 +127,7 @@ public class AdminServiceImpl implements AdminService {
 					GoodsImage
 						.builder()
 						.s3Key(fileKey)
-						.type(String.valueOf(ImageType.POSTER_IMG))
+						.type("대표")
 						.goods(goods)
 						.build();
 				goodsImageList.add(goodsImage);
@@ -103,7 +136,7 @@ public class AdminServiceImpl implements AdminService {
 					GoodsImage
 						.builder()
 						.s3Key(fileKey)
-						.type(String.valueOf(ImageType.INFO_IMG))
+						.type("일반")
 						.goods(goods)
 						.build();
 				goodsImageList.add(goodsImage);
@@ -131,28 +164,38 @@ public class AdminServiceImpl implements AdminService {
 		return fileUrl;
 	}
 
-	// 총 좌석 개수 연산
-	private Integer totalCountSeat(List<SeatRequest> seatRequests) {
-		Integer totalSeat = 0;
-
-		for (SeatRequest seat : seatRequests) {
-			totalSeat += seat.getZoneCountSeat();
+	// 회차 생성
+	public void createSequence(Goods goods, LocalTime startTime) {
+		List<Sequence> sequenceList = new ArrayList<>();
+		LocalDate startDate = goods.getStartDate();
+		LocalDate endDate = goods.getEndDate();
+		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+		for (int i = 1; i <= daysBetween; i++) {
+			LocalDateTime dateTIme = startDate.atTime(startTime);
+			Sequence sequence =
+				Sequence
+					.builder()
+					.startDateTime(dateTIme)
+					.goods(goods)
+					.sequence(i)
+					.build();
+			sequenceList.add(sequence);
+			startDate = startDate.plusDays(1);
 		}
-
-		return totalSeat;
+		sequenceService.saveAllSequence(sequenceList);
 	}
 
-	// 좌석 생성
-	private List<Seat> createSeat(List<SeatRequest> seats, Place place) {
-		List<Seat> seatList = new ArrayList<>();
-
-		for (SeatRequest seat : seats) {
-			for (int i = 1; i <= seat.getZoneCountSeat(); i++) {
-				seatList.add(seat.toEntity(place, i));
-			}
+	// 카테고리 생성 기타 입력시
+	public GoodsCategory createGoodsCategory(String category) {
+		GoodsCategory goodsCategory = goodsSequenceSeatService.findGoodsCategory(category);
+		if (goodsCategory == null) {
+			goodsCategory =
+				GoodsCategory
+					.builder()
+					.name(category)
+					.build();
 		}
-
-		return seatList;
+		return goodsSequenceSeatService.saveGoodSCategory(goodsCategory);
 	}
 
 }
