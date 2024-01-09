@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,16 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.redisson.api.RAtomicLong;
-import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.entity.Bid;
+import com.sparta.ticketauction.domain.auction.repository.AuctionRedissonRepository;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
 import com.sparta.ticketauction.domain.auction.repository.BidRepository;
 import com.sparta.ticketauction.domain.auction.request.BidRequest;
+import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
@@ -40,7 +37,10 @@ class BidServiceTest {
 	private BidRepository bidRepository;
 
 	@Mock
-	private RedissonClient redissonClient;
+	private AuctionRedissonRepository redissonRepository;
+
+	@Mock
+	private UserRepository userRepository;
 
 
 
@@ -59,18 +59,23 @@ class BidServiceTest {
 			.startPrice(1000L)
 			.build();
 
-		RAtomicLong atomicLong = mock(RAtomicLong.class);
-		given(redissonClient.getAtomicLong(any()))
-			.willReturn(atomicLong);
+		given(redissonRepository.existBucket(any()))
+			.willReturn(true);
+
+		given(redissonRepository.getValue(any()))
+			.willReturn(1000L);
 
 		given(auctionRepository.getReferenceById(auctionId))
 			.willReturn(auction);
+
+		given(userRepository.findPointById(any()))
+			.willReturn(bidRequest.getPrice());
 		//When
 		sut.bid(auctionId, bidRequest, UserUtil.createUser());
 
 		//Then
 		then(bidRepository).should().save(any(Bid.class));
-		then(atomicLong).should().set(bidRequest.getPrice());
+		then(redissonRepository).should().setValue(any(), any());
 	}
 
 	@Test
@@ -79,13 +84,14 @@ class BidServiceTest {
 		Long auctionId = 1L;
 		BidRequest bidRequest = new BidRequest(10_000L);
 
-		RAtomicLong atomicLong = mock(RAtomicLong.class);
-		given(redissonClient.getAtomicLong(any()))
-			.willReturn(atomicLong);
+		given(redissonRepository.existBucket(any()))
+			.willReturn(true);
 
-		given(atomicLong.get())
+		given(redissonRepository.getValue(any()))
 			.willReturn(1000_000L);
 
+		given(userRepository.findPointById(any()))
+			.willReturn(10_000L);
 		//When & Then
 		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, UserUtil.createUser()))
 			.isInstanceOf(ApiException.class)
@@ -98,12 +104,9 @@ class BidServiceTest {
 		Long auctionId = 1L;
 		BidRequest bidRequest = new BidRequest(10_0000L);
 
-		RAtomicLong atomicLong = mock(RAtomicLong.class);
-		given(redissonClient.getAtomicLong(any()))
-			.willReturn(atomicLong);
 
-		given(atomicLong.remainTimeToLive())
-			.willReturn(0L);
+		given(redissonRepository.existBucket(any()))
+			.willReturn(false);
 
 		//When & Then
 		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, UserUtil.createUser()))
