@@ -43,7 +43,7 @@ public class Seat extends BaseEntity {
 	private Place place;
 
 	@Builder
-	private Seat(String zone, int seatNumber, Place place) {
+	private Seat(String zone, Integer seatNumber, Place place) {
 		this.zone = zone;
 		this.seatNumber = seatNumber;
 		this.place = place;
