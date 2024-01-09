@@ -35,7 +35,7 @@ class ReservationCreateRequestTest {
 
 	@Test
 	@DisplayName("검증 성공")
-	void success() {
+	void 성공() {
 		// When
 		Set<ConstraintViolation<ReservationCreateRequest>> validations =
 			validator.validate(ReservationUtil.TEST_RESERVATION_CREATE_REQUEST);
@@ -45,11 +45,9 @@ class ReservationCreateRequestTest {
 	}
 
 	@Nested
-	@DisplayName("Zone 검증")
-	class Zone {
+	class 구역_검증 {
 		@Test
-		@DisplayName("실패 - NULL 입력")
-		void givenNullZone() throws Exception {
+		void 실패_NULL_입력() throws Exception {
 			// Given
 			ReservationCreateRequest request = new ReservationCreateRequest(null, 100L);
 
@@ -62,8 +60,7 @@ class ReservationCreateRequestTest {
 		}
 
 		@Test
-		@DisplayName("실패 - ZONE 빈 값 입력")
-		void givenEmptyZone() throws Exception {
+		void 실패_빈_값_입력() throws Exception {
 			// Given
 			ReservationCreateRequest request = new ReservationCreateRequest("", 100L);
 
@@ -76,8 +73,7 @@ class ReservationCreateRequestTest {
 		}
 
 		@Test
-		@DisplayName("실패 - ZONE 공백 입력")
-		void givenBlankZone() throws Exception {
+		void 실패_공백_입력() throws Exception {
 			// Given
 			ReservationCreateRequest request = new ReservationCreateRequest(" ", 100L);
 
@@ -91,12 +87,10 @@ class ReservationCreateRequestTest {
 	}
 
 	@Nested
-	@DisplayName("Price 검증")
-	class Price {
+	class 가격_검증 {
 
 		@Test
-		@DisplayName("실패 - NULL 입력")
-		void givenNullPrice() throws Exception {
+		void 실패_NULL_입력() throws Exception {
 			// Given
 			ReservationCreateRequest request = new ReservationCreateRequest("A", null);
 

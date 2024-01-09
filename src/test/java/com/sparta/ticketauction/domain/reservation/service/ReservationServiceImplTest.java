@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,12 +62,10 @@ class ReservationServiceImplTest {
 	ReservationServiceImpl sut;
 
 	@Nested
-	@DisplayName("좌석 예약 검증")
-	class ReserveTest {
+	class 좌석_예약_검증 {
 
 		@Test
-		@DisplayName("성공")
-		void success() throws Exception {
+		void 성공() throws Exception {
 			// Given
 			UserCreateRequest userCreateRequest = UserUtil.getUserCreateRequest();
 			User user = userCreateRequest.toEntity(passwordEncoder);
@@ -141,8 +138,7 @@ class ReservationServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("실패 - 포인트 부족")
-		void givenNotEnoughPoint_fail() {
+		void 실패_포인트_부족() {
 			// Given
 			UserCreateRequest userCreateRequest = UserUtil.getUserCreateRequest();
 			User user = userCreateRequest.toEntity(passwordEncoder);
@@ -187,8 +183,7 @@ class ReservationServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("실패 - 결제 금액 오류")
-		void givenInvalidPrice_fail() throws Exception {
+		void 실패_결제_금액_오류() throws Exception {
 			// Given
 			UserCreateRequest userCreateRequest = UserUtil.getUserCreateRequest();
 			User user = userCreateRequest.toEntity(passwordEncoder);
@@ -233,8 +228,7 @@ class ReservationServiceImplTest {
 		}
 
 		@Test
-		@DisplayName("실패 - 이미 예약된 좌석")
-		void givenAlreadyReservedSeat_fail() throws Exception {
+		void 실패_이미_예약된_자석() throws Exception {
 			// Given
 			UserCreateRequest userCreateRequest = UserUtil.getUserCreateRequest();
 			User user = userCreateRequest.toEntity(passwordEncoder);
