@@ -29,7 +29,7 @@ public class GoodsImage extends BaseEntity {
 	private Long id;
 
 	@Comment("S3 URL")
-	@Column(name = "s3_key", length = 50, nullable = false)
+	@Column(name = "s3_key", length = 150, nullable = false)
 	private String s3Key;
 
 	@Comment("대표 이미지 or 일반 이미지")
