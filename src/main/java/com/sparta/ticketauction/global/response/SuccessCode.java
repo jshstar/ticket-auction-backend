@@ -31,7 +31,7 @@ public enum SuccessCode {
 
 
 	/* PLACE */
-
+	SUCCESS_PLACE_CREATE(HttpStatus.CREATED, "P09900", "공연장이 추가되었습니다."),
 
 
 
