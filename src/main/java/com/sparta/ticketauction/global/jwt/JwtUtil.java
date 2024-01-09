@@ -44,7 +44,7 @@ public class JwtUtil {
 	public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
-	private final Long ACCESS_TOKEN_TIME = 60 * 1000L; // 60분
+	private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
 	private final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
 	private final ObjectMapper mapper = new ObjectMapper();
 
