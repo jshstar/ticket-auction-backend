@@ -43,8 +43,9 @@ public class GoodsImage extends BaseEntity {
 	private Goods goods;
 
 	@Builder
-	private GoodsImage(String s3Key, String type) {
+	private GoodsImage(String s3Key, String type, Goods goods) {
 		this.s3Key = s3Key;
 		this.type = ImageType.of(type);
+		this.goods = goods;
 	}
 }

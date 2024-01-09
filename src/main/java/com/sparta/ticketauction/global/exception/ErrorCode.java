@@ -32,7 +32,7 @@ public enum ErrorCode {
 
 
 	/* PLACE */
-
+	NOTFOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
 
 
 

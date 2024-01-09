@@ -97,4 +97,12 @@ public class Goods extends BaseEntity {
 		this.place = place;
 	}
 
+	public void createGoodsImage(List<GoodsImage> goodsImage) {
+		this.goodsImage = goodsImage;
+	}
+
+	public void createGoodsCategory(GoodsCategory goodsCategory) {
+		this.goodsCategory = goodsCategory;
+	}
+
 }
