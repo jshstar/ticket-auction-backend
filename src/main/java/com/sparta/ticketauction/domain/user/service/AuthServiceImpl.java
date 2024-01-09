@@ -26,7 +26,9 @@ public class AuthServiceImpl implements AuthService {
 	public void logout(HttpServletRequest request) {
 		String accessToken = jwtUtil.getAccessTokenFromRequestHeader(request);
 
-		if (!jwtUtil.validateToken(accessToken)) {
+		try {
+			jwtUtil.validateToken(accessToken);
+		} catch (ApiException e) {
 			throw new ApiException(ErrorCode.INVALID_TOKEN);
 		}
 
