@@ -15,14 +15,14 @@ public class UserUtil {
 	public static final String TEST_PASSWORD = "test123!@#";
 	public static final String TEST_NAME = "김수한";
 	public static final String TEST_NICKNAME = "두루미";
-	public static final String TEST_PHONE_NUMBER = "010-1234-5678";
+	public static final String TEST_PHONE_NUMBER = "01012345678";
 	public static final LocalDate TEST_BIRTH = LocalDate.of(1990, 1, 1);
-
+	public static final String TEST_VERIFICATION_CODE = "123456";
 	public static final String ADMIN_TEST_EMAIL = "admin@gmail.com";
 	public static final String ADMIN_TEST_PASSWORD = "test123!@#";
 	public static final String ADMIN_TEST_NAME = "김관리";
 	public static final String ADMIN_TEST_NICKNAME = "관리자";
-	public static final String ADMIN_TEST_PHONE_NUMBER = "010-1111-2222";
+	public static final String ADMIN_TEST_PHONE_NUMBER = "01011112222";
 	public static final LocalDate ADMIN_TEST_BIRTH = LocalDate.of(1997, 1, 1);
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	public static final User TEST_USER = User.builder()
@@ -56,7 +56,8 @@ public class UserUtil {
 			TEST_NAME,
 			TEST_NICKNAME,
 			TEST_PHONE_NUMBER,
-			TEST_BIRTH
+			TEST_BIRTH,
+			TEST_VERIFICATION_CODE
 		);
 	}
 
@@ -66,7 +67,8 @@ public class UserUtil {
 		String name,
 		String nickname,
 		String phoneNumber,
-		LocalDate birth
+		LocalDate birth,
+		String verificationNumber
 	) {
 		return new UserCreateRequest(
 			email,
@@ -74,7 +76,8 @@ public class UserUtil {
 			name,
 			nickname,
 			phoneNumber,
-			birth
+			birth,
+			verificationNumber
 		);
 	}
 

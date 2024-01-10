@@ -43,7 +43,8 @@ class UserCreateRequestTest {
 			TEST_NAME,
 			TEST_NICKNAME,
 			TEST_PHONE_NUMBER,
-			TEST_BIRTH
+			TEST_BIRTH,
+			TEST_VERIFICATION_CODE
 		);
 
 		// When
@@ -67,7 +68,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -87,7 +89,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -113,7 +116,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -133,7 +137,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -153,7 +158,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -173,7 +179,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -193,7 +200,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -218,7 +226,8 @@ class UserCreateRequestTest {
 				"name",
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -238,7 +247,8 @@ class UserCreateRequestTest {
 				"김",
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -258,7 +268,8 @@ class UserCreateRequestTest {
 				"김수한무두루미와거북이",
 				TEST_NICKNAME,
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -283,7 +294,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				"nickname",
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -303,7 +315,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				"닉",
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -323,7 +336,8 @@ class UserCreateRequestTest {
 				TEST_NAME,
 				"김수한무두루미와거북이",
 				TEST_PHONE_NUMBER,
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -347,8 +361,9 @@ class UserCreateRequestTest {
 				TEST_PASSWORD,
 				TEST_NICKNAME,
 				TEST_NAME,
-				"01012345678",
-				TEST_BIRTH
+				"010-1123-5678",
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
@@ -368,7 +383,8 @@ class UserCreateRequestTest {
 				TEST_NICKNAME,
 				TEST_NAME,
 				"asdㄴㅇㄴ",
-				TEST_BIRTH
+				TEST_BIRTH,
+				TEST_VERIFICATION_CODE
 			);
 
 			// When
