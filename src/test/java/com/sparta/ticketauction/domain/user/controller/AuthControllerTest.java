@@ -182,7 +182,7 @@ public class AuthControllerTest {
 			.getResponse();
 
 		// Then
-		actions.andExpect(status().isOk());
+		actions.andExpect(status().isCreated());
 		assertThat(response.getContentAsString())
 			.contains(SUCCESS_REISSUE_TOKEN.getCode());
 
