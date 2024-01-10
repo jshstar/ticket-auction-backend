@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
-import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.exception.ErrorCode;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -26,10 +24,8 @@ public class AuthServiceImpl implements AuthService {
 	public void logout(HttpServletRequest request) {
 		String accessToken = jwtUtil.getAccessTokenFromRequestHeader(request);
 
-		if (!jwtUtil.validateToken(accessToken)) {
-			throw new ApiException(ErrorCode.INVALID_TOKEN);
-		}
-
+		jwtUtil.validateToken(accessToken);
+		
 		Claims claims = jwtUtil.getUserInfoFromToken(accessToken);
 		String username = claims.getSubject();
 		Date expiration = claims.getExpiration();

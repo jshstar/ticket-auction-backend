@@ -13,7 +13,7 @@ import com.sparta.ticketauction.global.util.LettuceUtils;
 
 @Component
 public class JwtAuthenticationHelper {
-	
+
 	private static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 
 	@Autowired
@@ -38,7 +38,7 @@ public class JwtAuthenticationHelper {
 			.build();
 
 		User user = createUser();
-		String accessToken = jwtUtil.createAccessToken(user.getEmail(), user.getRole());
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
 		String refreshToken = jwtUtil.createRefreshToken(user.getEmail(), user.getRole());
 
 		lettuceUtils.save(user.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRATION);
