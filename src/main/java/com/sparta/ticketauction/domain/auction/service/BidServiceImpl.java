@@ -34,18 +34,14 @@ public class BidServiceImpl implements BidService {
 	public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
 		String key = AUCTION_BID_KEY_PREFIX + auctionId;
 
-		if (!redissonRepository.existBucket(key)) {
+		if (redissonRepository.isExpired(key)) {
 			throw new ApiException(ENDED_AUCTION);
 		}
 
-		long currentBidPrice = redissonRepository.getValue(key);
-		long increaseBidPrice = (long)(currentBidPrice * BID_PRICE_INCREASE_PERCENT);
-		long bidPrice = bidRequest.getPrice();
-
-		//상회입찰이 아니거나, 포인트가 입찰가보다 적은경우
 		long point = userRepository.findPointById(loginUser.getId());
-
-		validateBid(point, increaseBidPrice, bidPrice);
+		long bidPrice = bidRequest.getPrice();
+		long currentBidPrice = redissonRepository.getValue(key);
+		validateBid(point, currentBidPrice, bidPrice);
 
 		//경매 엔티티 입찰가 갱신 및 입찰 테이블 save
 		Auction auction = auctionRepository.getReferenceById(auctionId);
@@ -58,18 +54,19 @@ public class BidServiceImpl implements BidService {
 			.build();
 
 		bidRepository.save(bid);
-		loginUser.deductPoint(bidPrice);
 		redissonRepository.setValue(key, bidPrice);
 	}
 
-	private static void validateBid(long point, long increaseBidPrice, long bidPrice) {
-		if (increaseBidPrice > bidPrice) {
+	private static void validateBid(long point, long currentBidPrice, long bidPrice) {
+		currentBidPrice += (long)(currentBidPrice * BID_PRICE_INCREASE_PERCENT);
+
+		if (currentBidPrice > bidPrice) {
 			throw new ApiException(BAD_REQUEST_BID);
 		}
 
 		//포인트가 부족한 경우
 		if (point < bidPrice) {
-			throw new ApiException(BAD_REQUEST_BID);
+			throw new ApiException(NOT_ENOUGH_POINT);
 		}
 	}
 }

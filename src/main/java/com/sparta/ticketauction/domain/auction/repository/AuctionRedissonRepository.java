@@ -37,7 +37,7 @@ public class AuctionRedissonRepository {
 		return redissonClient.getBucket(key, codec);
 	}
 
-	public boolean existBucket(String key) {
-		return getBucket(key).isExists();
+	public boolean isExpired(String key) {
+		return getBucket(key).remainTimeToLive() < 1;
 	}
 }
