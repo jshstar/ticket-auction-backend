@@ -50,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
 
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
-	public static final String FILE_PATH = "goods/"; // goods/  thumbnail/ + (String)goodsId
+	public static final String FILE_PATH = "goods/";
 
 	public static final String THUMBNAIL = "thumbnail/";
 

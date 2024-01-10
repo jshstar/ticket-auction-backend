@@ -32,7 +32,7 @@ public class GoodsRequestTest {
 
 	String goodsName;
 
-	String goodsDescription = "강아지의 신나는 공연";
+	String goodsDescription;
 
 	LocalDate startDate;
 
