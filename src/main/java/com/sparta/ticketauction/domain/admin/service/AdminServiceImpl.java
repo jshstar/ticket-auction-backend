@@ -21,16 +21,16 @@ import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
-import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
+import com.sparta.ticketauction.domain.goods.service.GoodsService;
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
-import com.sparta.ticketauction.domain.goods_sequence_seat.service.GoodsSequenceSeatServiceImpl;
+import com.sparta.ticketauction.domain.goods_sequence_seat.service.GoodsSequenceSeatService;
 import com.sparta.ticketauction.domain.place.entity.Place;
-import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
+import com.sparta.ticketauction.domain.place.service.PlaceService;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.seat.request.SeatRequest;
-import com.sparta.ticketauction.domain.seat.service.SeatServiceImpl;
+import com.sparta.ticketauction.domain.seat.service.SeatService;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
-import com.sparta.ticketauction.domain.sequence.service.SequenceServiceImpl;
+import com.sparta.ticketauction.domain.sequence.service.SequenceService;
 import com.sparta.ticketauction.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
@@ -39,15 +39,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-	private final GoodsServiceImpl goodsService;
+	private final GoodsService goodsService;
 
-	private final PlaceServiceImpl placeService;
+	private final PlaceService placeService;
 
-	private final SequenceServiceImpl sequenceService;
+	private final SequenceService sequenceService;
 
-	private final SeatServiceImpl seatService;
+	private final SeatService seatService;
 
-	private final GoodsSequenceSeatServiceImpl goodsSequenceSeatService;
+	private final GoodsSequenceSeatService goodsSequenceSeatService;
 
 	private final S3Uploader s3Uploader;
 

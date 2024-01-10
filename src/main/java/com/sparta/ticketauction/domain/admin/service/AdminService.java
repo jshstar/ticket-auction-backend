@@ -17,7 +17,7 @@ public interface AdminService {
 	// 공연 생성
 	void createGoodsAndSequence(GoodsRequest goodsRequest, Long placeId, List<MultipartFile> files);
 
-	// 공연 별 회차 별 좌석
+	// 공연 별 회차 별 좌석 생성
 	void createGoodsSequenceSeatAndAuction(
 		Long placeId,
 		Long sequenceId,

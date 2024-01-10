@@ -18,14 +18,20 @@ public class SequenceServiceImpl implements SequenceService {
 
 	private final SequenceRepository sequenceRepository;
 
+	// 회차 리스트 저장
+	@Override
 	public void saveAllSequence(List<Sequence> sequenceList) {
 		sequenceRepository.saveAll(sequenceList);
 	}
 
+	// 회차 저장
+	@Override
 	public Sequence saveSequence(Sequence sequence) {
 		return sequenceRepository.save(sequence);
 	}
 
+	// 회차 탐색
+	@Override
 	public Sequence findSequence(Long sequenceId) {
 		return sequenceRepository.findById(sequenceId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_SEQUENCE));

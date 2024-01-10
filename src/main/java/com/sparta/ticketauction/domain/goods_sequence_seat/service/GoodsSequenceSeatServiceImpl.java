@@ -15,10 +15,14 @@ public class GoodsSequenceSeatServiceImpl implements GoodsSequenceSeatService {
 
 	private final GoodsSequenceSeatRepository goodsSequenceSeatRepository;
 
+	// 공연 회차 별 좌석 저장
+	@Override
 	public void saveAllGoodsSequenceSeat(List<GoodsSequenceSeat> goodsSequenceSeatList) {
 		goodsSequenceSeatRepository.saveAll(goodsSequenceSeatList);
 	}
 
+	// 회차별 공연 조회
+	@Override
 	public List<GoodsSequenceSeat> findAllBySequenceId(Long sequenceId) {
 		return goodsSequenceSeatRepository.findAllBySequenceId(sequenceId);
 	}
