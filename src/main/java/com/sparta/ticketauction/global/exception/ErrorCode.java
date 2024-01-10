@@ -42,8 +42,14 @@ public enum ErrorCode {
 
 	/* AUCTION */
 	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),
+
 	ENDED_AUCTION(HttpStatus.BAD_REQUEST, "A10001", "경매가 종료되었습니다."),
-	BAD_REQUEST_BID(HttpStatus.BAD_REQUEST, "A10100", "현재 입찰가보다 5% 이상이어야합니다."),
+
+
+	/* BID */
+	NOT_FOUND_BID(HttpStatus.NOT_FOUND, "B10000", "입찰을 찾지 못했습니다."),
+	NOT_FOUND_WIN_BID(HttpStatus.NOT_FOUND, "B10001", "낙찰자를 찾지 못했습니다."),
+	BAD_REQUEST_BID(HttpStatus.BAD_REQUEST, "B10100", "현재 입찰가보다 5% 이상이어야합니다."),
 
 
 
