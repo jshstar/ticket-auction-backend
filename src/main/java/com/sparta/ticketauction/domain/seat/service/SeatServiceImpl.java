@@ -18,4 +18,16 @@ public class SeatServiceImpl implements SeatService {
 	public void saveAllSeat(List<Seat> seats) {
 		seatRepository.saveAll(seats);
 	}
+
+	public Seat findSeat(Long placeId, String zone, Integer seatNumber) {
+		return seatRepository.findByPlaceIdAndZoneAndSeatNumber(placeId, zone, seatNumber).orElseThrow();
+	}
+
+	public List<Seat> findAllSeatOfZone(Long placeId, String zone) {
+		return seatRepository.findAllByPlaceIdAndZone(placeId, zone);
+	}
+
+	public List<Seat> findAllSeatNumber(Long placeId, String zone, List<Integer> seatNumbers) {
+		return seatRepository.findAllByPlaceIdAndZoneAndSeatNumberIn(placeId, zone, seatNumbers);
+	}
 }
