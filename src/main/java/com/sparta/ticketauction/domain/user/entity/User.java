@@ -71,8 +71,16 @@ public class User extends BaseEntity {
 	private Boolean isDeleted = false;
 
 	@Builder
-	private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth,
-		Role role) {
+	private User(
+		Long id,
+		String email,
+		String password,
+		String name,
+		String nickname,
+		String phoneNumber,
+		LocalDate birth
+	) {
+		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.name = name;

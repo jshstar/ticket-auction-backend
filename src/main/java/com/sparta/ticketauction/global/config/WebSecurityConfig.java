@@ -9,13 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.sparta.ticketauction.global.jwt.ExceptionHandlerFilter;
 import com.sparta.ticketauction.global.jwt.JwtAuthenticationFilter;
 import com.sparta.ticketauction.global.jwt.JwtAuthorizationFilter;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
@@ -30,8 +30,6 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
-	private final UserDetailsService userDetailsService;
-	private final AccessDeniedHandler accessDeniedHandler;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
 	@Bean
@@ -53,7 +51,12 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
-		return new JwtAuthorizationFilter(jwtUtil, lettuceUtils, userDetailsService);
+		return new JwtAuthorizationFilter(jwtUtil, lettuceUtils);
+	}
+
+	@Bean
+	public ExceptionHandlerFilter exceptionHandlerFilter() {
+		return new ExceptionHandlerFilter();
 	}
 
 	@Bean
@@ -77,8 +80,10 @@ public class WebSecurityConfig {
 
 		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
-
+		http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
+    
+    http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
+    
 		return http.build();
 	}
 }

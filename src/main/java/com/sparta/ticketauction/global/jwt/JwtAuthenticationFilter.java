@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -71,13 +72,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		HttpServletResponse response,
 		FilterChain chain,
 		Authentication authResult
-	) throws IOException, ServletException {
+	) throws ServletException, IOException {
 		log.info("Login Success, username : {}", authResult.getName());
 
-		String username = ((UserDetailsImpl)authResult.getPrincipal()).getUsername();
+		User user = ((UserDetailsImpl)authResult.getPrincipal()).getUser();
 		Role role = ((UserDetailsImpl)authResult.getPrincipal()).getUser().getRole();
+		String username = user.getEmail();
+		Long id = user.getId();
 
-		String accessToken = jwtUtil.createAccessToken(username, role);
+		String accessToken = jwtUtil.createAccessToken(id, username, role);
 		String refreshToken = jwtUtil.createRefreshToken(username, role);
 
 		lettuceUtils.save("RefreshToken: " + username, jwtUtil.substringToken(refreshToken), REFRESH_TOKEN_EXPIRATION);
@@ -85,11 +88,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
 		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
 
+		response.setStatus(SUCCESS_USER_LOGIN.getHttpStatus().value());
+
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
 		String result = mapper.writeValueAsString(
-			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}"));
+			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}")
+		);
 
 		response.getWriter().write(result);
 	}
@@ -102,14 +108,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	) throws IOException, ServletException {
 		log.info("Login Fail, msg : {}", failed.getMessage());
 
-		response.setStatus(NOT_FOUND_USER_FOR_LOGIN.getHttpStatus().value());
-
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-		String result = mapper.writeValueAsString(
-			ApiResponse.of(NOT_FOUND_USER_FOR_LOGIN.getCode(), NOT_FOUND_USER_FOR_LOGIN.getMessage(), "{}"));
-
-		response.getWriter().write(result);
+		throw new ApiException(NOT_FOUND_USER_FOR_LOGIN);
 	}
 }

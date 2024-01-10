@@ -40,8 +40,8 @@ public class JwtAuthenticationHelper {
 			.password(UserUtil.ADMIN_TEST_PASSWORD)
 			.build();
 
-		User user = createAdminUser();
-		String accessToken = jwtUtil.createAccessToken(user.getEmail(), user.getRole());
+		User user = createUser();
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
 		String refreshToken = jwtUtil.createRefreshToken(user.getEmail(), user.getRole());
 
 		lettuceUtils.save(user.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRATION);
