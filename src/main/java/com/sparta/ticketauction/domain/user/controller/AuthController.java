@@ -14,6 +14,7 @@ import com.sparta.ticketauction.domain.user.service.AuthService;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -42,5 +43,14 @@ public class AuthController {
 			);
 	}
 
+	@PostMapping("/reissue")
+	public ResponseEntity<ApiResponse> reissue(HttpServletRequest request, HttpServletResponse response) {
+		authService.reissue(request, response);
+		return ResponseEntity.status(SUCCESS_REISSUE_TOKEN.getHttpStatus())
+			.body(ApiResponse.of(
+				SUCCESS_REISSUE_TOKEN.getCode(),
+				SUCCESS_REISSUE_TOKEN.getMessage()
+			));
+	}
 }
 
