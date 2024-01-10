@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
@@ -45,7 +46,7 @@ class AuthServiceImplTest {
 	@BeforeEach
 	void beforeEach() {
 		ReflectionTestUtils.setField(jwtUtil, "ACCESS_TOKEN_TIME", ACCESS_TOKEN_TIME);
-		ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
+		// ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
 		ReflectionTestUtils.setField(jwtUtil, "secretKey", secretKey);
 
 		jwtUtil.init();
@@ -97,6 +98,40 @@ class AuthServiceImplTest {
 			// Then
 			assertThat(exception)
 				.hasMessage(EXISTED_USER_PHONE_NUMBER.getMessage());
+		}
+	}
+
+	@Nested
+	class 토큰_재발급_테스트 {
+
+		@Test
+		void 성공() {
+			// Given
+			MockHttpServletRequest request = new MockHttpServletRequest();
+			MockHttpServletResponse response = new MockHttpServletResponse();
+
+			String refreshToken = "testrefreshtoken";
+			String newAccessToken = "new-access-token";
+			String newRefreshToken = "new-refresh-token";
+
+			Claims claims = Jwts.claims().setSubject(TEST_EMAIL);
+			claims.put("auth", Role.USER);
+			claims.put("id", "1");
+
+			given(jwtUtil.getUserInfoFromToken(any())).willReturn(claims);
+			given(lettuceUtils.get(any())).willReturn(refreshToken);
+
+			given(jwtUtil.createAccessToken(any(), any(), any())).willReturn(newAccessToken);
+			given(jwtUtil.createRefreshToken(any(), any(), any())).willReturn(newRefreshToken);
+
+			// When
+			sut.reissue(request, response);
+
+			// Then
+			verify(jwtUtil).getUserInfoFromToken(any());
+			verify(lettuceUtils).get(any());
+			verify(jwtUtil).createAccessToken(any(), any(), any());
+			verify(jwtUtil).createRefreshToken(any(), any(), any());
 		}
 	}
 }
