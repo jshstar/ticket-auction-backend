@@ -44,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
 	private static final String PREFIX_REFRESH_TOKEN = "RefreshToken: ";
 	private static final String PREFIX_LOGOUT = "Logout: ";
 	private static final long VERIFY_TIME = 5 * 60 * 1000L;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
@@ -108,7 +109,6 @@ public class AuthServiceImpl implements AuthService {
 				.content("[Ticket Auction]\n인증 번호: " + verificationNumber + "\n5분 이내로 입력해주세요.")
 				.build();
 
-			ObjectMapper objectMapper = new ObjectMapper();
 			String body = objectMapper.writeValueAsString(request);
 
 			HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
