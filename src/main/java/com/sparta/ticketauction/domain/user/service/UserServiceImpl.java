@@ -56,4 +56,10 @@ public class UserServiceImpl implements UserService {
 		return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
 	}
 
+	@Override
+	public User findByUserId(Long userId) {
+		return userRepository.findByIdAndIsDeletedIsFalse(userId)
+			.orElseThrow(() -> new ApiException(NOT_FOUND_BY_ID));
+	}
+	
 }
