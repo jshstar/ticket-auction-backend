@@ -11,4 +11,12 @@ public interface UserService {
 	 * @return void
 	 * */
 	void signup(UserCreateRequest request);
+
+	/*
+	 * 휴대폰 번호 중복 검사 메서드
+	 *
+	 * @param String phoneNumber
+	 * @return boolean
+	 * */
+	boolean isExistedPhoneNumber(String phoneNumber);
 }

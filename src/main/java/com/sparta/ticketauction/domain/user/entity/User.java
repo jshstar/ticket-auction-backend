@@ -78,7 +78,8 @@ public class User extends BaseEntity {
 		String name,
 		String nickname,
 		String phoneNumber,
-		LocalDate birth
+		LocalDate birth,
+		Role role
 	) {
 		this.id = id;
 		this.email = email;

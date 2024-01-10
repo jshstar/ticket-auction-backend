@@ -47,3 +47,10 @@ cloud: # S3
       static: ap-northeast-2
     stack:
       auto: false
+
+
+naver-cloud:
+  access-key: ${ACCESS_KEY}
+  secret-key: ${SECRET_KEY}
+  service-id: ${SERVICE_ID}
+  sender-phone: ${SENDER_PHONE}

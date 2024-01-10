@@ -12,12 +12,12 @@ public enum ErrorCode {
 	/* USER */
 	EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10000", "사용 중인 이메일 입니다."),
 	EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10001", "사용 중인 닉네임 입니다."),
+	EXISTED_USER_PHONE_NUMBER(HttpStatus.CONFLICT, "U10002", "사용 중인 전화 번호 입니다."),
+	INVALID_VERIFICATION_NUMBER(HttpStatus.BAD_REQUEST, "U10003", "잘못된 인증 번호 입니다."),
+	EXCEED_VERIFICATION_TIME(HttpStatus.BAD_REQUEST, "U10004", "인증 번호 입력 시간 초과 입니다."),
 	INVALID_TOKEN(HttpStatus.BAD_REQUEST, "U10100", "잘못된 토큰입니다."),
 	NOT_FOUND_USER_FOR_LOGIN(HttpStatus.NOT_FOUND, "U10101", "존재하지 않는 회원입니다."),
 	REQUIRED_ADMIN_USER_AUTHORITY(HttpStatus.UNAUTHORIZED, "U19900", "관리자 권한이 필요합니다."),
-
-
-
 
 
 	/* GOODS */
