@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -14,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsSequenceSeatRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
+import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
 import com.sparta.ticketauction.domain.goods_sequence_seat.service.GoodsSequenceSeatServiceImpl;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
@@ -48,6 +51,8 @@ public class AdminServiceImpl implements AdminService {
 
 	private final S3Uploader s3Uploader;
 
+	// private final AuctionService auctionService;
+
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
 	public static final String FILE_PATH = "goods/";
@@ -60,12 +65,15 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	@Transactional
 	public List<PlaceResponse> createPlace(PlaceRequest placeRequest) {
+		// 좌석 카운트
 		List<SeatRequest> seats = placeRequest.getSeats();
 		Integer totalSeat = totalCountSeat(seats);
 
+		// 공연 저장
 		Place place = placeRequest.toEntity(totalSeat);
 		Place savePlace = placeService.savePlace(place);
 
+		// 좌석 저장
 		List<Seat> seatList = createSeat(seats, savePlace);
 		seatService.saveAllSeat(seatList);
 
@@ -82,21 +90,91 @@ public class AdminServiceImpl implements AdminService {
 	public void createGoodsAndSequence(GoodsRequest goodsRequest, Long placeId, List<MultipartFile> files) {
 		Place place = placeService.findPlace(placeId);
 
+		// 공연 저장
 		Goods goods = goodsRequest.toEntity(place);
 		Goods saveGoods = goodsService.saveGoods(goods);
 
+		// 이미지 저장
 		List<String> fileUrl = s3tUpload(files, saveGoods.getId());
 		List<GoodsImage> goodsImageList = saveAllGoodsImage(fileUrl, saveGoods);
 		saveGoods.addGoodsImage(goodsImageList);
 
+		// 카테고리 저장
 		GoodsCategory goodsCategory = createGoodsCategory(goodsRequest.getCategoryName());
 		saveGoods.updateGoodsCategory(goodsCategory);
 
+		// 회차 저장
 		createSequence(saveGoods, goodsRequest.getStartTime());
 	}
 
+	// 공연별 회차 생성 및 경매 생성
+	@Override
+	@Transactional
+	public void createGoodsSequenceSeatAndAuction(
+		Long placeId,
+		Long sequenceId,
+		GoodsSequenceSeatRequest goodsSequenceSeatRequest
+	) {
+		List<Seat> allSeatOfZone = seatService.findAllSeatOfZone(placeId, goodsSequenceSeatRequest.getZone());
+		Sequence sequence = sequenceService.findSequence(sequenceId);
+		List<GoodsSequenceSeat> goodsSequenceSeatList = checkAndCreateAuctionSeat(allSeatOfZone, sequence,
+			goodsSequenceSeatRequest);
+
+		saveAllGoodsSequenceSeat(goodsSequenceSeatList);
+
+		List<GoodsSequenceSeat> sequenceAuctionList = goodsSequenceSeatService.findAllBySequenceId(sequence.getId());
+		// createAuction(List<GoodsSequenceSeat> sequenceAuctionList);
+	}
+
+	// 옥션 공연 회차별 좌석 생성
+	public List<GoodsSequenceSeat> checkAndCreateAuctionSeat(
+		List<Seat> allSeatOfZone,
+		Sequence sequence,
+		GoodsSequenceSeatRequest goodsSequenceSeatRequest
+	) {
+		List<Integer> auctionSeatList = goodsSequenceSeatRequest.getAuctionSeats();
+		List<GoodsSequenceSeat> goodsSequenceSeatList = new ArrayList<>();
+
+		for (Integer seatNumber : auctionSeatList) {
+			// 임시 체크 처리
+			if (Objects.equals(allSeatOfZone.get(seatNumber).getSeatNumber(), seatNumber)) {
+				Seat auctionSeat = allSeatOfZone.get(seatNumber);
+				GoodsSequenceSeat auctionGoodsSequenceSeat =
+					goodsSequenceSeatRequest.auctionToEntity(
+						auctionSeat,
+						sequence
+					);
+				goodsSequenceSeatList.add(auctionGoodsSequenceSeat);
+				allSeatOfZone.remove(seatNumber.intValue());
+
+			}
+		}
+
+		return restCreateGeneralSeat(goodsSequenceSeatList, allSeatOfZone, sequence, goodsSequenceSeatRequest);
+	}
+
+	// 일반 좌석 공연 회차별 좌석 생성
+	public List<GoodsSequenceSeat> restCreateGeneralSeat(
+		List<GoodsSequenceSeat> goodsSequenceSeatList,
+		List<Seat> allSeatOfZone,
+		Sequence sequence,
+		GoodsSequenceSeatRequest goodsSequenceSeatRequest
+	) {
+
+		for (Seat seat : allSeatOfZone) {
+			goodsSequenceSeatList.add(goodsSequenceSeatRequest.generalToEntity(seat, sequence));
+		}
+
+		return goodsSequenceSeatList;
+	}
+
+	// 모든 좌석 생성
+	public void saveAllGoodsSequenceSeat(List<GoodsSequenceSeat> goodsSequenceSeatList) {
+		goodsSequenceSeatService.saveAllGoodsSequenceSeat(goodsSequenceSeatList);
+	}
+
 	// 총 좌석 개수 연산
-	private Integer totalCountSeat(List<SeatRequest> seatRequests) {
+	public Integer totalCountSeat(List<SeatRequest> seatRequests) {
 		Integer totalSeat = 0;
 
 		for (SeatRequest seat : seatRequests) {
@@ -169,6 +247,11 @@ public class AdminServiceImpl implements AdminService {
 		saveSequence(saveSequenceList);
 	}
 
+	private void saveSequence(List<Sequence> sequenceList) {
+		sequenceService.saveAllSequence(sequenceList);
+	}
+
+	// 회차 분리
 	private List<Sequence> distributeSequence(Goods goods, LocalTime startTime) {
 		LocalDate startDate = goods.getStartDate();
 		LocalDate endDate = goods.getEndDate();
@@ -190,10 +273,6 @@ public class AdminServiceImpl implements AdminService {
 		}
 
 		return distributeSequenceList;
-	}
-
-	private void saveSequence(List<Sequence> sequenceList) {
-		sequenceService.saveAllSequence(sequenceList);
 	}
 
 	// 카테고리 생성 기타 입력시
