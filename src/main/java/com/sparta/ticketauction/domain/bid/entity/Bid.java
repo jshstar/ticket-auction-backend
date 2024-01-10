@@ -1,7 +1,8 @@
-package com.sparta.ticketauction.domain.auction.entity;
+package com.sparta.ticketauction.domain.bid.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 

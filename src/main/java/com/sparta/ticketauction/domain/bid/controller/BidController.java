@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.auction.controller;
+package com.sparta.ticketauction.domain.bid.controller;
 
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sparta.ticketauction.domain.auction.request.BidRequest;
-import com.sparta.ticketauction.domain.auction.service.BidService;
+import com.sparta.ticketauction.domain.bid.request.BidRequest;
+import com.sparta.ticketauction.domain.bid.service.BidService;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.dto.EmptyObject;
