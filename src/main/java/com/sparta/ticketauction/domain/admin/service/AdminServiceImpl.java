@@ -185,7 +185,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 좌석 생성
-	private List<Seat> createSeat(List<SeatRequest> seats, Place place) {
+	public List<Seat> createSeat(List<SeatRequest> seats, Place place) {
 		return seats.stream()
 			.flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
 				.mapToObj(i -> seat.toEntity(place, i)))
@@ -193,13 +193,13 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 이미지 저장
-	private List<GoodsImage> saveAllGoodsImage(List<String> fileKeyList, Goods goods) {
+	public List<GoodsImage> saveAllGoodsImage(List<String> fileKeyList, Goods goods) {
 		List<GoodsImage> goodsImageList = divideGoodsImageList(fileKeyList, goods);
 		return goodsService.saveAllGoodsImage(goodsImageList);
 	}
 
 	// 이미지 종류 분리
-	private List<GoodsImage> divideGoodsImageList(List<String> fileKeyList, Goods goods) {
+	public List<GoodsImage> divideGoodsImageList(List<String> fileKeyList, Goods goods) {
 		List<GoodsImage> returnGoodsIamgeList = new ArrayList<>();
 		for (String fileKey : fileKeyList) {
 			GoodsImage goodsImage =
@@ -215,7 +215,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 이미지 종류 체크
-	private String checkGoodsType(String type) {
+	public String checkGoodsType(String type) {
 		if (type.contains(THUMBNAIL)) {
 			return "대표";
 		}
@@ -223,7 +223,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// S3 저장
-	private List<String> s3tUpload(List<MultipartFile> fileList, Long goodId) {
+	public List<String> s3tUpload(List<MultipartFile> fileList, Long goodId) {
 		List<String> fileUrl = new ArrayList<>();
 
 		String thumbnailFilePath = FILE_PATH + THUMBNAIL + goodId;
@@ -242,17 +242,17 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 회차 생성
-	private void createSequence(Goods goods, LocalTime startTime) {
+	public void createSequence(Goods goods, LocalTime startTime) {
 		List<Sequence> saveSequenceList = distributeSequence(goods, startTime);
 		saveSequence(saveSequenceList);
 	}
 
-	private void saveSequence(List<Sequence> sequenceList) {
+	public void saveSequence(List<Sequence> sequenceList) {
 		sequenceService.saveAllSequence(sequenceList);
 	}
 
 	// 회차 분리
-	private List<Sequence> distributeSequence(Goods goods, LocalTime startTime) {
+	public List<Sequence> distributeSequence(Goods goods, LocalTime startTime) {
 		LocalDate startDate = goods.getStartDate();
 		LocalDate endDate = goods.getEndDate();
 
@@ -276,7 +276,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 카테고리 생성 기타 입력시
-	private GoodsCategory createGoodsCategory(String category) {
+	public GoodsCategory createGoodsCategory(String category) {
 		GoodsCategory goodsCategory = goodsService.findGoodsCategory(category);
 		if (goodsCategory == null) {
 			goodsCategory =
