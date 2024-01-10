@@ -1,9 +1,14 @@
 package com.sparta.ticketauction.domain.user.service;
 
+import static com.sparta.ticketauction.domain.user.util.UserUtil.*;
+import static com.sparta.ticketauction.global.exception.ErrorCode.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +18,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
+import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -28,6 +35,8 @@ class AuthServiceImplTest {
 	private final String secretKey = "7J6g7J2AIOyZhOyEse2VmOqzoCDrgpjshJwg7J6Q66m065Cc64ukIQ==";
 	@Mock
 	JwtUtil jwtUtil;
+	@Mock
+	UserServiceImpl userService;
 	@InjectMocks
 	private AuthServiceImpl sut;
 	@Mock
@@ -54,7 +63,6 @@ class AuthServiceImplTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 
 		given(jwtUtil.getAccessTokenFromRequestHeader(any())).willReturn(accessToken);
-		given(jwtUtil.validateToken(any())).willReturn(true);
 
 		Claims claims = Jwts.claims().setSubject(email);
 		claims.put("auth", role);
@@ -68,5 +76,27 @@ class AuthServiceImplTest {
 		// Then
 		then(lettuceUtils).should().delete(any(String.class));
 		then(lettuceUtils).should().save(any(), any(), any());
+	}
+
+	@Nested
+	class 휴대폰_인증_번호_발송_테스트 {
+
+		@Test
+		void 이미_존재하는_번호_실패() {
+			// Given
+			UserForVerificationRequest request = new UserForVerificationRequest(TEST_PHONE_NUMBER);
+
+			given(userService.isExistedPhoneNumber(any())).willReturn(true);
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.verifyPhone(request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(EXISTED_USER_PHONE_NUMBER.getMessage());
+		}
 	}
 }

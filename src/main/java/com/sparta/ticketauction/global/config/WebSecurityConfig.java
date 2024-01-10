@@ -30,6 +30,7 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
+	private final AccessDeniedHandler accessDeniedHandler;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
 	@Bean
@@ -72,18 +73,17 @@ public class WebSecurityConfig {
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.requestMatchers(
-						"/api/v1/users/signup", "/api/v1/auth/login"
+						"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/signup/sms"
 					).permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
 
-		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
-    
-    http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
-    
+		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
+			.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class)
+			.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
+
 		return http.build();
 	}
 }

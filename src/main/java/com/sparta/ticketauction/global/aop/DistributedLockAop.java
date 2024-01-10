@@ -53,11 +53,13 @@ public class DistributedLockAop {
 		} catch (InterruptedException e) {
 			throw new InterruptedException();
 		} finally {
-			rLock.unlock();
-
-			log.debug("Redisson UnLock");
-			log.debug("serviceName: {}", method.getName());
-			log.debug("key: {}", key);
+			try {
+				rLock.unlock();
+			} catch (IllegalMonitorStateException e) {
+				log.debug("Redisson Already UnLock");
+				log.debug("serviceName: {}", method.getName());
+				log.debug("key: {}", key);
+			}
 		}
 	}
 }

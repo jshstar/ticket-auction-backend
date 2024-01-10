@@ -17,6 +17,12 @@ spring:
     username: ${db_username}
     password: ${db_password}
     url: jdbc:mysql://localhost:3306/ticket_auction
+    hikari :
+      connection-timeout: 3000
+      validation-timeout: 3000
+      minimum-idle: 10
+      max-lifetime: 240000
+      maximum-pool-size: 20
   jpa:
     hibernate:
       ddl-auto: update
@@ -47,3 +53,10 @@ cloud: # S3
       static: ap-northeast-2
     stack:
       auto: false
+
+
+naver-cloud:
+  access-key: ${ACCESS_KEY}
+  secret-key: ${SECRET_KEY}
+  service-id: ${SERVICE_ID}
+  sender-phone: ${SENDER_PHONE}
