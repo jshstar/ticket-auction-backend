@@ -51,9 +51,33 @@ public class S3Uploader {
 		for (File file : uploadFileList) {
 			// S3에 저장된 파일 이름
 			String fileName = filePath + "/" + UUID.randomUUID();
-			uploadImageUrl.add(putS3(file, fileName));
+			uploadImageUrl.add(putS3ToKey(file, fileName));
 			removeNewFile(file);
 		}
+
+		return uploadImageUrl;
+	}
+
+	/**
+	 * 로컬 경로에 저장
+	 */
+	public String uploadSingleFileToS3(MultipartFile multipartFile, String filePath) {
+		// MultipartFile -> File 로 변환
+		File uploadFile;
+		try {
+			uploadFile = convert(multipartFile).orElseThrow(()
+				-> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		String uploadImageUrl;
+		// s3로 업로드 후 로컬 파일 삭제
+
+		// S3에 저장된 파일 이름
+		String fileName = filePath + "/" + UUID.randomUUID();
+		uploadImageUrl = putS3ToKey(uploadFile, fileName);
+		removeNewFile(uploadFile);
 
 		return uploadImageUrl;
 	}
@@ -68,6 +92,18 @@ public class S3Uploader {
 		amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
 			CannedAccessControlList.PublicRead));
 		return amazonS3Client.getUrl(bucket, fileName).toString();
+	}
+
+	/**
+	 * S3로 업로드
+	 * @param uploadFile : 업로드할 파일
+	 * @param fileName : 업로드할 파일 이름
+	 * @return 업로드 경로를 제외한 KEY값
+	 */
+	public String putS3ToKey(File uploadFile, String fileName) {
+		amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
+			CannedAccessControlList.PublicRead));
+		return fileName;
 	}
 
 	/**

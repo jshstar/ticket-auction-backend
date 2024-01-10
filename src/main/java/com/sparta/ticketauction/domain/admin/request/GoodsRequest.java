@@ -1,15 +1,13 @@
 package com.sparta.ticketauction.domain.admin.request;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
-import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
-import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.place.entity.Place;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -24,11 +22,11 @@ public class GoodsRequest {
 	@Size(min = 1, max = 150, message = "1~150자 사이로 입력해주세요")
 	private final String description;
 
-	@NotBlank(message = "공연 시작일 기입은 필수입니다.")
+	@NotNull(message = "공연 시작일 기입은 필수입니다.")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private final LocalDate startDate;
 
-	@NotBlank(message = "공연 종료일은 필수입니다.")
+	@NotNull(message = "공연 종료일은 필수입니다.")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private final LocalDate endDate;
 
@@ -36,12 +34,16 @@ public class GoodsRequest {
 	private final Integer ageGrade;
 
 	@NotNull(message = "상영 시간은 필수입니다")
+	@JsonFormat(pattern = "HH:mm")
+	private final LocalTime startTime;
+
+	@NotNull(message = "공연 시간은 필수입니다")
 	private final Integer runningTime;
 
 	@Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
 	private final String categoryName;
 
-	public Goods toEntity(List<GoodsImage> goodsImages, Place place) {
+	public Goods toEntity(Place place) {
 		return Goods
 			.builder()
 			.name(this.name)
@@ -50,9 +52,8 @@ public class GoodsRequest {
 			.endDate(this.endDate)
 			.ageGrade(this.ageGrade)
 			.runningTime(this.runningTime)
-			.goodsCategory(GoodsCategory.builder().name(this.categoryName).build())
-			.goodsImage(goodsImages)
 			.place(place)
+			.goodsImage(new ArrayList<>())
 			.build();
 
 	}

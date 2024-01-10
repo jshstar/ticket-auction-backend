@@ -29,7 +29,7 @@ public class GoodsImage extends BaseEntity {
 	private Long id;
 
 	@Comment("S3 URL")
-	@Column(name = "s3_key", length = 50, nullable = false)
+	@Column(name = "s3_key", length = 150, nullable = false)
 	private String s3Key;
 
 	@Comment("대표 이미지 or 일반 이미지")
@@ -43,8 +43,9 @@ public class GoodsImage extends BaseEntity {
 	private Goods goods;
 
 	@Builder
-	private GoodsImage(String s3Key, String type) {
+	private GoodsImage(String s3Key, String type, Goods goods) {
 		this.s3Key = s3Key;
 		this.type = ImageType.of(type);
+		this.goods = goods;
 	}
 }

@@ -21,7 +21,7 @@ public enum SuccessCode {
 
 
 	/* GOODS */
-
+	SUCCESS_GOODS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "G09900", "공연 및 회차가 추가되었습니다."),
 
 
 

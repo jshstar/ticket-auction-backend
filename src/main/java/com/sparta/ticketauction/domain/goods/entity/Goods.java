@@ -51,14 +51,14 @@ public class Goods extends BaseEntity {
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
 
-	@Comment("연령대")
-	@Column(name = "age_grade", nullable = false)
-	private AgeGrade ageGrade;
-
 	@Comment("공연 시간")
 	@Column(name = "running_time", nullable = false)
 	@ColumnDefault("0")
 	private Integer runningTime = 0;
+
+	@Comment("연령대")
+	@Column(name = "age_grade", nullable = false)
+	private AgeGrade ageGrade;
 
 	@Comment("공연 카테고리")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -80,8 +80,8 @@ public class Goods extends BaseEntity {
 		String description,
 		LocalDate startDate,
 		LocalDate endDate,
-		Integer ageGrade,
 		Integer runningTime,
+		Integer ageGrade,
 		GoodsCategory goodsCategory,
 		List<GoodsImage> goodsImage,
 		Place place
@@ -90,11 +90,19 @@ public class Goods extends BaseEntity {
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.ageGrade = AgeGrade.of(ageGrade);
 		this.runningTime = runningTime;
+		this.ageGrade = AgeGrade.of(ageGrade);
 		this.goodsCategory = goodsCategory;
 		this.goodsImage = goodsImage;
 		this.place = place;
+	}
+
+	public void addGoodsImage(List<GoodsImage> goodsImages) {
+		this.goodsImage.addAll(goodsImages);
+	}
+
+	public void updateGoodsCategory(GoodsCategory goodsCategory) {
+		this.goodsCategory = goodsCategory;
 	}
 
 }
