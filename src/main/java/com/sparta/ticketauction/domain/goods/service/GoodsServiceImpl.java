@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
+import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
@@ -32,6 +33,14 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public GoodsImage saveGoodsImage(GoodsImage fileUrl) {
 		return goodsImageRepository.save(fileUrl);
+	}
+
+	public GoodsCategory findGoodsCategory(String category) {
+		return goodsCategoryRepository.findByName(category).orElse(null);
+	}
+
+	public GoodsCategory saveGoodSCategory(GoodsCategory category) {
+		return goodsCategoryRepository.save(category);
 	}
 
 }

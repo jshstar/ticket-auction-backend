@@ -87,10 +87,10 @@ public class AdminServiceImpl implements AdminService {
 
 		List<String> fileUrl = s3tUpload(files, saveGoods.getId());
 		List<GoodsImage> goodsImageList = saveAllGoodsImage(fileUrl, saveGoods);
-		saveGoods.createGoodsImage(goodsImageList);
+		saveGoods.addGoodsImage(goodsImageList);
 
 		GoodsCategory goodsCategory = createGoodsCategory(goodsRequest.getCategoryName());
-		saveGoods.createGoodsCategory(goodsCategory);
+		saveGoods.updateGoodsCategory(goodsCategory);
 
 		createSequence(saveGoods, goodsRequest.getStartTime());
 	}
@@ -108,45 +108,44 @@ public class AdminServiceImpl implements AdminService {
 
 	// 좌석 생성
 	private List<Seat> createSeat(List<SeatRequest> seats, Place place) {
-		List<Seat> seatList = new ArrayList<>();
-
-		seatList = seats.stream()
+		return seats.stream()
 			.flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
 				.mapToObj(i -> seat.toEntity(place, i)))
 			.collect(Collectors.toList());
-
-		return seatList;
 	}
 
 	// 이미지 저장
-	public List<GoodsImage> saveAllGoodsImage(List<String> fileKeyList, Goods goods) {
-		List<GoodsImage> goodsImageList = new ArrayList<>();
-		for (String fileKey : fileKeyList) {
-			if (fileKey.contains(THUMBNAIL)) {
-				GoodsImage goodsImage =
-					GoodsImage
-						.builder()
-						.s3Key(fileKey)
-						.type("대표")
-						.goods(goods)
-						.build();
-				goodsImageList.add(goodsImage);
-			} else if (fileKey.contains(GENERAL)) {
-				GoodsImage goodsImage =
-					GoodsImage
-						.builder()
-						.s3Key(fileKey)
-						.type("일반")
-						.goods(goods)
-						.build();
-				goodsImageList.add(goodsImage);
-			}
-		}
+	private List<GoodsImage> saveAllGoodsImage(List<String> fileKeyList, Goods goods) {
+		List<GoodsImage> goodsImageList = divideGoodsImageList(fileKeyList, goods);
 		return goodsService.saveAllGoodsImage(goodsImageList);
 	}
 
+	// 이미지 종류 분리
+	private List<GoodsImage> divideGoodsImageList(List<String> fileKeyList, Goods goods) {
+		List<GoodsImage> returnGoodsIamgeList = new ArrayList<>();
+		for (String fileKey : fileKeyList) {
+			GoodsImage goodsImage =
+				GoodsImage
+					.builder()
+					.s3Key(fileKey)
+					.type(this.checkGoodsType(fileKey))
+					.goods(goods)
+					.build();
+			returnGoodsIamgeList.add(goodsImage);
+		}
+		return returnGoodsIamgeList;
+	}
+
+	// 이미지 종류 체크
+	private String checkGoodsType(String type) {
+		if (type.contains(THUMBNAIL)) {
+			return "대표";
+		}
+		return "일반";
+	}
+
 	// S3 저장
-	public List<String> s3tUpload(List<MultipartFile> fileList, Long goodId) {
+	private List<String> s3tUpload(List<MultipartFile> fileList, Long goodId) {
 		List<String> fileUrl = new ArrayList<>();
 
 		String thumbnailFilePath = FILE_PATH + THUMBNAIL + goodId;
@@ -165,29 +164,41 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 회차 생성
-	public void createSequence(Goods goods, LocalTime startTime) {
-		List<Sequence> sequenceList = new ArrayList<>();
+	private void createSequence(Goods goods, LocalTime startTime) {
+		List<Sequence> saveSequenceList = distributeSequence(goods, startTime);
+		saveSequence(saveSequenceList);
+	}
+
+	private List<Sequence> distributeSequence(Goods goods, LocalTime startTime) {
 		LocalDate startDate = goods.getStartDate();
 		LocalDate endDate = goods.getEndDate();
+
+		List<Sequence> distributeSequenceList = new ArrayList<>();
 		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+
 		for (int i = 1; i <= daysBetween; i++) {
-			LocalDateTime dateTIme = startDate.atTime(startTime);
+			LocalDateTime dateTime = startDate.atTime(startTime);
 			Sequence sequence =
 				Sequence
 					.builder()
-					.startDateTime(dateTIme)
+					.startDateTime(dateTime)
 					.goods(goods)
 					.sequence(i)
 					.build();
-			sequenceList.add(sequence);
+			distributeSequenceList.add(sequence);
 			startDate = startDate.plusDays(1);
 		}
+
+		return distributeSequenceList;
+	}
+
+	private void saveSequence(List<Sequence> sequenceList) {
 		sequenceService.saveAllSequence(sequenceList);
 	}
 
 	// 카테고리 생성 기타 입력시
-	public GoodsCategory createGoodsCategory(String category) {
-		GoodsCategory goodsCategory = goodsSequenceSeatService.findGoodsCategory(category);
+	private GoodsCategory createGoodsCategory(String category) {
+		GoodsCategory goodsCategory = goodsService.findGoodsCategory(category);
 		if (goodsCategory == null) {
 			goodsCategory =
 				GoodsCategory
@@ -195,7 +206,7 @@ public class AdminServiceImpl implements AdminService {
 					.name(category)
 					.build();
 		}
-		return goodsSequenceSeatService.saveGoodSCategory(goodsCategory);
+		return goodsService.saveGoodSCategory(goodsCategory);
 	}
 
 }
