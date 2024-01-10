@@ -24,9 +24,13 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+    defer-datasource-initialization: true
   jackson:
     serialization:
       fail-on-empty-beans: false
+  sql:
+    init:
+      mode: always
 
 jwt:
   secret:

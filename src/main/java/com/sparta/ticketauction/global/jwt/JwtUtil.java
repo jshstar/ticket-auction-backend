@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -40,6 +41,7 @@ public class JwtUtil {
 	public static final String BEARER_PREFIX = "Bearer ";
 	private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
 	private final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -54,13 +56,14 @@ public class JwtUtil {
 	}
 
 	/* 엑세스 토큰 생성 */
-	public String createAccessToken(String username, Role role) {
+	public String createAccessToken(Long id, String username, Role role) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
 			Jwts.builder()
 				.setSubject(username)
 				.claim(AUTHORIZATION_KEY, role)
+				.claim("identify", id)
 				.setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)
@@ -91,29 +94,23 @@ public class JwtUtil {
 	}
 
 	/* 토큰 검증 */
-	public boolean validateToken(String token) {
+	public void validateToken(String token) {
 		try {
 			jwtParser.parseClaimsJws(token);
-			return true;
 		} catch (SecurityException | MalformedJwtException e) {
-			log.error("Invalid JWT Signature, 유효하지 않는 JWT 서명입니다.");
+			throw new ApiException(INVALID_JWT_TOKEN);
 		} catch (ExpiredJwtException e) {
-			log.error("Expired JWT token, 만료된 JWT token 입니다.");
+			throw new ApiException(EXPIRED_JWT_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰입니다.");
+			throw new ApiException(UNSUPPORTED_JWT_TOKEN);
 		} catch (IllegalArgumentException e) {
-			log.error("JWT claims is empty, 잘못된 JWT 토큰입니다.");
+			throw new ApiException(NON_ILLEGAL_ARGUMENT_JWT_TOKEN);
 		}
-		return false;
 	}
 
 	/* 토큰에서 사용자 정보 가져오기 */
 	public Claims getUserInfoFromToken(String token) {
 		return jwtParser.parseClaimsJws(token).getBody();
-	}
-
-	public String getUsernameFromToken(String token) {
-		return getUserInfoFromToken(token).getSubject();
 	}
 
 	public String resolveAccessToken(HttpServletRequest request) {
@@ -162,5 +159,4 @@ public class JwtUtil {
 		Date now = new Date();
 		return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
 	}
-
 }

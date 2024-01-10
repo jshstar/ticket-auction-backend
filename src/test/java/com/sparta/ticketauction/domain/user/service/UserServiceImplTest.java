@@ -41,12 +41,12 @@ class UserServiceImplTest {
 		void 이미_존재하는_이메일인_경우_실패() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			given(userRepository.existsByEmailAndIsDeletedIsFalse(request.getEmail())).willReturn(true);
@@ -65,12 +65,12 @@ class UserServiceImplTest {
 		void 이미_존재하는_닉네임인_경우_실패() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			given(userRepository.existsByEmailAndIsDeletedIsFalse(request.getEmail())).willReturn(false);
@@ -90,12 +90,12 @@ class UserServiceImplTest {
 		void 회원가입_성공() {
 			// Given
 			UserCreateRequest request = getUserCreateRequest(
-				EMAIL,
-				PASSWORD,
-				NAME,
-				NICKNAME,
-				PHONE_NUMBER,
-				BIRTH
+				TEST_EMAIL,
+				TEST_PASSWORD,
+				TEST_NAME,
+				TEST_NICKNAME,
+				TEST_PHONE_NUMBER,
+				TEST_BIRTH
 			);
 
 			User user = request.toEntity(passwordEncoder);
