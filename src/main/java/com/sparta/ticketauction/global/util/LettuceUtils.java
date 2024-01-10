@@ -11,11 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LettuceUtils {
 
-	public static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
 	private final RedisTemplate<String, String> lettuceTemplate;
 
 	public void save(String key, String value, Integer min) {
-		lettuceTemplate.opsForValue().set(key, value, min, TimeUnit.SECONDS);
+		lettuceTemplate.opsForValue().set(key, value, min, TimeUnit.MINUTES);
 	}
 
 	public String get(String key) {
