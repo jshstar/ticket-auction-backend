@@ -24,6 +24,6 @@ public class PlaceServiceImpl implements PlaceService {
 	// 공연장 찾기
 	public Place findPlace(Long placeId) {
 		return placeRepository.findById(placeId)
-			.orElseThrow(() -> new ApiException(NOTFOUND_PLACE));
+			.orElseThrow(() -> new ApiException(NOT_FOUND_PLACE));
 	}
 }
