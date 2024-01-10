@@ -13,8 +13,8 @@ public class LettuceUtils {
 
 	private final RedisTemplate<String, String> lettuceTemplate;
 
-	public void save(String key, String value, Integer min) {
-		lettuceTemplate.opsForValue().set(key, value, min, TimeUnit.MINUTES);
+	public void save(String key, String value, long time) {
+		lettuceTemplate.opsForValue().set(key, value, time, TimeUnit.MILLISECONDS);
 	}
 
 	public String get(String key) {
