@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -29,6 +28,7 @@ import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j(topic = "JwtUtil")
@@ -39,9 +39,8 @@ public class JwtUtil {
 	public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
+	public static final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
 	private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
-	private final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
-	private final ObjectMapper mapper = new ObjectMapper();
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -71,13 +70,14 @@ public class JwtUtil {
 	}
 
 	/* 리프레시 토큰 생성 */
-	public String createRefreshToken(String username, Role role) {
+	public String createRefreshToken(Long id, String username, Role role) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
 			Jwts.builder()
 				.setSubject(username)
 				.claim(AUTHORIZATION_KEY, role)
+				.claim("identify", id)
 				.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)
@@ -90,7 +90,7 @@ public class JwtUtil {
 			return token.substring(7);
 		}
 
-		throw new ApiException(INVALID_TOKEN);
+		throw new ApiException(INVALID_JWT_TOKEN);
 	}
 
 	/* 토큰 검증 */
@@ -135,18 +135,6 @@ public class JwtUtil {
 		return substringToken(refreshToken);
 	}
 
-	public Cookie setCookieWithRefreshToken(String refreshToken) {
-		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
-			.replaceAll("\\+", "%20");
-
-		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
-		cookie.setSecure(true);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-
-		return cookie;
-	}
-
 	public String getAccessTokenFromRequestHeader(HttpServletRequest request) {
 		String accessToken = request.getHeader(ACCESS_TOKEN_HEADER);
 		if (!StringUtils.hasText(accessToken)) {
@@ -158,5 +146,21 @@ public class JwtUtil {
 	public Integer getRemainingTime(Date expiration) {
 		Date now = new Date();
 		return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
+	}
+
+	public void setAccessTokenInHeader(HttpServletResponse response, String accessToken) {
+		response.setHeader(ACCESS_TOKEN_HEADER, accessToken);
+	}
+
+	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
+		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
+			.replaceAll("\\+", "%20");
+
+		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+
+		response.addCookie(cookie);
 	}
 }
