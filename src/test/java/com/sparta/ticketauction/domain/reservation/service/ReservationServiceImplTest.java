@@ -31,10 +31,10 @@ import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.seat.repository.SeatRepository;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.domain.sequence.repository.SequenceRepository;
-import com.sparta.ticketauction.domain.user.UserUtil;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 @ExtendWith(MockitoExtension.class)

@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.user.controller;
 
+import static com.sparta.ticketauction.domain.user.util.UserUtil.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 import static org.assertj.core.api.Assertions.*;
@@ -40,8 +41,8 @@ public class AuthControllerTest {
 	void 로그인_성공_테스트() throws Exception {
 		// Given
 		UserLoginRequest request = UserLoginRequest.builder()
-			.email(UserUtil.EMAIL)
-			.password(UserUtil.PASSWORD)
+			.email(UserUtil.TEST_EMAIL)
+			.password(UserUtil.TEST_PASSWORD)
 			.build();
 
 		helper.createUser();
@@ -76,7 +77,7 @@ public class AuthControllerTest {
 		// Given
 		UserLoginRequest request = UserLoginRequest.builder()
 			.email("another@gmail.com")
-			.password(UserUtil.PASSWORD)
+			.password(UserUtil.TEST_PASSWORD)
 			.build();
 
 		helper.createUser();
@@ -100,5 +101,42 @@ public class AuthControllerTest {
 		assertThat(response.getContentAsString())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getCode())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getMessage());
+	}
+
+	@Test
+	void 관리자_로그인_테스트() throws Exception {
+		// Given
+		UserLoginRequest request = UserLoginRequest.builder()
+			.email(ADMIN_TEST_EMAIL)
+			.password(ADMIN_TEST_PASSWORD)
+			.build();
+
+		String accessToken = helper.adminLogin();
+
+		// When
+		ResultActions actions = mvc.perform(post("/api/v1/auth/login")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(mapper.writeValueAsString(request))
+			.accept(MediaType.APPLICATION_JSON)
+		);
+
+		// Then
+		MockHttpServletResponse response = actions
+			.andDo(print())
+			.andReturn()
+			.getResponse();
+
+		assertThat(response.getStatus())
+			.isEqualTo(SUCCESS_USER_LOGIN.getHttpStatus().value());
+
+		assertThat(response.getHeader("Authorization"))
+			.startsWith("Bearer");
+
+		assertThat(response.getContentAsString())
+			.contains(SUCCESS_USER_LOGIN.getCode())
+			.contains(SUCCESS_USER_LOGIN.getMessage());
+
+		assertThat(helper.getRole(accessToken))
+			.isEqualTo("ADMIN");
 	}
 }

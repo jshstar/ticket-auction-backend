@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.sparta.ticketauction.global.jwt.ExceptionHandlerFilter;
@@ -73,12 +74,16 @@ public class WebSecurityConfig {
 					.requestMatchers(
 						"/api/v1/users/signup", "/api/v1/auth/login"
 					).permitAll()
+					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
 
 		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
+    
+    http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
+    
 		return http.build();
 	}
 }
