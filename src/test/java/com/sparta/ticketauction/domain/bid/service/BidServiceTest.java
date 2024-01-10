@@ -1,10 +1,11 @@
-package com.sparta.ticketauction.domain.auction.service;
+package com.sparta.ticketauction.domain.bid.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,19 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
-import com.sparta.ticketauction.domain.auction.entity.Bid;
-import com.sparta.ticketauction.domain.auction.repository.AuctionRedissonRepository;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
-import com.sparta.ticketauction.domain.auction.repository.BidRepository;
-import com.sparta.ticketauction.domain.auction.request.BidRequest;
-import com.sparta.ticketauction.domain.user.repository.UserRepository;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
+import com.sparta.ticketauction.domain.bid.repository.BidRepository;
+import com.sparta.ticketauction.domain.bid.request.BidRequest;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
 
-@DisplayName("[경매] 서비스 테스트")
+@DisplayName("[입찰] 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class BidServiceTest {
 	@InjectMocks
@@ -37,11 +38,7 @@ class BidServiceTest {
 	private BidRepository bidRepository;
 
 	@Mock
-	private AuctionRedissonRepository redissonRepository;
-
-	@Mock
-	private UserRepository userRepository;
-
+	private BidRedisService bidRedisService;
 
 
 	//로그인한 유저가
@@ -59,23 +56,25 @@ class BidServiceTest {
 			.startPrice(1000L)
 			.build();
 
-		given(redissonRepository.isExpired(any()))
+		User bidder = UserUtil.createUser();
+		ReflectionTestUtils.setField(bidder, "point", 10_0000L);
+
+		System.out.println(bidder.getPoint());
+		given(bidRedisService.isExpired(any()))
 			.willReturn(false);
 
-		given(redissonRepository.getValue(any()))
+		given(bidRedisService.getBidPrice(any()))
 			.willReturn(1000L);
 
-		given(auctionRepository.getReferenceById(auctionId))
-			.willReturn(auction);
+		given(auctionRepository.findById(auctionId))
+			.willReturn(Optional.of(auction));
 
-		given(userRepository.findPointById(any()))
-			.willReturn(bidRequest.getPrice());
 		//When
-		sut.bid(auctionId, bidRequest, UserUtil.createUser());
+		sut.bid(auctionId, bidRequest, bidder);
 
 		//Then
 		then(bidRepository).should().save(any(Bid.class));
-		then(redissonRepository).should().setValue(any(), any());
+		then(bidRedisService).should().setBidPrice(any(), any());
 	}
 
 	@Test
@@ -84,16 +83,17 @@ class BidServiceTest {
 		Long auctionId = 1L;
 		BidRequest bidRequest = new BidRequest(10_000L);
 
-		given(redissonRepository.isExpired(any()))
+		User bidder = UserUtil.createUser();
+		ReflectionTestUtils.setField(bidder, "point", 10_0000L);
+
+		given(bidRedisService.isExpired(any()))
 			.willReturn(false);
 
-		given(redissonRepository.getValue(any()))
+		given(bidRedisService.getBidPrice(any()))
 			.willReturn(1000_000L);
 
-		given(userRepository.findPointById(any()))
-			.willReturn(10_000L);
 		//When & Then
-		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, UserUtil.createUser()))
+		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, bidder))
 			.isInstanceOf(ApiException.class)
 			.hasMessage(ErrorCode.BAD_REQUEST_BID.getMessage());
 	}
@@ -104,8 +104,7 @@ class BidServiceTest {
 		Long auctionId = 1L;
 		BidRequest bidRequest = new BidRequest(10_0000L);
 
-
-		given(redissonRepository.isExpired(any()))
+		given(bidRedisService.isExpired(any()))
 			.willReturn(true);
 
 		//When & Then
