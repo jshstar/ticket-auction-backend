@@ -38,9 +38,12 @@ public class UserServiceImpl implements UserService {
 		}
 
 		/* 핸드폰 번호 인증 번호 검사 */
+		if (!lettuceUtils.hasKey("[Verification]" + request.getPhoneNumber())) {
+			throw new ApiException(EXCEED_VERIFICATION_TIME);
+		}
+
 		if (!lettuceUtils.get("[Verification]" + request.getPhoneNumber())
-			.equals(request.getVerificationNumber())
-		) {
+			.equals(request.getVerificationNumber())) {
 			throw new ApiException(INVALID_VERIFICATION_NUMBER);
 		}
 
