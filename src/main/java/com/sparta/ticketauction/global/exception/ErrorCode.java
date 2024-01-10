@@ -41,7 +41,9 @@ public enum ErrorCode {
 
 
 	/* AUCTION */
-
+	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),
+	ENDED_AUCTION(HttpStatus.BAD_REQUEST, "A10001", "경매가 종료되었습니다."),
+	BAD_REQUEST_BID(HttpStatus.BAD_REQUEST, "A10100", "현재 입찰가보다 5% 이상이어야합니다."),
 
 
 
@@ -55,7 +57,7 @@ public enum ErrorCode {
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
 
 	/* PAYMENT */
-	NOT_ENOUGH_POINT(HttpStatus.OK, "", "결제할 포인트가 부족합니다"),
+	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "", "결제할 포인트가 부족합니다"),
 
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
