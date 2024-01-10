@@ -59,8 +59,8 @@ class BidServiceTest {
 			.startPrice(1000L)
 			.build();
 
-		given(redissonRepository.existBucket(any()))
-			.willReturn(true);
+		given(redissonRepository.isExpired(any()))
+			.willReturn(false);
 
 		given(redissonRepository.getValue(any()))
 			.willReturn(1000L);
@@ -84,8 +84,8 @@ class BidServiceTest {
 		Long auctionId = 1L;
 		BidRequest bidRequest = new BidRequest(10_000L);
 
-		given(redissonRepository.existBucket(any()))
-			.willReturn(true);
+		given(redissonRepository.isExpired(any()))
+			.willReturn(false);
 
 		given(redissonRepository.getValue(any()))
 			.willReturn(1000_000L);
@@ -105,8 +105,8 @@ class BidServiceTest {
 		BidRequest bidRequest = new BidRequest(10_0000L);
 
 
-		given(redissonRepository.existBucket(any()))
-			.willReturn(false);
+		given(redissonRepository.isExpired(any()))
+			.willReturn(true);
 
 		//When & Then
 		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, UserUtil.createUser()))
