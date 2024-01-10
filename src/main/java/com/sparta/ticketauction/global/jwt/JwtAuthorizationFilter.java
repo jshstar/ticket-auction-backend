@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -37,23 +36,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 		String accessToken = jwtUtil.resolveAccessToken(request);
 
 		// 엑세스 토큰 검증
-
 		if (StringUtils.hasText(accessToken)) {
-			try {
-				jwtUtil.validateToken(accessToken);
+			jwtUtil.validateToken(accessToken);
 
-				Claims info = jwtUtil.getUserInfoFromToken(accessToken);
-				Long id = Long.parseLong(info.get("identify").toString());
-				String username = info.getSubject();
+			Claims info = jwtUtil.getUserInfoFromToken(accessToken);
+			Long id = Long.parseLong(info.get("identify").toString());
+			String username = info.getSubject();
 
-				String logoutToken = lettuceUtils.get("Logout: " + username);
-				// 로그아웃 토큰 검증
-				if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
-					setAuthentication(id, username);
-				}
-			} catch (ApiException e) {
-				jwtUtil.setExceptionResponse(response, e);
-				return;
+			String logoutToken = lettuceUtils.get("Logout: " + username);
+			// 로그아웃 토큰 검증
+			if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
+				setAuthentication(id, username);
 			}
 		}
 		filterChain.doFilter(request, response);

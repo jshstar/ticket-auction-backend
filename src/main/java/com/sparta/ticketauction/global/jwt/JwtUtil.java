@@ -2,7 +2,6 @@ package com.sparta.ticketauction.global.jwt;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,15 +10,12 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.response.ApiResponse;
-import com.sparta.ticketauction.global.response.SuccessCode;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,7 +29,6 @@ import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j(topic = "JwtUtil")
@@ -163,31 +158,5 @@ public class JwtUtil {
 	public Integer getRemainingTime(Date expiration) {
 		Date now = new Date();
 		return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
-	}
-
-	public void setExceptionResponse(HttpServletResponse response, ApiException apiException) throws IOException {
-		response.setStatus(apiException.getHttpStatus().value());
-
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-		String result = mapper.writeValueAsString(
-			ApiResponse.of(apiException.getCode(), apiException.getMessage(), "{}")
-		);
-
-		response.getWriter().write(result);
-	}
-
-	public void setSuccessResponse(HttpServletResponse response, SuccessCode successCode) throws IOException {
-		response.setStatus(successCode.getHttpStatus().value());
-
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-		String result = mapper.writeValueAsString(
-			ApiResponse.of(successCode.getCode(), successCode.getMessage(), "{}")
-		);
-
-		response.getWriter().write(result);
 	}
 }

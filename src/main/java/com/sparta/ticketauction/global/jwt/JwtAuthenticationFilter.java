@@ -4,7 +4,9 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,6 +17,7 @@ import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.response.ApiResponse;
 import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -34,6 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	@PostConstruct
 	public void setup() {
@@ -84,7 +88,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
 		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
 
-		jwtUtil.setSuccessResponse(response, SUCCESS_USER_LOGIN);
+		response.setStatus(SUCCESS_USER_LOGIN.getHttpStatus().value());
+
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+		String result = mapper.writeValueAsString(
+			ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}")
+		);
+
+		response.getWriter().write(result);
 	}
 
 	@Override
@@ -95,6 +108,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	) throws IOException, ServletException {
 		log.info("Login Fail, msg : {}", failed.getMessage());
 
-		jwtUtil.setExceptionResponse(response, new ApiException(NOT_FOUND_USER_FOR_LOGIN));
+		throw new ApiException(NOT_FOUND_USER_FOR_LOGIN);
 	}
 }
