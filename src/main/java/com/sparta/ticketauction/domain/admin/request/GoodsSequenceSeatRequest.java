@@ -5,10 +5,9 @@ import java.util.List;
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.SellType;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
-import com.sparta.ticketauction.domain.seat.request.SeatRequest;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,28 +21,29 @@ public class GoodsSequenceSeatRequest {
 	@NotNull(message = "잘못된 경매 가격입니다.")
 	private final Long auctionPrice;
 
-	@Valid
-	@NotNull(message = "정확한 경매 좌석을 입력해 주세요.")
-	private final List<SeatRequest> auctionSeats;
+	@NotBlank(message = "구역 입력은 필수입니다.")
+	private final String zone;
 
-	public GoodsSequenceSeat generalToEntity(Seat seat, Sequence sequence, SellType sellType) {
+	private final List<Integer> auctionSeats;
+
+	public GoodsSequenceSeat generalToEntity(Seat seat, Sequence sequence) {
 		return GoodsSequenceSeat
 			.builder()
 			.price(this.generalAuctionPrice)
 			.seat(seat)
 			.sequence(sequence)
-			.sellType(sellType)
+			.sellType(SellType.NORMAL)
 			.isSelled(false)
 			.build();
 	}
 
-	public GoodsSequenceSeat auctionToEntity(Seat seat, Sequence sequence, SellType sellType) {
+	public GoodsSequenceSeat auctionToEntity(Seat seat, Sequence sequence) {
 		return GoodsSequenceSeat
 			.builder()
 			.price(this.auctionPrice)
 			.seat(seat)
 			.sequence(sequence)
-			.sellType(sellType)
+			.sellType(SellType.AUCTION)
 			.isSelled(false)
 			.build();
 	}
