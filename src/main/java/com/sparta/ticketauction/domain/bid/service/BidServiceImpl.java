@@ -3,16 +3,15 @@ package com.sparta.ticketauction.domain.bid.service;
 import static com.sparta.ticketauction.domain.bid.constant.BidConstant.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
-import java.util.Comparator;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
-import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.repository.BidRepository;
+import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.DistributedLock;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -58,7 +57,7 @@ public class BidServiceImpl implements BidService {
 		}
 
 		//새 입찰자 포인트 차감 및 경매 입찰가 갱신
-		bidder.deductPoint(newBidPrice);
+		bidder.usePoint(newBidPrice);
 	}
 
 	public void saveBid(User bidder, long newBidPrice, Auction auction) {
@@ -79,8 +78,7 @@ public class BidServiceImpl implements BidService {
 	}
 
 	public Optional<Bid> getCurrentBid(Auction auction) {
-		return auction.getBids().stream()
-			.max(Comparator.comparingLong(Bid::getPrice));
+		return bidRepository.findTopByAuctionOrderByIdDesc(auction);
 	}
 
 	/**
