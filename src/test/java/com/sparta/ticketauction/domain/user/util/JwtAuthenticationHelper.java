@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
-import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -34,17 +33,31 @@ public class JwtAuthenticationHelper {
 		return userRepository.save(UserUtil.AMDIN_USER);
 	}
 
-	public String adminLogin() {
-		UserLoginRequest request = UserLoginRequest.builder()
-			.email(UserUtil.ADMIN_TEST_EMAIL)
-			.password(UserUtil.ADMIN_TEST_PASSWORD)
-			.build();
-
+	public String[] login() {
 		User user = createUser();
-		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
-		String refreshToken = jwtUtil.createRefreshToken(user.getEmail(), user.getRole());
 
-		lettuceUtils.save(user.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRATION);
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole());
+
+		lettuceUtils.save(
+			"RefreshToken " + user.getEmail(),
+			jwtUtil.substringToken(refreshToken),
+			REFRESH_TOKEN_EXPIRATION
+		);
+
+		return new String[] {accessToken, refreshToken};
+	}
+
+	public String adminLogin() {
+		User user = createAdminUser();
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole());
+
+		lettuceUtils.save(
+			"RefreshToken " + user.getEmail(),
+			jwtUtil.substringToken(refreshToken),
+			REFRESH_TOKEN_EXPIRATION
+		);
 
 		return accessToken;
 	}
@@ -54,5 +67,9 @@ public class JwtAuthenticationHelper {
 
 		return (String)claims.get("auth");
 
+	}
+
+	public void deleteToken(String username) {
+		lettuceUtils.delete("RefreshToken " + username);
 	}
 }

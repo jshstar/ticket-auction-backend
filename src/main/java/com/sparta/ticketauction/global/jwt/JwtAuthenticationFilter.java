@@ -33,8 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	private static final long REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30 * 1000L;
-
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
 	private final ObjectMapper mapper = new ObjectMapper();
@@ -51,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	) throws AuthenticationException {
 		try {
 			UserLoginRequest req =
-				new ObjectMapper().readValue(request.getInputStream(), UserLoginRequest.class);
+				mapper.readValue(request.getInputStream(), UserLoginRequest.class);
 
 			return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
@@ -81,12 +79,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		Long id = user.getId();
 
 		String accessToken = jwtUtil.createAccessToken(id, username, role);
-		String refreshToken = jwtUtil.createRefreshToken(username, role);
+		String refreshToken = jwtUtil.createRefreshToken(id, username, role);
 
-		lettuceUtils.save("RefreshToken: " + username, jwtUtil.substringToken(refreshToken), REFRESH_TOKEN_EXPIRATION);
+		lettuceUtils.save(
+			JwtUtil.REFRESH_TOKEN_HEADER + " " + username,
+			jwtUtil.substringToken(refreshToken),
+			JwtUtil.REFRESH_TOKEN_TIME
+		);
 
-		response.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
-		response.addCookie(jwtUtil.setCookieWithRefreshToken(refreshToken));
+		jwtUtil.setAccessTokenInHeader(response, accessToken);
+		jwtUtil.setRefreshTokenInCookie(response, refreshToken);
 
 		response.setStatus(SUCCESS_USER_LOGIN.getHttpStatus().value());
 

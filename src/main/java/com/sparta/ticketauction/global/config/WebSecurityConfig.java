@@ -79,9 +79,10 @@ public class WebSecurityConfig {
 					.anyRequest().authenticated()
 		);
 
-		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
+		http
+			.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
 			.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class)
+			.addFilterBefore(exceptionHandlerFilter(), JwtAuthorizationFilter.class)
 			.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
 
 		return http.build();
