@@ -1,20 +1,22 @@
 package com.sparta.ticketauction.domain.auction.entity;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,7 +36,7 @@ public class Auction extends BaseEntity {
 	@Comment("시작가")
 	@ColumnDefault("0")
 	@Column(name = "start_price", nullable = false)
-	private Long startPrice = 0L;
+	private Long startPrice;
 
 	@Comment("입찰가")
 	@Column(name = "bid_price", nullable = false)
@@ -52,17 +54,32 @@ public class Auction extends BaseEntity {
 	@Column(name = "is_ended")
 	private Boolean isEnded = false;
 
-	@OneToMany(mappedBy = "auction")
-	private Set<Bid> bid = new LinkedHashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({
+		@JoinColumn(name = "seat_id", referencedColumnName = "seatId"),
+		@JoinColumn(name = "sequence_id", referencedColumnName = "sequenceId")
+	})
+	private GoodsSequenceSeat sequenceSeat;
 
 	@Builder
-	private Auction(Long startPrice, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	private Auction(
+		Long startPrice,
+		LocalDateTime startDateTime,
+		LocalDateTime endDateTime,
+		GoodsSequenceSeat sequenceSeat
+	) {
 		this.startPrice = startPrice;
+		this.bidPrice = startPrice;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
+		this.sequenceSeat = sequenceSeat;
 	}
 
 	public void updateBidPrice(Long bidPrice) {
 		this.bidPrice = bidPrice;
+	}
+
+	public void ended() {
+		this.isEnded = true;
 	}
 }
