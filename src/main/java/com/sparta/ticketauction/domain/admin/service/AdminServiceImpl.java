@@ -23,6 +23,7 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
+import com.sparta.ticketauction.domain.goods_sequence_seat.entity.SellType;
 import com.sparta.ticketauction.domain.goods_sequence_seat.service.GoodsSequenceSeatService;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.service.PlaceService;
@@ -122,7 +123,8 @@ public class AdminServiceImpl implements AdminService {
 
 		saveAllGoodsSequenceSeat(goodsSequenceSeatList);
 
-		List<GoodsSequenceSeat> sequenceAuctionList = goodsSequenceSeatService.findAllBySequenceId(sequence.getId());
+		List<GoodsSequenceSeat> sequenceAuctionList =
+			goodsSequenceSeatService.findAllBySequenceIdAndSellType(sequence.getId(), SellType.AUCTION);
 		// createAuction(List<GoodsSequenceSeat> sequenceAuctionList);
 	}
 

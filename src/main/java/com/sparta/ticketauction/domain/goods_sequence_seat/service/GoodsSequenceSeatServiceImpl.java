@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
+import com.sparta.ticketauction.domain.goods_sequence_seat.entity.SellType;
 import com.sparta.ticketauction.domain.goods_sequence_seat.repository.GoodsSequenceSeatRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ public class GoodsSequenceSeatServiceImpl implements GoodsSequenceSeatService {
 		goodsSequenceSeatRepository.saveAll(goodsSequenceSeatList);
 	}
 
-	// 회차별 공연 조회
+	// 공연 회차별 타입 좌석 조회
 	@Override
-	public List<GoodsSequenceSeat> findAllBySequenceId(Long sequenceId) {
-		return goodsSequenceSeatRepository.findAllBySequenceId(sequenceId);
+	public List<GoodsSequenceSeat> findAllBySequenceIdAndSellType(Long sequenceId, SellType sellType) {
+		return goodsSequenceSeatRepository.findAllBySequenceIdAndSellType(sequenceId, sellType);
 	}
 
 }
