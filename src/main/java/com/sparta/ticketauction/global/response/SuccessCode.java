@@ -33,13 +33,6 @@ public enum SuccessCode {
 	/* PLACE */
 
 
-
-
-
-
-
-
-
 	/* AUCTION */
 	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
 
@@ -67,6 +60,9 @@ public enum SuccessCode {
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
+
+	/* TOKEN */
+	SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
 
 	/* GLOBAL */
 	OK(HttpStatus.OK, "", "성공");

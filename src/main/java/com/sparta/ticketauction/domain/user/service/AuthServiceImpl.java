@@ -1,6 +1,7 @@
 package com.sparta.ticketauction.domain.user.service;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
+import static com.sparta.ticketauction.global.jwt.JwtUtil.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -22,10 +23,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.ticketauction.domain.user.entity.constant.Role;
 import com.sparta.ticketauction.domain.user.request.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
@@ -35,9 +38,11 @@ import com.sparta.ticketauction.global.util.LettuceUtils;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
@@ -60,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
 	private String senderPhone;
 
 	@Override
+	@Transactional
 	public void logout(HttpServletRequest request) {
 		String accessToken = jwtUtil.getAccessTokenFromRequestHeader(request);
 
@@ -75,6 +81,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
+	@Transactional
 	public SmsResponse verifyPhone(UserForVerificationRequest userForVerificationRequest) {
 		if (userService.isExistedPhoneNumber(userForVerificationRequest.getTo())) {
 			throw new ApiException(EXISTED_USER_PHONE_NUMBER);
@@ -140,6 +147,38 @@ public class AuthServiceImpl implements AuthService {
 		);
 
 		return smsResponse;
+	}
+
+	@Override
+	@Transactional
+	public void reissue(HttpServletRequest request, HttpServletResponse response) {
+		String refreshToken = jwtUtil.resolveRefreshToken(request);
+
+		// 토큰 검증
+		jwtUtil.validateToken(refreshToken);
+
+		// 유저 정보 추출
+		Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
+		String username = claims.getSubject();
+		Role role = Role.valueOf((String)claims.get("auth"));
+		Long id = Long.parseLong(claims.get("identify").toString());
+
+		if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
+			throw new ApiException(INVALID_JWT_TOKEN);
+		}
+
+		String newAccessToken = jwtUtil.createAccessToken(id, username, role);
+		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role);
+
+		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
+		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
+
+		lettuceUtils.delete(REFRESH_TOKEN_HEADER + " " + username);
+		lettuceUtils.save(
+			REFRESH_TOKEN_HEADER + " " + username,
+			jwtUtil.substringToken(newRefreshToken),
+			REFRESH_TOKEN_TIME
+		);
 	}
 
 	private String getSignature(String time)

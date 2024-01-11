@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	// id를 사용하여 point 조회
 	@Query("SELECT u.point FROM User u WHERE u.id = :userId")
 	Long findPointById(@Param("userId") Long userId);
+
+	Optional<User> findByIdAndIsDeletedIsFalse(Long id);
 }

@@ -6,6 +6,10 @@ import static com.sparta.ticketauction.global.response.SuccessCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +23,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
+import com.sparta.ticketauction.domain.user.service.UserServiceImpl;
 import com.sparta.ticketauction.domain.user.util.JwtAuthenticationHelper;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
+import com.sparta.ticketauction.global.jwt.JwtUtil;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
@@ -35,6 +42,8 @@ public class AuthControllerTest {
 	private MockMvc mvc;
 	@Autowired
 	private ObjectMapper mapper;
+	@Autowired
+	private UserServiceImpl userService;
 
 	@Test
 	@Transactional
@@ -48,10 +57,11 @@ public class AuthControllerTest {
 		helper.createUser();
 
 		// When
-		ResultActions actions = mvc.perform(post("/api/v1/auth/login")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(mapper.writeValueAsString(request))
-			.accept(MediaType.APPLICATION_JSON)
+		ResultActions actions = mvc.perform(
+			post("/api/v1/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(request))
+				.accept(MediaType.APPLICATION_JSON)
 		);
 
 		// Then
@@ -70,6 +80,7 @@ public class AuthControllerTest {
 			.contains(SUCCESS_USER_LOGIN.getCode())
 			.contains(SUCCESS_USER_LOGIN.getMessage());
 
+		helper.deleteToken("RefreshToken " + TEST_EMAIL);
 	}
 
 	@Test
@@ -101,6 +112,8 @@ public class AuthControllerTest {
 		assertThat(response.getContentAsString())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getCode())
 			.contains(NOT_FOUND_USER_FOR_LOGIN.getMessage());
+
+		helper.deleteToken("RefreshToken " + TEST_EMAIL);
 	}
 
 	@Test
@@ -138,5 +151,41 @@ public class AuthControllerTest {
 
 		assertThat(helper.getRole(accessToken))
 			.isEqualTo("ADMIN");
+
+		helper.deleteToken("RefreshToken " + ADMIN_TEST_EMAIL);
+	}
+
+	@Test
+	void 토큰_재발급_테스트() throws Exception {
+		// Given
+		String[] token = helper.login();
+
+		token[1] = URLEncoder.encode(token[1], StandardCharsets.UTF_8)
+			.replaceAll("\\+", "%20");
+
+		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, token[1]);
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		// When
+		ResultActions actions = mvc.perform(
+			post("/api/v1/auth/reissue")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", token[0])
+				.cookie(cookie)
+		);
+
+		MockHttpServletResponse response = actions
+			.andDo(print())
+			.andReturn()
+			.getResponse();
+
+		// Then
+		actions.andExpect(status().isCreated());
+		assertThat(response.getContentAsString())
+			.contains(SUCCESS_REISSUE_TOKEN.getCode());
+
+		helper.deleteToken("RefreshToken " + TEST_EMAIL);
 	}
 }

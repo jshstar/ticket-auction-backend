@@ -1,6 +1,6 @@
-package com.sparta.ticketauction.domain.auction.service;
+package com.sparta.ticketauction.domain.bid.service;
 
-import com.sparta.ticketauction.domain.auction.request.BidRequest;
+import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.user.entity.User;
 
 public interface BidService {
