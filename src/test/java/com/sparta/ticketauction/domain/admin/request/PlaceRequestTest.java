@@ -102,7 +102,7 @@ public class PlaceRequestTest {
 		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
 
 		//then
-		assertThat(violations).isEmpty();
+		assertThat(violations).isNotEmpty();
 		violations
 			.forEach(
 				error -> {
