@@ -1,7 +1,8 @@
-package com.sparta.ticketauction.domain.auction.entity;
+package com.sparta.ticketauction.domain.bid.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -29,17 +30,17 @@ public class Bid extends BaseEntity {
 	private Long id;
 
 	@Comment("입찰 금액")
-	@Column(name = "price", nullable = false, updatable = false)
+	@Column(name = "price", nullable = false)
 	private Long price;
 
 	@Comment("입찰한 유저")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@Comment("경매")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "auction_id")
+	@JoinColumn(name = "auction_id", nullable = false)
 	private Auction auction;
 
 	@Builder

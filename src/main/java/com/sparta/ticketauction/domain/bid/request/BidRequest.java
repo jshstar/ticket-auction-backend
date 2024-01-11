@@ -1,8 +1,8 @@
-package com.sparta.ticketauction.domain.auction.request;
+package com.sparta.ticketauction.domain.bid.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.sparta.ticketauction.domain.auction.entity.Auction;
-import com.sparta.ticketauction.domain.auction.entity.Bid;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.user.entity.User;
 
 import jakarta.validation.constraints.NotNull;
