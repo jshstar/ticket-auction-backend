@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.request;
+package com.sparta.ticketauction.domain.user.request.sms;
 
 import java.util.List;
 
