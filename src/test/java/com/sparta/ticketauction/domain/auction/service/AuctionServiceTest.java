@@ -39,6 +39,26 @@ class AuctionServiceTest {
 	@Mock
 	private BidServiceImpl bidService;
 
+	@Nested
+	class 경매_등록_테스트 {
+		@Test
+		void 정상() {
+			Long auctionId = 1L;
+			Long bidId = 1L;
+			Auction auction = getAuction(auctionId);
+			Bid bid = getBid(auction, bidId);
+			given(auctionRepository.findById(auctionId))
+				.willReturn(Optional.of(auction));
+
+			given(bidService.getCurrentBid(auction))
+				.willReturn(Optional.of(bid));
+
+			//when
+			sut.endAuction(auctionId);
+
+			then(reservationService).should().reserve(auction, bid.getUser());
+		}
+	}
 
 	@Nested
 	class 경매_종료_테스트 {
