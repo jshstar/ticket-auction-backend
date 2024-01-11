@@ -15,7 +15,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -55,10 +54,8 @@ public class Auction extends BaseEntity {
 	private Boolean isEnded = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-		@JoinColumn(name = "seat_id", referencedColumnName = "seatId"),
-		@JoinColumn(name = "sequence_id", referencedColumnName = "sequenceId")
-	})
+	@JoinColumn(name = "seat_id")
+	@JoinColumn(name = "sequence_id")
 	private GoodsSequenceSeat sequenceSeat;
 
 	@Builder
