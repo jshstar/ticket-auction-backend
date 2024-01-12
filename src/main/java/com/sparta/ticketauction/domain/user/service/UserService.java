@@ -4,6 +4,7 @@ import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.response.UserResponse;
 
 public interface UserService {
 
@@ -34,7 +35,7 @@ public interface UserService {
 	/*
 	 * 유저 닉네임 정보 수정
 	 *
-	 * @param user 		로그인한 유저 정보
+	 * @param user 		로그인 한 유저 정보
 	 * @param userId 	정보가 수정될 유저의 id
 	 * @param request	변경할 닉네임 정보
 	 * */
@@ -43,9 +44,19 @@ public interface UserService {
 	/*
 	 * 유저 전화 번호 변경
 	 *
-	 * @param user 		로그인한 유저 정보
+	 * @param user 		로그인 한 유저 정보
 	 * @param userId 	정보가 수정될 유저의 id
 	 * @param request	변경할 전화 번호 정보
 	 * */
 	void updateUserPhoneInfo(User user, Long userId, UserPhoneUpdateRequest request);
+
+	/*
+	 * 유저 정보 조회
+	 *
+	 * @param user	 		로그인 한 융저 정보
+	 * @param userId 		조회할 유저의 id
+	 *
+	 * @return UserResponse	유저 응답 정보 dto
+	 * */
+	UserResponse gerUserInfo(User user, Long userId);
 }
