@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
-import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
-import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
@@ -42,34 +41,18 @@ public class UserController {
 			);
 	}
 
-	@PutMapping("/{user_id}/nickname")
+	@PutMapping("/{user_id}")
 	public ResponseEntity<ApiResponse> updateUserNicknameInfo(
 		@CurrentUser User user,
 		@PathVariable Long user_id,
-		@RequestBody @Valid UserNicknameUpdateRequest request
+		@RequestBody @Valid UserUpdateRequest request
 	) {
-		userService.updateUserNicknameInfo(user, user_id, request);
-		return ResponseEntity.status(SUCCESS_UPDATE_USER_NICKNAME.getHttpStatus())
+		userService.updateUserInfo(user, user_id, request);
+		return ResponseEntity.status(SUCCESS_UPDATE_USER_INFO.getHttpStatus())
 			.body(
 				ApiResponse.of(
-					SUCCESS_UPDATE_USER_NICKNAME.getCode(),
-					SUCCESS_UPDATE_USER_NICKNAME.getMessage()
-				)
-			);
-	}
-
-	@PutMapping("/{user_id}/phone")
-	public ResponseEntity<ApiResponse> updateUserPhoneInfo(
-		@CurrentUser User user,
-		@PathVariable Long user_id,
-		@RequestBody @Valid UserPhoneUpdateRequest request
-	) {
-		userService.updateUserPhoneInfo(user, user_id, request);
-		return ResponseEntity.status(SUCCESS_UPDATE_USER_PHONE.getHttpStatus())
-			.body(
-				ApiResponse.of(
-					SUCCESS_UPDATE_USER_PHONE.getCode(),
-					SUCCESS_UPDATE_USER_PHONE.getMessage()
+					SUCCESS_UPDATE_USER_INFO.getCode(),
+					SUCCESS_UPDATE_USER_INFO.getMessage()
 				)
 			);
 	}
@@ -84,9 +67,10 @@ public class UserController {
 			.body(
 				ApiResponse.of(
 					SUCCESS_GET_USER_INFO.getCode(),
-					SUCCESS_UPDATE_USER_NICKNAME.getMessage(),
+					SUCCESS_UPDATE_USER_INFO.getMessage(),
 					response
 				)
 			);
 	}
+
 }

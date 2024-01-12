@@ -22,8 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
-import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
-import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
