@@ -2,8 +2,7 @@ package com.sparta.ticketauction.domain.user.service;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
-import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
-import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 
 public interface UserService {
@@ -14,7 +13,7 @@ public interface UserService {
 	 * @param UserCreateRequest 회원 가입 시, 입력 정보
 	 * @return void
 	 * */
-	void signup(UserCreateRequest request);
+	UserResponse signup(UserCreateRequest request);
 
 	/*
 	 * 휴대폰 번호 중복 검사 메서드
@@ -33,22 +32,13 @@ public interface UserService {
 	User findByUserId(Long userId);
 
 	/*
-	 * 유저 닉네임 정보 수정
+	 * 유저 정보 수정 - 입력이 되고, 검증된 값에 한하여 수정됨
 	 *
 	 * @param user 		로그인 한 유저 정보
 	 * @param userId 	정보가 수정될 유저의 id
-	 * @param request	변경할 닉네임 정보
+	 * @param request	변경할 정보
 	 * */
-	void updateUserNicknameInfo(User user, Long userId, UserNicknameUpdateRequest request);
-
-	/*
-	 * 유저 전화 번호 변경
-	 *
-	 * @param user 		로그인 한 유저 정보
-	 * @param userId 	정보가 수정될 유저의 id
-	 * @param request	변경할 전화 번호 정보
-	 * */
-	void updateUserPhoneInfo(User user, Long userId, UserPhoneUpdateRequest request);
+	UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request);
 
 	/*
 	 * 유저 정보 조회
@@ -58,5 +48,5 @@ public interface UserService {
 	 *
 	 * @return UserResponse	유저 응답 정보 dto
 	 * */
-	UserResponse gerUserInfo(User user, Long userId);
+	UserResponse getUserInfo(User user, Long userId);
 }
