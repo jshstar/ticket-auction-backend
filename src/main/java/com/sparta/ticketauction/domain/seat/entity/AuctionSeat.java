@@ -2,7 +2,7 @@ package com.sparta.ticketauction.domain.seat.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.sequence.entity.Sequence;
+import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -37,7 +37,7 @@ public class AuctionSeat extends BaseEntity {
 	@Comment("회차")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sequence_id", nullable = false)
-	private Sequence sequence;
+	private Schedule schedule;
 
 	@Comment("구역등급")
 	@OneToOne(fetch = FetchType.LAZY)
@@ -45,9 +45,9 @@ public class AuctionSeat extends BaseEntity {
 	private ZoneGrade zoneGrade;
 
 	@Builder
-	public AuctionSeat(Integer seatNumber, Sequence sequence, ZoneGrade zoneGrade) {
+	public AuctionSeat(Integer seatNumber, Schedule schedule, ZoneGrade zoneGrade) {
 		this.seatNumber = seatNumber;
-		this.sequence = sequence;
+		this.schedule = schedule;
 		this.zoneGrade = zoneGrade;
 	}
 }
