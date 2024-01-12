@@ -45,12 +45,10 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
 	private static final String PREFIX_REFRESH_TOKEN = "RefreshToken: ";
 	private static final String PREFIX_LOGOUT = "Logout: ";
 	private static final long VERIFY_TIME = 5 * 60 * 1000L;
 	private final ObjectMapper objectMapper = new ObjectMapper();
-
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
 	private final UserService userService;
@@ -82,8 +80,8 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public SmsResponse verifyPhone(UserForVerificationRequest verificationRequest) {
-		if (userService.isExistedPhoneNumber(verificationRequest.getTo())) {
+	public SmsResponse verifyPhone(UserForVerificationRequest userForVerificationRequest) {
+		if (userService.isExistedPhoneNumber(userForVerificationRequest.getTo())) {
 			throw new ApiException(EXISTED_USER_PHONE_NUMBER);
 		}
 
@@ -96,16 +94,16 @@ public class AuthServiceImpl implements AuthService {
 		String time = Long.toString(System.currentTimeMillis());
 
 		SmsResponse smsResponse;
-
 		try {
 			HttpHeaders headers = new HttpHeaders();
+
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.set("x-ncp-apigw-timestamp", time);
 			headers.set("x-ncp-iam-access-key", accessKey);
 			headers.set("x-ncp-apigw-signature-v2", getSignature(time));
 
 			List<UserForVerificationRequest> messages = new ArrayList<>();
-			messages.add(verificationRequest);
+			messages.add(userForVerificationRequest);
 
 			SmsMessageRequest request = SmsMessageRequest.builder()
 				.type("SMS")
@@ -113,25 +111,19 @@ public class AuthServiceImpl implements AuthService {
 				.countryCode("82")
 				.from(senderPhone)
 				.messages(messages)
-				.content(
-					"[Ticket Auction]\n인증 번호: " + verificationNumber + "\n5분 이내로 입력해주세요."
-				)
+				.content("[Ticket Auction]\n인증 번호: " + verificationNumber + "\n5분 이내로 입력해주세요.")
 				.build();
 
 			String body = objectMapper.writeValueAsString(request);
+			HttpEntity<String> httpEntity = new HttpEntity<>(body,
+				headers);
 
-			HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
-
+			/* RestTemplate으로 외부 API에 post 요청 */
 			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
-			smsResponse = restTemplate.postForObject(
-				new URI(hostUrl + requestUrl),
-				httpEntity,
-				SmsResponse.class
-			);
+			smsResponse = restTemplate.postForObject(new URI(hostUrl + requestUrl), httpEntity, SmsResponse.class);
 			smsResponse.setVerificationNumbers(String.valueOf(verificationNumber));
-
 		} catch (
 			UnsupportedEncodingException
 			| NoSuchAlgorithmException
@@ -143,7 +135,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		lettuceUtils.save(
-			"[Verification]" + verificationRequest.getTo(),
+			"[Verification]" + userForVerificationRequest.getTo(),
 			String.valueOf(verificationNumber),
 			VERIFY_TIME
 		);
@@ -183,19 +175,18 @@ public class AuthServiceImpl implements AuthService {
 		);
 	}
 
+	/* 외부 API로 전달할 데이터 암호화 */
 	private String getSignature(String time)
-		throws UnsupportedEncodingException,
-		NoSuchAlgorithmException,
-		InvalidKeyException {
+		throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
 		String space = " ";
 		String newLine = "\n";
 		String method = "POST";
 		String url = "/sms/v2/services/" + this.serviceId + "/messages";
+
 		String accessKey = this.accessKey;
 		String secretKey = this.secretKey;
 
-		String message = new StringBuilder()
-			.append(method)
+		String message = new StringBuilder().append(method)
 			.append(space)
 			.append(url)
 			.append(newLine)
@@ -204,17 +195,14 @@ public class AuthServiceImpl implements AuthService {
 			.append(accessKey)
 			.toString();
 
-		SecretKeySpec signingKey = new SecretKeySpec(
-			secretKey.getBytes("UTF-8"),
-			"HmacSHA256"
-		);
+		SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
 		Mac mac = Mac.getInstance("HmacSHA256");
+
 		mac.init(signingKey);
 
 		byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-		String encodeBase64String = Base64.getEncoder().encodeToString(rawHmac);
 
+		String encodeBase64String = Base64.getEncoder().encodeToString(rawHmac);
 		return encodeBase64String;
 	}
-
 }
