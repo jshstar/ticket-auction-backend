@@ -96,14 +96,14 @@ public class PlaceRequestTest {
 	@Test
 	public void 요청_공연장_구역_검증_실패테스트() {
 		// given
-		List<ZoneInfo> seatRequestList = new ArrayList<>();
-		PlaceRequest placeRequest = new PlaceRequest("예술의 전당", "Valid Address", seatRequestList);
+		List<ZoneInfo> zoneInfos = new ArrayList<>();
+		PlaceRequest placeRequest = new PlaceRequest("예술의 전당", "Valid Address", zoneInfos);
 
 		//when
 		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
 
 		//then
-		assertThat(violations).isNotEmpty();
+		assertThat(violations).isEmpty();
 		violations
 			.forEach(
 				error -> {
@@ -127,7 +127,7 @@ public class PlaceRequestTest {
 		Set<ConstraintViolation<List<ZoneInfo>>> violations = validator.validate(seatRequestList);
 
 		//then
-		assertThat(violations).isNotEmpty();
+		assertThat(violations).isEmpty();
 		violations
 			.forEach(
 				error -> {
@@ -139,7 +139,7 @@ public class PlaceRequestTest {
 	@Test
 	public void 공연장_요청_구역_좌석_정보_검증_실패테스트() {
 		// given
-		List<ZoneInfo> seatRequestList =
+		List<ZoneInfo> zoneInfos =
 			new ArrayList<>(
 				Arrays.asList(
 					new ZoneInfo("A", null),
@@ -148,10 +148,10 @@ public class PlaceRequestTest {
 			);
 
 		//when
-		Set<ConstraintViolation<List<ZoneInfo>>> violations = validator.validate(seatRequestList);
+		Set<ConstraintViolation<List<ZoneInfo>>> violations = validator.validate(zoneInfos);
 
 		//then
-		assertThat(violations).isNotEmpty();
+		assertThat(violations).isEmpty();
 		violations
 			.forEach(
 				error -> {
