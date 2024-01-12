@@ -73,6 +73,14 @@ public class GoodsSequenceSeat extends BaseEntity {
 		this.id = new GoodsSequenceSeatID(seat.getId(), sequence.getId());
 	}
 
+	public void updatePrice(Long price) {
+		this.price = price;
+	}
+
+	public void updateSellType(SellType sellType) {
+		this.sellType = sellType;
+	}
+
 	public void updateIsSelled() {
 		this.isSelled = true;
 	}

@@ -56,8 +56,8 @@ public class Auction extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
-		@JoinColumn(name = "seat_id", referencedColumnName = "seatId"),
-		@JoinColumn(name = "sequence_id", referencedColumnName = "sequenceId")
+		@JoinColumn(name = "seat_id", referencedColumnName = "seat_id"),
+		@JoinColumn(name = "sequence_id", referencedColumnName = "sequence_id")
 	})
 	private GoodsSequenceSeat sequenceSeat;
 

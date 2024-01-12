@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -118,7 +119,7 @@ public class AdminServiceImpl implements AdminService {
 	) {
 		List<Seat> allSeatOfZone = seatService.findAllSeatOfZone(placeId, goodsSequenceSeatRequest.getZone());
 		Sequence sequence = sequenceService.findSequence(sequenceId);
-		List<GoodsSequenceSeat> goodsSequenceSeatList = checkAndCreateAuctionSeat(allSeatOfZone, sequence,
+		List<GoodsSequenceSeat> goodsSequenceSeatList = checkAuctionAndGeneralSeat(allSeatOfZone, sequence,
 			goodsSequenceSeatRequest);
 
 		saveAllGoodsSequenceSeat(goodsSequenceSeatList);
@@ -129,46 +130,56 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	// 옥션 공연 회차별 좌석 생성
-	public List<GoodsSequenceSeat> checkAndCreateAuctionSeat(
+	public List<GoodsSequenceSeat> checkAuctionAndGeneralSeat(
 		List<Seat> allSeatOfZone,
 		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
+		GoodsSequenceSeatRequest sequenceSeatRequest
 	) {
-		List<Integer> auctionSeatList = goodsSequenceSeatRequest.getAuctionSeats();
-		List<GoodsSequenceSeat> goodsSequenceSeatList = new ArrayList<>();
+		Set<Integer> auctionSeatNumberList = new HashSet<>(sequenceSeatRequest.getAuctionSeats());
+		List<GoodsSequenceSeat> sequenceSeats = new ArrayList<>();
 
-		for (Integer seatNumber : auctionSeatList) {
-			// 임시 체크 처리
-			if (Objects.equals(allSeatOfZone.get(seatNumber).getSeatNumber(), seatNumber)) {
-				Seat auctionSeat = allSeatOfZone.get(seatNumber);
-				GoodsSequenceSeat auctionGoodsSequenceSeat =
-					goodsSequenceSeatRequest.auctionToEntity(
-						auctionSeat,
-						sequence
-					);
-				goodsSequenceSeatList.add(auctionGoodsSequenceSeat);
-				allSeatOfZone.remove(seatNumber.intValue());
+		for (Seat seat : allSeatOfZone) {
+			GoodsSequenceSeat goodsSequenceSeat = sequenceSeatRequest.toEntity(seat, sequence);
+			Long price = sequenceSeatRequest.getGeneralAuctionPrice();
+			SellType sellType = SellType.NORMAL;
 
+			if (auctionSeatNumberList.contains(seat.getSeatNumber())) {
+				price = sequenceSeatRequest.getAuctionPrice();
+				sellType = SellType.AUCTION;
 			}
+
+			updatePriceAndSellType(goodsSequenceSeat, price, sellType);
+			sequenceSeats.add(goodsSequenceSeat);
 		}
 
-		return restCreateGeneralSeat(goodsSequenceSeatList, allSeatOfZone, sequence, goodsSequenceSeatRequest);
+		return sequenceSeats;
+	}
+
+	// public GoodsSequenceSeat initSequenceSeat(
+	// 	Seat seat,
+	// 	Set<Integer> auctionSeatNumberList,
+	// 	GoodsSequenceSeatRequest sequenceSeatRequest){
+	//
+	// 	Long price = sequenceSeatRequest.getGeneralAuctionPrice();
+	// 	SellType sellType = SellType.NORMAL;
+	//
+	//
+	// 	if (auctionSeatNumberList.contains(seat.getSeatNumber())) {
+	// 		price = sequenceSeatRequest.getAuctionPrice();
+	// 		sellType = SellType.AUCTION;
+	// 	}
+	//
+	// 	// return
+	// }
+
+	public GoodsSequenceSeat updatePriceAndSellType(GoodsSequenceSeat goodsSequenceSeat, Long price,
+		SellType sellType) {
+		goodsSequenceSeat.updatePrice(price);
+		goodsSequenceSeat.updateSellType(sellType);
+		return goodsSequenceSeat;
 	}
 
 	// 일반 좌석 공연 회차별 좌석 생성
-	public List<GoodsSequenceSeat> restCreateGeneralSeat(
-		List<GoodsSequenceSeat> goodsSequenceSeatList,
-		List<Seat> allSeatOfZone,
-		Sequence sequence,
-		GoodsSequenceSeatRequest goodsSequenceSeatRequest
-	) {
-
-		for (Seat seat : allSeatOfZone) {
-			goodsSequenceSeatList.add(goodsSequenceSeatRequest.generalToEntity(seat, sequence));
-		}
-
-		return goodsSequenceSeatList;
-	}
 
 	// 모든 좌석 생성
 	public void saveAllGoodsSequenceSeat(List<GoodsSequenceSeat> goodsSequenceSeatList) {

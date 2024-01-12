@@ -26,6 +26,15 @@ public class GoodsSequenceSeatRequest {
 
 	private final List<Integer> auctionSeats;
 
+	public GoodsSequenceSeat toEntity(Seat seat, Sequence sequence) {
+		return GoodsSequenceSeat
+			.builder()
+			.seat(seat)
+			.sequence(sequence)
+			.isSelled(false)
+			.build();
+	}
+
 	public GoodsSequenceSeat generalToEntity(Seat seat, Sequence sequence) {
 		return GoodsSequenceSeat
 			.builder()
