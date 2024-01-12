@@ -21,8 +21,6 @@ import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
-import com.sparta.ticketauction.domain.place.repository.PlaceRepository;
-import com.sparta.ticketauction.domain.place.repository.ZoneRepository;
 import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
 import com.sparta.ticketauction.domain.place.service.ZoneServiceImpl;
 
@@ -37,12 +35,6 @@ public class AdminServiceTest {
 
 	@Mock
 	ZoneServiceImpl zoneService;
-
-	@Mock
-	PlaceRepository placeRepository;
-
-	@Mock
-	ZoneRepository zoneRepository;
 
 	public static PlaceRequest placeRequest;
 
@@ -92,17 +84,17 @@ public class AdminServiceTest {
 		);
 
 		//when
-		given(placeRepository.save(any(Place.class))).willReturn(place);
-		given(zoneRepository.saveAll(any())).willReturn(zoneList);
+		given(placeService.createPlace(any())).willReturn(place);
+		given(zoneService.createZone(any(), any())).willReturn(zoneList);
 		List<PlaceResponse> response = adminService.createPlaceAndZone(placeRequest);
 
 		//then
 		assertEquals("공연장", place.getName());
 		assertEquals("Address", place.getAddress());
-		assertEquals(zoneList.get(0).getName(), response.get(0).getZone());
-		assertEquals(zoneList.get(0).getSeatNumber(), response.get(0).getZoneCountSeat());
-		assertEquals(zoneList.get(1).getName(), response.get(1).getZone());
-		assertEquals(zoneList.get(1).getSeatNumber(), response.get(1).getZoneCountSeat());
+		assertEquals(response.get(0).getZone(), zoneList.get(0).getName());
+		assertEquals(response.get(0).getZoneCountSeat(), zoneList.get(0).getSeatNumber());
+		assertEquals(response.get(1).getZone(), zoneList.get(1).getName());
+		assertEquals(response.get(1).getZoneCountSeat(), zoneList.get(1).getSeatNumber());
 
 	}
 }
