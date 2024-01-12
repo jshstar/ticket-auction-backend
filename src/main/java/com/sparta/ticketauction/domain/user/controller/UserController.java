@@ -67,7 +67,7 @@ public class UserController {
 			.body(
 				ApiResponse.of(
 					SUCCESS_GET_USER_INFO.getCode(),
-					SUCCESS_UPDATE_USER_INFO.getMessage(),
+					SUCCESS_GET_USER_INFO.getMessage(),
 					response
 				)
 			);
