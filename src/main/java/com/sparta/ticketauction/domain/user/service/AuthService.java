@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.user.service;
 
-import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
+import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
 
 import jakarta.servlet.http.HttpServletRequest;

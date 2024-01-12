@@ -29,8 +29,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
-import com.sparta.ticketauction.domain.user.request.SmsMessageRequest;
-import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
+import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
+import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
@@ -82,8 +82,8 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public SmsResponse verifyPhone(UserForVerificationRequest userForVerificationRequest) {
-		if (userService.isExistedPhoneNumber(userForVerificationRequest.getTo())) {
+	public SmsResponse verifyPhone(UserForVerificationRequest verificationRequest) {
+		if (userService.isExistedPhoneNumber(verificationRequest.getTo())) {
 			throw new ApiException(EXISTED_USER_PHONE_NUMBER);
 		}
 
@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
 			headers.set("x-ncp-apigw-signature-v2", getSignature(time));
 
 			List<UserForVerificationRequest> messages = new ArrayList<>();
-			messages.add(userForVerificationRequest);
+			messages.add(verificationRequest);
 
 			SmsMessageRequest request = SmsMessageRequest.builder()
 				.type("SMS")
@@ -113,7 +113,9 @@ public class AuthServiceImpl implements AuthService {
 				.countryCode("82")
 				.from(senderPhone)
 				.messages(messages)
-				.content("[Ticket Auction]\n인증 번호: " + verificationNumber + "\n5분 이내로 입력해주세요.")
+				.content(
+					"[Ticket Auction]\n인증 번호: " + verificationNumber + "\n5분 이내로 입력해주세요."
+				)
 				.build();
 
 			String body = objectMapper.writeValueAsString(request);
@@ -141,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		lettuceUtils.save(
-			"[Verification]" + userForVerificationRequest.getTo(),
+			"[Verification]" + verificationRequest.getTo(),
 			String.valueOf(verificationNumber),
 			VERIFY_TIME
 		);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
+import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
 import com.sparta.ticketauction.domain.user.service.AuthService;
 import com.sparta.ticketauction.global.response.ApiResponse;

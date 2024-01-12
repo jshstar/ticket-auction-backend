@@ -19,7 +19,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.user.entity.constant.Role;
-import com.sparta.ticketauction.domain.user.request.UserForVerificationRequest;
+import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
@@ -85,7 +85,10 @@ class AuthServiceImplTest {
 		@Test
 		void 이미_존재하는_번호_실패() {
 			// Given
-			UserForVerificationRequest request = new UserForVerificationRequest(TEST_PHONE_NUMBER);
+			UserForVerificationRequest request = UserForVerificationRequest
+				.builder()
+				.to(TEST_PHONE_NUMBER)
+				.build();
 
 			given(userService.isExistedPhoneNumber(any())).willReturn(true);
 
