@@ -1,5 +1,8 @@
 package com.sparta.ticketauction.domain.reservation.service;
 
+import com.sparta.ticketauction.domain.reservation.request.ReservationCreateRequest;
+import com.sparta.ticketauction.domain.reservation.response.ReservationDetailResponse;
+
 public interface ReservationService {
 
 	/**
@@ -10,10 +13,10 @@ public interface ReservationService {
 	 * @param request 예매 요청 정보
 	 * @return 예매한 좌석의 정보를 반환한다.
 	 */
-	// ReservationDetailResponse reserve(
-	// 	User user,
-	// 	Long seatId,
-	// 	Long sequenceId,
-	// 	ReservationCreateRequest request
-	// );
+	ReservationDetailResponse reserve(
+		User user,
+		Long seatId,
+		Long sequenceId,
+		ReservationCreateRequest request
+	);
 }
