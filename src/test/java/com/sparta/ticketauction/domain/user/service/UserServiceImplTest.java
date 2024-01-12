@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -197,14 +198,14 @@ class UserServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest("테스트닉네임", null, null);
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 			given(userRepository.existsByNicknameAndIsDeletedIsFalse(any())).willReturn(false);
 
 			// When
-			sut.updateUserNicknameInfo(user, 1L, request);
+			sut.updateUserInfo(user, 1L, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -214,7 +215,7 @@ class UserServiceImplTest {
 		@Test
 		void 이미_존재하는_닉네임으로_실패() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest(TEST_NICKNAME, null, null);
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
@@ -223,7 +224,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserNicknameInfo(user, 1L, request)
+				() -> sut.updateUserInfo(user, 1L, request)
 			);
 
 			// Then
@@ -234,13 +235,13 @@ class UserServiceImplTest {
 		@Test
 		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest(TEST_NICKNAME, null, null);
 			User user = UserUtil.TEST_USER;
 
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserNicknameInfo(user, 2L, request)
+				() -> sut.updateUserInfo(user, 2L, request)
 			);
 
 			// Then
@@ -254,7 +255,8 @@ class UserServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -267,7 +269,7 @@ class UserServiceImplTest {
 				.willReturn(request.getVerificationNumber());
 
 			// When
-			sut.updateUserPhoneInfo(user, 1L, request);
+			sut.updateUserInfo(user, 1L, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -278,7 +280,8 @@ class UserServiceImplTest {
 		@Test
 		void 인증_번호_일치_실패로_인해_실패() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -293,7 +296,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserPhoneInfo(user, 1L, request)
+				() -> sut.updateUserInfo(user, 1L, request)
 			);
 
 			// Then
@@ -304,7 +307,8 @@ class UserServiceImplTest {
 		@Test
 		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -313,7 +317,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserPhoneInfo(user, 2L, request)
+				() -> sut.updateUserInfo(user, 2L, request)
 			);
 
 			// Then
