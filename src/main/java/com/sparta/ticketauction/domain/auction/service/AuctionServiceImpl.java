@@ -12,7 +12,6 @@ import com.sparta.ticketauction.domain.bid.service.BidRedisService;
 import com.sparta.ticketauction.domain.bid.service.BidService;
 import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
 import com.sparta.ticketauction.domain.reservation.service.ReservationService;
-import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
 

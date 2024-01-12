@@ -30,12 +30,16 @@ public enum ErrorCode {
 
 
 
+
+	/* SEQUENCE */
+	NOT_FOUND_SEQUENCE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
+
 	/* PLACE */
-	NOTFOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
+	NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
+
 
 	/* AUCTION */
 	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),
-
 	ENDED_AUCTION(HttpStatus.BAD_REQUEST, "A10001", "경매가 종료되었습니다."),
 
 	/* BID */

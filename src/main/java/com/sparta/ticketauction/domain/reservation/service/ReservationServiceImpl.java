@@ -1,20 +1,13 @@
 package com.sparta.ticketauction.domain.reservation.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeatID;
-import com.sparta.ticketauction.domain.goods_sequence_seat.repository.GoodsSequenceSeatRepository;
 import com.sparta.ticketauction.domain.reservation.entity.Reservation;
 import com.sparta.ticketauction.domain.reservation.repository.ReservationRepository;
 import com.sparta.ticketauction.domain.reservation.request.ReservationCreateRequest;
 import com.sparta.ticketauction.domain.reservation.response.ReservationDetailResponse;
-import com.sparta.ticketauction.domain.seat.entity.Seat;
-import com.sparta.ticketauction.domain.seat.repository.SeatRepository;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.domain.sequence.repository.SequenceRepository;
-import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
@@ -81,13 +74,13 @@ public class ReservationServiceImpl implements ReservationService {
 			savedReservation.getId(),
 			user.getName(),
 			savedReservation.getCreatedAt(),
-			sequence.getGoods().getName(),
+			sequence.getGoodsInfo().getName(),
 			sequence.getSequence(),
 			seat.getZone(),
 			seat.getSeatNumber(),
 			seat.getPlace().getAddress(),
 			sequence.getStartDateTime(),
-			sequence.getGoods().getGoodsImage().get(0).getS3Key() // TODO: S3 PREFIX 붙여야함
+			sequence.getGoodsInfo().getGoodsImage().get(0).getS3Key() // TODO: S3 PREFIX 붙여야함
 		);
 	}
 }

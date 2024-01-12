@@ -1,29 +1,8 @@
 package com.sparta.ticketauction.domain.auction.service;
 
-import static org.mockito.BDDMockito.*;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import com.sparta.ticketauction.domain.auction.entity.Auction;
-import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
-import com.sparta.ticketauction.domain.bid.entity.Bid;
-import com.sparta.ticketauction.domain.bid.service.BidServiceImpl;
-import com.sparta.ticketauction.domain.reservation.service.ReservationService;
-import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.domain.user.util.UserUtil;
-import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.exception.ErrorCode;
 
 @DisplayName("[경매] 테스트")
 @ExtendWith(MockitoExtension.class)

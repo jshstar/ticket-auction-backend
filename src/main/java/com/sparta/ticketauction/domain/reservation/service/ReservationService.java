@@ -2,7 +2,6 @@ package com.sparta.ticketauction.domain.reservation.service;
 
 import com.sparta.ticketauction.domain.reservation.request.ReservationCreateRequest;
 import com.sparta.ticketauction.domain.reservation.response.ReservationDetailResponse;
-import com.sparta.ticketauction.domain.user.entity.User;
 
 public interface ReservationService {
 

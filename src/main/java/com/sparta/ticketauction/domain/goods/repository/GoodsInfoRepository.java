@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 
-public interface GoodsRepository extends JpaRepository<GoodsInfo, Long> {
+public interface GoodsInfoRepository extends JpaRepository<GoodsInfo, Long> {
 }

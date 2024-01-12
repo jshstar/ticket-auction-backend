@@ -18,13 +18,35 @@ public enum SuccessCode {
 	SUCCESS_UPDATE_USER_PHONE(HttpStatus.OK, "U00401", "전화 번호 변경에 성공했습니다."),
 
 	/* GOODS */
-	SUCCESS_GOODS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "G09900", "공연 및 회차가 추가되었습니다."),
+
 
 	/* PLACE */
-	SUCCESS_PLACE_CREATE(HttpStatus.CREATED, "P09900", "공연장이 추가되었습니다."),
+
 
 	/* AUCTION */
 	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
+
+
+
+
+
+
+
+
+	/* GOODS_SEQUENCE_SEAT */
+
+
+
+
+
+
+
+
+
+	/* ADMIN */
+	SUCCESS_GOODS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "Z09900", "공연 및 회차가 추가되었습니다."),
+	SUCCESS_PLACE_AND_SEAT_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 좌석이 추가되었습니다."),
+	SUCCESS_GOODS_SEQUENCE_SEAT_AND_AUCTION_CREATE(HttpStatus.CREATED, "Z09902", "공연 회차 별 좌석"),
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
