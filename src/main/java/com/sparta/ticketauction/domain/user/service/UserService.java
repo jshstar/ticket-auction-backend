@@ -2,6 +2,8 @@ package com.sparta.ticketauction.domain.user.service;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
 
 public interface UserService {
 
@@ -28,4 +30,22 @@ public interface UserService {
 	 * @return User  해당 id를 가진 유저 객체
 	 * */
 	User findByUserId(Long userId);
+
+	/*
+	 * 유저 닉네임 정보 수정
+	 *
+	 * @param user 		로그인한 유저 정보
+	 * @param userId 	정보가 수정될 유저의 id
+	 * @param request	변경할 닉네임 정보
+	 * */
+	void updateUserNicknameInfo(User user, Long userId, UserNicknameUpdateRequest request);
+
+	/*
+	 * 유저 전화 번호 변경
+	 *
+	 * @param user 		로그인한 유저 정보
+	 * @param userId 	정보가 수정될 유저의 id
+	 * @param request	변경할 전화 번호 정보
+	 * */
+	void updateUserPhoneInfo(User user, Long userId, UserPhoneUpdateRequest request);
 }
