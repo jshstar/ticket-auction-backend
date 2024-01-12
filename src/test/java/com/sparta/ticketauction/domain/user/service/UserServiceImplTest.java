@@ -198,7 +198,7 @@ class UserServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
@@ -215,7 +215,7 @@ class UserServiceImplTest {
 		@Test
 		void 이미_존재하는_닉네임으로_실패() {
 			// Given
-			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
@@ -235,7 +235,7 @@ class UserServiceImplTest {
 		@Test
 		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
 			// Given
-			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
 			User user = UserUtil.TEST_USER;
 
 			// When
