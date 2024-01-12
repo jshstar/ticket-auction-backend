@@ -4,6 +4,7 @@ import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.service.UserService;
@@ -43,7 +45,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{userId}")
-	public ResponseEntity<ApiResponse> updateUserNicknameInfo(
+	public ResponseEntity<ApiResponse> updateUserInfo(
 		@CurrentUser User user,
 		@PathVariable Long userId,
 		@RequestBody @Valid UserUpdateRequest request
@@ -71,6 +73,22 @@ public class UserController {
 					SUCCESS_GET_USER_INFO.getCode(),
 					SUCCESS_GET_USER_INFO.getMessage(),
 					response
+				)
+			);
+	}
+
+	@PatchMapping("/{userId}")
+	public ResponseEntity<ApiResponse> updateUserPassword(
+		@CurrentUser User user,
+		@PathVariable Long userId,
+		@RequestBody @Valid UserPasswordUpdateRequest request
+	) {
+		userService.updateUserPassword(user, userId, request);
+		return ResponseEntity.status(SUCCESS_UPDATE_USER_PASSWORD.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_UPDATE_USER_PASSWORD.getCode(),
+					SUCCESS_UPDATE_USER_PASSWORD.getMessage()
 				)
 			);
 	}
