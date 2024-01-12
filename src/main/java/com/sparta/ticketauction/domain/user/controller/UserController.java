@@ -31,38 +31,40 @@ public class UserController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponse> signup(@RequestBody @Valid UserCreateRequest request) {
-		userService.signup(request);
+		UserResponse response = userService.signup(request);
 		return ResponseEntity.status(SUCCESS_USER_SIGN_UP.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_USER_SIGN_UP.getCode(),
-					SUCCESS_USER_SIGN_UP.getMessage()
+					SUCCESS_USER_SIGN_UP.getMessage(),
+					response
 				)
 			);
 	}
 
-	@PutMapping("/{user_id}")
+	@PutMapping("/{userId}")
 	public ResponseEntity<ApiResponse> updateUserNicknameInfo(
 		@CurrentUser User user,
-		@PathVariable Long user_id,
+		@PathVariable Long userId,
 		@RequestBody @Valid UserUpdateRequest request
 	) {
-		userService.updateUserInfo(user, user_id, request);
+		UserResponse response = userService.updateUserInfo(user, userId, request);
 		return ResponseEntity.status(SUCCESS_UPDATE_USER_INFO.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_UPDATE_USER_INFO.getCode(),
-					SUCCESS_UPDATE_USER_INFO.getMessage()
+					SUCCESS_UPDATE_USER_INFO.getMessage(),
+					response
 				)
 			);
 	}
 
-	@GetMapping("/{user_id}")
+	@GetMapping("/{userId}")
 	public ResponseEntity<ApiResponse> getUserInfo(
 		@CurrentUser User user,
-		@PathVariable Long user_id
+		@PathVariable Long userId
 	) {
-		UserResponse response = userService.gerUserInfo(user, user_id);
+		UserResponse response = userService.getUserInfo(user, userId);
 		return ResponseEntity.status(SUCCESS_GET_USER_INFO.getHttpStatus())
 			.body(
 				ApiResponse.of(
@@ -72,5 +74,4 @@ public class UserController {
 				)
 			);
 	}
-
 }

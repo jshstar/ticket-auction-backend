@@ -13,7 +13,7 @@ public interface UserService {
 	 * @param UserCreateRequest 회원 가입 시, 입력 정보
 	 * @return void
 	 * */
-	void signup(UserCreateRequest request);
+	UserResponse signup(UserCreateRequest request);
 
 	/*
 	 * 휴대폰 번호 중복 검사 메서드
@@ -38,7 +38,7 @@ public interface UserService {
 	 * @param userId 	정보가 수정될 유저의 id
 	 * @param request	변경할 정보
 	 * */
-	void updateUserInfo(User loginUser, Long userId, UserUpdateRequest request);
+	UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request);
 
 	/*
 	 * 유저 정보 조회
@@ -48,5 +48,5 @@ public interface UserService {
 	 *
 	 * @return UserResponse	유저 응답 정보 dto
 	 * */
-	UserResponse gerUserInfo(User user, Long userId);
+	UserResponse getUserInfo(User user, Long userId);
 }

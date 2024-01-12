@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public void signup(UserCreateRequest request) {
+	public UserResponse signup(UserCreateRequest request) {
 		String email = request.getEmail();
 		String nickname = request.getNickname();
 
@@ -47,6 +47,8 @@ public class UserServiceImpl implements UserService {
 
 		User user = request.toEntity(passwordEncoder);
 		userRepository.save(user);
+
+		return UserResponse.from(user);
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public void updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
+	public UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
 		User user = checkAndGetUser(loginUser, userId);
 
 		if (!Objects.requireNonNullElse(request.getNickname(), "").isBlank()) {
@@ -76,10 +78,11 @@ public class UserServiceImpl implements UserService {
 			checkPhoneVerificationCode(request.getPhoneNumber(), request.getVerificationNumber());
 			user.updatePhoneNumber(request.getPhoneNumber());
 		}
+		return UserResponse.from(user);
 	}
 
 	@Override
-	public UserResponse gerUserInfo(User loginUser, Long userId) {
+	public UserResponse getUserInfo(User loginUser, Long userId) {
 		User user = checkAndGetUser(loginUser, userId);
 
 		return UserResponse.from(user);

@@ -337,7 +337,7 @@ class UserServiceImplTest {
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 
 			// When
-			UserResponse response = sut.gerUserInfo(user, 1L);
+			UserResponse response = sut.getUserInfo(user, 1L);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -358,7 +358,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.gerUserInfo(user, 2L)
+				() -> sut.getUserInfo(user, 2L)
 			);
 
 			// Then
