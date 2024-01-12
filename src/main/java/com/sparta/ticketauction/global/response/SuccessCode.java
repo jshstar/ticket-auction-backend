@@ -16,7 +16,7 @@ public enum SuccessCode {
 	SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS(HttpStatus.OK, "U003000", "인증 번호를 발송했습니다"),
 	SUCCESS_UPDATE_USER_NICKNAME(HttpStatus.OK, "U00400", "닉네임 변경에 성공했습니다."),
 	SUCCESS_UPDATE_USER_PHONE(HttpStatus.OK, "U00401", "전화 번호 변경에 성공했습니다."),
-
+	SUCCESS_GET_USER_INFO(HttpStatus.OK, "U00402", "회원 정보 조회에 성공했습니다."),
 	/* GOODS */
 
 

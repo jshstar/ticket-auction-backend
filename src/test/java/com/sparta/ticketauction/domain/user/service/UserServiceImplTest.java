@@ -24,6 +24,7 @@ import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.LettuceUtils;
@@ -315,6 +316,47 @@ class UserServiceImplTest {
 			ApiException exception = assertThrows(
 				ApiException.class,
 				() -> sut.updateUserPhoneInfo(user, 2L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+	}
+
+	@Nested
+	class 회원_정보_조회_테스트 {
+
+		@Test
+		void 성공() {
+			// Given
+			User user = TEST_USER;
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+
+			// When
+			UserResponse response = sut.gerUserInfo(user, 1L);
+
+			// Then
+			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
+
+			assertThat(response.getName())
+				.isEqualTo(user.getName());
+
+			assertThat(response.getEmail())
+				.isEqualTo(user.getEmail());
+
+		}
+
+		@Test
+		void 권한없는_유저로_실패() {
+			// Given
+			User user = TEST_USER;
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.gerUserInfo(user, 2L)
 			);
 
 			// Then

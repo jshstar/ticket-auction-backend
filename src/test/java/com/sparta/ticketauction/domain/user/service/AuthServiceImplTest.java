@@ -45,7 +45,7 @@ class AuthServiceImplTest {
 	@BeforeEach
 	void beforeEach() {
 		ReflectionTestUtils.setField(jwtUtil, "ACCESS_TOKEN_TIME", ACCESS_TOKEN_TIME);
-		ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
+		// ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
 		ReflectionTestUtils.setField(jwtUtil, "secretKey", secretKey);
 		jwtUtil.init();
 	}
@@ -65,6 +65,7 @@ class AuthServiceImplTest {
 
 		Claims claims = Jwts.claims().setSubject(email);
 		claims.put("auth", role);
+		claims.put("identify", 1);
 
 		given(jwtUtil.getUserInfoFromToken(any())).willReturn(claims);
 		given(jwtUtil.getRemainingTime(any())).willReturn(60);
@@ -74,7 +75,7 @@ class AuthServiceImplTest {
 
 		// Then
 		then(lettuceUtils).should().delete(any(String.class));
-		then(lettuceUtils).should().save(any(), any(), any());
+		then(lettuceUtils).should().save(any(), any(), anyLong());
 	}
 
 	@Nested
@@ -104,14 +105,15 @@ class AuthServiceImplTest {
 			MockHttpServletRequest request = new MockHttpServletRequest();
 			MockHttpServletResponse response = new MockHttpServletResponse();
 
-			String refreshToken = "testrefreshtoken";
+			String refreshToken = "test-refresh-token";
 			String newAccessToken = "new-access-token";
 			String newRefreshToken = "new-refresh-token";
 
 			Claims claims = Jwts.claims().setSubject(TEST_EMAIL);
 			claims.put("auth", Role.USER);
-			claims.put("id", "1");
+			claims.put("identify", "1");
 
+			given(jwtUtil.resolveRefreshToken(any())).willReturn(refreshToken);
 			given(jwtUtil.getUserInfoFromToken(any())).willReturn(claims);
 			given(lettuceUtils.get(any())).willReturn(refreshToken);
 			given(jwtUtil.createAccessToken(any(), any(), any())).willReturn(newAccessToken);
@@ -121,6 +123,7 @@ class AuthServiceImplTest {
 			sut.reissue(request, response);
 
 			// Then
+			verify(jwtUtil).resolveRefreshToken(any());
 			verify(jwtUtil).getUserInfoFromToken(any());
 			verify(lettuceUtils).get(any());
 			verify(jwtUtil).createAccessToken(any(), any(), any());

@@ -153,9 +153,10 @@ public class AuthServiceImpl implements AuthService {
 
 		// 유저 정보 추출
 		Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
+
 		String username = claims.getSubject();
-		Role role = Role.valueOf((String)claims.get("auth"));
-		Long id = Long.parseLong(claims.get("identify").toString());
+		Role role = Role.valueOf(String.valueOf(claims.get("auth")));
+		Long id = Long.parseLong(String.valueOf(claims.get("identify")));
 
 		if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
 			throw new ApiException(INVALID_JWT_TOKEN);
@@ -186,7 +187,8 @@ public class AuthServiceImpl implements AuthService {
 		String accessKey = this.accessKey;
 		String secretKey = this.secretKey;
 
-		String message = new StringBuilder().append(method)
+		String message = new StringBuilder()
+			.append(method)
 			.append(space)
 			.append(url)
 			.append(newLine)
@@ -202,7 +204,6 @@ public class AuthServiceImpl implements AuthService {
 
 		byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
 
-		String encodeBase64String = Base64.getEncoder().encodeToString(rawHmac);
-		return encodeBase64String;
+		return Base64.getEncoder().encodeToString(rawHmac);
 	}
 }
