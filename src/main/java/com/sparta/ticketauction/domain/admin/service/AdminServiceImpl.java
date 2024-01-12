@@ -13,6 +13,7 @@ import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
 import com.sparta.ticketauction.domain.place.service.PlaceService;
+import com.sparta.ticketauction.domain.place.service.ZoneService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,8 @@ public class AdminServiceImpl implements AdminService {
 	private final PlaceService placeService;
 
 	private final GoodsService goodsService;
+
+	private final ZoneService zoneService;
 
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
@@ -38,7 +41,7 @@ public class AdminServiceImpl implements AdminService {
 	public List<PlaceResponse> createPlaceAndZone(PlaceRequest placeRequest) {
 		List<ZoneInfo> zoneInfos = placeRequest.getZoneInfos();
 		Place place = placeService.createPlace(placeRequest);
-		List<Zone> zone = placeService.createZone(place, zoneInfos);
+		List<Zone> zone = zoneService.createZone(place, zoneInfos);
 
 		return createPlaceResponse(zone);
 
