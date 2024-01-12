@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
+import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
@@ -25,8 +25,8 @@ public class GoodsServiceImpl implements GoodsService {
 
 	// 이미지 저장
 	@Override
-	public Goods saveGoods(Goods goods) {
-		return goodsRepository.save(goods);
+	public GoodsInfo saveGoods(GoodsInfo goodsInfo) {
+		return goodsRepository.save(goodsInfo);
 	}
 
 	// 모든 이미지 저장

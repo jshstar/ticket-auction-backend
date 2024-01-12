@@ -24,7 +24,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class GoodsSequenceSeatRequestTest {
+public class GoodsInfoSequenceSeatRequestTest {
 
 	private static ValidatorFactory factory;
 	private static Validator validator;

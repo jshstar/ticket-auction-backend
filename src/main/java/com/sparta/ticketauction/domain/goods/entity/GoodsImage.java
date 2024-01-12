@@ -39,13 +39,13 @@ public class GoodsImage extends BaseEntity {
 
 	@Comment("상품 id")
 	@ManyToOne
-	@JoinColumn(name = "goods_id")
-	private Goods goods;
+	@JoinColumn(name = "goods_info_id")
+	private GoodsInfo goodsInfo;
 
 	@Builder
-	private GoodsImage(String s3Key, String type, Goods goods) {
+	private GoodsImage(String s3Key, String type, GoodsInfo goodsInfo) {
 		this.s3Key = s3Key;
 		this.type = ImageType.of(type);
-		this.goods = goods;
+		this.goodsInfo = goodsInfo;
 	}
 }

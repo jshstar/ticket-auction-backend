@@ -2,14 +2,14 @@ package com.sparta.ticketauction.domain.goods.service;
 
 import java.util.List;
 
-import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
+import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 
 public interface GoodsService {
 
 	// 공연 저장
-	Goods saveGoods(Goods goods);
+	GoodsInfo saveGoods(GoodsInfo goodsInfo);
 
 	// 모든 이미지 저장
 	List<GoodsImage> saveAllGoodsImage(List<GoodsImage> fileUrl);

@@ -11,13 +11,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sparta.ticketauction.domain.goods.entity.AgeGrade;
-import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
-import com.sparta.ticketauction.domain.place.entity.Place;
+import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -276,7 +274,6 @@ public class GoodsRequestTest {
 	@Test
 	void Entity_생성_성공_테스트() {
 		// given
-		Place place = Mockito.mock();
 		GoodsRequest goodsRequest = new GoodsRequest(
 			this.goodsName,
 			this.goodsDescription,
@@ -288,23 +285,21 @@ public class GoodsRequestTest {
 			this.categoryName);
 
 		//when
-		Goods goods = goodsRequest.toEntity(place);
+		GoodsInfo goodsInfo = goodsRequest.toEntity();
 
 		GoodsCategory goodsCategory =
 			GoodsCategory
 				.builder()
 				.name(this.categoryName)
 				.build();
-		goods.updateGoodsCategory(goodsCategory);
+		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		//then
-		assertEquals(this.goodsName, goods.getName());
-		assertEquals(this.goodsDescription, goods.getDescription());
-		assertEquals(this.startDate, goods.getStartDate());
-		assertEquals(this.endDate, goods.getEndDate());
-		assertEquals(AgeGrade.AGE_12, goods.getAgeGrade());
-		assertEquals(this.runningTime, goods.getRunningTime());
-		assertEquals(this.categoryName, goods.getGoodsCategory().getName());
+		assertEquals(this.goodsName, goodsInfo.getName());
+		assertEquals(this.goodsDescription, goodsInfo.getDescription());
+		assertEquals(AgeGrade.AGE_12, goodsInfo.getAgeGrade());
+		assertEquals(this.runningTime, goodsInfo.getRunningTime());
+		assertEquals(this.categoryName, goodsInfo.getGoodsCategory().getName());
 
 	}
 
