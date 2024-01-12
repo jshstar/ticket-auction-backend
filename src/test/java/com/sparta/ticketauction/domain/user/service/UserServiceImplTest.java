@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 
@@ -184,6 +189,137 @@ class UserServiceImplTest {
 
 			verify(userRepository).save(argumentCaptor.capture());
 			assertEquals(request.getNickname(), argumentCaptor.getValue().getNickname());
+		}
+	}
+
+	@Nested
+	class 회원_닉네임_수정_테스트 {
+
+		@Test
+		void 성공() {
+			// Given
+			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			User user = UserUtil.TEST_USER;
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(userRepository.existsByNicknameAndIsDeletedIsFalse(any())).willReturn(false);
+
+			// When
+			sut.updateUserNicknameInfo(user, 1L, request);
+
+			// Then
+			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
+			verify(userRepository).existsByNicknameAndIsDeletedIsFalse(any());
+		}
+
+		@Test
+		void 이미_존재하는_닉네임으로_실패() {
+			// Given
+			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			User user = UserUtil.TEST_USER;
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(userRepository.existsByNicknameAndIsDeletedIsFalse(any())).willReturn(true);
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserNicknameInfo(user, 1L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(EXISTED_USER_NICKNAME.getMessage());
+		}
+
+		@Test
+		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
+			// Given
+			UserNicknameUpdateRequest request = new UserNicknameUpdateRequest(TEST_NICKNAME);
+			User user = UserUtil.TEST_USER;
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserNicknameInfo(user, 2L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+	}
+
+	@Nested
+	class 전화_번호_수정_테스트 {
+		@Test
+		void 성공() {
+			// Given
+			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+				"01011111111",
+				"123456"
+			);
+
+			User user = TEST_USER;
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(lettuceUtils.hasKey("[Verification]" + request.getPhoneNumber())).willReturn(true);
+			given(lettuceUtils.get("[Verification]" + request.getPhoneNumber()))
+				.willReturn(request.getVerificationNumber());
+
+			// When
+			sut.updateUserPhoneInfo(user, 1L, request);
+
+			// Then
+			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
+			verify(lettuceUtils).hasKey("[Verification]" + request.getPhoneNumber());
+			verify(lettuceUtils).get("[Verification]" + request.getPhoneNumber());
+		}
+
+		@Test
+		void 인증_번호_일치_실패로_인해_실패() {
+			// Given
+			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+				"01011111111",
+				"123456"
+			);
+
+			User user = TEST_USER;
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(lettuceUtils.hasKey("[Verification]" + request.getPhoneNumber())).willReturn(true);
+			given(lettuceUtils.get("[Verification]" + request.getPhoneNumber()))
+				.willReturn("111111");
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPhoneInfo(user, 1L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(INVALID_VERIFICATION_NUMBER.getMessage());
+		}
+
+		@Test
+		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
+			// Given
+			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+				"01011111111",
+				"123456"
+			);
+			User user = UserUtil.TEST_USER;
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPhoneInfo(user, 2L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ACCESS_DENIED.getMessage());
 		}
 	}
 }

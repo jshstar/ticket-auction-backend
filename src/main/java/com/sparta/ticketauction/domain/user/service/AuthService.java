@@ -24,7 +24,7 @@ public interface AuthService {
 	SmsResponse verifyPhone(UserForVerificationRequest request);
 
 	/*
-	 * 토큰 재바급
+	 * 토큰 재빌급
 	 *
 	 * @param HttpServletRequest
 	 * @param HttpServletResponse
