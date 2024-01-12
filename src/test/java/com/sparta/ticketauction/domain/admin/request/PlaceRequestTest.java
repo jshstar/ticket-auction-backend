@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -114,18 +115,47 @@ public class PlaceRequestTest {
 	@Test
 	public void 공연장_요청_구역_정보_검증_실패테스트() {
 		// given
-		List<ZoneInfo> seatRequestList = new ArrayList<>();
-		PlaceRequest placeRequest = new PlaceRequest("예술의 전당", "Valid Address", seatRequestList);
+		List<ZoneInfo> seatRequestList =
+			new ArrayList<>(
+				Arrays.asList(
+					new ZoneInfo("", 1),
+					new ZoneInfo("B", 1)
+				)
+			);
 
 		//when
-		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
+		Set<ConstraintViolation<List<ZoneInfo>>> violations = validator.validate(seatRequestList);
 
 		//then
 		assertThat(violations).isNotEmpty();
 		violations
 			.forEach(
 				error -> {
-					assertThat(error.getMessage()).isEqualTo("좌석 정보는 필수입니다.");
+					assertThat(error.getMessage()).isEqualTo("구역 입력은 필수 입니다.");
+				});
+
+	}
+
+	@Test
+	public void 공연장_요청_구역_좌석_정보_검증_실패테스트() {
+		// given
+		List<ZoneInfo> seatRequestList =
+			new ArrayList<>(
+				Arrays.asList(
+					new ZoneInfo("A", null),
+					new ZoneInfo("B", 1)
+				)
+			);
+
+		//when
+		Set<ConstraintViolation<List<ZoneInfo>>> violations = validator.validate(seatRequestList);
+
+		//then
+		assertThat(violations).isNotEmpty();
+		violations
+			.forEach(
+				error -> {
+					assertThat(error.getMessage()).isEqualTo("구역당 총 좌석입력은 필 수 입니다.");
 				});
 
 	}
