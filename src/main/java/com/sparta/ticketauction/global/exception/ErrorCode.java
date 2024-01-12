@@ -54,6 +54,7 @@ public enum ErrorCode {
 	/* RESERVATION */
 	ALREADY_RESERVED_SEAT(HttpStatus.CONFLICT, "R10000", "이미 예약된 좌석입니다."),
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
+	NOT_FOUND_RESERVATION(HttpStatus.NOT_FOUND, "R10002", "예매 기록이 존재하지 않습니다."),
 
 	/* PAYMENT */
 	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "", "결제할 포인트가 부족합니다"),

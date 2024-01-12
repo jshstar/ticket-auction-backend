@@ -1,5 +1,9 @@
 package com.sparta.ticketauction.domain.reservation.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +14,7 @@ import com.sparta.ticketauction.domain.reservation.entity.Reservation;
 import com.sparta.ticketauction.domain.reservation.repository.ReservationRepository;
 import com.sparta.ticketauction.domain.reservation.request.ReservationCreateRequest;
 import com.sparta.ticketauction.domain.reservation.response.ReservationDetailResponse;
+import com.sparta.ticketauction.domain.reservation.response.ReservationResponse;
 import com.sparta.ticketauction.domain.seat.entity.Seat;
 import com.sparta.ticketauction.domain.seat.repository.SeatRepository;
 import com.sparta.ticketauction.domain.sequence.entity.Sequence;
@@ -77,17 +82,39 @@ public class ReservationServiceImpl implements ReservationService {
 		// 예매 정보 생성
 		Reservation reservation = request.toEntity(savedUser, goodsSequenceSeat, request.getPrice());
 		Reservation savedReservation = reservationRepository.save(reservation);
-		return ReservationDetailResponse.from(
-			savedReservation.getId(),
-			user.getName(),
-			savedReservation.getCreatedAt(),
-			sequence.getGoods().getName(),
-			sequence.getSequence(),
-			seat.getZone(),
-			seat.getSeatNumber(),
-			seat.getPlace().getAddress(),
-			sequence.getStartDateTime(),
-			sequence.getGoods().getGoodsImage().get(0).getS3Key() // TODO: S3 PREFIX 붙여야함
-		);
+		return ReservationDetailResponse.builder().
+			reservationId(savedReservation.getId()).
+			username(user.getName()).
+			reservationDate(savedReservation.getCreatedAt()).
+			goodsTitle(sequence.getGoods().getName()).
+			sequence(sequence.getSequence()).
+			zone(seat.getZone()).
+			seatNumber(seat.getSeatNumber()).
+			address(seat.getPlace().getAddress()).
+			goodsStartDateTime(sequence.getStartDateTime()).
+			thumbnailUrl(sequence.getGoods().getGoodsImage().get(0).getS3Key()) // TODO: S3 PREFIX 붙여야함
+			.build();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<ReservationResponse> searchReservations(User user, int page, int size) {
+		// 필요 정보: 유저이름(유저), 예약번호(예약), 예약일자(예약), 공연제목(공연), 공연시작일(회차), 예약상태(공연)
+		Pageable pageable = PageRequest.of(page, size);
+
+		return reservationRepository.findReservationsByUserId(user.getId(), pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ReservationDetailResponse searchReservation(User user, Long reservationId) {
+		ReservationDetailResponse reservation = reservationRepository.findReservationById(reservationId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_RESERVATION));
+
+		// 요청한 유저가 예매한 유저인지 확인
+		if (!reservationRepository.existsReservationByIdAndUser_Id(reservation.getReservationId(), user.getId())) {
+			throw new ApiException();
+		}
+		return reservationRepository.findReservationById(reservationId);
 	}
 }

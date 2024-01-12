@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Builder
 public class ReservationDetailResponse {
 
@@ -34,7 +34,7 @@ public class ReservationDetailResponse {
 
 	private String thumbnailUrl; // 썸네일 이미지
 
-	public static ReservationDetailResponse from(
+	public ReservationDetailResponse(
 		Long reservationId,
 		String username,
 		LocalDateTime reservationDate,
@@ -43,20 +43,16 @@ public class ReservationDetailResponse {
 		String zone,
 		Integer seatNumber,
 		String address,
-		LocalDateTime goodsStartDateTime,
-		String thumbnailUrl
+		LocalDateTime goodsStartDateTime
 	) {
-		return ReservationDetailResponse.builder()
-			.reservationId(reservationId)
-			.username(username)
-			.reservationDate(reservationDate)
-			.goodsTitle(goodsTitle)
-			.sequence(sequence)
-			.zone(zone)
-			.seatNumber(seatNumber)
-			.address(address)
-			.goodsStartDateTime(goodsStartDateTime)
-			.thumbnailUrl(thumbnailUrl)
-			.build();
+		this.reservationId = reservationId;
+		this.username = username;
+		this.reservationDate = reservationDate;
+		this.goodsTitle = goodsTitle;
+		this.sequence = sequence;
+		this.zone = zone;
+		this.seatNumber = seatNumber;
+		this.address = address;
+		this.goodsStartDateTime = goodsStartDateTime;
 	}
 }

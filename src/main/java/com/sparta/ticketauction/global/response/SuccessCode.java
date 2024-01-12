@@ -38,6 +38,7 @@ public enum SuccessCode {
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
+	SUCCESS_RESERVATIONS_SEARCH(HttpStatus.OK, "R00001", "예매 내역 조회 성공했습니다."),
 
 	/* TOKEN */
 	SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
