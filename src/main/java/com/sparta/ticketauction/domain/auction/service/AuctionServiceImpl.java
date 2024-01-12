@@ -37,17 +37,17 @@ public class AuctionServiceImpl implements AuctionService {
 		Auction auction = getAuction(auctionId);
 		auction.ended();
 
-		// User bidWinner = getBidWinner(auction);
-		//
-		// log.info("예매 성공! id: {]", auctionId);
-		// reservationService.reserve(auction, bidWinner);
+		User bidWinner = getBidWinner(auction);
+
+		log.info("예매 성공! id: {]", auctionId);
+		reservationService.reserve(auction, bidWinner);
 	}
 
-	// public User getBidWinner(Auction auction) {
-	// 	return bidService.getCurrentBid(auction)
-	// 		.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_WIN_BID))
-	// 		.getUser();
-	// }
+	public User getBidWinner(Auction auction) {
+		return bidService.getCurrentBid(auction)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_WIN_BID))
+			.getUser();
+	}
 
 	public Auction getAuction(Long auctionId) {
 		return auctionRepository.findById(auctionId)
