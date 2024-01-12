@@ -26,7 +26,6 @@ public class UserUtil {
 	public static final LocalDate ADMIN_TEST_BIRTH = LocalDate.of(1997, 1, 1);
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	public static final User TEST_USER = User.builder()
-		.id(1L)
 		.email(TEST_EMAIL)
 		.password(passwordEncoder.encode(TEST_PASSWORD))
 		.name(TEST_NAME)
@@ -37,7 +36,6 @@ public class UserUtil {
 		.build();
 
 	public static final User AMDIN_USER = User.builder()
-		.id(1L)
 		.email(ADMIN_TEST_EMAIL)
 		.password(passwordEncoder.encode(ADMIN_TEST_PASSWORD))
 		.name(ADMIN_TEST_NAME)

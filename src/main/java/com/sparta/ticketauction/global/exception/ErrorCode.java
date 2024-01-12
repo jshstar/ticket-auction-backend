@@ -38,9 +38,17 @@ public enum ErrorCode {
 	NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
 
 
+
+
+
+
+
+
+
 	/* AUCTION */
 	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),
 	ENDED_AUCTION(HttpStatus.BAD_REQUEST, "A10001", "경매가 종료되었습니다."),
+
 
 	/* BID */
 	NOT_FOUND_BID(HttpStatus.NOT_FOUND, "B10000", "입찰을 찾지 못했습니다."),
@@ -57,7 +65,6 @@ public enum ErrorCode {
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
 	INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "", ""),
-	ACCESS_DENIED(HttpStatus.FORBIDDEN, "G10000", "해당 요청에 대한 권한이 없습니다."),
 
 	/* TOKEN */
 	INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10000", "유효하지 않는 JWT 토큰입니다."),

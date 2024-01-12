@@ -98,12 +98,4 @@ public class User extends BaseEntity {
 	public void usePoint(Long point) {
 		this.point -= point;
 	}
-
-	public void updateUserNickName(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public void updatePhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
 }

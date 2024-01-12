@@ -30,13 +30,14 @@ import io.jsonwebtoken.Jwts;
 @DisplayName("회원 서비스 테스트")
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
+
 	private final Long ACCESS_TOKEN_TIME = 1000L;
 	private final Long REFRESH_TOKEN_TIME = 1000L;
 	private final String secretKey = "7J6g7J2AIOyZhOyEse2VmOqzoCDrgpjshJwg7J6Q66m065Cc64ukIQ==";
 	@Mock
 	JwtUtil jwtUtil;
 	@Mock
-	UserService userService;
+	UserServiceImpl userService;
 	@InjectMocks
 	private AuthServiceImpl sut;
 	@Mock
@@ -45,8 +46,9 @@ class AuthServiceImplTest {
 	@BeforeEach
 	void beforeEach() {
 		ReflectionTestUtils.setField(jwtUtil, "ACCESS_TOKEN_TIME", ACCESS_TOKEN_TIME);
-		ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
+		// ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
 		ReflectionTestUtils.setField(jwtUtil, "secretKey", secretKey);
+
 		jwtUtil.init();
 	}
 
@@ -83,15 +85,22 @@ class AuthServiceImplTest {
 		@Test
 		void 이미_존재하는_번호_실패() {
 			// Given
-			UserForVerificationRequest request = UserForVerificationRequest.builder().to(TEST_PHONE_NUMBER).build();
+			UserForVerificationRequest request = UserForVerificationRequest
+				.builder()
+				.to(TEST_PHONE_NUMBER)
+				.build();
 
 			given(userService.isExistedPhoneNumber(any())).willReturn(true);
 
 			// When
-			ApiException exception = assertThrows(ApiException.class, () -> sut.verifyPhone(request));
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.verifyPhone(request)
+			);
 
 			// Then
-			assertThat(exception).hasMessage(EXISTED_USER_PHONE_NUMBER.getMessage());
+			assertThat(exception)
+				.hasMessage(EXISTED_USER_PHONE_NUMBER.getMessage());
 		}
 	}
 
@@ -114,6 +123,7 @@ class AuthServiceImplTest {
 
 			given(jwtUtil.getUserInfoFromToken(any())).willReturn(claims);
 			given(lettuceUtils.get(any())).willReturn(refreshToken);
+
 			given(jwtUtil.createAccessToken(any(), any(), any())).willReturn(newAccessToken);
 			given(jwtUtil.createRefreshToken(any(), any(), any())).willReturn(newRefreshToken);
 
