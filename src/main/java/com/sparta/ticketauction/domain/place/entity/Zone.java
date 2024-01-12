@@ -1,10 +1,10 @@
-package com.sparta.ticketauction.domain.seat.entity;
+package com.sparta.ticketauction.domain.place.entity;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.place.entity.Zone;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,25 +21,31 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "zone_grade")
-public class ZoneGrade extends BaseEntity {
+@Table(name = "zone")
+public class Zone extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Comment("구역등급")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "grade_id", nullable = false)
-	private Grade grade;
+	@Comment("구역명")
+	@Column(name = "name", length = 10)
+	private String name;
 
-	@Comment("구역")
+	@Comment("좌석수")
+	@Column(name = "seat_number")
+	private Integer seatNumber;
+
+	@Comment("공연장")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "zone_id", nullable = false)
-	private Zone zone;
+	@JoinColumn(name = "palce_id")
+	private Place place;
 
 	@Builder
-	public ZoneGrade(Grade grade, Zone zone) {
-		this.grade = grade;
-		this.zone = zone;
+	private Zone(String name, Integer seatNumber, Place place) {
+		this.name = name;
+		this.seatNumber = seatNumber;
+		this.place = place;
 	}
+
 }
+
