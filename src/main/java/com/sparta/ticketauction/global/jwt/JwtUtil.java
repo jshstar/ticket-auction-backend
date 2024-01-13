@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 import io.jsonwebtoken.Claims;

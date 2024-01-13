@@ -22,8 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
-import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
-import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -199,14 +199,14 @@ class UserServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest("테스트닉네임", null, null);
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 			given(userRepository.existsByNicknameAndIsDeletedIsFalse(any())).willReturn(false);
 
 			// When
-			sut.updateUserNicknameInfo(user, 1L, request);
+			sut.updateUserInfo(user, 1L, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -216,7 +216,7 @@ class UserServiceImplTest {
 		@Test
 		void 이미_존재하는_닉네임으로_실패() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest(TEST_NICKNAME, null, null);
 			User user = UserUtil.TEST_USER;
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
@@ -225,7 +225,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserNicknameInfo(user, 1L, request)
+				() -> sut.updateUserInfo(user, 1L, request)
 			);
 
 			// Then
@@ -236,13 +236,13 @@ class UserServiceImplTest {
 		@Test
 		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
 			// Given
-			UserNicknameUpdateRequest request = UserNicknameUpdateRequest.builder().nickname(TEST_NICKNAME).build();
+			UserUpdateRequest request = new UserUpdateRequest(TEST_NICKNAME, null, null);
 			User user = UserUtil.TEST_USER;
 
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserNicknameInfo(user, 2L, request)
+				() -> sut.updateUserInfo(user, 2L, request)
 			);
 
 			// Then
@@ -256,7 +256,8 @@ class UserServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -269,7 +270,7 @@ class UserServiceImplTest {
 				.willReturn(request.getVerificationNumber());
 
 			// When
-			sut.updateUserPhoneInfo(user, 1L, request);
+			sut.updateUserInfo(user, 1L, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -280,7 +281,8 @@ class UserServiceImplTest {
 		@Test
 		void 인증_번호_일치_실패로_인해_실패() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -295,7 +297,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserPhoneInfo(user, 1L, request)
+				() -> sut.updateUserInfo(user, 1L, request)
 			);
 
 			// Then
@@ -306,7 +308,8 @@ class UserServiceImplTest {
 		@Test
 		void 로그인한_유저에게_해당_수정_권한이_없어서_실패() {
 			// Given
-			UserPhoneUpdateRequest request = new UserPhoneUpdateRequest(
+			UserUpdateRequest request = new UserUpdateRequest(
+				null,
 				"01011111111",
 				"123456"
 			);
@@ -315,7 +318,7 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.updateUserPhoneInfo(user, 2L, request)
+				() -> sut.updateUserInfo(user, 2L, request)
 			);
 
 			// Then
@@ -335,7 +338,7 @@ class UserServiceImplTest {
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 
 			// When
-			UserResponse response = sut.gerUserInfo(user, 1L);
+			UserResponse response = sut.getUserInfo(user, 1L);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -356,12 +359,73 @@ class UserServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.gerUserInfo(user, 2L)
+				() -> sut.getUserInfo(user, 2L)
 			);
 
 			// Then
 			assertThat(exception)
 				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+	}
+
+	@Nested
+	class 비밀_번호_변경_테스트 {
+		@Test
+		void 성공() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password("pw15900!@")
+				.build();
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+
+			// When
+			sut.updateUserPassword(user, 1L, request);
+
+			// Then
+			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
+		}
+
+		@Test
+		void 권한없는_유저로_실패() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password("pw15900!@")
+				.build();
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPassword(user, 2L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+
+		@Test
+		void 기존과_동일한_비밀번호로_인해_실패() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password(TEST_PASSWORD)
+				.build();
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(passwordEncoder.matches(any(), any())).willReturn(true);
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPassword(user, 1L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ALREADY_USED_PASSWORD.getMessage());
 		}
 	}
 }

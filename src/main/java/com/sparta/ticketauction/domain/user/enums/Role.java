@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.entity.constant;
+package com.sparta.ticketauction.domain.user.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

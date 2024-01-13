@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
 

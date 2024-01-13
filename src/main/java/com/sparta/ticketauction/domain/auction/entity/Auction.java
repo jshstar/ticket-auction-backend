@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
+import com.sparta.ticketauction.domain.sequence.entity.Sequence;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -16,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,6 +33,20 @@ public class Auction extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Comment("공연 회차")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "sequence_id", nullable = false)
+	private Sequence sequence;
+
+	@Comment("구역등급")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "zone_grade_id", nullable = false)
+	private ZoneGrade zoneGrade;
+
+	@Comment("시작가")
+	@Column(name = "seat_number", nullable = false)
+	private Integer seatNumber;
 
 	@Comment("시작가")
 	@ColumnDefault("0")
@@ -53,23 +69,23 @@ public class Auction extends BaseEntity {
 	@Column(name = "is_ended")
 	private Boolean isEnded = false;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "seat_id")
-	@JoinColumn(name = "sequence_id")
-	private GoodsSequenceSeat sequenceSeat;
 
 	@Builder
 	private Auction(
+		Sequence sequence,
+		ZoneGrade zoneGrade,
+		Integer seatNumber,
 		Long startPrice,
 		LocalDateTime startDateTime,
-		LocalDateTime endDateTime,
-		GoodsSequenceSeat sequenceSeat
+		LocalDateTime endDateTime
 	) {
+		this.sequence = sequence;
+		this.zoneGrade = zoneGrade;
+		this.seatNumber = seatNumber;
 		this.startPrice = startPrice;
 		this.bidPrice = startPrice;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
-		this.sequenceSeat = sequenceSeat;
 	}
 
 	public void updateBidPrice(Long bidPrice) {

@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.seat.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 

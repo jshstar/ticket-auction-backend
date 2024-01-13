@@ -16,9 +16,9 @@ public enum ErrorCode {
 	EXISTED_USER_PHONE_NUMBER(HttpStatus.CONFLICT, "U10102", "사용 중인 전화 번호 입니다."),
 	INVALID_VERIFICATION_NUMBER(HttpStatus.BAD_REQUEST, "U10103", "잘못된 인증 번호 입니다."),
 	EXCEED_VERIFICATION_TIME(HttpStatus.BAD_REQUEST, "U10104", "인증 번호 입력 시간 초과 입니다."),
+	ALREADY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "U10105", "기존과 다른 비밀 번호를 입력해주세요."),
 	NOT_FOUND_USER_FOR_LOGIN(HttpStatus.NOT_FOUND, "U10201", "존재하지 않는 회원입니다."),
 	REQUIRED_ADMIN_USER_AUTHORITY(HttpStatus.UNAUTHORIZED, "U19900", "관리자 권한이 필요합니다."),
-
 
 	/* GOODS */
 
@@ -51,7 +51,7 @@ public enum ErrorCode {
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
 
 	/* PAYMENT */
-	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "", "결제할 포인트가 부족합니다"),
+	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P100000", "결제할 포인트가 부족합니다"),
 
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
