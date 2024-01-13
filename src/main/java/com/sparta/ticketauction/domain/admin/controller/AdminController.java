@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
-import com.sparta.ticketauction.global.dto.EmptyObject;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -55,18 +55,24 @@ public class AdminController {
 			MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE
 		})
-	public ResponseEntity<ApiResponse<EmptyObject>> createGoodsBundleAndSchedule(
+	public ResponseEntity<ApiResponse<GoodsResponse>> createGoodsBundleAndSchedule(
 		@Valid @RequestPart GoodsRequest goodsRequest,
 		@RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
 		@PathVariable Long placeId
 	) {
-		adminService.createGoodsBundleAndSchedule(placeId, goodsRequest, multipartFiles);
+		GoodsResponse goodsResponse =
+			adminService.createGoodsBundleAndSchedule(
+				placeId,
+				goodsRequest,
+				multipartFiles
+			);
 		return ResponseEntity
 			.status(SUCCESS_GOODS_AND_SCHEDULE_CREATE.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getCode(),
-					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getMessage()
+					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getMessage(),
+					goodsResponse
 				)
 			);
 	}
