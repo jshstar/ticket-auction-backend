@@ -31,12 +31,11 @@ public enum ErrorCode {
 
 
 
-	/* SEQUENCE */
-	NOT_FOUND_SEQUENCE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
+	/* SCHEDULE */
+	NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
 
 	/* PLACE */
 	NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
-
 
 	/* AUCTION */
 	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),

@@ -28,7 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	public Schedule findSchedule(Long scheduleId) {
 		return sequenceRepository.findById(scheduleId)
-			.orElseThrow(() -> new ApiException(NOT_FOUND_SEQUENCE));
+			.orElseThrow(() -> new ApiException(NOT_FOUND_SCHEDULE));
 	}
 
 	// 회차 생성
