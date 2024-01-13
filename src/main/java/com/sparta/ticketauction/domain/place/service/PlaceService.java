@@ -9,9 +9,12 @@ import com.sparta.ticketauction.domain.place.entity.Place;
 public interface PlaceService {
 
 	// 공연장 생성
-	public Place createPlace(PlaceRequest placeRequest);
+	Place createPlace(PlaceRequest placeRequest);
 
 	// 공연장 총 좌석 개수 계산
-	public Integer calculateSeats(List<ZoneInfo> seats);
+	Integer calculateSeats(List<ZoneInfo> seats);
+
+	// 공연장 프록시 객체 탐색 생성
+	Place getReferenceById(Long placeId);
 
 }
