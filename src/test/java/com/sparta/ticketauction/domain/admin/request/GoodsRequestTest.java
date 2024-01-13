@@ -308,6 +308,7 @@ public class GoodsRequestTest {
 
 	}
 
+	@Test
 	void 공연_Entity_생성_성공_테스트() {
 		// given
 		GoodsRequest goodsRequest = new GoodsRequest(

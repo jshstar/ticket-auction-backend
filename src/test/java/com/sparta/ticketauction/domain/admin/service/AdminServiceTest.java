@@ -186,7 +186,7 @@ public class AdminServiceTest {
 		assertEquals(goodsImage.get(0).getType(), goodsInfo.getGoodsImage().get(0).getType());
 		assertEquals(goodsImage.get(1).getType(), goodsInfo.getGoodsImage().get(1).getType());
 		assertEquals(goodsCategory.getName(), goodsInfo.getGoodsCategory().getName());
-		assertEquals((int)daysBetween, scheduleList.get(1).getSequence());
+		assertEquals((int)daysBetween + 1, scheduleList.get(1).getSequence());
 		assertEquals(goodsRequest.getStartTime().getMinute(), scheduleList.get(1).getStartDateTime().getMinute());
 		assertEquals(goodsRequest.getStartTime().getHour(), scheduleList.get(1).getStartDateTime().getHour());
 		assertEquals(scheduleList.get(1).getGoods().getGoodsInfo(), goodsInfo);

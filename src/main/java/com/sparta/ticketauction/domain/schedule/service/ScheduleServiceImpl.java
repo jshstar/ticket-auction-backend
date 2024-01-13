@@ -48,7 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		List<Schedule> distributeSequenceList = new ArrayList<>();
 		long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
 
-		for (int i = 1; i <= daysBetween; i++) {
+		for (int i = 1; i <= daysBetween + 1; i++) {
 			LocalDateTime dateTime = startDate.atTime(startTime);
 			Schedule schedule =
 				Schedule
