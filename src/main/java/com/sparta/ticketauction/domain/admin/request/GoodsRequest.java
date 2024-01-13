@@ -5,7 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.place.entity.Place;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -52,6 +54,16 @@ public class GoodsRequest {
 			.goodsImage(new ArrayList<>())
 			.build();
 
+	}
+
+	public Goods toEntity(Place place, GoodsInfo goodsInfo) {
+		return Goods
+			.builder()
+			.place(place)
+			.goodsInfo(goodsInfo)
+			.startDate(this.startDate)
+			.endDate(this.endDate)
+			.build();
 	}
 
 }
