@@ -1,19 +1,28 @@
 package com.sparta.ticketauction.domain.admin.service;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
+import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
+import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
+import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.goods.service.GoodsInfoService;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
 import com.sparta.ticketauction.domain.place.service.PlaceService;
 import com.sparta.ticketauction.domain.place.service.ZoneService;
+import com.sparta.ticketauction.domain.schedule.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +35,10 @@ public class AdminServiceImpl implements AdminService {
 	private final GoodsService goodsService;
 
 	private final ZoneService zoneService;
+
+	private final GoodsInfoService goodsInfoService;
+
+	private final ScheduleService scheduleService;
 
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
@@ -57,6 +70,31 @@ public class AdminServiceImpl implements AdminService {
 		}
 
 		return placeResponseList;
+	}
+
+	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
+	@Override
+	@Transactional
+	public void createGoodsBundleAndSchedule(
+		Long placeId,
+		GoodsRequest goodsRequest,
+		List<MultipartFile> multipartFiles) {
+
+		Place place = placeService.getReferenceById(placeId);
+
+		GoodsInfo goodsInfo = goodsInfoService.createGoodsInfo(goodsRequest);
+
+		List<GoodsImage> goodsImages = goodsInfoService.createGoodsImage(multipartFiles, goodsInfo);
+		goodsInfo.addGoodsImage(goodsImages);
+
+		GoodsCategory goodsCategory = goodsInfoService.createGoodsCategory(goodsRequest.getCategoryName());
+		goodsInfo.updateGoodsCategory(goodsCategory);
+
+		Goods goods = goodsService.createGoods(goodsRequest, place, goodsInfo);
+
+		LocalTime startTime = goodsRequest.getStartTime();
+		scheduleService.createSchedule(goods, startTime);
+
 	}
 
 }
