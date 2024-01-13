@@ -28,7 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;

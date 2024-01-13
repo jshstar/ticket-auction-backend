@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;

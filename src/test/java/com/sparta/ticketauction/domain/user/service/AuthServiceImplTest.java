@@ -18,7 +18,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;

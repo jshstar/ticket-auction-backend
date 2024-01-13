@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 
 public class UserUtil {
