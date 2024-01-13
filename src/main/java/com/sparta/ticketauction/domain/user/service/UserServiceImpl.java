@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -86,6 +87,21 @@ public class UserServiceImpl implements UserService {
 		User user = checkAndGetUser(loginUser, userId);
 
 		return UserResponse.from(user);
+	}
+
+	@Override
+	@Transactional
+	public void updateUserPassword(User loginUser, Long userId, UserPasswordUpdateRequest request) {
+		User user = checkAndGetUser(loginUser, userId);
+
+		checkPassword(user, request.getPassword());
+		user.updatePassword(passwordEncoder.encode(request.getPassword()));
+	}
+
+	private void checkPassword(User user, String password) {
+		if (passwordEncoder.matches(password, user.getPassword())) {
+			throw new ApiException(ALREADY_USED_PASSWORD);
+		}
 	}
 
 	private void checkPhoneVerificationCode(String phoneNumber, String verificationCode) {

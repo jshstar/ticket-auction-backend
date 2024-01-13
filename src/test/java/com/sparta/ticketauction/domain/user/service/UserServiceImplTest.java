@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
@@ -364,6 +365,67 @@ class UserServiceImplTest {
 			// Then
 			assertThat(exception)
 				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+	}
+
+	@Nested
+	class 비밀_번호_변경_테스트 {
+		@Test
+		void 성공() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password("pw15900!@")
+				.build();
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+
+			// When
+			sut.updateUserPassword(user, 1L, request);
+
+			// Then
+			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
+		}
+
+		@Test
+		void 권한없는_유저로_실패() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password("pw15900!@")
+				.build();
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPassword(user, 2L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ACCESS_DENIED.getMessage());
+		}
+
+		@Test
+		void 기존과_동일한_비밀번호로_인해_실패() {
+			// Given
+			User user = TEST_USER;
+			UserPasswordUpdateRequest request = UserPasswordUpdateRequest.builder()
+				.password(TEST_PASSWORD)
+				.build();
+
+			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
+			given(passwordEncoder.matches(any(), any())).willReturn(true);
+
+			// When
+			ApiException exception = assertThrows(
+				ApiException.class,
+				() -> sut.updateUserPassword(user, 1L, request)
+			);
+
+			// Then
+			assertThat(exception)
+				.hasMessage(ALREADY_USED_PASSWORD.getMessage());
 		}
 	}
 }

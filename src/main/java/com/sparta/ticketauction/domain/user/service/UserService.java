@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.user.service;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 
@@ -49,4 +50,13 @@ public interface UserService {
 	 * @return UserResponse	유저 응답 정보 dto
 	 * */
 	UserResponse getUserInfo(User user, Long userId);
+
+	/*
+	 * 유저 비밀 번호 수정 - 수정할 비밀 번호와 확인 비밀 번호 입력 값에 대한 일치 여부는 프론트 단에서 검증
+	 *
+	 * @param user 		로그인 한 유저 정보
+	 * @param userId  	비밀 번호를 수정할 유저의 id
+	 * @param request	변경할 비밀 번호 - 이미  검증됨
+	 * */
+	void updateUserPassword(User user, Long userId, UserPasswordUpdateRequest request);
 }
