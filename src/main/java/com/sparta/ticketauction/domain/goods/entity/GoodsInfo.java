@@ -56,7 +56,7 @@ public class GoodsInfo extends BaseEntity {
 	private GoodsCategory goodsCategory;
 
 	@Comment("공연 이미지")
-	@OneToMany(mappedBy = "goods", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "goodsInfo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<GoodsImage> goodsImage = new ArrayList<>();
 
 	@Builder
