@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.entity.User;
-import com.sparta.ticketauction.domain.user.entity.constant.Role;
+import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.response.ApiResponse;
