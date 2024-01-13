@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.seat.entity;
+package com.sparta.ticketauction.domain.grade.entity;
 
 import org.hibernate.annotations.Comment;
 

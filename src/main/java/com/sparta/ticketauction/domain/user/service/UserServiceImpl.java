@@ -2,6 +2,8 @@ package com.sparta.ticketauction.domain.user.service;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
+import java.util.Objects;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
-import com.sparta.ticketauction.domain.user.request.UserNicknameUpdateRequest;
-import com.sparta.ticketauction.domain.user.request.UserPhoneUpdateRequest;
+import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public void signup(UserCreateRequest request) {
+	public UserResponse signup(UserCreateRequest request) {
 		String email = request.getEmail();
 		String nickname = request.getNickname();
 
@@ -46,6 +47,8 @@ public class UserServiceImpl implements UserService {
 
 		User user = request.toEntity(passwordEncoder);
 		userRepository.save(user);
+
+		return UserResponse.from(user);
 	}
 
 	@Override
@@ -62,22 +65,24 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public void updateUserNicknameInfo(User loginUser, Long userId, UserNicknameUpdateRequest request) {
+	public UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
 		User user = checkAndGetUser(loginUser, userId);
-		checkNickname(request.getNickname());
-		user.updateUserNickName(request.getNickname());
+
+		if (!Objects.requireNonNullElse(request.getNickname(), "").isBlank()) {
+			checkNickname(request.getNickname());
+			user.updateUserNickName(request.getNickname());
+		}
+
+		if (!Objects.requireNonNullElse(request.getPhoneNumber(), "").isBlank()
+			&& !Objects.requireNonNullElse(request.getVerificationNumber(), "").isBlank()) {
+			checkPhoneVerificationCode(request.getPhoneNumber(), request.getVerificationNumber());
+			user.updatePhoneNumber(request.getPhoneNumber());
+		}
+		return UserResponse.from(user);
 	}
 
-	@Transactional
 	@Override
-	public void updateUserPhoneInfo(User loginUser, Long userId, UserPhoneUpdateRequest request) {
-		User user = checkAndGetUser(loginUser, userId);
-		checkPhoneVerificationCode(request.getPhoneNumber(), request.getVerificationNumber());
-		user.updatePhoneNumber(request.getPhoneNumber());
-	}
-
-	@Override
-	public UserResponse gerUserInfo(User loginUser, Long userId) {
+	public UserResponse getUserInfo(User loginUser, Long userId) {
 		User user = checkAndGetUser(loginUser, userId);
 
 		return UserResponse.from(user);
