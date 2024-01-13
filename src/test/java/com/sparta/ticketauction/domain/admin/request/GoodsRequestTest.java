@@ -11,11 +11,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sparta.ticketauction.domain.goods.entity.AgeGrade;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.place.entity.Place;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -43,6 +46,8 @@ public class GoodsRequestTest {
 	Integer runningTime;
 
 	String categoryName;
+
+	GoodsRequest goodsRequest;
 
 	@BeforeAll
 	public static void init() {
@@ -272,7 +277,7 @@ public class GoodsRequestTest {
 	}
 
 	@Test
-	void Entity_생성_성공_테스트() {
+	void 공연정보_Entity_생성_성공_테스트() {
 		// given
 		GoodsRequest goodsRequest = new GoodsRequest(
 			this.goodsName,
@@ -301,6 +306,42 @@ public class GoodsRequestTest {
 		assertEquals(this.runningTime, goodsInfo.getRunningTime());
 		assertEquals(this.categoryName, goodsInfo.getGoodsCategory().getName());
 
+	}
+
+	void 공연_Entity_생성_성공_테스트() {
+		// given
+		GoodsRequest goodsRequest = new GoodsRequest(
+			this.goodsName,
+			this.goodsDescription,
+			this.startDate,
+			this.endDate,
+			this.ageGrade,
+			this.startTime,
+			this.runningTime,
+			this.categoryName);
+
+		//when
+		GoodsInfo goodsInfo = goodsRequest.toEntity();
+
+		GoodsCategory goodsCategory =
+			GoodsCategory
+				.builder()
+				.name(this.categoryName)
+				.build();
+		goodsInfo.updateGoodsCategory(goodsCategory);
+
+		Place place = Mockito.mock();
+		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+
+		//then
+		assertEquals(this.startDate.getYear(), goods.getStartDate().getYear());
+		assertEquals(this.startDate.getMonth(), goods.getStartDate().getMonth());
+		assertEquals(this.startDate.getDayOfMonth(), goods.getStartDate().getDayOfMonth());
+		assertEquals(this.endDate.getYear(), goods.getEndDate().getYear());
+		assertEquals(this.endDate.getMonth(), goods.getEndDate().getMonth());
+		assertEquals(this.endDate.getDayOfMonth(), goods.getEndDate().getDayOfMonth());
+		assertEquals(goodsInfo, goods.getGoodsInfo());
+		assertEquals(place, goods.getPlace());
 	}
 
 }
