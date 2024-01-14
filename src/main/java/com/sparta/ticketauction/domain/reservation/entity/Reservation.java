@@ -1,8 +1,11 @@
 package com.sparta.ticketauction.domain.reservation.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
+import com.sparta.ticketauction.domain.reservation_seat.entity.ReservationSeat;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -15,8 +18,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,13 +37,6 @@ public class Reservation extends BaseEntity {
 	@Column(nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-		@JoinColumn(name = "seat_id", referencedColumnName = "seat_id", nullable = false),
-		@JoinColumn(name = "sequence_id", referencedColumnName = "sequence_id", nullable = false)
-	})
-	private GoodsSequenceSeat goodsSequenceSeat;
-
 	@Comment("유저")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -55,11 +51,18 @@ public class Reservation extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 
+	@OneToMany(mappedBy = "reservation")
+	private List<ReservationSeat> reservationSeats = new ArrayList<>();
+
 	@Builder
-	private Reservation(User user, GoodsSequenceSeat goodsSequenceSeat, Long price) {
+	private Reservation(User user, Long price, ReservationStatus status) {
 		this.user = user;
-		this.goodsSequenceSeat = goodsSequenceSeat;
 		this.price = price;
-		this.status = ReservationStatus.OK;
+		this.status = status;
+	}
+
+	public void addSeat(ReservationSeat seat) {
+		seat.setReservation(this);
+		reservationSeats.add(seat);
 	}
 }
