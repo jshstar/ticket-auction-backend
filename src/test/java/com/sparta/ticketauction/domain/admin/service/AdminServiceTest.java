@@ -213,6 +213,7 @@ public class AdminServiceTest {
 
 		// when
 		given(goodsService.findById(any())).willReturn(goods);
+		given(gradeService.createGrade(any(GradeRequest.class), any(Goods.class))).willReturn(grade);
 		adminService.createGrade(1L, gradeRequest);
 
 		// then
