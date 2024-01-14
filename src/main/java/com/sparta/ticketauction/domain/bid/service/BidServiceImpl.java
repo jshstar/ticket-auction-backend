@@ -13,6 +13,7 @@ import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.repository.BidRepository;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.global.annotaion.DistributedLock;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -27,6 +28,7 @@ public class BidServiceImpl implements BidService {
 	private final AuctionRepository auctionRepository;
 	private final BidRepository bidRepository;
 	private final BidRedisService bidRedisService;
+	private final PointService pointService;
 
 	@Override
 	@DistributedLock(key = "T(com.sparta.ticketauction.domain.bid.constant.BidConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
@@ -53,11 +55,11 @@ public class BidServiceImpl implements BidService {
 		Optional<Bid> currentBid = getCurrentBid(auction);
 		if (currentBid.isPresent()) {
 			User currentBidder = currentBid.get().getUser();
-			currentBidder.chargePoint(currentBidPrice);
+			pointService.chargePoint(currentBidder, currentBidPrice);
 		}
 
 		//새 입찰자 포인트 차감 및 경매 입찰가 갱신
-		bidder.usePoint(newBidPrice);
+		pointService.usePoint(bidder, newBidPrice);
 	}
 
 	public void saveBid(User bidder, long newBidPrice, Auction auction) {
