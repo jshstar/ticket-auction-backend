@@ -107,6 +107,7 @@ public class AdminServiceImpl implements AdminService {
 
 	// 구역 생성
 	@Override
+	@Transactional
 	public GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest) {
 		Goods goods = goodsService.findById(goodsId);
 		gradeService.createGrade(gradeRequest, goods);
