@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
+import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
@@ -18,6 +20,7 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoService;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
+import com.sparta.ticketauction.domain.grade.service.GradeService;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
@@ -40,6 +43,8 @@ public class AdminServiceImpl implements AdminService {
 	private final GoodsInfoService goodsInfoService;
 
 	private final ScheduleService scheduleService;
+
+	private final GradeService gradeService;
 
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
@@ -98,6 +103,14 @@ public class AdminServiceImpl implements AdminService {
 
 		return new GoodsResponse(goods.getId());
 
+	}
+
+	// 구역 생성
+	@Override
+	public GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest) {
+		Goods goods = goodsService.findById(goodsId);
+		gradeService.createGrade(gradeRequest, goods);
+		return new GradeResponse(goods.getPlace().getId());
 	}
 
 }
