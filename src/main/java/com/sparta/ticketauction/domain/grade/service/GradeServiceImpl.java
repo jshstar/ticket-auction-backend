@@ -16,9 +16,9 @@ public class GradeServiceImpl implements GradeService {
 	private final GradeRepository gradeRepository;
 
 	// 등급 생성
-	public void createGrade(GradeRequest gradeRequest, Goods goods) {
+	public Grade createGrade(GradeRequest gradeRequest, Goods goods) {
 		Grade grade = gradeRequest.toEntity(goods);
-		gradeRepository.save(grade);
+		return gradeRepository.save(grade);
 	}
 
 }

@@ -6,8 +6,11 @@ import lombok.Getter;
 public class GradeResponse {
 	private final Long placeId;
 
-	public GradeResponse(Long placeId) {
+	private final Long gradeId;
+
+	public GradeResponse(Long placeId, Long gradeId) {
 		this.placeId = placeId;
+		this.gradeId = gradeId;
 	}
 
 }

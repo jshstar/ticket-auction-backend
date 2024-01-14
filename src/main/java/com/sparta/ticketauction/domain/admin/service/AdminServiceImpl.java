@@ -20,6 +20,7 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoService;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
+import com.sparta.ticketauction.domain.grade.entity.Grade;
 import com.sparta.ticketauction.domain.grade.service.GradeService;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
@@ -110,8 +111,8 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional
 	public GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest) {
 		Goods goods = goodsService.findById(goodsId);
-		gradeService.createGrade(gradeRequest, goods);
-		return new GradeResponse(goods.getPlace().getId());
+		Grade grade = gradeService.createGrade(gradeRequest, goods);
+		return new GradeResponse(goods.getPlace().getId(), grade.getId());
 	}
 
 }
