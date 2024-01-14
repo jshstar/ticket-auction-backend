@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.ticketauction.domain.user.request.UserLoginRequest;
-import com.sparta.ticketauction.domain.user.service.UserServiceImpl;
+import com.sparta.ticketauction.domain.user.service.impl.UserServiceImpl;
 import com.sparta.ticketauction.domain.user.util.JwtAuthenticationHelper;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.jwt.JwtUtil;

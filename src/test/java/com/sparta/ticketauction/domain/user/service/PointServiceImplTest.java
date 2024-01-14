@@ -20,6 +20,7 @@ import com.sparta.ticketauction.domain.user.entity.Point;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
+import com.sparta.ticketauction.domain.user.service.impl.PointServiceImpl;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 @DisplayName("포인트 서비스 테스트")
