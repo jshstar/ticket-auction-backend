@@ -44,11 +44,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			Long id = Long.parseLong(info.get("identify").toString());
 			String username = info.getSubject();
 			Role role = Role.valueOf((String)info.get("auth"));
+			String nickname = (String)info.get("nickname");
 
 			String logoutToken = lettuceUtils.get("Logout: " + username);
 			// 로그아웃 토큰 검증
 			if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
-				setAuthentication(id, username, role);
+				setAuthentication(id, username, role, nickname);
 			}
 		}
 		filterChain.doFilter(request, response);
@@ -57,20 +58,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	/*
 	 * 인증 처리하기
 	 * */
-	private void setAuthentication(Long id, String username, Role role) {
+	private void setAuthentication(Long id, String username, Role role, String nickname) {
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		Authentication authentication = createAuthentication(id, username, role);
+		Authentication authentication = createAuthentication(id, username, role, nickname);
 		context.setAuthentication(authentication);
 
 		SecurityContextHolder.setContext(context);
 	}
 
-	private Authentication createAuthentication(Long id, String username, Role role) {
+	private Authentication createAuthentication(Long id, String username, Role role, String nickname) {
 		UserDetails userDetails = new UserDetailsImpl(
 			User.builder()
 				.id(id)
 				.email(username)
 				.role(role)
+				.nickname(nickname)
 				.build()
 		);
 
