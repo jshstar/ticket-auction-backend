@@ -36,4 +36,11 @@ public class ZoneServiceImpl implements ZoneService {
 
 		return zoneRepository.saveAll(zoneList);
 	}
+
+	// 구역 프록시 객체 생성
+	@Override
+	public Zone getReferenceById(Long zoneId) {
+		return zoneRepository.getReferenceById(zoneId);
+	}
+
 }
