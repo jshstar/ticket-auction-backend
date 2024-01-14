@@ -28,7 +28,8 @@ public interface AdminService {
 
 	// 등급 생성
 	GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest);
-
+	
+	// 구역 등급 생성
 	ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest);
 
 }
