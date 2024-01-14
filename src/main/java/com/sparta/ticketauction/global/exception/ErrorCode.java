@@ -31,8 +31,8 @@ public enum ErrorCode {
 
 
 
-	/* SEQUENCE */
-	NOT_FOUND_SEQUENCE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
+	/* SCHEDULE */
+	NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
 
 	/* PLACE */
 	NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),

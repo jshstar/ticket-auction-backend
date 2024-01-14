@@ -4,13 +4,19 @@ import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
 import com.sparta.ticketauction.global.response.ApiResponse;
@@ -27,6 +33,7 @@ public class AdminController {
 
 	private final AdminServiceImpl adminService;
 
+	// 공연장 및 구역 생성
 	@PostMapping("/admin/places")
 	public ResponseEntity<ApiResponse<List<PlaceResponse>>> createPlaceAndZone(
 		@Valid @RequestBody PlaceRequest placeRequest
@@ -39,6 +46,34 @@ public class AdminController {
 					SUCCESS_PLACE_AND_ZONE_CREATE.getCode(),
 					SUCCESS_PLACE_AND_ZONE_CREATE.getMessage(),
 					placeResponseList)
+			);
+	}
+
+	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
+	@PostMapping(value = "/admin/places/{placeId}/goods",
+		consumes = {
+			MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE
+		})
+	public ResponseEntity<ApiResponse<GoodsResponse>> createGoodsBundleAndSchedule(
+		@Valid @RequestPart GoodsRequest goodsRequest,
+		@RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
+		@PathVariable Long placeId
+	) {
+		GoodsResponse goodsResponse =
+			adminService.createGoodsBundleAndSchedule(
+				placeId,
+				goodsRequest,
+				multipartFiles
+			);
+		return ResponseEntity
+			.status(SUCCESS_GOODS_AND_SCHEDULE_CREATE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getCode(),
+					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getMessage(),
+					goodsResponse
+				)
 			);
 	}
 
