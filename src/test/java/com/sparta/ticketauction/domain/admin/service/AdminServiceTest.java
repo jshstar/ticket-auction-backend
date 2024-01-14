@@ -21,7 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
@@ -29,7 +31,9 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoServiceImpl;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
 import com.sparta.ticketauction.domain.grade.entity.Grade;
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.service.GradeServiceImpl;
+import com.sparta.ticketauction.domain.grade.service.ZoneGradeServiceImpl;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
@@ -62,11 +66,16 @@ public class AdminServiceTest {
 	@Mock
 	GradeServiceImpl gradeService;
 
+	@Mock
+	ZoneGradeServiceImpl zoneGradeService;
+
 	public static PlaceRequest placeRequest;
 
 	public static GoodsRequest goodsRequest;
 
 	public static GradeRequest gradeRequest;
+
+	public static ZoneGradeRequest zoneGradeRequest;
 
 	@BeforeEach
 	public void initPlaceRequest() {
@@ -85,7 +94,7 @@ public class AdminServiceTest {
 			"공연"
 		);
 		gradeRequest = new GradeRequest("VIP", 100000L, 70000L);
-
+		zoneGradeRequest = new ZoneGradeRequest(1L, 1L);
 	}
 
 	@Test
@@ -206,7 +215,7 @@ public class AdminServiceTest {
 	@Test
 	void 등급_생성_테스트() {
 		// given
-		Place place = Mockito.mock();
+		Place place = placeRequest.toEntity(200);
 		GoodsInfo goodsInfo = goodsRequest.toEntity();
 		Goods goods = goodsRequest.toEntity(place, goodsInfo);
 		Grade grade = gradeRequest.toEntity(goods);
@@ -217,10 +226,56 @@ public class AdminServiceTest {
 		adminService.createGrade(1L, gradeRequest);
 
 		// then
+		verify(goodsService, times(1)).findById(any());
+		verify(gradeService, times(1)).createGrade(any(GradeRequest.class), any(Goods.class));
 		assertEquals(gradeRequest.getName(), grade.getName());
 		assertEquals(gradeRequest.getNormalPrice(), grade.getNormalPrice());
 		assertEquals(gradeRequest.getAuctionPrice(), grade.getAuctionPrice());
 		assertEquals(grade.getGoods(), goods);
 		assertEquals(grade.getGoods().getGoodsInfo(), goodsInfo);
+	}
+
+	@Test
+	void 등급_구역_생성_테스트() {
+		// given
+		Place place = placeRequest.toEntity(100);
+		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		Grade grade = gradeRequest.toEntity(goods);
+		Zone zone =
+			Zone
+				.builder()
+				.place(place)
+				.name("A")
+				.seatNumber(100)
+				.build();
+		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
+
+		// when
+		given(zoneService.getReferenceById(anyLong())).willReturn(zone);
+		given(gradeService.getReferenceById(anyLong())).willReturn(grade);
+		given(
+			zoneGradeService
+				.createZoneGrade(
+					any(ZoneGradeRequest.class),
+					any(Zone.class),
+					any(Grade.class)))
+			.willReturn(zoneGrade);
+
+		ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+
+		// then
+		verify(zoneService, times(1)).getReferenceById(anyLong());
+		verify(gradeService, times(1)).getReferenceById(anyLong());
+		verify(zoneGradeService, times(1))
+			.createZoneGrade(
+				any(ZoneGradeRequest.class),
+				any(Zone.class),
+				any(Grade.class)
+			);
+		assertEquals(zoneGrade.getGrade(), grade);
+		assertEquals(zoneGrade.getZone(), zone);
+		assertEquals(zoneGradeResponse.getGradeName(), zoneGrade.getGrade().getName());
+		assertEquals(zoneGradeResponse.getAuctionPrice(), zoneGrade.getGrade().getAuctionPrice());
 	}
 }
