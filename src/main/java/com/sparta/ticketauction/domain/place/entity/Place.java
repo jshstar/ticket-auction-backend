@@ -54,7 +54,10 @@ public class Place extends BaseEntity {
 		this.countSeats = countSeats;
 	}
 
-	public void updateZone(List<Zone> zone) {
-		this.zones.addAll(zone);
+	public void updateZone(List<Zone> zones) {
+		for (Zone zone : zones) {
+			zone.addPlace(this);
+		}
+		this.zones.addAll(zones);
 	}
 }

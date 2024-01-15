@@ -105,7 +105,6 @@ public class AdminServiceTest {
 		zoneList.add(
 			Zone
 				.builder()
-				.place(place)
 				.name(
 					placeRequest.getZoneInfos().get(0).getZone())
 				.seatNumber(
@@ -114,17 +113,17 @@ public class AdminServiceTest {
 		);
 		zoneList.add(Zone
 			.builder()
-			.place(place)
 			.name(
 				placeRequest.getZoneInfos().get(1).getZone())
 			.seatNumber(
 				placeRequest.getZoneInfos().get(1).getSeatNumber())
 			.build()
 		);
+		place.updateZone(zoneList);
 
 		//when
 		given(placeService.createPlace(any())).willReturn(place);
-		given(zoneService.createZone(any(), any())).willReturn(zoneList);
+		given(zoneService.createZone(any())).willReturn(zoneList);
 		List<PlaceResponse> response = adminService.createPlaceAndZone(placeRequest);
 
 		//then
@@ -245,10 +244,10 @@ public class AdminServiceTest {
 		Zone zone =
 			Zone
 				.builder()
-				.place(place)
 				.name("A")
 				.seatNumber(100)
 				.build();
+		place.updateZone(List.of(zone));
 		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
 
 		// when

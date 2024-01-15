@@ -38,7 +38,7 @@ public class ZoneGrade extends BaseEntity {
 	private Zone zone;
 
 	@Builder
-	public ZoneGrade(Grade grade, Zone zone) {
+	private ZoneGrade(Grade grade, Zone zone) {
 		this.grade = grade;
 		this.zone = zone;
 	}
