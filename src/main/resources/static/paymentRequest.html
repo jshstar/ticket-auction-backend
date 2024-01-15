@@ -77,11 +77,32 @@
             }
         });
     });
-    let tossPayments = TossPayments("test_ck_GjLJoQ1aVZq4w21BDdAP3w6KYe2R");
+
+    var token = Cookies.get('Authorization');
+    let key;
+    let tossPayments;
+    // AJAX 요청이 완료된 후에 TossPayments 초기화
+    $.ajax({
+        url: "/api/v1/payments/getKey",
+        type: "GET",
+        headers: {
+            "Authorization": token,
+            "Content-Type": "application/json"
+        },
+        success: function (data) {
+            key = data;
+
+            // TossPayments 초기화
+            tossPayments = TossPayments(key);
+
+            // getRequest 함수 등을 호출할 수 있음
+        },
+        error: function (jqXHR, textStatus) {
+            console.error("Error checking login status:", textStatus);
+        }
+    });
 
     function getRequest(callback) {
-        var token = Cookies.get('Authorization');
-
         let amount;
         if ($('#customAmountRadio').is(':checked')) {
             amount = $('#customAmount').val();
@@ -133,7 +154,6 @@
     // pay 함수 수정
     function pay(method) {
         getRequest(function (json) {
-            console.log(json);
             tossPayments.requestPayment(method, json)
                 .catch(function (error) {
                     if (error.code === "USER_CANCEL") {

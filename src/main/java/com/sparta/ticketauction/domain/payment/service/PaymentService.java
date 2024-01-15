@@ -9,4 +9,6 @@ public interface PaymentService {
 	PaymentToApiRequest requestPayment(User user, PaymentFromUserRequest request);
 
 	PaymentSuccessResponse successPayment(String jsonBody);
+
+	String getKey();
 }

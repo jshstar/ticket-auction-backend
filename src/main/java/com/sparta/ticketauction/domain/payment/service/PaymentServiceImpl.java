@@ -75,9 +75,14 @@ public class PaymentServiceImpl implements PaymentService {
 		Long amountLong = Long.parseLong(amount);
 		Payment payment = verifyPayment(orderId, amountLong);
 		payment.addPaymentKey(paymentKey);
-		
+
 		return requestPaymentAccept(paymentKey, orderId, amountLong);
 
+	}
+
+	@Override
+	public String getKey() {
+		return this.clientKey;
 	}
 
 	private PaymentSuccessResponse requestPaymentAccept(String paymentKey, String orderId, Long amount) {

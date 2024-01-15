@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,4 +45,8 @@ public class PaymentController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/getKey")
+	public ResponseEntity<?> getKey(@CurrentUser User user) {
+		return ResponseEntity.ok(paymentService.getKey());
+	}
 }
