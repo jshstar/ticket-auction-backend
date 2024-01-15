@@ -25,7 +25,7 @@ public class GoodsController {
 	private final GoodsInfoService goodsInfoService;
 
 	// 공연 정보 단건 조회
-	@GetMapping("/goods-info/{goodsInfoId}")
+	@GetMapping("/goods-infos/{goodsInfoId}")
 	public ResponseEntity<ApiResponse<GoodsInfoGetResponse>> getGoodsInfo(@PathVariable Long goodsInfoId) {
 		GoodsInfoGetResponse goodsInfoGetResponse = goodsInfoService.getGoodsInfo(goodsInfoId);
 		return ResponseEntity
@@ -38,7 +38,7 @@ public class GoodsController {
 			);
 	}
 
-	@GetMapping("/goods-info/slice")
+	@GetMapping("/goods-infos/slices")
 	public ResponseEntity<ApiResponse<GoodsInfoGetSliceResponse>> getSliceGoodsInfo(Pageable pageable,
 		@RequestParam(value = "categoryName", required = false) String categoryName) {
 		GoodsInfoGetSliceResponse goodsInfoGetSliceResponse = goodsInfoService.getSliceGoodsInfo(pageable,
