@@ -52,6 +52,7 @@ public enum SuccessCode {
 	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 구역 생성을 성공했습니다."),
 	SUCCESS_GRADE_CREATE(HttpStatus.CREATED, "Z09902", "등급 생성 성공"),
 	SUCCESS_ZONE_GRADE_CREATE(HttpStatus.CREATED, "Z09903", "구역 등급 생성 성공"),
+	SUCCESS_AUCTION_CREATE(HttpStatus.CREATED, "Z09904", "경매 생성 성공"),
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),

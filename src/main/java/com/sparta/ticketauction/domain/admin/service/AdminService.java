@@ -12,6 +12,7 @@ import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.domain.place.entity.Zone;
 
 public interface AdminService {
@@ -28,8 +29,11 @@ public interface AdminService {
 
 	// 등급 생성
 	GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest);
-	
+
 	// 구역 등급 생성
 	ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest);
+
+	// 경매 생성
+	void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest auctionCreateRequest);
 
 }
