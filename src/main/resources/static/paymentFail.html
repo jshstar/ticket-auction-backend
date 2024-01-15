@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head id="head">
+    <meta charset="UTF-8">
+    <title>Ticket Auction</title>
+
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <script crossorigin="anonymous"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/basic.js"></script>
+</head>
+<body>
+<header id="headers"></header>
+<h2> 결제 실패 </h2>
+<p id="code"></p>
+<p id="message"></p>
+</body>
+</html>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const codeElement = document.getElementById("code");
+    const messageElement = document.getElementById("message");
+
+    codeElement.textContent = "에러코드: " + urlParams.get("code");
+    messageElement.textContent = "실패 사유: " + urlParams.get("message");
+</script>
