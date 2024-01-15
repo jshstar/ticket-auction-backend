@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,10 +120,10 @@ public class AdminController {
 	}
 
 	// 경매 생성
-	@PostMapping("/admin/schedules/{scheduleId}/zone-grades/{zoneGradeId}/auctions")
+	@PostMapping("/admin/schedules/{scheduleId}/auctions")
 	public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
 		@PathVariable Long scheduleId,
-		@PathVariable Long zoneGradeId,
+		@RequestParam Long zoneGradeId,
 		@RequestBody AuctionCreateRequest auctionCreateRequest
 	) {
 		adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
