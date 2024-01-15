@@ -24,7 +24,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 	private final ScheduleRepository sequenceRepository;
 
-	// 회차 탐색
+	// 회차 조회
 	@Override
 	public Schedule findSchedule(Long scheduleId) {
 		return sequenceRepository.findById(scheduleId)

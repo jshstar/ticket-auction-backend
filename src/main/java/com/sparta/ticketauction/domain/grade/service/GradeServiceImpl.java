@@ -22,7 +22,7 @@ public class GradeServiceImpl implements GradeService {
 		return gradeRepository.save(grade);
 	}
 
-	// 등급 프록시 객체 탐색
+	// 등급 프록시 객체 조회
 	@Override
 	public Grade getReferenceById(Long gradeId) {
 		return gradeRepository.getReferenceById(gradeId);

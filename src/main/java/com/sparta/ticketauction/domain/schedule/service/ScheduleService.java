@@ -7,8 +7,8 @@ import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 
 public interface ScheduleService {
-	
-	// 회차 탐색
+
+	// 회차 조회
 	Schedule findSchedule(Long ScheduleId);
 
 	//회차 생성
