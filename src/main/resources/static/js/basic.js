@@ -55,9 +55,6 @@ function requestLogout() {
     });
 }
 
-$(document).ready(function () {
-    Cookies.remove('Authorization', {path: '/'})
-});
 
 function requestLogin() {
     let email = $('#email').val();
