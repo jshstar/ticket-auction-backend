@@ -44,7 +44,7 @@ public class GoodsRequest {
 	@Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
 	private final String categoryName;
 
-	public GoodsInfo toEntity() {
+	public GoodsInfo toGoodsInfoEntity() {
 		return GoodsInfo
 			.builder()
 			.name(this.name)
@@ -56,7 +56,7 @@ public class GoodsRequest {
 
 	}
 
-	public Goods toEntity(Place place, GoodsInfo goodsInfo) {
+	public Goods toGoodsEntity(Place place, GoodsInfo goodsInfo) {
 		return Goods
 			.builder()
 			.place(place)

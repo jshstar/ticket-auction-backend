@@ -33,7 +33,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	// 공연 정보 생성
 	@Override
 	public GoodsInfo createGoodsInfo(GoodsRequest goodsRequest) {
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
 
 		return goodsInfoRepository.save(goodsInfo);
 	}

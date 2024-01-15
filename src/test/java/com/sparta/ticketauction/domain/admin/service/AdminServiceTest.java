@@ -140,8 +140,8 @@ public class AdminServiceTest {
 	void 공연_공연정보_공연이미지_공연카테고리_회차_생성_테스트() {
 		// given
 		Place place = Mockito.mock();
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 
 		List<String> fileUrl = new ArrayList<>();
 		fileUrl.add("goods/thumbnail/1/51579925-f563-4c75-9999-e2264dadbdab");
@@ -215,8 +215,8 @@ public class AdminServiceTest {
 	void 등급_생성_테스트() {
 		// given
 		Place place = placeRequest.toEntity(200);
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 		Grade grade = gradeRequest.toEntity(goods);
 
 		// when
@@ -238,8 +238,8 @@ public class AdminServiceTest {
 	void 등급_구역_생성_테스트() {
 		// given
 		Place place = placeRequest.toEntity(100);
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 		Grade grade = gradeRequest.toEntity(goods);
 		Zone zone =
 			Zone
