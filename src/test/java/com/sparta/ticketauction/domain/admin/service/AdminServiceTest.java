@@ -21,7 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
@@ -29,7 +31,9 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoServiceImpl;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
 import com.sparta.ticketauction.domain.grade.entity.Grade;
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.service.GradeServiceImpl;
+import com.sparta.ticketauction.domain.grade.service.ZoneGradeServiceImpl;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
@@ -62,11 +66,16 @@ public class AdminServiceTest {
 	@Mock
 	GradeServiceImpl gradeService;
 
+	@Mock
+	ZoneGradeServiceImpl zoneGradeService;
+
 	public static PlaceRequest placeRequest;
 
 	public static GoodsRequest goodsRequest;
 
 	public static GradeRequest gradeRequest;
+
+	public static ZoneGradeRequest zoneGradeRequest;
 
 	@BeforeEach
 	public void initPlaceRequest() {
@@ -85,7 +94,7 @@ public class AdminServiceTest {
 			"공연"
 		);
 		gradeRequest = new GradeRequest("VIP", 100000L, 70000L);
-
+		zoneGradeRequest = new ZoneGradeRequest(1L, 1L);
 	}
 
 	@Test
@@ -96,7 +105,6 @@ public class AdminServiceTest {
 		zoneList.add(
 			Zone
 				.builder()
-				.place(place)
 				.name(
 					placeRequest.getZoneInfos().get(0).getZone())
 				.seatNumber(
@@ -105,17 +113,17 @@ public class AdminServiceTest {
 		);
 		zoneList.add(Zone
 			.builder()
-			.place(place)
 			.name(
 				placeRequest.getZoneInfos().get(1).getZone())
 			.seatNumber(
 				placeRequest.getZoneInfos().get(1).getSeatNumber())
 			.build()
 		);
+		place.updateZone(zoneList);
 
 		//when
 		given(placeService.createPlace(any())).willReturn(place);
-		given(zoneService.createZone(any(), any())).willReturn(zoneList);
+		given(zoneService.createZone(any())).willReturn(zoneList);
 		List<PlaceResponse> response = adminService.createPlaceAndZone(placeRequest);
 
 		//then
@@ -132,8 +140,8 @@ public class AdminServiceTest {
 	void 공연_공연정보_공연이미지_공연카테고리_회차_생성_테스트() {
 		// given
 		Place place = Mockito.mock();
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 
 		List<String> fileUrl = new ArrayList<>();
 		fileUrl.add("goods/thumbnail/1/51579925-f563-4c75-9999-e2264dadbdab");
@@ -206,9 +214,9 @@ public class AdminServiceTest {
 	@Test
 	void 등급_생성_테스트() {
 		// given
-		Place place = Mockito.mock();
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		Place place = placeRequest.toEntity(200);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 		Grade grade = gradeRequest.toEntity(goods);
 
 		// when
@@ -217,10 +225,56 @@ public class AdminServiceTest {
 		adminService.createGrade(1L, gradeRequest);
 
 		// then
+		verify(goodsService, times(1)).findById(any());
+		verify(gradeService, times(1)).createGrade(any(GradeRequest.class), any(Goods.class));
 		assertEquals(gradeRequest.getName(), grade.getName());
 		assertEquals(gradeRequest.getNormalPrice(), grade.getNormalPrice());
 		assertEquals(gradeRequest.getAuctionPrice(), grade.getAuctionPrice());
 		assertEquals(grade.getGoods(), goods);
 		assertEquals(grade.getGoods().getGoodsInfo(), goodsInfo);
+	}
+
+	@Test
+	void 등급_구역_생성_테스트() {
+		// given
+		Place place = placeRequest.toEntity(100);
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
+		Grade grade = gradeRequest.toEntity(goods);
+		Zone zone =
+			Zone
+				.builder()
+				.name("A")
+				.seatNumber(100)
+				.build();
+		place.updateZone(List.of(zone));
+		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
+
+		// when
+		given(zoneService.getReferenceById(anyLong())).willReturn(zone);
+		given(gradeService.getReferenceById(anyLong())).willReturn(grade);
+		given(
+			zoneGradeService
+				.createZoneGrade(
+					any(ZoneGradeRequest.class),
+					any(Zone.class),
+					any(Grade.class)))
+			.willReturn(zoneGrade);
+
+		ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+
+		// then
+		verify(zoneService, times(1)).getReferenceById(anyLong());
+		verify(gradeService, times(1)).getReferenceById(anyLong());
+		verify(zoneGradeService, times(1))
+			.createZoneGrade(
+				any(ZoneGradeRequest.class),
+				any(Zone.class),
+				any(Grade.class)
+			);
+		assertEquals(zoneGrade.getGrade(), grade);
+		assertEquals(zoneGrade.getZone(), zone);
+		assertEquals(zoneGradeResponse.getGradeName(), zoneGrade.getGrade().getName());
+		assertEquals(zoneGradeResponse.getAuctionPrice(), zoneGrade.getGrade().getAuctionPrice());
 	}
 }

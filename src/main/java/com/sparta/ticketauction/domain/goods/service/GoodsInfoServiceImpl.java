@@ -33,7 +33,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	// 공연 정보 생성
 	@Override
 	public GoodsInfo createGoodsInfo(GoodsRequest goodsRequest) {
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
 
 		return goodsInfoRepository.save(goodsInfo);
 	}
@@ -97,14 +97,13 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	// 카테고리 생성 기타 입력시
 	@Override
 	public GoodsCategory createGoodsCategory(String name) {
-		GoodsCategory goodsCategory = goodsCategoryRepository.findByName(name).orElse(null);
-		if (goodsCategory == null) {
-			goodsCategory =
+		GoodsCategory goodsCategory = goodsCategoryRepository.findByName(name)
+			.orElse(
 				GoodsCategory
 					.builder()
 					.name(name)
-					.build();
-		}
+					.build());
+
 		return goodsCategoryRepository.save(goodsCategory);
 	}
 

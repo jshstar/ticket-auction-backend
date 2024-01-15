@@ -11,9 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
 import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
@@ -21,7 +23,9 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoService;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
 import com.sparta.ticketauction.domain.grade.entity.Grade;
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.service.GradeService;
+import com.sparta.ticketauction.domain.grade.service.ZoneGradeService;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
@@ -47,6 +51,8 @@ public class AdminServiceImpl implements AdminService {
 
 	private final GradeService gradeService;
 
+	private final ZoneGradeService zoneGradeService;
+
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
 	public static final String FILE_PATH = "goods/";
@@ -61,9 +67,10 @@ public class AdminServiceImpl implements AdminService {
 	public List<PlaceResponse> createPlaceAndZone(PlaceRequest placeRequest) {
 		List<ZoneInfo> zoneInfos = placeRequest.getZoneInfos();
 		Place place = placeService.createPlace(placeRequest);
-		List<Zone> zone = zoneService.createZone(place, zoneInfos);
+		List<Zone> zoneList = zoneService.createZone(zoneInfos);
+		place.updateZone(zoneList);
 
-		return createPlaceResponse(zone);
+		return createPlaceResponse(zoneList);
 
 	}
 
@@ -111,8 +118,21 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional
 	public GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest) {
 		Goods goods = goodsService.findById(goodsId);
+
 		Grade grade = gradeService.createGrade(gradeRequest, goods);
+
 		return new GradeResponse(goods.getPlace().getId(), grade.getId());
 	}
 
+	// 구역 등급 생성
+	@Override
+	@Transactional
+	public ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest) {
+		Zone zone = zoneService.getReferenceById(zoneGradeRequest.getZoneId());
+		Grade grade = gradeService.getReferenceById(zoneGradeRequest.getGradeId());
+
+		ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
+
+		return new ZoneGradeResponse(zoneGrade.getGrade().getName(), zoneGrade.getGrade().getAuctionPrice());
+	}
 }

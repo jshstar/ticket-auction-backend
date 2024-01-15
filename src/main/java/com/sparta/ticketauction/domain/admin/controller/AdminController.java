@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
 import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
@@ -79,6 +81,7 @@ public class AdminController {
 			);
 	}
 
+	// 등급 생성
 	@PostMapping("/admin/goods/{goodsId}/grades")
 	public ResponseEntity<ApiResponse<GradeResponse>> createGrade(
 		@PathVariable Long goodsId,
@@ -87,12 +90,29 @@ public class AdminController {
 		GradeResponse gradeResponse = adminService.createGrade(goodsId, gradeRequest);
 
 		return ResponseEntity
-			.status(SUCCESS_GRADE.getHttpStatus())
+			.status(SUCCESS_GRADE_CREATE.getHttpStatus())
 			.body(
 				ApiResponse.of(
-					SUCCESS_GRADE.getCode(),
-					SUCCESS_GRADE.getMessage(),
+					SUCCESS_GRADE_CREATE.getCode(),
+					SUCCESS_GRADE_CREATE.getMessage(),
 					gradeResponse)
+			);
+	}
+
+	// 구역 등급 생성
+	@PostMapping("/admin/zone-grades")
+	public ResponseEntity<ApiResponse<ZoneGradeResponse>> createZoneGrade(
+		@RequestBody ZoneGradeRequest zoneGradeRequest
+	) {
+		ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+		return ResponseEntity
+			.status(SUCCESS_ZONE_GRADE_CREATE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_ZONE_GRADE_CREATE.getCode(),
+					SUCCESS_ZONE_GRADE_CREATE.getMessage(),
+					zoneGradeResponse
+				)
 			);
 	}
 

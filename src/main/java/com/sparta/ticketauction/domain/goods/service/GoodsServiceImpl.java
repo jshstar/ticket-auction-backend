@@ -20,7 +20,7 @@ public class GoodsServiceImpl implements GoodsService {
 	public final GoodsRepository goodsRepository;
 
 	public Goods createGoods(GoodsRequest goodsRequest, Place place, GoodsInfo goodsInfo) {
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 
 		return goodsRepository.save(goods);
 	}

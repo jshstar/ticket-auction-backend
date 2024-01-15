@@ -290,7 +290,7 @@ public class GoodsRequestTest {
 			this.categoryName);
 
 		//when
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
 
 		GoodsCategory goodsCategory =
 			GoodsCategory
@@ -322,7 +322,7 @@ public class GoodsRequestTest {
 			this.categoryName);
 
 		//when
-		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
 
 		GoodsCategory goodsCategory =
 			GoodsCategory
@@ -332,7 +332,7 @@ public class GoodsRequestTest {
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		Place place = Mockito.mock();
-		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
 
 		//then
 		assertEquals(this.startDate.getYear(), goods.getStartDate().getYear());
