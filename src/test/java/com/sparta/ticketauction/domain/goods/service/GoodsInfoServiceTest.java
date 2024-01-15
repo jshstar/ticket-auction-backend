@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.goods.service;
 
+import static com.sparta.ticketauction.domain.admin.service.AdminServiceImpl.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -76,12 +77,12 @@ public class GoodsInfoServiceTest {
 			GoodsImage.builder().s3Key(fileUrl.get(3)).type("대표").goodsInfo(this.goodsInfoList.get(1)).build());
 
 		this.goodsInfoList.get(0).addGoodsImage(goodsImageList1);
-		GoodsCategory goodsCategory1 = GoodsCategory.builder().name("공연").build();
+		GoodsCategory goodsCategory1 = GoodsCategory.builder().name("연극").build();
 		this.goodsInfoList.get(0).updateGoodsCategory(goodsCategory1);
 		ReflectionTestUtils.setField(this.goodsInfoList.get(0), "id", 1L);
 
 		this.goodsInfoList.get(1).addGoodsImage(goodsImageList2);
-		GoodsCategory goodsCategory2 = GoodsCategory.builder().name("공연").build();
+		GoodsCategory goodsCategory2 = GoodsCategory.builder().name("뮤지컬").build();
 		this.goodsInfoList.get(1).updateGoodsCategory(goodsCategory2);
 		ReflectionTestUtils.setField(this.goodsInfoList.get(1), "id", 2L);
 
@@ -102,11 +103,11 @@ public class GoodsInfoServiceTest {
 		assertEquals(goodsInfoGetResponse.getAgeGrade(), this.goodsInfoList.get(0).getAgeGrade().getKorea());
 		assertEquals(
 			goodsInfoGetResponse.getGoodsImages().get(0).getS3Url(),
-			this.goodsInfoList.get(0).getGoodsImage().get(0).getS3Key()
+			S3_PATH + this.goodsInfoList.get(0).getGoodsImage().get(0).getS3Key()
 		);
 		assertEquals(
 			goodsInfoGetResponse.getGoodsImages().get(1).getS3Url(),
-			this.goodsInfoList.get(0).getGoodsImage().get(1).getS3Key()
+			S3_PATH + this.goodsInfoList.get(0).getGoodsImage().get(1).getS3Key()
 		);
 		assertEquals(
 			goodsInfoGetResponse.getGoodsImages().get(0).getImageType(),
@@ -126,7 +127,7 @@ public class GoodsInfoServiceTest {
 		Pageable pageable = PageRequest.of(page, size);
 
 		List<GoodsInfo> filteredGoodsInfo = this.goodsInfoList.stream()
-			.filter(goodsInfo -> goodsInfo.getGoodsCategory().getName().equals("공연1"))
+			.filter(goodsInfo -> goodsInfo.getGoodsCategory().getName().equals("연극"))
 			.toList();
 
 		int start = (int)pageable.getOffset();
@@ -136,21 +137,26 @@ public class GoodsInfoServiceTest {
 		Slice<GoodsInfo> goodsInfoSlice = new PageImpl<>(pageContent, pageable, filteredGoodsInfo.size());
 
 		// when
-		given(goodsInfoRepository.findByCategoryName(any(Pageable.class), any(String.class)))
+		given(
+			goodsInfoRepository.findAllByCategoryName(any(Pageable.class), any(String.class)))
 			.willReturn(goodsInfoSlice);
+
 		GoodsInfoGetSliceResponse goodsInfoGetSliceResponse =
-			goodsInfoService.getSliceGoodsInfo(pageable, "공연1");
+			goodsInfoService.getSliceGoodsInfo(pageable, "연극");
 
 		//then
+		verify(
+			goodsInfoRepository, times(1))
+			.findAllByCategoryName(any(Pageable.class), any(String.class));
 		assertNotEquals(
-			goodsInfoGetSliceResponse.getGoodsInfoSlice().getSize(),
+			goodsInfoGetSliceResponse.getGoodsInfoSlice().getNumberOfElements(),
 			goodsInfoList.size());
 		assertEquals(
 			goodsInfoGetSliceResponse.getGoodsInfoSlice().getContent().get(0).getName(),
 			goodsInfoList.get(0).getName());
 		assertEquals(
 			goodsInfoGetSliceResponse.getGoodsInfoSlice().getContent().get(0).getS3Url(),
-			goodsInfoList.get(0).getGoodsImage().get(0).getS3Key());
+			S3_PATH + goodsInfoList.get(0).getGoodsImage().get(0).getS3Key());
 	}
 
 }
