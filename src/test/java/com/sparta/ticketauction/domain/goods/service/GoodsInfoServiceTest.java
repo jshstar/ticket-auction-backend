@@ -64,8 +64,43 @@ public class GoodsInfoServiceTest {
 		assertEquals(goodsInfoGetResponse.getName(), goodsInfo.getName());
 		assertEquals(goodsInfoGetResponse.getDescription(), goodsInfo.getDescription());
 		assertEquals(goodsInfoGetResponse.getRunningTime(), goodsInfo.getRunningTime());
-		assertEquals(goodsInfoGetResponse.getAgeGrade(), goodsInfo.getAgeGrade());
-		assertEquals(goodsInfoGetResponse.getGoodsImages().get(0), goodsInfo.getGoodsImage().get(0));
-		assertEquals(goodsInfoGetResponse.getGoodsImages().get(1), goodsInfo.getGoodsImage().get(1));
+		assertEquals(goodsInfoGetResponse.getAgeGrade(), goodsInfo.getAgeGrade().getKorea());
+		assertEquals(
+			goodsInfoGetResponse
+				.getGoodsImages()
+				.get(0).getS3Url(),
+			goodsInfo
+				.getGoodsImage()
+				.get(0)
+				.getS3Key()
+		);
+		assertEquals(
+			goodsInfoGetResponse
+				.getGoodsImages()
+				.get(1)
+				.getS3Url(), goodsInfo
+				.getGoodsImage()
+				.get(1)
+				.getS3Key()
+		);
+		assertEquals(
+			goodsInfoGetResponse
+				.getGoodsImages()
+				.get(0)
+				.getImageType(), goodsInfo
+				.getGoodsImage()
+				.get(0)
+				.getType().getType()
+		);
+		assertEquals(
+			goodsInfoGetResponse
+				.getGoodsImages()
+				.get(1)
+				.getImageType(), goodsInfo
+				.getGoodsImage()
+				.get(1)
+				.getType().getType()
+		);
 	}
+
 }
