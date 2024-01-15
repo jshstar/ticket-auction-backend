@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.service;
+package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
@@ -14,6 +14,7 @@ import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
 import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
+import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
 import com.sparta.ticketauction.global.util.LettuceUtils;
@@ -96,6 +97,14 @@ public class UserServiceImpl implements UserService {
 
 		checkPassword(user, request.getPassword());
 		user.updatePassword(passwordEncoder.encode(request.getPassword()));
+	}
+
+	@Override
+	@Transactional
+	public void deleteUser(User loginUser, Long userId) {
+		User user = checkAndGetUser(loginUser, userId);
+
+		user.delete();
 	}
 
 	private void checkPassword(User user, String password) {
