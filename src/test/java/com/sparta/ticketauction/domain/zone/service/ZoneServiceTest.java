@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.admin.zone.service;
+package com.sparta.ticketauction.domain.zone.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;

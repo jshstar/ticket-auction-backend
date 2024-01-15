@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.admin.place.service;
+package com.sparta.ticketauction.domain.place.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -16,7 +16,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.repository.PlaceRepository;
 import com.sparta.ticketauction.domain.place.response.PlaceGetResponse;
-import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceTest {
