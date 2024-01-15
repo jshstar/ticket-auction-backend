@@ -54,8 +54,7 @@ public class AuctionServiceImpl implements AuctionService {
 
 		User bidWinner = getBidWinner(auction);
 
-		log.info("예매 성공! id: {]", auctionId);
-		reservationService.reserve(auction, bidWinner);
+		reservationService.reserve(bidWinner, auction);
 	}
 
 	public User getBidWinner(Auction auction) {
