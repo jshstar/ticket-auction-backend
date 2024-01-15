@@ -124,6 +124,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 		return new GoodsInfoGetResponse(goodsInfo);
 	}
 
+	// 공연 정보 카테고리별 페이징 페이징 조회
 	@Override
 	@Transactional(readOnly = true)
 	public GoodsInfoGetSliceResponse getSliceGoodsInfo(Pageable pageable, String categoryName) {

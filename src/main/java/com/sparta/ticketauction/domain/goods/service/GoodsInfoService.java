@@ -34,7 +34,8 @@ public interface GoodsInfoService {
 
 	// 공연 정보 단건 조회
 	GoodsInfoGetResponse getGoodsInfo(Long goodsInfoId);
-
+	
+	// 공연 정보 카테고리별 페이징 페이징 조회
 	GoodsInfoGetSliceResponse getSliceGoodsInfo(Pageable pageable, String categoryName);
 
 }

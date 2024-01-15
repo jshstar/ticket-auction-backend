@@ -38,6 +38,7 @@ public class GoodsController {
 			);
 	}
 
+	// 공연 정보 카테고리별 페이징 페이징 조회
 	@GetMapping("/goods-infos/slices")
 	public ResponseEntity<ApiResponse<GoodsInfoGetSliceResponse>> getSliceGoodsInfo(Pageable pageable,
 		@RequestParam(value = "categoryName", required = false) String categoryName) {
