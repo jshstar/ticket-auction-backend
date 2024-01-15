@@ -25,7 +25,7 @@ public enum SuccessCode {
 
 
 	/* PLACE */
-
+	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공"),
 
 	/* AUCTION */
 	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
