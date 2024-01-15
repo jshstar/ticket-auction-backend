@@ -16,6 +16,8 @@ import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
 import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.domain.auction.service.AuctionService;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
@@ -52,6 +54,8 @@ public class AdminServiceImpl implements AdminService {
 	private final GradeService gradeService;
 
 	private final ZoneGradeService zoneGradeService;
+
+	private final AuctionService auctionService;
 
 	public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
 
@@ -133,6 +137,13 @@ public class AdminServiceImpl implements AdminService {
 
 		ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
 
-		return new ZoneGradeResponse(zoneGrade.getGrade().getName(), zoneGrade.getGrade().getAuctionPrice());
+		return new ZoneGradeResponse(zoneGrade);
+	}
+
+	// 경매 생성
+	@Override
+	@Transactional
+	public void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest auctionCreateRequest) {
+		auctionService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
 	}
 }
