@@ -25,7 +25,7 @@ import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 public class GoodsInfoServiceTest {
 
 	@InjectMocks
-	GoodsInfoService goodsInfoService;
+	GoodsInfoServiceImpl goodsInfoService;
 
 	@Mock
 	GoodsInfoRepository goodsInfoRepository;
