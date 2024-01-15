@@ -127,7 +127,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	@Override
 	@Transactional(readOnly = true)
 	public GoodsInfoGetSliceResponse getSliceGoodsInfo(Pageable pageable, String categoryName) {
-		Slice<GoodsInfo> goodsInfoSlice = goodsInfoRepository.findByCategoryName(pageable, categoryName);
+		Slice<GoodsInfo> goodsInfoSlice = goodsInfoRepository.findAllByCategoryName(pageable, categoryName);
 		return new GoodsInfoGetSliceResponse(goodsInfoSlice);
 	}
 
