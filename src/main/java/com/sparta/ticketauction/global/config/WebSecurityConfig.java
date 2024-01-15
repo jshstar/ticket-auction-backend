@@ -72,9 +72,9 @@ public class WebSecurityConfig {
 			(request) ->
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-					.requestMatchers("/api/v1/").permitAll()
-					.requestMatchers("/api/v1/users/login").permitAll()
 					.requestMatchers("/api/v1/auth/status").permitAll()
+					.requestMatchers("/header.html", "/index.html", "/login.html", "/paymentRequest.html",
+						"/paymentSuccess.html", "/paymentFail.html").permitAll()
 					.requestMatchers(
 						"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/signup/sms"
 					).permitAll()
@@ -84,8 +84,9 @@ public class WebSecurityConfig {
 
 		http.formLogin((formLogin) ->
 			formLogin
-				.loginPage("/api/v1/users/login")
-				.defaultSuccessUrl("/api/v1/")
+				.loginPage("/login.html")
+				.defaultSuccessUrl("/index.html")
+				.permitAll()
 		);
 
 		http
