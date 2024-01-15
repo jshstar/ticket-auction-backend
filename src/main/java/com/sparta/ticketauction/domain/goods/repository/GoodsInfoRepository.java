@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 
 public interface GoodsInfoRepository extends JpaRepository<GoodsInfo, Long> {
-	@Query("select g from GoodsInfo g where g.goodsCategory.name = :categoryName")
-	Slice<GoodsInfo> findByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
-
+	@Query("select g from GoodsInfo g where (:categoryName is null or g.goodsCategory.name = :categoryName)")
+	Slice<GoodsInfo> findAllByCategoryName(Pageable pageable, @Param("categoryName") String categoryName);
 }
