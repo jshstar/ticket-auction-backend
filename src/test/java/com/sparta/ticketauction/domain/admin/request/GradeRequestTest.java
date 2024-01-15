@@ -49,6 +49,7 @@ public class GradeRequestTest {
 
 	@Test
 	void 등급_이름_검증_테스트() {
+		// given
 		GradeRequest gradeRequest =
 			new GradeRequest(
 				"",
@@ -56,8 +57,10 @@ public class GradeRequestTest {
 				this.auctionPrice
 			);
 
+		// when
 		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
 
+		// then
 		assertThat(violations).isNotEmpty();
 		violations
 			.forEach(
@@ -68,6 +71,7 @@ public class GradeRequestTest {
 
 	@Test
 	void 일반가격_검증_테스트() {
+		// given
 		GradeRequest gradeRequest =
 			new GradeRequest(
 				this.name,
@@ -75,8 +79,10 @@ public class GradeRequestTest {
 				this.auctionPrice
 			);
 
+		// when
 		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
 
+		// then
 		assertThat(violations).isNotNull();
 		violations
 			.forEach(
@@ -87,6 +93,7 @@ public class GradeRequestTest {
 
 	@Test
 	void 경매가격_검증_테스트() {
+		// given
 		GradeRequest gradeRequest =
 			new GradeRequest(
 				this.name,
@@ -94,8 +101,10 @@ public class GradeRequestTest {
 				null
 			);
 
+		// when
 		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
 
+		// then
 		assertThat(violations).isNotNull();
 		violations
 			.forEach(
@@ -106,6 +115,7 @@ public class GradeRequestTest {
 
 	@Test
 	void 등급_Entity_생성_테스트() {
+		// given
 		Goods goods = Mockito.mock();
 		GradeRequest gradeRequest =
 			new GradeRequest(
@@ -114,8 +124,10 @@ public class GradeRequestTest {
 				this.auctionPrice
 			);
 
+		// when
 		Grade grade = gradeRequest.toEntity(goods);
 
+		// then
 		assertEquals(this.name, grade.getName());
 		assertEquals(this.normalPrice, grade.getNormalPrice());
 		assertEquals(this.auctionPrice, grade.getAuctionPrice());
