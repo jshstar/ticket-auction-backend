@@ -55,14 +55,15 @@ public class JwtUtil {
 	}
 
 	/* 엑세스 토큰 생성 */
-	public String createAccessToken(Long id, String username, Role role) {
+	public String createAccessToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
 			Jwts.builder()
-				.setSubject(username)
+				.setSubject(email)
 				.claim(AUTHORIZATION_KEY, role)
 				.claim("identify", id)
+				.claim("nickname", nickname)
 				.setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)
@@ -70,14 +71,15 @@ public class JwtUtil {
 	}
 
 	/* 리프레시 토큰 생성 */
-	public String createRefreshToken(Long id, String username, Role role) {
+	public String createRefreshToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
 			Jwts.builder()
-				.setSubject(username)
+				.setSubject(email)
 				.claim(AUTHORIZATION_KEY, role)
 				.claim("identify", id)
+				.claim("nickname", nickname)
 				.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)

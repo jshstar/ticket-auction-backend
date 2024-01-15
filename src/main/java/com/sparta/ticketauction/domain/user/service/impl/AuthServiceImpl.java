@@ -159,13 +159,14 @@ public class AuthServiceImpl implements AuthService {
 		String username = claims.getSubject();
 		Role role = Role.valueOf(String.valueOf(claims.get("auth")));
 		Long id = Long.parseLong(String.valueOf(claims.get("identify")));
+		String nickname = String.valueOf(claims.get("nickname"));
 
 		if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
 			throw new ApiException(INVALID_JWT_TOKEN);
 		}
 
-		String newAccessToken = jwtUtil.createAccessToken(id, username, role);
-		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role);
+		String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
+		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
 		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
 		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
