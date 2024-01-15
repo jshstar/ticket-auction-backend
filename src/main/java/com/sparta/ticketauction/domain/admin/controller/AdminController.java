@@ -23,6 +23,8 @@ import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.global.dto.EmptyObject;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -112,6 +114,24 @@ public class AdminController {
 					SUCCESS_ZONE_GRADE_CREATE.getCode(),
 					SUCCESS_ZONE_GRADE_CREATE.getMessage(),
 					zoneGradeResponse
+				)
+			);
+	}
+
+	// 경매 생성
+	@PostMapping("/admin/schedules/{scheduleId}/zone-grades/{zoneGradeId}/auctions")
+	public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
+		@PathVariable Long scheduleId,
+		@PathVariable Long zoneGradeId,
+		@RequestBody AuctionCreateRequest auctionCreateRequest
+	) {
+		adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
+		return ResponseEntity
+			.status(SUCCESS_AUCTION_CREATE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_AUCTION_CREATE.getCode(),
+					SUCCESS_AUCTION_CREATE.getMessage()
 				)
 			);
 	}
