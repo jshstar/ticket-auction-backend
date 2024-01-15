@@ -10,4 +10,5 @@ public interface GoodsService {
 	// 공연 생성
 	Goods createGoods(GoodsRequest goodsRequest, Place place, GoodsInfo goodsInfo);
 
+	Goods findById(Long goodsId);
 }

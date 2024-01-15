@@ -48,9 +48,9 @@ public enum SuccessCode {
 
 
 	/* ADMIN */
-	SUCCESS_GOODS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "Z09900", "공연정보, 공연 및 회차가 추가되었습니다."),
-	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 구역이 추가되었습니다."),
-	SUCCESS_GOODS_SEQUENCE_SEAT_AND_AUCTION_CREATE(HttpStatus.CREATED, "Z09902", "공연 회차 별 좌석"),
+	SUCCESS_GOODS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "Z09900", "공연정보, 공연 및 회차 생성을 성공했습니다."),
+	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 구역 생성을 성공했습니다."),
+	SUCCESS_GRADE(HttpStatus.CREATED, "Z09902", "등급 생성 성공"),
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),

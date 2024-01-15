@@ -21,15 +21,7 @@ public enum ErrorCode {
 	REQUIRED_ADMIN_USER_AUTHORITY(HttpStatus.UNAUTHORIZED, "U19900", "관리자 권한이 필요합니다."),
 
 	/* GOODS */
-
-
-
-
-
-
-
-
-
+	NOT_FOUND_GOODS(HttpStatus.NOT_FOUND, "G10000", "해당하는 공연 정보가 없습니다."),
 
 	/* SCHEDULE */
 	NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),

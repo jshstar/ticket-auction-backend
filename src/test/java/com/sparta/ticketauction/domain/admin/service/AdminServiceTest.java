@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GradeRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -27,6 +28,8 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.service.GoodsInfoServiceImpl;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
+import com.sparta.ticketauction.domain.grade.entity.Grade;
+import com.sparta.ticketauction.domain.grade.service.GradeServiceImpl;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
@@ -56,9 +59,14 @@ public class AdminServiceTest {
 	@Mock
 	ScheduleServiceImpl scheduleService;
 
+	@Mock
+	GradeServiceImpl gradeService;
+
 	public static PlaceRequest placeRequest;
 
 	public static GoodsRequest goodsRequest;
+
+	public static GradeRequest gradeRequest;
 
 	@BeforeEach
 	public void initPlaceRequest() {
@@ -76,6 +84,8 @@ public class AdminServiceTest {
 			360,
 			"공연"
 		);
+		gradeRequest = new GradeRequest("VIP", 100000L, 70000L);
+
 	}
 
 	@Test
@@ -191,5 +201,26 @@ public class AdminServiceTest {
 		assertEquals(goodsRequest.getStartTime().getHour(), scheduleList.get(1).getStartDateTime().getHour());
 		assertEquals(scheduleList.get(1).getGoods().getGoodsInfo(), goodsInfo);
 
+	}
+
+	@Test
+	void 등급_생성_테스트() {
+		// given
+		Place place = Mockito.mock();
+		GoodsInfo goodsInfo = goodsRequest.toEntity();
+		Goods goods = goodsRequest.toEntity(place, goodsInfo);
+		Grade grade = gradeRequest.toEntity(goods);
+
+		// when
+		given(goodsService.findById(any())).willReturn(goods);
+		given(gradeService.createGrade(any(GradeRequest.class), any(Goods.class))).willReturn(grade);
+		adminService.createGrade(1L, gradeRequest);
+
+		// then
+		assertEquals(gradeRequest.getName(), grade.getName());
+		assertEquals(gradeRequest.getNormalPrice(), grade.getNormalPrice());
+		assertEquals(gradeRequest.getAuctionPrice(), grade.getAuctionPrice());
+		assertEquals(grade.getGoods(), goods);
+		assertEquals(grade.getGoods().getGoodsInfo(), goodsInfo);
 	}
 }
