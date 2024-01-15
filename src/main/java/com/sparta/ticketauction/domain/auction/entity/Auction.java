@@ -6,7 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
-import com.sparta.ticketauction.domain.sequence.entity.Sequence;
+import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -36,8 +36,8 @@ public class Auction extends BaseEntity {
 
 	@Comment("공연 회차")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sequence_id", nullable = false)
-	private Sequence sequence;
+	@JoinColumn(name = "schedule_id", nullable = false)
+	private Schedule schedule;
 
 	@Comment("구역등급")
 	@OneToOne(fetch = FetchType.LAZY)
@@ -72,18 +72,19 @@ public class Auction extends BaseEntity {
 
 	@Builder
 	private Auction(
-		Sequence sequence,
+		Schedule schedule,
 		ZoneGrade zoneGrade,
 		Integer seatNumber,
 		Long startPrice,
+		Long bidPrice,
 		LocalDateTime startDateTime,
 		LocalDateTime endDateTime
 	) {
-		this.sequence = sequence;
+		this.schedule = schedule;
 		this.zoneGrade = zoneGrade;
 		this.seatNumber = seatNumber;
 		this.startPrice = startPrice;
-		this.bidPrice = startPrice;
+		this.bidPrice = bidPrice;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 	}

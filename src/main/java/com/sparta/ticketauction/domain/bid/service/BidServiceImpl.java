@@ -19,9 +19,9 @@ import com.sparta.ticketauction.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
-@Slf4j
 public class BidServiceImpl implements BidService {
 
 	private final AuctionRepository auctionRepository;
@@ -29,7 +29,7 @@ public class BidServiceImpl implements BidService {
 	private final BidRedisService bidRedisService;
 
 	@Override
-	@DistributedLock(key = "T(com.sparta.ticketauction.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
+	@DistributedLock(key = "T(com.sparta.ticketauction.domain.bid.constant.BidConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
 	public void bid(Long auctionId, BidRequest bidRequest, User bidder) {
 		//redis에 경매 정보 확인
 		if (bidRedisService.isExpired(auctionId)) {
