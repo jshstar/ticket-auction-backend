@@ -2,13 +2,17 @@ package com.sparta.ticketauction.domain.grade.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,10 +41,16 @@ public class Grade extends BaseEntity {
 	@Column(name = "auctionPrice", nullable = false)
 	private Long auctionPrice;
 
+	@Comment("공연")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "goods_id")
+	private Goods goods;
+
 	@Builder
-	public Grade(String name, Long normalPrice, Long auctionPrice) {
+	private Grade(String name, Long normalPrice, Long auctionPrice, Goods goods) {
 		this.name = name;
 		this.normalPrice = normalPrice;
 		this.auctionPrice = auctionPrice;
+		this.goods = goods;
 	}
 }

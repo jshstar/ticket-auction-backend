@@ -1,8 +1,31 @@
 package com.sparta.ticketauction.domain.auction.service;
 
+import static org.mockito.BDDMockito.*;
+
+import java.util.Optional;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
+import com.sparta.ticketauction.domain.bid.service.BidServiceImpl;
+import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
+import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
+import com.sparta.ticketauction.domain.schedule.entity.Schedule;
+import com.sparta.ticketauction.domain.schedule.repository.ScheduleRepository;
+import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
+import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.exception.ErrorCode;
 
 @DisplayName("[경매] 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -12,6 +35,13 @@ class AuctionServiceTest {
 
 	@Mock
 	private AuctionRepository auctionRepository;
+
+	@Mock
+	private  ScheduleRepository scheduleRepository;
+
+	@Mock
+	private ZoneGradeRepository zoneGradeRepository;
+
 	@Mock
 	private ReservationService reservationService;
 
@@ -26,6 +56,10 @@ class AuctionServiceTest {
 			Long bidId = 1L;
 			Auction auction = getAuction(auctionId);
 			Bid bid = getBid(auction, bidId);
+			given(scheduleRepository.getReferenceById(any()))
+				.willReturn(any(Schedule.class));
+			given(zoneGradeRepository.getReferenceById(any()))
+				.willReturn(any(ZoneGrade.class));
 			given(auctionRepository.findById(auctionId))
 				.willReturn(Optional.of(auction));
 
@@ -35,7 +69,8 @@ class AuctionServiceTest {
 			//when
 			sut.endAuction(auctionId);
 
-			then(reservationService).should().reserve(auction, bid.getUser());
+			//then
+			then(auctionRepository).should().save(auction);
 		}
 	}
 
@@ -56,6 +91,7 @@ class AuctionServiceTest {
 			//when
 			sut.endAuction(auctionId);
 
+			//then
 			then(reservationService).should().reserve(auction, bid.getUser());
 		}
 
@@ -95,9 +131,7 @@ class AuctionServiceTest {
 
 	private static Auction getAuction(Long auctionId) {
 		Auction auction = Auction.builder()
-			.startDateTime(LocalDateTime.now())
-			.endDateTime(LocalDateTime.now().plusDays(7))
-			.startPrice(1000L)
+			.seatNumber(1)
 			.build();
 
 		ReflectionTestUtils.setField(auction, "id", auctionId);

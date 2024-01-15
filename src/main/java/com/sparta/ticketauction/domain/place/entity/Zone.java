@@ -41,9 +41,12 @@ public class Zone extends BaseEntity {
 	private Place place;
 
 	@Builder
-	private Zone(String name, Integer seatNumber, Place place) {
+	private Zone(String name, Integer seatNumber) {
 		this.name = name;
 		this.seatNumber = seatNumber;
+	}
+
+	public void addPlace(Place place) {
 		this.place = place;
 	}
 

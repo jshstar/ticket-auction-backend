@@ -5,7 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.place.entity.Place;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,7 +44,7 @@ public class GoodsRequest {
 	@Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
 	private final String categoryName;
 
-	public GoodsInfo toEntity() {
+	public GoodsInfo toGoodsInfoEntity() {
 		return GoodsInfo
 			.builder()
 			.name(this.name)
@@ -52,6 +54,16 @@ public class GoodsRequest {
 			.goodsImage(new ArrayList<>())
 			.build();
 
+	}
+
+	public Goods toGoodsEntity(Place place, GoodsInfo goodsInfo) {
+		return Goods
+			.builder()
+			.place(place)
+			.goodsInfo(goodsInfo)
+			.startDate(this.startDate)
+			.endDate(this.endDate)
+			.build();
 	}
 
 }

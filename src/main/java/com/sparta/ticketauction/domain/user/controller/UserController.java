@@ -3,6 +3,7 @@ package com.sparta.ticketauction.domain.user.controller;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -89,6 +90,21 @@ public class UserController {
 				ApiResponse.of(
 					SUCCESS_UPDATE_USER_PASSWORD.getCode(),
 					SUCCESS_UPDATE_USER_PASSWORD.getMessage()
+				)
+			);
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<ApiResponse> deleteUser(
+		@CurrentUser User user,
+		@PathVariable Long userId
+	) {
+		userService.deleteUser(user, userId);
+		return ResponseEntity.status(SUCCESS_DELETE_USER.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_DELETE_USER.getCode(),
+					SUCCESS_DELETE_USER.getMessage()
 				)
 			);
 	}

@@ -1,8 +1,6 @@
 package com.sparta.ticketauction.domain.auction.service;
 
-import java.util.List;
-
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 
 public interface AuctionService {
 	/**
@@ -10,9 +8,11 @@ public interface AuctionService {
 	 * 경매 테이블에 경매정보 등록
 	 * 경매 시작 - 회차별 좌석 created At
 	 * 경매 마감 - 회차 공연시작 3일 전
-	 * @param sequenceSeats - 경매 좌석 리스트
+	 *
+	 * @param scheduleId - 공연 회차 식별자 ID
+	 * @param zoneGradeId -  구역등급 식별자 ID
 	 */
-	void createAuction(List<GoodsSequenceSeat> sequenceSeats);
+	void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest createRequest);
 
 	/**
 	 * 경매 종료

@@ -59,4 +59,12 @@ public interface UserService {
 	 * @param request	변경할 비밀 번호 - 이미  검증됨
 	 * */
 	void updateUserPassword(User user, Long userId, UserPasswordUpdateRequest request);
+
+	/*
+	 * 회원 탈퇴
+	 *
+	 * @param user 		로그인 한 유저 정보
+	 * @param userId  	탈퇴할 유저의 id
+	 * */
+	void deleteUser(User user, Long userId);
 }

@@ -15,4 +15,5 @@ public class ZoneInfo {
 	@NotNull(message = "구역당 총 좌석입력은 필 수 입니다.")
 	private final Integer seatNumber;
 
+	// Todo Zone ToEntity로 Zone Entity 생성
 }

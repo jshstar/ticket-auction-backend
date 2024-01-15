@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.service;
+package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.jwt.JwtUtil.*;
@@ -32,6 +32,8 @@ import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
+import com.sparta.ticketauction.domain.user.service.AuthService;
+import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
@@ -157,13 +159,14 @@ public class AuthServiceImpl implements AuthService {
 		String username = claims.getSubject();
 		Role role = Role.valueOf(String.valueOf(claims.get("auth")));
 		Long id = Long.parseLong(String.valueOf(claims.get("identify")));
+		String nickname = String.valueOf(claims.get("nickname"));
 
 		if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
 			throw new ApiException(INVALID_JWT_TOKEN);
 		}
 
-		String newAccessToken = jwtUtil.createAccessToken(id, username, role);
-		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role);
+		String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
+		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
 		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
 		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);

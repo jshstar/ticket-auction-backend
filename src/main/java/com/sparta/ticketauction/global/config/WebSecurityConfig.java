@@ -72,11 +72,20 @@ public class WebSecurityConfig {
 			(request) ->
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+					.requestMatchers("/api/v1/").permitAll()
+					.requestMatchers("/api/v1/users/login").permitAll()
+					.requestMatchers("/api/v1/auth/status").permitAll()
 					.requestMatchers(
 						"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/signup/sms"
 					).permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
+		);
+
+		http.formLogin((formLogin) ->
+			formLogin
+				.loginPage("/api/v1/users/login")
+				.defaultSuccessUrl("/api/v1/")
 		);
 
 		http

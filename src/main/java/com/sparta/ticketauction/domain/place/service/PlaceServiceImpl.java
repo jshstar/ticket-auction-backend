@@ -41,4 +41,10 @@ public class PlaceServiceImpl implements PlaceService {
 		return totalSeat;
 	}
 
+	// 공연장 프록시 객체 조회
+	@Override
+	public Place getReferenceById(Long placeId) {
+		return placeRepository.getReferenceById(placeId);
+	}
+
 }

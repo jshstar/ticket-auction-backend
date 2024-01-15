@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.service;
+package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
@@ -9,6 +9,7 @@ import com.sparta.ticketauction.domain.user.entity.Point;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
+import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PointServiceImpl implements PointService {
-	
+
 	private final PointRepository pointRepository;
 
 	@Override
