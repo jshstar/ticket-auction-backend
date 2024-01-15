@@ -20,6 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
+import com.sparta.ticketauction.domain.user.service.impl.AuthServiceImpl;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;

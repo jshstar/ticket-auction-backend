@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.user.service;
+package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static com.sparta.ticketauction.global.jwt.JwtUtil.*;
@@ -32,6 +32,8 @@ import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
 import com.sparta.ticketauction.domain.user.response.SmsResponse;
+import com.sparta.ticketauction.domain.user.service.AuthService;
+import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;

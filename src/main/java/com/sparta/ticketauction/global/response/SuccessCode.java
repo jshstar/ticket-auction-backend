@@ -13,11 +13,11 @@ public enum SuccessCode {
 	SUCCESS_USER_SIGN_UP(HttpStatus.CREATED, "U00000", "회원 가입에 성공했습니다."),
 	SUCCESS_USER_LOGIN(HttpStatus.OK, "U00100", "로그인에 성공했습니다."),
 	SUCCESS_USER_LOGOUT(HttpStatus.OK, "U00200", "로그아웃에 성공했습니다"),
-	SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS(HttpStatus.OK, "U003000", "인증 번호를 발송했습니다"),
+	SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS(HttpStatus.OK, "U00300", "인증 번호를 발송했습니다"),
 	SUCCESS_UPDATE_USER_INFO(HttpStatus.OK, "U00400", "회원 정보 수정에 성공했습니다."),
 	SUCCESS_UPDATE_USER_PASSWORD(HttpStatus.OK, "U00401", "비밀 번호 변경에 성공했습니다."),
-	SUCCESS_GET_USER_INFO(HttpStatus.OK, "U00402", "회원 정보 조회에 성공했습니다."),
-
+	SUCCESS_GET_USER_INFO(HttpStatus.OK, "U00500", "회원 정보 조회에 성공했습니다."),
+	SUCCESS_DELETE_USER(HttpStatus.OK, "U00600", "회원 탈퇴에 성공했습니다."),
 
 
 
@@ -48,8 +48,8 @@ public enum SuccessCode {
 
 
 	/* ADMIN */
-	SUCCESS_GOODS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "Z09900", "공연 및 회차가 추가되었습니다."),
-	SUCCESS_PLACE_AND_SEAT_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 좌석이 추가되었습니다."),
+	SUCCESS_GOODS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "Z09900", "공연정보, 공연 및 회차가 추가되었습니다."),
+	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 구역이 추가되었습니다."),
 	SUCCESS_GOODS_SEQUENCE_SEAT_AND_AUCTION_CREATE(HttpStatus.CREATED, "Z09902", "공연 회차 별 좌석"),
 
 	/* RESERVATION */

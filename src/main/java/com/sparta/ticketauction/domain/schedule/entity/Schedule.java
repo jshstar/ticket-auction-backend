@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.sequence.entity;
+package com.sparta.ticketauction.domain.schedule.entity;
 
 import java.time.LocalDateTime;
 
@@ -25,8 +25,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "sequence")
-public class Sequence extends BaseEntity {
+@Table(name = "schedule")
+public class Schedule extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -46,7 +46,7 @@ public class Sequence extends BaseEntity {
 	private Goods goods;
 
 	@Builder
-	private Sequence(int sequence, LocalDateTime startDateTime, Goods goods) {
+	private Schedule(int sequence, LocalDateTime startDateTime, Goods goods) {
 		this.sequence = sequence;
 		this.startDateTime = startDateTime;
 		this.goods = goods;
