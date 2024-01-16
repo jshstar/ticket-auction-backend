@@ -113,8 +113,8 @@ function redirectToPageWithToken(pageUrl) {
 }
 
 
+// 권한(토큰)이 필요 없는 페이지 이동 시 호출 함수
 function redirectToPage(pageUrl) {
-    // Fetch API를 사용하여 페이지 이동 시에 헤더에 토큰을 추가하여 요청
     fetch(pageUrl, {
         method: 'GET'
     })

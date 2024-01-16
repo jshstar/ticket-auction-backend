@@ -73,8 +73,7 @@ public class WebSecurityConfig {
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.requestMatchers("/api/v1/auth/status", "/api/v1/payments/getKey").permitAll()
-					.requestMatchers("/header.html", "/index.html", "/login.html", "/paymentRequest.html",
-						"/paymentSuccess.html", "/paymentFail.html").permitAll()
+					.requestMatchers("/*.html").permitAll()
 					.requestMatchers(
 						"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/signup/sms"
 					).permitAll()
