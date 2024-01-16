@@ -26,7 +26,7 @@ public interface AdminService {
 	List<PlaceCreateResponse> createPlaceResponse(List<Zone> zoneList);
 
 	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지 생성
-	GoodsInfoCreateResponse createGoodsBundle(Long placeId, GoodsInfoCreateRequest goodsInfoCreateRequest,
+	GoodsInfoCreateResponse createGoodsBundle(GoodsInfoCreateRequest goodsInfoCreateRequest,
 		List<MultipartFile> multipartFiles);
 
 	// 공연 및 회차 생성

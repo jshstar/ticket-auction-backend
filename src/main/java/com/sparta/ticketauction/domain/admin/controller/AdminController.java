@@ -59,19 +59,17 @@ public class AdminController {
 	}
 
 	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지 생성
-	@PostMapping(value = "/admin/goodsInfos",
+	@PostMapping(value = "/admin/goods-infos",
 		consumes = {
 			MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE
 		})
 	public ResponseEntity<ApiResponse<GoodsInfoCreateResponse>> createGoodsInfo(
 		@Valid @RequestPart GoodsInfoCreateRequest goodsInfoCreateRequest,
-		@RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
-		@PathVariable Long placeId
+		@RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles
 	) {
 		GoodsInfoCreateResponse goodsInfoCreateResponse =
 			adminService.createGoodsBundle(
-				placeId,
 				goodsInfoCreateRequest,
 				multipartFiles
 			);

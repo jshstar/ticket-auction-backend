@@ -97,7 +97,6 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	@Transactional
 	public GoodsInfoCreateResponse createGoodsBundle(
-		Long placeId,
 		GoodsInfoCreateRequest goodsInfoCreateRequest,
 		List<MultipartFile> multipartFiles) {
 
