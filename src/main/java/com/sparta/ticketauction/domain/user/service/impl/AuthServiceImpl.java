@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
@@ -160,14 +161,13 @@ public class AuthServiceImpl implements AuthService {
 		Role role = Role.valueOf(String.valueOf(claims.get("auth")));
 		Long id = Long.parseLong(String.valueOf(claims.get("identify")));
 		String nickname = String.valueOf(claims.get("nickname"));
-		Long point = Long.parseLong(String.valueOf(claims.get("point")));
 
 		if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
 			throw new ApiException(INVALID_JWT_TOKEN);
 		}
 
-		String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname, point);
-		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname, point);
+		String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
+		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
 		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
 		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
@@ -178,6 +178,11 @@ public class AuthServiceImpl implements AuthService {
 			jwtUtil.substringToken(newRefreshToken),
 			REFRESH_TOKEN_TIME
 		);
+	}
+
+	@Override
+	public Long findPoint(User user) {
+		return userService.findByUserId(user.getId()).getPoint();
 	}
 
 	/* 외부 API로 전달할 데이터 암호화 */

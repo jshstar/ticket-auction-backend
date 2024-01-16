@@ -65,8 +65,10 @@ public class AuthController {
 
 		if (user != null) {
 			// 사용자가 인증되어 있을 때
+			Long point = authService.findPoint(user);
 			status.put("isLoggedIn", true);
 			status.put("user", user); // 사용자 아이디 등을 추가할 수 있습니다.
+			status.put("point", point);
 			// 다른 필요한 사용자 정보도 추가할 수 있습니다.
 		} else {
 			// 사용자가 인증되어 있지 않을 때

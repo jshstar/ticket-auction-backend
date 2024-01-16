@@ -25,7 +25,7 @@ function checkLoginStatus() {
                         .text(data.user.nickname);
                     $("#login, #signup").css("display", "none");
                     $("#login-user-set #user-drop-menus #header-point")
-                        .text(data.user.point.toLocaleString());
+                        .text(data.point.toLocaleString());
                     $("#admin-set").css("display", "none");
                 } else {
                     $("#admin-set").css("display", "block");

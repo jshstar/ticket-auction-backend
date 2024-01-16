@@ -40,7 +40,7 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
 	public static final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
-	private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
+	private static final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -55,7 +55,7 @@ public class JwtUtil {
 	}
 
 	/* 엑세스 토큰 생성 */
-	public String createAccessToken(Long id, String email, Role role, String nickname, Long point) {
+	public String createAccessToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
@@ -64,7 +64,6 @@ public class JwtUtil {
 				.claim(AUTHORIZATION_KEY, role)
 				.claim("identify", id)
 				.claim("nickname", nickname)
-				.claim("point", point)
 				.setExpiration(new Date(now.getTime() + ACCESS_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)
@@ -72,7 +71,7 @@ public class JwtUtil {
 	}
 
 	/* 리프레시 토큰 생성 */
-	public String createRefreshToken(Long id, String email, Role role, String nickname, Long point) {
+	public String createRefreshToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
 		return BEARER_PREFIX +
@@ -81,13 +80,12 @@ public class JwtUtil {
 				.claim(AUTHORIZATION_KEY, role)
 				.claim("identify", id)
 				.claim("nickname", nickname)
-				.claim("point", point)
 				.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
 				.setIssuedAt(now)
 				.signWith(key, SignatureAlgorithm.HS256)
 				.compact();
 	}
-	
+
 	/* JWT 토큰 substring */
 	public String substringToken(String token) {
 		if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
