@@ -18,12 +18,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
-import com.sparta.ticketauction.domain.admin.request.GradeRequest;
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
-import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
-import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
-import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
+import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.response.PlaceCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeCreateResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
@@ -69,54 +70,57 @@ public class AdminServiceTest {
 	@Mock
 	ZoneGradeServiceImpl zoneGradeService;
 
-	public static PlaceRequest placeRequest;
+	public static PlaceCreateRequest placeCreateRequest;
 
-	public static GoodsRequest goodsRequest;
+	public static GoodsInfoCreateRequest goodsInfoCreateRequest;
 
-	public static GradeRequest gradeRequest;
+	public static GradeCreateRequest gradeCreateRequest;
 
-	public static ZoneGradeRequest zoneGradeRequest;
+	public static ZoneGradeCreateRequest zoneGradeCreateRequest;
+
+	public static GoodsCreateRequest goodsCreateRequest;
 
 	@BeforeEach
 	public void initPlaceRequest() {
 		List<ZoneInfo> zoneInfos = new ArrayList<>();
 		zoneInfos.add(new ZoneInfo("A", 100));
 		zoneInfos.add(new ZoneInfo("B", 100));
-		placeRequest = new PlaceRequest("공연장", "Address", zoneInfos);
-		goodsRequest = new GoodsRequest(
+		placeCreateRequest = new PlaceCreateRequest("공연장", "Address", zoneInfos);
+		goodsInfoCreateRequest = new GoodsInfoCreateRequest(
 			"강아지 공연",
 			"강아지 쇼케이스",
-			LocalDate.of(2023, 3, 1),
-			LocalDate.of(2023, 3, 2),
 			12,
-			LocalTime.of(15, 0),
 			360,
 			"공연"
 		);
-		gradeRequest = new GradeRequest("VIP", 100000L, 70000L);
-		zoneGradeRequest = new ZoneGradeRequest(1L, 1L);
+		goodsCreateRequest = new GoodsCreateRequest(
+			LocalDate.of(2023, 3, 1),
+			LocalDate.of(2023, 3, 2),
+			LocalTime.of(15, 0));
+		gradeCreateRequest = new GradeCreateRequest("VIP", 100000L, 70000L);
+		zoneGradeCreateRequest = new ZoneGradeCreateRequest(1L, 1L);
 	}
 
 	@Test
 	void 공연장_생성_테스트() {
 		// given
-		Place place = placeRequest.toEntity(100);
+		Place place = placeCreateRequest.toEntity(100);
 		List<Zone> zoneList = new ArrayList<>();
 		zoneList.add(
 			Zone
 				.builder()
 				.name(
-					placeRequest.getZoneInfos().get(0).getZone())
+					placeCreateRequest.getZoneInfos().get(0).getZone())
 				.seatNumber(
-					placeRequest.getZoneInfos().get(0).getSeatNumber())
+					placeCreateRequest.getZoneInfos().get(0).getSeatNumber())
 				.build()
 		);
 		zoneList.add(Zone
 			.builder()
 			.name(
-				placeRequest.getZoneInfos().get(1).getZone())
+				placeCreateRequest.getZoneInfos().get(1).getZone())
 			.seatNumber(
-				placeRequest.getZoneInfos().get(1).getSeatNumber())
+				placeCreateRequest.getZoneInfos().get(1).getSeatNumber())
 			.build()
 		);
 		place.updateZone(zoneList);
@@ -124,7 +128,7 @@ public class AdminServiceTest {
 		//when
 		given(placeService.createPlace(any())).willReturn(place);
 		given(zoneService.createZone(any())).willReturn(zoneList);
-		List<PlaceResponse> response = adminService.createPlaceAndZone(placeRequest);
+		List<PlaceCreateResponse> response = adminService.createPlaceAndZone(placeCreateRequest);
 
 		//then
 		assertEquals("공연장", place.getName());
@@ -137,11 +141,10 @@ public class AdminServiceTest {
 	}
 
 	@Test
-	void 공연_공연정보_공연이미지_공연카테고리_회차_생성_테스트() {
+	void 공연정보_공연이미지_공연카테고리() {
 		// given
 		Place place = Mockito.mock();
-		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
-		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
+		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
 
 		List<String> fileUrl = new ArrayList<>();
 		fileUrl.add("goods/thumbnail/1/51579925-f563-4c75-9999-e2264dadbdab");
@@ -154,6 +157,34 @@ public class AdminServiceTest {
 		goodsInfo.addGoodsImage(goodsImage);
 		GoodsCategory goodsCategory = GoodsCategory.builder().name("공연").build();
 		goodsInfo.updateGoodsCategory(goodsCategory);
+
+		// when
+		given(placeService.getReferenceById(1L)).willReturn(place);
+		given(goodsInfoService.createGoodsInfo(any(GoodsInfoCreateRequest.class))).willReturn(goodsInfo);
+		given(goodsInfoService.createGoodsImage(any(), any())).willReturn(goodsImage);
+		given(goodsInfoService.createGoodsCategory(any())).willReturn(goodsCategory);
+		adminService.createGoodsBundle(1L, goodsInfoCreateRequest, mock());
+
+		// then
+		verify(placeService, times(1)).getReferenceById(anyLong());
+		verify(goodsInfoService, times(1)).createGoodsInfo(any(GoodsInfoCreateRequest.class));
+		verify(goodsInfoService, times(1)).createGoodsImage(any(), any(GoodsInfo.class));
+		verify(goodsInfoService, times(1)).createGoodsCategory(any());
+
+		assertEquals(goodsImage.get(0).getS3Key(), goodsInfo.getGoodsImage().get(0).getS3Key());
+		assertEquals(goodsImage.get(1).getS3Key(), goodsInfo.getGoodsImage().get(1).getS3Key());
+		assertEquals(goodsImage.get(0).getType(), goodsInfo.getGoodsImage().get(0).getType());
+		assertEquals(goodsImage.get(1).getType(), goodsInfo.getGoodsImage().get(1).getType());
+		assertEquals(goodsCategory.getName(), goodsInfo.getGoodsCategory().getName());
+
+	}
+
+	@Test
+	void 공연_및_회차_생성_테스트() {
+		// given
+		Place place = placeCreateRequest.toEntity(200);
+		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
+		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
 
 		List<Schedule> scheduleList = new ArrayList<>();
 		scheduleList.add(
@@ -179,57 +210,43 @@ public class AdminServiceTest {
 		long daysBetween = ChronoUnit.DAYS.between(startDateTime, endDateTime);
 
 		// when
-		given(placeService.getReferenceById(1L)).willReturn(place);
-		given(goodsInfoService.createGoodsInfo(any(GoodsRequest.class))).willReturn(goodsInfo);
-		given(goodsInfoService.createGoodsImage(any(), any())).willReturn(goodsImage);
-		given(goodsInfoService.createGoodsCategory(any())).willReturn(goodsCategory);
-		given(goodsService.createGoods(goodsRequest, place, goodsInfo)).willReturn(goods);
-		adminService.createGoodsBundleAndSchedule(1L, goodsRequest, mock());
+		given(goodsService.createGoods(goodsCreateRequest, place, goodsInfo)).willReturn(goods);
 
-		// then
-		verify(placeService, times(1)).getReferenceById(anyLong());
-		verify(goodsInfoService, times(1)).createGoodsInfo(any(GoodsRequest.class));
-		verify(goodsInfoService, times(1)).createGoodsImage(any(), any(GoodsInfo.class));
-		verify(goodsInfoService, times(1)).createGoodsCategory(any());
 		verify(goodsService, times(1))
 			.createGoods(
-				any(GoodsRequest.class),
+				any(GoodsCreateRequest.class),
 				any(Place.class),
 				any(GoodsInfo.class)
 			);
 		verify(scheduleService, times(1)).createSchedule(any(Goods.class), any(LocalTime.class));
+		adminService.createGoodsAndSchedule(any(GoodsCreateRequest.class), anyLong(), anyLong());
 
-		assertEquals(goodsImage.get(0).getS3Key(), goodsInfo.getGoodsImage().get(0).getS3Key());
-		assertEquals(goodsImage.get(1).getS3Key(), goodsInfo.getGoodsImage().get(1).getS3Key());
-		assertEquals(goodsImage.get(0).getType(), goodsInfo.getGoodsImage().get(0).getType());
-		assertEquals(goodsImage.get(1).getType(), goodsInfo.getGoodsImage().get(1).getType());
-		assertEquals(goodsCategory.getName(), goodsInfo.getGoodsCategory().getName());
 		assertEquals((int)daysBetween + 1, scheduleList.get(1).getSequence());
-		assertEquals(goodsRequest.getStartTime().getMinute(), scheduleList.get(1).getStartDateTime().getMinute());
-		assertEquals(goodsRequest.getStartTime().getHour(), scheduleList.get(1).getStartDateTime().getHour());
+		assertEquals(goodsCreateRequest.getStartTime().getMinute(),
+			scheduleList.get(1).getStartDateTime().getMinute());
+		assertEquals(goodsCreateRequest.getStartTime().getHour(), scheduleList.get(1).getStartDateTime().getHour());
 		assertEquals(scheduleList.get(1).getGoods().getGoodsInfo(), goodsInfo);
-
 	}
 
 	@Test
 	void 등급_생성_테스트() {
 		// given
-		Place place = placeRequest.toEntity(200);
-		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
-		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
-		Grade grade = gradeRequest.toEntity(goods);
+		Place place = placeCreateRequest.toEntity(200);
+		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
+		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
+		Grade grade = gradeCreateRequest.toEntity(goods);
 
 		// when
 		given(goodsService.findById(any())).willReturn(goods);
-		given(gradeService.createGrade(any(GradeRequest.class), any(Goods.class))).willReturn(grade);
-		adminService.createGrade(1L, gradeRequest);
+		given(gradeService.createGrade(any(GradeCreateRequest.class), any(Goods.class))).willReturn(grade);
+		adminService.createGrade(1L, gradeCreateRequest);
 
 		// then
 		verify(goodsService, times(1)).findById(any());
-		verify(gradeService, times(1)).createGrade(any(GradeRequest.class), any(Goods.class));
-		assertEquals(gradeRequest.getName(), grade.getName());
-		assertEquals(gradeRequest.getNormalPrice(), grade.getNormalPrice());
-		assertEquals(gradeRequest.getAuctionPrice(), grade.getAuctionPrice());
+		verify(gradeService, times(1)).createGrade(any(GradeCreateRequest.class), any(Goods.class));
+		assertEquals(gradeCreateRequest.getName(), grade.getName());
+		assertEquals(gradeCreateRequest.getNormalPrice(), grade.getNormalPrice());
+		assertEquals(gradeCreateRequest.getAuctionPrice(), grade.getAuctionPrice());
 		assertEquals(grade.getGoods(), goods);
 		assertEquals(grade.getGoods().getGoodsInfo(), goodsInfo);
 	}
@@ -237,10 +254,10 @@ public class AdminServiceTest {
 	@Test
 	void 등급_구역_생성_테스트() {
 		// given
-		Place place = placeRequest.toEntity(100);
-		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
-		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
-		Grade grade = gradeRequest.toEntity(goods);
+		Place place = placeCreateRequest.toEntity(100);
+		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
+		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
+		Grade grade = gradeCreateRequest.toEntity(goods);
 		Zone zone =
 			Zone
 				.builder()
@@ -248,7 +265,7 @@ public class AdminServiceTest {
 				.seatNumber(100)
 				.build();
 		place.updateZone(List.of(zone));
-		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
+		ZoneGrade zoneGrade = zoneGradeCreateRequest.toEntity(zone, grade);
 
 		// when
 		given(zoneService.getReferenceById(anyLong())).willReturn(zone);
@@ -256,25 +273,25 @@ public class AdminServiceTest {
 		given(
 			zoneGradeService
 				.createZoneGrade(
-					any(ZoneGradeRequest.class),
+					any(ZoneGradeCreateRequest.class),
 					any(Zone.class),
 					any(Grade.class)))
 			.willReturn(zoneGrade);
 
-		ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+		ZoneGradeCreateResponse zoneGradeCreateResponse = adminService.createZoneGrade(zoneGradeCreateRequest);
 
 		// then
 		verify(zoneService, times(1)).getReferenceById(anyLong());
 		verify(gradeService, times(1)).getReferenceById(anyLong());
 		verify(zoneGradeService, times(1))
 			.createZoneGrade(
-				any(ZoneGradeRequest.class),
+				any(ZoneGradeCreateRequest.class),
 				any(Zone.class),
 				any(Grade.class)
 			);
 		assertEquals(zoneGrade.getGrade(), grade);
 		assertEquals(zoneGrade.getZone(), zone);
-		assertEquals(zoneGradeResponse.getGradeName(), zoneGrade.getGrade().getName());
-		assertEquals(zoneGradeResponse.getAuctionPrice(), zoneGrade.getGrade().getAuctionPrice());
+		assertEquals(zoneGradeCreateResponse.getGradeName(), zoneGrade.getGrade().getName());
+		assertEquals(zoneGradeCreateResponse.getAuctionPrice(), zoneGrade.getGrade().getAuctionPrice());
 	}
 }
