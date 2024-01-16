@@ -130,11 +130,14 @@ public class JwtUtil {
 			return null;
 		}
 
-		String refreshToken = "";
+		String refreshToken = null;
 		for (Cookie cookie : cookies) {
-			refreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+			if (cookie.getName().equals(REFRESH_TOKEN_HEADER)) {
+				refreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+				break;
+			}
 		}
-		return substringToken(refreshToken);
+		return refreshToken;
 	}
 
 	public String getAccessTokenFromRequestHeader(HttpServletRequest request) {
