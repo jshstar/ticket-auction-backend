@@ -137,6 +137,10 @@ public class JwtUtil {
 				break;
 			}
 		}
+
+		if (refreshToken != null && refreshToken.startsWith(BEARER_PREFIX)) {
+			return substringToken(refreshToken);
+		}
 		return refreshToken;
 	}
 
