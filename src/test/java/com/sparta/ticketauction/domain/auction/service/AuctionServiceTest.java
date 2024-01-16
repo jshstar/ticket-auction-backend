@@ -20,6 +20,7 @@ import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.service.BidServiceImpl;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
+import com.sparta.ticketauction.domain.reservation.service.ReservationService;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.domain.schedule.repository.ScheduleRepository;
 import com.sparta.ticketauction.domain.user.entity.User;

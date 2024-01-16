@@ -1,11 +1,11 @@
 package com.sparta.ticketauction.domain.user.service;
 
-import static com.sparta.ticketauction.domain.user.util.UserUtil.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
 import com.sparta.ticketauction.domain.user.service.impl.PointServiceImpl;
+import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 @DisplayName("포인트 서비스 테스트")
@@ -36,13 +37,19 @@ class PointServiceImplTest {
 	@Captor
 	ArgumentCaptor<Point> argumentCaptor;
 
+	User user;
+
+	@BeforeEach
+	public void beforeEach() {
+		user = UserUtil.getUser();
+	}
+
 	@Nested
 	class 포인트_사용_테스트 {
 
 		@Test
 		void 보유_포인트_잔액_부족으로_실패() {
 			// Given
-			User user = TEST_USER;
 
 			// When
 			ApiException exception = assertThrows(
@@ -51,14 +58,13 @@ class PointServiceImplTest {
 			);
 
 			// Then
-			assertThat(exception)
-				.hasMessage(NOT_ENOUGH_POINT.getMessage());
+			assertThat(exception.getMessage())
+				.isEqualTo(NOT_ENOUGH_POINT.getMessage());
 		}
 
 		@Test
 		void 성공() {
 			// Given
-			User user = TEST_USER;
 			user.chargePoint(100L);
 
 			Point point = Point.builder()
@@ -90,7 +96,6 @@ class PointServiceImplTest {
 		@Test
 		void 성공() {
 			// Given
-			User user = TEST_USER;
 
 			Point point = Point.builder()
 				.user(user)

@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.domain.schedule.repository.ScheduleRepository;
+import com.sparta.ticketauction.domain.schedule.response.ScheduleGetResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 import lombok.RequiredArgsConstructor;
@@ -22,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private final ScheduleRepository sequenceRepository;
+	private final ScheduleRepository scheduleRepository;
 
 	// 회차 조회
 	@Override
 	public Schedule findSchedule(Long scheduleId) {
-		return sequenceRepository.findById(scheduleId)
+		return scheduleRepository.findById(scheduleId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_SCHEDULE));
 	}
 
@@ -36,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void createSchedule(Goods goods, LocalTime localTime) {
 
 		List<Schedule> scheduleList = distributeSchedule(goods, localTime);
-		sequenceRepository.saveAll(scheduleList);
+		scheduleRepository.saveAll(scheduleList);
 	}
 
 	//회차 요일 및 시작시간 부여
@@ -61,6 +63,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 			startDate = startDate.plusDays(1);
 		}
 		return distributeSequenceList;
+	}
+
+	// 해당 공연에 대한 전 회차 조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<ScheduleGetResponse> getAllSchedule(Long goodsId) {
+		List<Schedule> scheduleList = scheduleRepository.findAllByGoodsId(goodsId);
+		return scheduleList.stream().map(ScheduleGetResponse::new).toList();
 	}
 
 }

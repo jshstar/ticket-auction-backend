@@ -67,4 +67,13 @@ public interface UserService {
 	 * @param userId  	탈퇴할 유저의 id
 	 * */
 	void deleteUser(User user, Long userId);
+
+	/*
+	 * 해당 회원의 포인트 찾기
+	 *
+	 * @param userId 로그인 한 유저 id
+	 *
+	 * @return Long 회원의 포인트 값
+	 * */
+	Long findUserPoint(Long userId);
 }

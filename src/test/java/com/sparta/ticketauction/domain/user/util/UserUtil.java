@@ -25,17 +25,7 @@ public class UserUtil {
 	public static final String ADMIN_TEST_PHONE_NUMBER = "01011112222";
 	public static final LocalDate ADMIN_TEST_BIRTH = LocalDate.of(1997, 1, 1);
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-	public static final User TEST_USER = User.builder()
-		.id(1L)
-		.email(TEST_EMAIL)
-		.password(passwordEncoder.encode(TEST_PASSWORD))
-		.name(TEST_NAME)
-		.nickname(TEST_NICKNAME)
-		.phoneNumber(TEST_PHONE_NUMBER)
-		.birth(TEST_BIRTH)
-		.role(Role.USER)
-		.build();
-
+	public static final User TEST_USER = getUser();
 	public static final User AMDIN_USER = User.builder()
 		.id(1L)
 		.email(ADMIN_TEST_EMAIL)
@@ -46,6 +36,19 @@ public class UserUtil {
 		.birth(ADMIN_TEST_BIRTH)
 		.role(Role.ADMIN)
 		.build();
+
+	public static User getUser() {
+		return User.builder()
+			.id(1L)
+			.email(TEST_EMAIL)
+			.password(passwordEncoder.encode(TEST_PASSWORD))
+			.name(TEST_NAME)
+			.nickname(TEST_NICKNAME)
+			.phoneNumber(TEST_PHONE_NUMBER)
+			.birth(TEST_BIRTH)
+			.role(Role.USER)
+			.build();
+	}
 
 	public static User createUser() {
 		return getUserCreateRequest().toEntity(passwordEncoder);

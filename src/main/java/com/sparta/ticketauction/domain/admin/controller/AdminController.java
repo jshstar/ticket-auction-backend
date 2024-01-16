@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,8 @@ import com.sparta.ticketauction.domain.admin.response.GradeResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.global.dto.EmptyObject;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -112,6 +115,24 @@ public class AdminController {
 					SUCCESS_ZONE_GRADE_CREATE.getCode(),
 					SUCCESS_ZONE_GRADE_CREATE.getMessage(),
 					zoneGradeResponse
+				)
+			);
+	}
+
+	// 경매 생성
+	@PostMapping("/admin/schedules/{scheduleId}/auctions")
+	public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
+		@PathVariable Long scheduleId,
+		@RequestParam Long zoneGradeId,
+		@RequestBody AuctionCreateRequest auctionCreateRequest
+	) {
+		adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
+		return ResponseEntity
+			.status(SUCCESS_AUCTION_CREATE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_AUCTION_CREATE.getCode(),
+					SUCCESS_AUCTION_CREATE.getMessage()
 				)
 			);
 	}

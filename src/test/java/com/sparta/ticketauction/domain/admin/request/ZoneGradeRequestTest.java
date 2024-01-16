@@ -3,6 +3,7 @@ package com.sparta.ticketauction.domain.admin.request;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -88,7 +89,6 @@ public class ZoneGradeRequestTest {
 			Zone
 				.builder()
 				.name("A")
-				.place(place)
 				.seatNumber(100)
 				.build();
 
@@ -100,7 +100,7 @@ public class ZoneGradeRequestTest {
 				.normalPrice(100000L)
 				.goods(goods)
 				.build();
-
+		place.updateZone(List.of(zone));
 		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
 
 		// when

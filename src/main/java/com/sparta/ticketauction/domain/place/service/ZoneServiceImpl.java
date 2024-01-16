@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Zone;
 import com.sparta.ticketauction.domain.place.repository.ZoneRepository;
+import com.sparta.ticketauction.domain.place.response.ZoneGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,14 @@ public class ZoneServiceImpl implements ZoneService {
 		}
 
 		return zoneRepository.saveAll(zoneList);
+	}
+
+	// 공연장 구역 전체 조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<ZoneGetResponse> getAllZone(Long placeId) {
+		List<Zone> zoneList = zoneRepository.findAllByPlaceId(placeId);
+		return zoneList.stream().map(ZoneGetResponse::new).toList();
 	}
 
 	// 구역 프록시 객체 생성

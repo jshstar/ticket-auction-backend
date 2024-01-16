@@ -3,11 +3,13 @@ package com.sparta.ticketauction.domain.place.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.repository.PlaceRepository;
+import com.sparta.ticketauction.domain.place.response.PlaceGetResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,6 +41,14 @@ public class PlaceServiceImpl implements PlaceService {
 		}
 
 		return totalSeat;
+	}
+
+	// 공연장 전체조회
+	@Override
+	@Transactional(readOnly = true)
+	public List<PlaceGetResponse> getAllPlace() {
+		List<Place> placeList = placeRepository.findAll();
+		return placeList.stream().map(PlaceGetResponse::new).toList();
 	}
 
 	// 공연장 프록시 객체 조회

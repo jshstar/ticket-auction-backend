@@ -2,7 +2,6 @@ package com.sparta.ticketauction.domain.admin.request;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -51,7 +50,6 @@ public class GoodsRequest {
 			.description(this.description)
 			.ageGrade(this.ageGrade)
 			.runningTime(this.runningTime)
-			.goodsImage(new ArrayList<>())
 			.build();
 
 	}
