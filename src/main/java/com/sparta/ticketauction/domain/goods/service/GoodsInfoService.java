@@ -8,6 +8,7 @@ import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 
 public interface GoodsInfoService {
 
@@ -28,5 +29,8 @@ public interface GoodsInfoService {
 
 	// 공연 이미지 타입 체크
 	String checkGoodsType(String type);
+
+	// 공연 정보 단건 조회
+	GoodsInfoGetResponse getGoodsInfo(Long goodsInfoId);
 
 }
