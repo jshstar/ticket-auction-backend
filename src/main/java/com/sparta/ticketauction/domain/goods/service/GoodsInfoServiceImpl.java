@@ -6,6 +6,8 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetSliceResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.S3Uploader;
 
@@ -119,6 +122,14 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS_INFO)
 			);
 		return new GoodsInfoGetResponse(goodsInfo);
+	}
+
+	// 공연 정보 카테고리별 페이징 페이징 조회
+	@Override
+	@Transactional(readOnly = true)
+	public GoodsInfoGetSliceResponse getSliceGoodsInfo(Pageable pageable, String categoryName) {
+		Slice<GoodsInfo> goodsInfoSlice = goodsInfoRepository.findAllByCategoryName(pageable, categoryName);
+		return new GoodsInfoGetSliceResponse(goodsInfoSlice);
 	}
 
 }
