@@ -78,6 +78,38 @@ function refreshToken() {
         });
 }
 
+function reissueToken(callback) {
+    let token = Cookies.get('Authorization');
+    let deferred = $.Deferred();
+
+    if (isTokenExpiring(token)) {
+        // 토큰 재발급 중이 아닌 경우에만 재발급 시도
+        if (!getIsRefreshingToken()) {
+            // 토큰 갱신 시도
+            refreshToken().then((data) => {
+                // 토큰 갱신이 완료된 후 사용자 상태 업데이트
+                setTokenInCookie(data);
+                /* 원래 요청 로직 에서 토큰 값으로 data를 넣어서*/
+                callback(data);
+            }).catch((error) => {
+                // 토큰 갱신 실패 시 로그아웃 처리
+                console.error('Token refresh failed:', error);
+                requestLogout();
+            }).finally(() => {
+                setIsRefreshingToken(false); // 토큰 갱신 완료 후 상태 업데이트
+                deferred.resolve();
+            });
+        } else {
+            deferred.resolve();
+        }
+    } else {
+        /* 원래 요청 로직 */
+        callback(token);
+        deferred.resolve();
+    }
+    return deferred.promise();
+}
+
 // 토큰을 포함하여 요청을 보내는 함수
 function fetchWithToken(url, token, method) {
     return fetch(url, {

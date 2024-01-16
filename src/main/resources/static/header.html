@@ -71,10 +71,10 @@
 </body>
 <script>
     $("#login").on("click", function () {
-        redirectToPage("/login.html");
+        movePageWithToken("/login.html");
     });
     $("#charge-point").on("click", function () {
-        redirectToPageWithToken(`/paymentRequest.html`);
+        movePageWithToken(`/paymentRequest.html`);
     });
     $(".logout").on("click", function () {
         confirmFuncLogout();

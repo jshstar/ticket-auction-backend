@@ -8,40 +8,13 @@
 
 function checkLoginStatus() {
     let token = Cookies.get('Authorization');
-    let deferred = $.Deferred();
-
-    // 토큰이 있는지 확인
-    if (!token) {
+    if (token == null) {
         updateLoginStatus(null, false);
-        deferred.resolve();
-        return deferred.promise();
-    }
-
-    if (isTokenExpiring(token)) {
-        // 토큰 재발급 중이 아닌 경우에만 재발급 시도
-        if (!getIsRefreshingToken()) {
-            // 토큰 갱신 시도
-            refreshToken().then((data) => {
-                // 토큰 갱신이 완료된 후 사용자 상태 업데이트
-                setTokenInCookie(data);
-                updateLoginStatus(data, true);
-            }).catch((error) => {
-                // 토큰 갱신 실패 시 로그아웃 처리
-                console.error('Token refresh failed:', error);
-                requestLogout();
-            }).finally(() => {
-                setIsRefreshingToken(false); // 토큰 갱신 완료 후 상태 업데이트
-                deferred.resolve();
-            });
-        } else {
-            deferred.resolve();
-        }
     } else {
-        // 토큰이 유효한 경우 사용자 상태 업데이트
-        updateLoginStatus(token, true);
-        deferred.resolve();
+        reissueToken((token) => {
+            updateLoginStatus(token, true);
+        });
     }
-    return deferred.promise();
 }
 
 function updateLoginStatus(token, stat) {
@@ -147,68 +120,35 @@ function requestLogin() {
 }
 
 /* 토큰이 필요한 페이지로 이동 시 함수*/
-function redirectToPageWithToken(pageUrl) {
+function movePageWithToken(pageUrl) {
     let token = Cookies.get('Authorization');
-    let deferred = $.Deferred();
-
-    // 권한 토큰이 있는 경우에만 요청을 보냄
     if (token) {
-        if (isTokenExpiring(token)) {
-            if (!getIsRefreshingToken()) {
-                refreshToken().then((data) => {
-                    setTokenInCookie(data);
-                    // Fetch API를 사용하여 페이지 이동 시에 헤더에 토큰을 추가하여 요청
-                    fetch(pageUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `${data}`
-                        }
-                    })
-                        .then(response => {
-                            // 응답을 확인하고, 필요한 처리를 수행
-                            if (response.ok) {
-                                // 페이지 이동 또는 다른 동작 수행
-                                window.location.href = pageUrl;
-                            } else {
-                                console.error('페이지 이동 실패:', response.statusText);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('페이지 이동 실패:', error);
-                        });
-                }).catch((error) => {
-                    requestLogout();
-                }).finally(() => {
-                    setIsRefreshingToken(false);
-                    deferred.resolve();
-                });
-            } else {
-                deferred.resolve();
-            }
-        } else {
-            fetch(pageUrl, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `${token}`
-                }
-            })
-                .then(response => {
-                    // 응답을 확인하고, 필요한 처리를 수행
-                    if (response.ok) {
-                        // 페이지 이동 또는 다른 동작 수행
-                        window.location.href = pageUrl;
-                    } else {
-                        console.error('페이지 이동 실패:', response.statusText);
-                    }
-                })
-                .catch(error => {
-                    console.error('페이지 이동 실패:', error);
-                });
-        }
-        return deferred.promise();
+        reissueToken((token) => {
+            redirectToPageWithToken(pageUrl, token);
+        })
     }
 }
 
+function redirectToPageWithToken(pageUrl, token) {
+    fetch(pageUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': `${token}`
+        }
+    })
+        .then(response => {
+            // 응답을 확인하고, 필요한 처리를 수행
+            if (response.ok) {
+                // 페이지 이동 또는 다른 동작 수행
+                window.location.href = pageUrl;
+            } else {
+                console.error('페이지 이동 실패:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('페이지 이동 실패:', error);
+        });
+}
 
 // 권한(토큰)이 필요 없는 페이지 이동 시 호출 함수
 function redirectToPage(pageUrl) {
