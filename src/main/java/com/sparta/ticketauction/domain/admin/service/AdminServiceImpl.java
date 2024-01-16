@@ -8,14 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
-import com.sparta.ticketauction.domain.admin.request.GradeRequest;
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
-import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
-import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
-import com.sparta.ticketauction.domain.admin.response.GradeResponse;
-import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
-import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
+import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.response.GoodsCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.GoodsInfoCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.GradeCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.PlaceCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeCreateResponse;
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.domain.auction.service.AuctionService;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -68,9 +70,9 @@ public class AdminServiceImpl implements AdminService {
 	// 공연장 및 구역 생성
 	@Override
 	@Transactional
-	public List<PlaceResponse> createPlaceAndZone(PlaceRequest placeRequest) {
-		List<ZoneInfo> zoneInfos = placeRequest.getZoneInfos();
-		Place place = placeService.createPlace(placeRequest);
+	public List<PlaceCreateResponse> createPlaceAndZone(PlaceCreateRequest placeCreateRequest) {
+		List<ZoneInfo> zoneInfos = placeCreateRequest.getZoneInfos();
+		Place place = placeService.createPlace(placeCreateRequest);
 		List<Zone> zoneList = zoneService.createZone(zoneInfos);
 		place.updateZone(zoneList);
 
@@ -80,65 +82,80 @@ public class AdminServiceImpl implements AdminService {
 
 	// 공연장 및 구역 응답 생성
 	@Override
-	public List<PlaceResponse> createPlaceResponse(List<Zone> zoneList) {
-		List<PlaceResponse> placeResponseList = new ArrayList<>();
+	public List<PlaceCreateResponse> createPlaceResponse(List<Zone> zoneList) {
+		List<PlaceCreateResponse> placeCreateResponseList = new ArrayList<>();
 
 		for (Zone zone : zoneList) {
-			placeResponseList.add(new PlaceResponse(zone.getName(), zone.getSeatNumber(), zone.getPlace().getId()));
+			placeCreateResponseList.add(
+				new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlace().getId()));
 		}
 
-		return placeResponseList;
+		return placeCreateResponseList;
 	}
 
 	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
 	@Override
 	@Transactional
-	public GoodsResponse createGoodsBundleAndSchedule(
+	public GoodsInfoCreateResponse createGoodsBundle(
 		Long placeId,
-		GoodsRequest goodsRequest,
+		GoodsInfoCreateRequest goodsInfoCreateRequest,
 		List<MultipartFile> multipartFiles) {
 
-		Place place = placeService.getReferenceById(placeId);
-
-		GoodsInfo goodsInfo = goodsInfoService.createGoodsInfo(goodsRequest);
+		GoodsInfo goodsInfo = goodsInfoService.createGoodsInfo(goodsInfoCreateRequest);
 
 		List<GoodsImage> goodsImages = goodsInfoService.createGoodsImage(multipartFiles, goodsInfo);
 		goodsInfo.addGoodsImage(goodsImages);
 
-		GoodsCategory goodsCategory = goodsInfoService.createGoodsCategory(goodsRequest.getCategoryName());
+		GoodsCategory goodsCategory = goodsInfoService.createGoodsCategory(goodsInfoCreateRequest.getCategoryName());
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
-		Goods goods = goodsService.createGoods(goodsRequest, place, goodsInfo);
+		return new GoodsInfoCreateResponse(goodsInfo.getId());
+
+	}
+
+	// 공연 및 회차 생성
+	@Override
+	@Transactional
+	public GoodsCreateResponse createGoodsAndSchedule(
+		GoodsCreateRequest goodsCreateRequest,
+		Long goodsInfoId,
+		Long placeId) {
+
+		Place place = placeService.getReferenceById(placeId);
+
+		GoodsInfo goodsInfo = goodsInfoService.findByGoodsInfoId(goodsInfoId);
+
+		Goods goods = goodsService.createGoods(goodsCreateRequest, place, goodsInfo);
 		goodsInfo.addGoods(goods);
 
-		LocalTime startTime = goodsRequest.getStartTime();
+		LocalTime startTime = goodsCreateRequest.getStartTime();
+
 		scheduleService.createSchedule(goods, startTime);
 
-		return new GoodsResponse(goods.getId());
-
+		return new GoodsCreateResponse(goods.getId());
 	}
 
 	// 구역 생성
 	@Override
 	@Transactional
-	public GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest) {
+	public GradeCreateResponse createGrade(Long goodsId, GradeCreateRequest gradeCreateRequest) {
 		Goods goods = goodsService.findById(goodsId);
 
-		Grade grade = gradeService.createGrade(gradeRequest, goods);
+		Grade grade = gradeService.createGrade(gradeCreateRequest, goods);
 
-		return new GradeResponse(goods.getPlace().getId(), grade.getId());
+		return new GradeCreateResponse(goods.getPlace().getId(), grade.getId());
 	}
 
 	// 구역 등급 생성
 	@Override
 	@Transactional
-	public ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest) {
-		Zone zone = zoneService.getReferenceById(zoneGradeRequest.getZoneId());
-		Grade grade = gradeService.getReferenceById(zoneGradeRequest.getGradeId());
+	public ZoneGradeCreateResponse createZoneGrade(ZoneGradeCreateRequest zoneGradeCreateRequest) {
+		Zone zone = zoneService.getReferenceById(zoneGradeCreateRequest.getZoneId());
+		Grade grade = gradeService.getReferenceById(zoneGradeCreateRequest.getGradeId());
 
-		ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
+		ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeCreateRequest, zone, grade);
 
-		return new ZoneGradeResponse(zoneGrade);
+		return new ZoneGradeCreateResponse(zoneGrade);
 	}
 
 	// 경매 생성
