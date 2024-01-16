@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PlaceResponse {
+public class PlaceCreateResponse {
 	private final String zone;
 
 	private final Integer zoneCountSeat;
 
 	private final Long placeId;
 
-	public PlaceResponse(String zone, Integer zoneCountSeat, Place place) {
+	public PlaceCreateResponse(String zone, Integer zoneCountSeat, Place place) {
 		this.zone = zone;
 		this.zoneCountSeat = zoneCountSeat;
 		this.placeId = place.getId();

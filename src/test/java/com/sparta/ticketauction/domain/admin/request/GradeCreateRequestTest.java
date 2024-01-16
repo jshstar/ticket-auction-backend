@@ -21,7 +21,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class GradeRequestTest {
+public class GradeCreateRequestTest {
 
 	private static ValidatorFactory factory;
 	private static Validator validator;
@@ -50,15 +50,15 @@ public class GradeRequestTest {
 	@Test
 	void 등급_이름_검증_테스트() {
 		// given
-		GradeRequest gradeRequest =
-			new GradeRequest(
+		GradeCreateRequest gradeCreateRequest =
+			new GradeCreateRequest(
 				"",
 				this.normalPrice,
 				this.auctionPrice
 			);
 
 		// when
-		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
+		Set<ConstraintViolation<GradeCreateRequest>> violations = validator.validate(gradeCreateRequest);
 
 		// then
 		assertThat(violations).isNotEmpty();
@@ -72,15 +72,15 @@ public class GradeRequestTest {
 	@Test
 	void 일반가격_검증_테스트() {
 		// given
-		GradeRequest gradeRequest =
-			new GradeRequest(
+		GradeCreateRequest gradeCreateRequest =
+			new GradeCreateRequest(
 				this.name,
 				null,
 				this.auctionPrice
 			);
 
 		// when
-		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
+		Set<ConstraintViolation<GradeCreateRequest>> violations = validator.validate(gradeCreateRequest);
 
 		// then
 		assertThat(violations).isNotNull();
@@ -94,15 +94,15 @@ public class GradeRequestTest {
 	@Test
 	void 경매가격_검증_테스트() {
 		// given
-		GradeRequest gradeRequest =
-			new GradeRequest(
+		GradeCreateRequest gradeCreateRequest =
+			new GradeCreateRequest(
 				this.name,
 				this.normalPrice,
 				null
 			);
 
 		// when
-		Set<ConstraintViolation<GradeRequest>> violations = validator.validate(gradeRequest);
+		Set<ConstraintViolation<GradeCreateRequest>> violations = validator.validate(gradeCreateRequest);
 
 		// then
 		assertThat(violations).isNotNull();
@@ -117,15 +117,15 @@ public class GradeRequestTest {
 	void 등급_Entity_생성_테스트() {
 		// given
 		Goods goods = Mockito.mock();
-		GradeRequest gradeRequest =
-			new GradeRequest(
+		GradeCreateRequest gradeCreateRequest =
+			new GradeCreateRequest(
 				this.name,
 				this.normalPrice,
 				this.auctionPrice
 			);
 
 		// when
-		Grade grade = gradeRequest.toEntity(goods);
+		Grade grade = gradeCreateRequest.toEntity(goods);
 
 		// then
 		assertEquals(this.name, grade.getName());

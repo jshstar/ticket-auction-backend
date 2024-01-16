@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ZoneGradeRequest {
+public class ZoneGradeCreateRequest {
 	@NotNull(message = "구역 Id값은 필수입니다.")
 	private final Long zoneId;
 

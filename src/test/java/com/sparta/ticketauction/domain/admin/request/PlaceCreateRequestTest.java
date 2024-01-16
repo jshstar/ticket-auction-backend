@@ -23,7 +23,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class PlaceRequestTest {
+public class PlaceCreateRequestTest {
 
 	private static ValidatorFactory factory;
 	private static Validator validator;
@@ -40,10 +40,10 @@ public class PlaceRequestTest {
 		String name = "예술의 전당";
 		String address = "XX시 XX구";
 		List<ZoneInfo> zoneInfos = Mockito.mock();
-		PlaceRequest placeRequest = new PlaceRequest(name, address, zoneInfos);
+		PlaceCreateRequest placeCreateRequest = new PlaceCreateRequest(name, address, zoneInfos);
 
 		// when
-		Place place = placeRequest.toEntity(650);
+		Place place = placeCreateRequest.toEntity(650);
 
 		// then
 		assertEquals(name, place.getName());
@@ -57,10 +57,10 @@ public class PlaceRequestTest {
 		String invalidName = "";
 		List<ZoneInfo> seatRequestList = new ArrayList<>();
 		seatRequestList.add(new ZoneInfo("A", 100));
-		PlaceRequest placeRequest = new PlaceRequest(invalidName, "Valid Address", seatRequestList);
+		PlaceCreateRequest placeCreateRequest = new PlaceCreateRequest(invalidName, "Valid Address", seatRequestList);
 
 		// when
-		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
+		Set<ConstraintViolation<PlaceCreateRequest>> violations = validator.validate(placeCreateRequest);
 
 		// then
 		assertThat(violations).isNotEmpty();
@@ -78,10 +78,10 @@ public class PlaceRequestTest {
 		String invalidAddress = "";
 		List<ZoneInfo> seatRequestList = new ArrayList<>();
 		seatRequestList.add(new ZoneInfo("A", 100));
-		PlaceRequest placeRequest = new PlaceRequest("예술의 전당", invalidAddress, seatRequestList);
+		PlaceCreateRequest placeCreateRequest = new PlaceCreateRequest("예술의 전당", invalidAddress, seatRequestList);
 
 		//when
-		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
+		Set<ConstraintViolation<PlaceCreateRequest>> violations = validator.validate(placeCreateRequest);
 
 		//then
 		assertThat(violations).isNotEmpty();
@@ -97,10 +97,10 @@ public class PlaceRequestTest {
 	public void 요청_공연장_구역_검증_실패테스트() {
 		// given
 		List<ZoneInfo> zoneInfos = new ArrayList<>();
-		PlaceRequest placeRequest = new PlaceRequest("예술의 전당", "Valid Address", zoneInfos);
+		PlaceCreateRequest placeCreateRequest = new PlaceCreateRequest("예술의 전당", "Valid Address", zoneInfos);
 
 		//when
-		Set<ConstraintViolation<PlaceRequest>> violations = validator.validate(placeRequest);
+		Set<ConstraintViolation<PlaceCreateRequest>> violations = validator.validate(placeCreateRequest);
 
 		//then
 		assertThat(violations).isEmpty();
