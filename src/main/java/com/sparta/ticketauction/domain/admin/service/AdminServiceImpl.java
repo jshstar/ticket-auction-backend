@@ -109,6 +109,7 @@ public class AdminServiceImpl implements AdminService {
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		Goods goods = goodsService.createGoods(goodsRequest, place, goodsInfo);
+		goodsInfo.addGoods(goods);
 
 		LocalTime startTime = goodsRequest.getStartTime();
 		scheduleService.createSchedule(goods, startTime);
