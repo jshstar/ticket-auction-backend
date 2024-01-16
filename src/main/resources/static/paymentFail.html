@@ -17,11 +17,14 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="/js/basic.js"></script>
 </head>
+
 <body>
 <header id="headers"></header>
-<h2> 결제 실패 </h2>
-<p id="code"></p>
-<p id="message"></p>
+<div class="container text-center">
+    <h1>포인트 충전 실패 </h1>
+    <p id="code"></p>
+    <p id="message"></p>
+</div>
 </body>
 </html>
 
@@ -33,4 +36,8 @@
 
     codeElement.textContent = "에러코드: " + urlParams.get("code");
     messageElement.textContent = "실패 사유: " + urlParams.get("message");
+
+    setTimeout(function () {
+        window.location.href = "/index.html";
+    });
 </script>

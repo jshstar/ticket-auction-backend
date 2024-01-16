@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.Role;
 import com.sparta.ticketauction.domain.user.request.sms.SmsMessageRequest;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
@@ -177,6 +178,11 @@ public class AuthServiceImpl implements AuthService {
 			jwtUtil.substringToken(newRefreshToken),
 			REFRESH_TOKEN_TIME
 		);
+	}
+
+	@Override
+	public Long findPoint(User user) {
+		return userService.findUserPoint(user.getId());
 	}
 
 	/* 외부 API로 전달할 데이터 암호화 */

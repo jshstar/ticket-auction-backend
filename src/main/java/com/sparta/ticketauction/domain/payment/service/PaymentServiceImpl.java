@@ -1,5 +1,7 @@
 package com.sparta.ticketauction.domain.payment.service;
 
+import static com.sparta.ticketauction.global.exception.ErrorCode.*;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
@@ -21,9 +23,9 @@ import com.sparta.ticketauction.domain.payment.request.PaymentFromUserRequest;
 import com.sparta.ticketauction.domain.payment.request.PaymentToApiRequest;
 import com.sparta.ticketauction.domain.payment.response.PaymentSuccessResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentServiceImpl implements PaymentService {
 
 	private final UserService userService;
+	private final PointService pointService;
 	private final PaymentRepository paymentRepository;
 
 	@Value("${TOSS_SECRET_KEY}")
@@ -58,6 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
 	@Transactional
 	public PaymentSuccessResponse successPayment(String jsonBody) {
 		JSONParser parser = new JSONParser();
+
 		String orderId;
 		String amount;
 		String paymentKey;
@@ -76,6 +80,9 @@ public class PaymentServiceImpl implements PaymentService {
 		Payment payment = verifyPayment(orderId, amountLong);
 		payment.addPaymentKey(paymentKey);
 
+		User user = userService.findByUserId(payment.getUser().getId());
+		pointService.chargePoint(user, amountLong);
+		
 		return requestPaymentAccept(paymentKey, orderId, amountLong);
 
 	}
@@ -118,11 +125,11 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private Payment verifyPayment(String orderId, Long amount) {
 		Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(
-			() -> new ApiException(ErrorCode.INTERNAL_SERVER_ERROR)
+			() -> new ApiException(NOT_FOUND_ORDER_ID)
 		);
 
 		if (!payment.getAmount().equals(amount)) {
-			throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
+			throw new ApiException(NOT_EQUALS_AMOUNT);
 		}
 
 		return payment;
