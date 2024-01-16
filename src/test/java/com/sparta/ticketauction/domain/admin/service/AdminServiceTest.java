@@ -15,14 +15,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.ZoneGradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.response.GoodsCreateResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceCreateResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeCreateResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -143,7 +144,6 @@ public class AdminServiceTest {
 	@Test
 	void 공연정보_공연이미지_공연카테고리() {
 		// given
-		Place place = Mockito.mock();
 		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
 
 		List<String> fileUrl = new ArrayList<>();
@@ -159,14 +159,12 @@ public class AdminServiceTest {
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		// when
-		given(placeService.getReferenceById(1L)).willReturn(place);
 		given(goodsInfoService.createGoodsInfo(any(GoodsInfoCreateRequest.class))).willReturn(goodsInfo);
 		given(goodsInfoService.createGoodsImage(any(), any())).willReturn(goodsImage);
 		given(goodsInfoService.createGoodsCategory(any())).willReturn(goodsCategory);
-		adminService.createGoodsBundle(1L, goodsInfoCreateRequest, mock());
+		adminService.createGoodsBundle(goodsInfoCreateRequest, mock());
 
 		// then
-		verify(placeService, times(1)).getReferenceById(anyLong());
 		verify(goodsInfoService, times(1)).createGoodsInfo(any(GoodsInfoCreateRequest.class));
 		verify(goodsInfoService, times(1)).createGoodsImage(any(), any(GoodsInfo.class));
 		verify(goodsInfoService, times(1)).createGoodsCategory(any());
@@ -185,6 +183,11 @@ public class AdminServiceTest {
 		Place place = placeCreateRequest.toEntity(200);
 		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
 		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
+		goodsInfo.addGoods(goods);
+
+		ReflectionTestUtils.setField(place, "id", 1L);
+		ReflectionTestUtils.setField(goodsInfo, "id", 1L);
+		ReflectionTestUtils.setField(goods, "id", 1L);
 
 		List<Schedule> scheduleList = new ArrayList<>();
 		scheduleList.add(
@@ -210,8 +213,16 @@ public class AdminServiceTest {
 		long daysBetween = ChronoUnit.DAYS.between(startDateTime, endDateTime);
 
 		// when
-		given(goodsService.createGoods(goodsCreateRequest, place, goodsInfo)).willReturn(goods);
+		given(placeService.getReferenceById(any(Long.class))).willReturn(place);
+		given(goodsInfoService.findByGoodsInfoId(any(Long.class))).willReturn(goodsInfo);
+		given(goodsService.createGoods(
+			any(GoodsCreateRequest.class),
+			any(Place.class),
+			any(GoodsInfo.class)))
+			.willReturn(goods);
 
+		then(placeService).should().getReferenceById(any(Long.class));
+		verify(goodsInfoService, times(1)).findByGoodsInfoId(any());
 		verify(goodsService, times(1))
 			.createGoods(
 				any(GoodsCreateRequest.class),
@@ -219,7 +230,8 @@ public class AdminServiceTest {
 				any(GoodsInfo.class)
 			);
 		verify(scheduleService, times(1)).createSchedule(any(Goods.class), any(LocalTime.class));
-		adminService.createGoodsAndSchedule(any(GoodsCreateRequest.class), anyLong(), anyLong());
+		GoodsCreateResponse goodsCreateResponse =
+			adminService.createGoodsAndSchedule(any(GoodsCreateRequest.class), anyLong(), anyLong());
 
 		assertEquals((int)daysBetween + 1, scheduleList.get(1).getSequence());
 		assertEquals(goodsCreateRequest.getStartTime().getMinute(),
