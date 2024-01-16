@@ -42,7 +42,6 @@ public class BidServiceImpl implements BidService {
 		long newBidPrice = bidRequest.getPrice();
 		long currentBidPrice = bidRedisService.getBidPrice(auctionId);
 		validateBid(currentBidPrice, newBidPrice);
-		validatePoint(bidder.getPoint(), newBidPrice);
 
 		//기존 입찰자, 새입찰자 포인트 업데이트
 		Auction auction = getAuction(auctionId);
@@ -93,13 +92,6 @@ public class BidServiceImpl implements BidService {
 		currentBidPrice += (long)(currentBidPrice * BID_PRICE_INCREASE_PERCENT);
 		if (currentBidPrice > bidPrice) {
 			throw new ApiException(BAD_REQUEST_BID);
-		}
-	}
-
-	private static void validatePoint(long point, long bidPrice) {
-		//포인트가 부족한 경우
-		if (point < bidPrice) {
-			throw new ApiException(NOT_ENOUGH_POINT);
 		}
 	}
 }
