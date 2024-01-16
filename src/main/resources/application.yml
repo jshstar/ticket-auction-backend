@@ -17,7 +17,7 @@ spring:
     username: ${db_username}
     password: ${db_password}
     url: jdbc:mysql://localhost:3306/ticket_auction
-    hikari :
+    hikari:
       connection-timeout: 3000
       validation-timeout: 3000
       minimum-idle: 10
@@ -60,3 +60,10 @@ naver-cloud:
   secret-key: ${SECRET_KEY}
   service-id: ${SERVICE_ID}
   sender-phone: ${SENDER_PHONE}
+
+payment:
+  toss:
+    client-key: ${TOSS_CLIENT_KEY}
+    secret-key: ${TOSS_SECRET_KEY}
+    success-url: ${SUCCESS_URL}
+    fail-url: ${FAIL_URL}

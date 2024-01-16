@@ -36,8 +36,10 @@ public class JwtAuthenticationHelper {
 	public String[] login() {
 		User user = createUser();
 
-		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
-		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole());
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole(),
+			user.getNickname());
+		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole(),
+			user.getNickname());
 
 		lettuceUtils.save(
 			"RefreshToken " + user.getEmail(),
@@ -50,8 +52,10 @@ public class JwtAuthenticationHelper {
 
 	public String adminLogin() {
 		User user = createAdminUser();
-		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole());
-		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole());
+		String accessToken = jwtUtil.createAccessToken(user.getId(), user.getEmail(), user.getRole(),
+			user.getNickname());
+		String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getEmail(), user.getRole(),
+			user.getNickname());
 
 		lettuceUtils.save(
 			"RefreshToken " + user.getEmail(),
