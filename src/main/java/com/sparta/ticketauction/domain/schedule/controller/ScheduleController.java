@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,7 @@ public class ScheduleController {
 
 	// 해당 공연에 대한 전 회차 조회
 	@GetMapping("/goods/{goodsId}/schedules")
-	public ResponseEntity<ApiResponse<List<ScheduleGetResponse>>> getAllSequence(Long goodsId) {
+	public ResponseEntity<ApiResponse<List<ScheduleGetResponse>>> getAllSequence(@PathVariable Long goodsId) {
 		List<ScheduleGetResponse> scheduleGetResponses = scheduleService.getAllSchedule(goodsId);
 
 		return ResponseEntity

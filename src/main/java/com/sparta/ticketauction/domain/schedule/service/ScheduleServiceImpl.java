@@ -24,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
-	private final ScheduleRepository sequenceRepository;
+	private final ScheduleRepository scheduleRepository;
 
 	// 회차 조회
 	@Override
 	public Schedule findSchedule(Long scheduleId) {
-		return sequenceRepository.findById(scheduleId)
+		return scheduleRepository.findById(scheduleId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_SCHEDULE));
 	}
 
@@ -38,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public void createSchedule(Goods goods, LocalTime localTime) {
 
 		List<Schedule> scheduleList = distributeSchedule(goods, localTime);
-		sequenceRepository.saveAll(scheduleList);
+		scheduleRepository.saveAll(scheduleList);
 	}
 
 	//회차 요일 및 시작시간 부여
@@ -69,7 +69,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ScheduleGetResponse> getAllSchedule(Long goodsId) {
-		List<Schedule> scheduleList = sequenceRepository.findAllByGoodsId(goodsId);
+		List<Schedule> scheduleList = scheduleRepository.findAllByGoodsId(goodsId);
 		return scheduleList.stream().map(ScheduleGetResponse::new).toList();
 	}
 
