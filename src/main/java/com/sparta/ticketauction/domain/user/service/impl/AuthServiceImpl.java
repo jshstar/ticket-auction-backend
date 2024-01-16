@@ -182,7 +182,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public Long findPoint(User user) {
-		return userService.findByUserId(user.getId()).getPoint();
+		return userService.findUserPoint(user.getId());
 	}
 
 	/* 외부 API로 전달할 데이터 암호화 */
