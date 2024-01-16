@@ -33,18 +33,35 @@
         <li class="nav-item" id="signup" style="display: none;">
             <a class="nav-link" href="#" style="color: black;">회원가입</a>
         </li>
-        <li class="nav-item" id="logout" style="display: none;">
-            <a class="nav-link" onclick="requestLogout();" style="color: black;">로그아웃</a>
+        <li class="nav-item dropdown" id="login-user-set"
+            style="float:right; list-style-type: none; margin-left: 20px; display: none;">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+               data-toggle="dropdown" id="userDropdown" role="button" style="color: black;">
+                닉네임
+            </a>
+            <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-sm-right" id="user-drop-menus">
+                <h3 class="dropdown-header" id="nickname"></h3>
+                <h3 class="dropdown-item" id="header-point">보유 포인트</h3>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" onclick="redirectToPageWithToken(`/paymentRequest.html`)">포인트 충전</a>
+                <a class="dropdown-item" href="#">마이페이지</a>
+                <a class="dropdown-item" onclick="requestLogout();" style="color: black;">로그아웃</a>
+            </div>
         </li>
-        <li class="nav-item" id="mypage" style="display: none;">
-            <a class="nav-link" href="#" style="color: black;">마이페이지</a>
-        </li>
-        <li class="nav-item" id="charge" style="display: none;">
-            <a class="nav-link"
-               onclick="redirectToPageWithToken(`/paymentRequest.html`)" style="color: black;">결제하기</a>
-        </li>
-        <li class="nav-item" id="name" style="display: none;">
-            <a class="nav-link" href="#" id="name_a" style="color: black;">닉네임</a>
+        <li class="nav-item dropdown" id="admin-set"
+            style="float:right; list-style-type: none; margin-left: 20px; display: none;">
+            <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+               data-toggle="dropdown" id="adminDropdown" role="button" style="color: black;">
+                닉네임
+            </a>
+            <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-sm-right" id="admin-drop-menus">
+                <h3 class="dropdown-header" id="admin-nickname"></h3>
+                <a class="dropdown-item" href="#">관리자 추가</a>
+                <a class="dropdown-item">공연장 추가</a>
+                <a class="dropdown-item" href="#">공연 추가</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" onclick="requestLogout();" style="color: black;">로그아웃</a>
+            </div>
         </li>
     </ul>
 </header>
