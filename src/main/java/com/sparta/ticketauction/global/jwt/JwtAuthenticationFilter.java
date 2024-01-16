@@ -78,9 +78,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String username = user.getEmail();
 		Long id = user.getId();
 		String nickname = user.getNickname();
+		Long point = user.getPoint();
 
-		String accessToken = jwtUtil.createAccessToken(id, username, role, nickname);
-		String refreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
+		String accessToken = jwtUtil.createAccessToken(id, username, role, nickname, point);
+		String refreshToken = jwtUtil.createRefreshToken(id, username, role, nickname, point);
 
 		lettuceUtils.save(
 			JwtUtil.REFRESH_TOKEN_HEADER + " " + username,
