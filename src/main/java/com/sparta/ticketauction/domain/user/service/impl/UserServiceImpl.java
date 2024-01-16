@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
@@ -54,12 +53,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean isExistedPhoneNumber(String phoneNumber) {
 		return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
 
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public User findByUserId(Long userId) {
 		return userRepository.findByIdAndIsDeletedIsFalse(userId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_BY_ID));
@@ -84,6 +85,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserResponse getUserInfo(User loginUser, Long userId) {
 		User user = checkAndGetUser(loginUser, userId);
 
@@ -105,6 +107,12 @@ public class UserServiceImpl implements UserService {
 		User user = checkAndGetUser(loginUser, userId);
 
 		user.delete();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Long findUserPoint(Long userId) {
+		return userRepository.findPointById(userId);
 	}
 
 	private void checkPassword(User user, String password) {

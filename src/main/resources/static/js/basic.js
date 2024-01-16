@@ -19,13 +19,25 @@ function checkLoginStatus() {
         success: function (data) {
             if (data.isLoggedIn === true) {
                 // 로그인 상태일 경우 처리
-                $("#logout, #mypage, #name, #charge").css("display", "block");
-                $("#name_a").text(data.user.nickname);
-                $("#login, #signup").css("display", "none");
+                if (data.user.role === "USER") {
+                    $("#login-user-set").css("display", "block");
+                    $("#login-user-set #userDropdown, #login-user-set #user-drop-menus #nickname")
+                        .text(data.user.nickname);
+                    $("#login, #signup").css("display", "none");
+                    $("#login-user-set #user-drop-menus #header-point")
+                        .text(data.point.toLocaleString());
+                    $("#admin-set").css("display", "none");
+                } else {
+                    $("#admin-set").css("display", "block");
+                    $("#login-user-set").css("display", "none");
+                    $("#admin-set #admin-nickname, #admin-set #adminDropdown")
+                        .text(data.user.nickname);
+                    $("#login, #signup").css("display", "none");
+                }
             } else {
                 // 비로그인 상태일 경우 처리
                 $("#login, #signup").css("display", "block");
-                $("#logout, #mypage, #name, #charge").css("display", "none");
+                $("#login-user-set").css("display", "none");
             }
             deferred.resolve(); // 작업이 끝났음을 알림
         },
@@ -39,26 +51,30 @@ function checkLoginStatus() {
 }
 
 function requestLogout() {
-    var token = Cookies.get('Authorization');
-    $.ajax({
-        url: "/api/v1/auth/logout",
-        type: "POST",
-        headers: {
-            "Authorization": token
-        },
-        success: function (data) {
-            // 로그아웃에 성공한 경우 처리
-            console.log("Logout successful");
-            // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
-            Cookies.remove('Authorization', {path: '/'})
+    var result = confirm("로그아웃 하시겠습니까?");
 
-            window.location.href = `/index.html`
-        },
-        error: function (jqXHR, textStatus) {
-            // 로그아웃에 실패한 경우 처리
-            console.error("Error during logout:", textStatus);
-        }
-    });
+    if (result) {
+        var token = Cookies.get('Authorization');
+        $.ajax({
+            url: "/api/v1/auth/logout",
+            type: "POST",
+            headers: {
+                "Authorization": token
+            },
+            success: function (data) {
+                // 로그아웃에 성공한 경우 처리
+                console.log("Logout successful");
+                // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
+                Cookies.remove('Authorization', {path: '/'})
+
+                window.location.href = `/index.html`
+            },
+            error: function (jqXHR, textStatus) {
+                // 로그아웃에 실패한 경우 처리
+                console.error("Error during logout:", textStatus);
+            }
+        });
+    }
 }
 
 

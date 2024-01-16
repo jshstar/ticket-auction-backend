@@ -44,7 +44,9 @@ public enum ErrorCode {
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
 
 	/* PAYMENT */
-	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P100000", "결제할 포인트가 부족합니다"),
+	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P10000", "결제할 포인트가 부족합니다"),
+	NOT_FOUND_ORDER_ID(HttpStatus.NOT_FOUND, "P10100", "해당 id를 가진 결제 요청이 없습니다."),
+	NOT_EQUALS_AMOUNT(HttpStatus.BAD_REQUEST, "P10101", "결제 금액과 요청 결제 금액이 일치하지 않습니다."),
 
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),

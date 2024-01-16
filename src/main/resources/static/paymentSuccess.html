@@ -16,57 +16,50 @@
             src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="/js/basic.js"></script>
-    <link href="/css/payment.css">
+    <link href="/css/payment.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
 
 <div class="container text-center">
-    <h2> 포인트 충전 성공 </h2>
-    <div class="wrap">
-
-        <div class="form-control px-4 py-3">
-            <h3 id="amount">충전 금액</h3>
-        </div>
-
-    </div>
-
+    <h1><img class="icon" src="/images/fireworks.png"/>포인트 충전 성공 </h1>
 </div>
 
 </body>
-<!--<script>-->
-<!--    const urlParams = new URLSearchParams(window.location.search);-->
-<!--    const paymentKey = urlParams.get("paymentKey");-->
-<!--    const orderId = urlParams.get("orderId");-->
-<!--    const amount = urlParams.get("amount");-->
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentKey = urlParams.get("paymentKey");
+    const orderId = urlParams.get("orderId");
+    const amount = urlParams.get("amount");
 
-<!--    async function confirm() {-->
-<!--        const requestData = {-->
-<!--            paymentKey: paymentKey,-->
-<!--            orderId: orderId,-->
-<!--            amount: amount,-->
-<!--        };-->
+    async function confirm() {
+        const requestData = {
+            paymentKey: paymentKey,
+            orderId: orderId,
+            amount: amount,
+        };
 
-<!--        const response = await fetch("/api/v1/payments/success", {-->
-<!--            method: "POST",-->
-<!--            headers: {-->
-<!--                "Content-Type": "application/json",-->
-<!--            },-->
-<!--            body: JSON.stringify(requestData),-->
-<!--        });-->
+        var token = Cookies.get("Authorization");
+        const response = await fetch("/api/v1/payments/success", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify(requestData),
+        });
 
-<!--        const json = await response.json();-->
+        const json = await response.json();
 
-<!--        if (!response.ok) {-->
-<!--            console.log(json);-->
-<!--            window.location.href = `/fail.html?message=${json.message}&code=${json.code}`;-->
-<!--        }-->
+        if (!response.ok) {
+            console.log(json);
+            window.location.href = `/paymentFail.html?message=${json.message}&code=${json.code}`;
+        }
 
-<!--        // 결제 성공 비즈니스 로직을 구현하세요.-->
-<!--        console.log(json);-->
-<!--    }-->
+        redirectToPageWithToken(`/index.html`);
+    }
 
-<!--    confirm();-->
+    confirm();
 
-<!--</script>-->
+</script>
 </html>
