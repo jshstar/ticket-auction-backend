@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
-import com.sparta.ticketauction.domain.admin.request.GradeRequest;
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
-import com.sparta.ticketauction.domain.admin.request.ZoneGradeRequest;
-import com.sparta.ticketauction.domain.admin.response.GoodsResponse;
-import com.sparta.ticketauction.domain.admin.response.GradeResponse;
-import com.sparta.ticketauction.domain.admin.response.PlaceResponse;
-import com.sparta.ticketauction.domain.admin.response.ZoneGradeResponse;
+import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.GradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
+import com.sparta.ticketauction.domain.admin.request.ZoneGradeCreateRequest;
+import com.sparta.ticketauction.domain.admin.response.GoodsCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.GoodsInfoCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.GradeCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.PlaceCreateResponse;
+import com.sparta.ticketauction.domain.admin.response.ZoneGradeCreateResponse;
 import com.sparta.ticketauction.domain.admin.service.AdminServiceImpl;
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.global.dto.EmptyObject;
@@ -42,36 +44,60 @@ public class AdminController {
 
 	// 공연장 및 구역 생성
 	@PostMapping("/admin/places")
-	public ResponseEntity<ApiResponse<List<PlaceResponse>>> createPlaceAndZone(
-		@Valid @RequestBody PlaceRequest placeRequest
+	public ResponseEntity<ApiResponse<List<PlaceCreateResponse>>> createPlaceAndZone(
+		@Valid @RequestBody PlaceCreateRequest placeCreateRequest
 	) {
-		List<PlaceResponse> placeResponseList = adminService.createPlaceAndZone(placeRequest);
+		List<PlaceCreateResponse> placeCreateResponseList = adminService.createPlaceAndZone(placeCreateRequest);
 		return ResponseEntity
 			.status(SUCCESS_PLACE_AND_ZONE_CREATE.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_PLACE_AND_ZONE_CREATE.getCode(),
 					SUCCESS_PLACE_AND_ZONE_CREATE.getMessage(),
-					placeResponseList)
+					placeCreateResponseList)
 			);
 	}
 
-	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
-	@PostMapping(value = "/admin/places/{placeId}/goods",
+	//  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지 생성
+	@PostMapping(value = "/admin/goodsInfos",
 		consumes = {
 			MediaType.APPLICATION_JSON_VALUE,
 			MediaType.MULTIPART_FORM_DATA_VALUE
 		})
-	public ResponseEntity<ApiResponse<GoodsResponse>> createGoodsBundleAndSchedule(
-		@Valid @RequestPart GoodsRequest goodsRequest,
+	public ResponseEntity<ApiResponse<GoodsInfoCreateResponse>> createGoodsInfo(
+		@Valid @RequestPart GoodsInfoCreateRequest goodsInfoCreateRequest,
 		@RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
 		@PathVariable Long placeId
 	) {
-		GoodsResponse goodsResponse =
-			adminService.createGoodsBundleAndSchedule(
+		GoodsInfoCreateResponse goodsInfoCreateResponse =
+			adminService.createGoodsBundle(
 				placeId,
-				goodsRequest,
+				goodsInfoCreateRequest,
 				multipartFiles
+			);
+		return ResponseEntity
+			.status(SUCCESS_GOODS_INFO_CREATE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GOODS_INFO_CREATE.getCode(),
+					SUCCESS_GOODS_INFO_CREATE.getMessage(),
+					goodsInfoCreateResponse
+				)
+			);
+	}
+
+	// 공연 및 회차 생성
+	@PostMapping("/admin/goods-infos/{goodsInfoId}/goods")
+	public ResponseEntity<ApiResponse<GoodsCreateResponse>> createGoodsAndSchedule(
+		@Valid @RequestBody GoodsCreateRequest goodsCreateRequest,
+		@PathVariable Long goodsInfoId,
+		@RequestParam Long placeId
+	) {
+		GoodsCreateResponse goodsCreateResponse =
+			adminService.createGoodsAndSchedule(
+				goodsCreateRequest,
+				goodsInfoId,
+				placeId
 			);
 		return ResponseEntity
 			.status(SUCCESS_GOODS_AND_SCHEDULE_CREATE.getHttpStatus())
@@ -79,18 +105,18 @@ public class AdminController {
 				ApiResponse.of(
 					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getCode(),
 					SUCCESS_GOODS_AND_SCHEDULE_CREATE.getMessage(),
-					goodsResponse
+					goodsCreateResponse
 				)
 			);
 	}
 
 	// 등급 생성
 	@PostMapping("/admin/goods/{goodsId}/grades")
-	public ResponseEntity<ApiResponse<GradeResponse>> createGrade(
+	public ResponseEntity<ApiResponse<GradeCreateResponse>> createGrade(
 		@PathVariable Long goodsId,
-		@Valid @RequestBody GradeRequest gradeRequest) {
+		@Valid @RequestBody GradeCreateRequest gradeCreateRequest) {
 
-		GradeResponse gradeResponse = adminService.createGrade(goodsId, gradeRequest);
+		GradeCreateResponse gradeCreateResponse = adminService.createGrade(goodsId, gradeCreateRequest);
 
 		return ResponseEntity
 			.status(SUCCESS_GRADE_CREATE.getHttpStatus())
@@ -98,23 +124,23 @@ public class AdminController {
 				ApiResponse.of(
 					SUCCESS_GRADE_CREATE.getCode(),
 					SUCCESS_GRADE_CREATE.getMessage(),
-					gradeResponse)
+					gradeCreateResponse)
 			);
 	}
 
 	// 구역 등급 생성
 	@PostMapping("/admin/zone-grades")
-	public ResponseEntity<ApiResponse<ZoneGradeResponse>> createZoneGrade(
-		@RequestBody ZoneGradeRequest zoneGradeRequest
+	public ResponseEntity<ApiResponse<ZoneGradeCreateResponse>> createZoneGrade(
+		@RequestBody ZoneGradeCreateRequest zoneGradeCreateRequest
 	) {
-		ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+		ZoneGradeCreateResponse zoneGradeCreateResponse = adminService.createZoneGrade(zoneGradeCreateRequest);
 		return ResponseEntity
 			.status(SUCCESS_ZONE_GRADE_CREATE.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_ZONE_GRADE_CREATE.getCode(),
 					SUCCESS_ZONE_GRADE_CREATE.getMessage(),
-					zoneGradeResponse
+					zoneGradeCreateResponse
 				)
 			);
 	}
