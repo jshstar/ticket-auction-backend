@@ -1,0 +1,74 @@
+/* 전체 페이지에 대한 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 800px; /* 적절한 최대 너비 설정 */
+    margin: 20px auto; /* 중앙 정렬 */
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 라벨과 인풋 필드 스타일 */
+label {
+    margin-top: 10px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f8f8;
+}
+
+/* 버튼 스타일 */
+button {
+    padding: 10px 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+/* '제거' 버튼에 대한 추가 스타일 */
+button[onclick*="removeZone"] {
+    background-color: #d9534f;
+    padding: 5px 10px;
+}
+
+button[onclick*="removeZone"]:hover {
+    background-color: #c9302c;
+}
