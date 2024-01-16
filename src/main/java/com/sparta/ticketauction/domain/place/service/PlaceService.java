@@ -2,7 +2,7 @@ package com.sparta.ticketauction.domain.place.service;
 
 import java.util.List;
 
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.response.PlaceGetResponse;
@@ -10,7 +10,7 @@ import com.sparta.ticketauction.domain.place.response.PlaceGetResponse;
 public interface PlaceService {
 
 	// 공연장 생성
-	Place createPlace(PlaceRequest placeRequest);
+	Place createPlace(PlaceCreateRequest placeCreateRequest);
 
 	// 공연장 총 좌석 개수 계산
 	Integer calculateSeats(List<ZoneInfo> seats);

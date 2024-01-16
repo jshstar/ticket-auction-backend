@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sparta.ticketauction.domain.admin.request.PlaceRequest;
+import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.repository.PlaceRepository;
@@ -21,12 +21,12 @@ public class PlaceServiceImpl implements PlaceService {
 
 	// 공연장 생성
 	@Override
-	public Place createPlace(PlaceRequest placeRequest) {
-		List<ZoneInfo> zoneInfos = placeRequest.getZoneInfos();
+	public Place createPlace(PlaceCreateRequest placeCreateRequest) {
+		List<ZoneInfo> zoneInfos = placeCreateRequest.getZoneInfos();
 
 		Integer totalSeat = calculateSeats(zoneInfos);
 
-		Place place = placeRequest.toEntity(totalSeat);
+		Place place = placeCreateRequest.toEntity(totalSeat);
 
 		return placeRepository.save(place);
 	}
