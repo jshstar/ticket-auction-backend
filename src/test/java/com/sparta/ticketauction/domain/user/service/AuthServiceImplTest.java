@@ -117,8 +117,8 @@ class AuthServiceImplTest {
 			given(jwtUtil.resolveRefreshToken(any())).willReturn(refreshToken);
 			given(jwtUtil.getUserInfoFromToken(any())).willReturn(claims);
 			given(lettuceUtils.get(any())).willReturn(refreshToken);
-			given(jwtUtil.createAccessToken(any(), any(), any())).willReturn(newAccessToken);
-			given(jwtUtil.createRefreshToken(any(), any(), any())).willReturn(newRefreshToken);
+			given(jwtUtil.createAccessToken(any(), any(), any(), any())).willReturn(newAccessToken);
+			given(jwtUtil.createRefreshToken(any(), any(), any(), any())).willReturn(newRefreshToken);
 
 			// When
 			sut.reissue(request, response);
@@ -127,8 +127,8 @@ class AuthServiceImplTest {
 			verify(jwtUtil).resolveRefreshToken(any());
 			verify(jwtUtil).getUserInfoFromToken(any());
 			verify(lettuceUtils).get(any());
-			verify(jwtUtil).createAccessToken(any(), any(), any());
-			verify(jwtUtil).createRefreshToken(any(), any(), any());
+			verify(jwtUtil).createAccessToken(any(), any(), any(), any());
+			verify(jwtUtil).createRefreshToken(any(), any(), any(), any());
 		}
 	}
 }
