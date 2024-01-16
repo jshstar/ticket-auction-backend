@@ -64,16 +64,12 @@ public class GoodsInfo extends BaseEntity {
 		String name,
 		String description,
 		Integer runningTime,
-		Integer ageGrade,
-		GoodsCategory goodsCategory,
-		List<GoodsImage> goodsImage
+		Integer ageGrade
 	) {
 		this.name = name;
 		this.description = description;
 		this.runningTime = runningTime;
 		this.ageGrade = AgeGrade.of(ageGrade);
-		this.goodsCategory = goodsCategory;
-		this.goodsImage = goodsImage;
 	}
 
 	public void addGoodsImage(List<GoodsImage> goodsImages) {

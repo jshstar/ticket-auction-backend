@@ -7,3 +7,7 @@ a {
     color: black;
 }
 
+.dropdown-item:hover {
+    background-color: black !important;
+    color: white !important;
+}

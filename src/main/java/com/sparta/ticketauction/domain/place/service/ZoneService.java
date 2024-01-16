@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sparta.ticketauction.domain.place.dto.ZoneInfo;
 import com.sparta.ticketauction.domain.place.entity.Zone;
+import com.sparta.ticketauction.domain.place.response.ZoneGetResponse;
 
 public interface ZoneService {
 
@@ -12,4 +13,7 @@ public interface ZoneService {
 
 	// 구역 프록시 객체 생성
 	Zone getReferenceById(Long zoneId);
+
+	// 공연장 구역 전체 조회
+	List<ZoneGetResponse> getAllZone(Long placeId);
 }

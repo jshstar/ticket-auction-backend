@@ -21,7 +21,8 @@ public enum ErrorCode {
 	REQUIRED_ADMIN_USER_AUTHORITY(HttpStatus.UNAUTHORIZED, "U19900", "관리자 권한이 필요합니다."),
 
 	/* GOODS */
-	NOT_FOUND_GOODS(HttpStatus.NOT_FOUND, "G10000", "해당하는 공연 정보가 없습니다."),
+	NOT_FOUND_GOODS(HttpStatus.NOT_FOUND, "G10000", "해당하는 공연이 없습니다."),
+	NOT_FOUND_GOODS_INFO(HttpStatus.NOT_FOUND, "G10001", "해당하는 공연 정보가 없습니다."),
 
 	/* SCHEDULE */
 	NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
@@ -43,7 +44,9 @@ public enum ErrorCode {
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
 
 	/* PAYMENT */
-	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P100000", "결제할 포인트가 부족합니다"),
+	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P10000", "결제할 포인트가 부족합니다"),
+	NOT_FOUND_ORDER_ID(HttpStatus.NOT_FOUND, "P10100", "해당 id를 가진 결제 요청이 없습니다."),
+	NOT_EQUALS_AMOUNT(HttpStatus.BAD_REQUEST, "P10101", "결제 금액과 요청 결제 금액이 일치하지 않습니다."),
 
 	/* GLOBAL */
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
