@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="https://js.tosspayments.com/v1/payment"></script>
 
+    <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/payment.js"></script>
     <link href="/css/payment.css" rel="stylesheet">
@@ -60,11 +61,21 @@
             </form>
         </div>
         <div class="form-group pt-3">
-            <button class="btn btn-dark w-100" onclick="pay('카드')" style="height: 50px;" type="submit">결제
+            <button class="btn btn-dark w-100" id="pay-button" style="height: 50px;" type="submit">결제
             </button>
         </div>
 
     </div>
 </div>
 </body>
+<script>
+    // 페이지 로드 시 로그인 상태 확인 후 UI 업데이트
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    })
+    $("#pay-button").on("click", function () {
+        pay('카드');
+    });
+
+</script>
 </html>

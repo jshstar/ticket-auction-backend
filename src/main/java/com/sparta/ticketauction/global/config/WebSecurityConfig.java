@@ -72,11 +72,9 @@ public class WebSecurityConfig {
 			(request) ->
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-					.requestMatchers("/api/v1/auth/status", "/api/v1/payments/getKey").permitAll()
+					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
 					.requestMatchers("/*.html").permitAll()
-					.requestMatchers(
-						"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/signup/sms"
-					).permitAll()
+					.requestMatchers("/api/v1/users/signup").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
