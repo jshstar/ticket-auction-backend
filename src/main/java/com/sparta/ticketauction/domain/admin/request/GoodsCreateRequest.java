@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class GoodsCreateRequest {
 	@NotNull(message = "공연제목 기입은 필수 입니다.")
 	@Pattern(
-		regexp = "([^\\s-]+(?:\\s+[^\\s-]+)*)\\s*-\\s*([^\\s-]+(?:\\s+[^\\s-]+)*)",
+		regexp = "([A-Za-z0-9\\s(){}<>가-힣]+) - ([A-Za-z0-9\\s(){}<>가-힣]+)",
 		message = "입력 양식: (공연제목) - (지역 및 목표) 입니다.")
 	private final String title;
 
