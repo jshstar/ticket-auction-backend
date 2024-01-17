@@ -2,6 +2,8 @@ package com.sparta.ticketauction.domain.bid.service;
 
 import java.util.Optional;
 
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
@@ -24,4 +26,6 @@ public interface BidService {
 	 * @return 최근 입찰
 	 */
 	Optional<Bid> getCurrentBid(Auction auction);
+
+	SseEmitter subscribe(Long auctionId);
 }

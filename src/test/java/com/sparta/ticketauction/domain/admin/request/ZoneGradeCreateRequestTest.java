@@ -25,7 +25,7 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class ZoneGradeRequestTest {
+public class ZoneGradeCreateRequestTest {
 
 	private static ValidatorFactory factory;
 	private static Validator validator;
@@ -49,10 +49,10 @@ public class ZoneGradeRequestTest {
 	@Test
 	void 구역_아이디_검증_테스트() {
 		// given
-		ZoneGradeRequest zoneGradeRequest = new ZoneGradeRequest(null, this.gradeId);
+		ZoneGradeCreateRequest zoneGradeCreateRequest = new ZoneGradeCreateRequest(null, this.gradeId);
 
 		// when
-		Set<ConstraintViolation<ZoneGradeRequest>> violations = validator.validate(zoneGradeRequest);
+		Set<ConstraintViolation<ZoneGradeCreateRequest>> violations = validator.validate(zoneGradeCreateRequest);
 
 		// then
 		assertThat(violations).isNotEmpty();
@@ -66,10 +66,10 @@ public class ZoneGradeRequestTest {
 	@Test
 	void 등급_아이디_검증_테스트() {
 		// given
-		ZoneGradeRequest zoneGradeRequest = new ZoneGradeRequest(this.zoneId, null);
+		ZoneGradeCreateRequest zoneGradeCreateRequest = new ZoneGradeCreateRequest(this.zoneId, null);
 
 		// when
-		Set<ConstraintViolation<ZoneGradeRequest>> violations = validator.validate(zoneGradeRequest);
+		Set<ConstraintViolation<ZoneGradeCreateRequest>> violations = validator.validate(zoneGradeCreateRequest);
 
 		// then
 		assertThat(violations).isNotEmpty();
@@ -82,7 +82,7 @@ public class ZoneGradeRequestTest {
 
 	@Test
 	void 구역_등급_Entity_생성_테스트() {
-		ZoneGradeRequest zoneGradeRequest = new ZoneGradeRequest(this.zoneId, this.gradeId);
+		ZoneGradeCreateRequest zoneGradeCreateRequest = new ZoneGradeCreateRequest(this.zoneId, this.gradeId);
 		Place place = Mockito.mock();
 		Goods goods = Mockito.mock();
 		Zone zone =
@@ -101,7 +101,7 @@ public class ZoneGradeRequestTest {
 				.goods(goods)
 				.build();
 		place.updateZone(List.of(zone));
-		ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
+		ZoneGrade zoneGrade = zoneGradeCreateRequest.toEntity(zone, grade);
 
 		// when
 		assertEquals(zoneGrade.getZone(), zone);

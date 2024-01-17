@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PlaceRequest {
+public class PlaceCreateRequest {
 	@Size(min = 1, max = 30, message = "공연장 이름은 필수입니다.")
 	private final String name;
 

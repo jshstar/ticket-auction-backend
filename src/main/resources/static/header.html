@@ -15,6 +15,8 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet">
 
     <link href="/css/style.css" rel="stylesheet">
+
+    <script src="/js/basic.js"></script>
 </head>
 <body>
 
@@ -43,9 +45,9 @@
                 <h3 class="dropdown-header" id="nickname"></h3>
                 <h3 class="dropdown-item" id="header-point">보유 포인트</h3>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onclick="redirectToPageWithToken(`/paymentRequest.html`)">포인트 충전</a>
+                <a class="dropdown-item" id="charge-point">포인트 충전</a>
                 <a class="dropdown-item" href="#">마이페이지</a>
-                <a class="dropdown-item" onclick="requestLogout();" style="color: black;">로그아웃</a>
+                <a class="dropdown-item logout" style="color: black;">로그아웃</a>
             </div>
         </li>
         <li class="nav-item dropdown" id="admin-set"
@@ -60,11 +62,22 @@
                 <a class="dropdown-item">공연장 추가</a>
                 <a class="dropdown-item" href="#">공연 추가</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onclick="requestLogout();" style="color: black;">로그아웃</a>
+                <a class="dropdown-item logout" style="color: black;">로그아웃</a>
             </div>
         </li>
     </ul>
 </header>
 
 </body>
+<script>
+    $("#login").on("click", function () {
+        movePageWithToken("/login.html");
+    });
+    $("#charge-point").on("click", function () {
+        movePageWithToken(`/paymentRequest.html`);
+    });
+    $(".logout").on("click", function () {
+        confirmFuncLogout();
+    });
+</script>
 </html>

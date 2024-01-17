@@ -59,4 +59,9 @@ public class BidRedisRepository {
 	public boolean isExpired(Long auctionId) {
 		return getBucket(auctionId).remainTimeToLive() < 1;
 	}
+
+	public Optional<Long> getRemainTIme(Long auctionId) {
+		RBucket<Long> bucket = getBucket(auctionId);
+		return Optional.of(bucket.remainTimeToLive());
+	}
 }

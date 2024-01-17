@@ -1,6 +1,7 @@
 package com.sparta.ticketauction.domain.bid.service;
 
-import org.redisson.api.RBucket;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
@@ -25,12 +26,12 @@ public class BidRedisService {
 		redisRepository.setValue(auctionId, bidPrice);
 	}
 
-	public RBucket<Long> getBucket(Long auctionId) {
-		return redisRepository.getBucket(auctionId);
-	}
-
 	public boolean isExpired(Long auctionId) {
 		return redisRepository.isExpired(auctionId);
 	}
 
+	public long getRemainTimeMilli(Long auctionId) {
+		Optional<Long> remainTimeMilliOps = redisRepository.getRemainTIme(auctionId);
+		return remainTimeMilliOps.orElse(0L);
+	}
 }
