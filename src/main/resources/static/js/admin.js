@@ -154,20 +154,20 @@ function submitGoodsInfo(token) {
             if (token) {
                 xhr.setRequestHeader('Authorization', token);
             }
-            $("#submitButton").prop('disabled', true).text('Submitting...');
         },
         success: function (response) {
             alert('공연 정보가 성공적으로 추가되었습니다.');
             console.log(response);
             // 폼 초기화 등 추가 작업 수행
+            $("#submitButton").prop('disabled', true).text('제출 됨');
         },
         error: function (xhr, status, error) {
             alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
         },
-        complete: function () {
-            // 요청이 완료되면 버튼을 다시 활성화
-            $("#submitButton").prop('disabled', false).text('Add Performance Info');
-        }
+        // complete: function () {
+        //     // 요청이 완료되면 버튼을 다시 활성화
+        //     $("#submitButton").prop('disabled', false).text('Add Performance Info');
+        // }
     });
 }
 

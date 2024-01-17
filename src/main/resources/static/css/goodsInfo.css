@@ -39,3 +39,12 @@ body {
     background-color: #cccccc;
     cursor: not-allowed;
 }
+
+#goodsPage {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    float: right;
+}
