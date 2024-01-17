@@ -20,6 +20,7 @@
 
 </head>
 <body>
+
 <div class="row mt-5 justify-content-center">
     <div class="col-8">
         <div>
@@ -27,7 +28,7 @@
                 <a class="list-group-item list-group-item-action" href="#" id="get-user-info">
                     회원 정보
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
+                <a class="list-group-item list-group-item-action" href="#" id="update-user-info">
                     회원 정보 변경
                 </a>
                 <a class="list-group-item list-group-item-action" href="#">
@@ -52,10 +53,14 @@
         </div>
     </div>
 </div>
+
 </body>
 <script>
     $("#get-user-info").on("click", function () {
         movePageWithToken(`/user-info.html`);
+    });
+    $("#update-user-info").on("click", function () {
+        movePageWithToken(`/update-user-info.html`);
     });
 </script>
 </html>
