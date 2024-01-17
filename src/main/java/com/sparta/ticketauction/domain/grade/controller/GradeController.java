@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class GradeController {
 
 	// 해당 공현의 등급 전체 정보 조회
 	@GetMapping("/goods/{goodsId}/grade")
-	public ResponseEntity<ApiResponse<List<GradeGetResponse>>> getAllGrade(Long goodsId) {
+	public ResponseEntity<ApiResponse<List<GradeGetResponse>>> getAllGrade(@PathVariable Long goodsId) {
 		List<GradeGetResponse> gradeGetResponses = gradeService.getAllGrade(goodsId);
 		return ResponseEntity
 			.status(
