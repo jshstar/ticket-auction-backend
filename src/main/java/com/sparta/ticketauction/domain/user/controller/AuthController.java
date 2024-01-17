@@ -21,6 +21,7 @@ import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,7 +39,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup/sms")
-	public ResponseEntity<ApiResponse> verifyPhone(@RequestBody UserForVerificationRequest request) {
+	public ResponseEntity<ApiResponse> verifyPhone(@RequestBody @Valid UserForVerificationRequest request) {
 		SmsResponse response = authService.verifyPhone(request);
 		return ResponseEntity.status(SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS.getHttpStatus())
 			.body(ApiResponse.of(
