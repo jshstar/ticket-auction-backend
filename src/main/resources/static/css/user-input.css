@@ -18,6 +18,15 @@ input {
     height: 50px;
 }
 
+.input-group-text {
+    height: 50px;
+    margin-top: 10px;
+}
+
+.custom-btn {
+    height: 50px;
+}
+
 .logo {
     width: 16px;
     height: 16px;
