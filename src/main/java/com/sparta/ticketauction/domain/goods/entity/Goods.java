@@ -31,7 +31,7 @@ public class Goods extends BaseEntity {
 	private Long id;
 
 	@Comment("공연 제목")
-	@Column(name = "title")
+	@Column(name = "title", nullable = false)
 	private String title;
 
 	@Comment("공연 시작일")
