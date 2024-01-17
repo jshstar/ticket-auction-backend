@@ -40,4 +40,21 @@ public class PointController {
 				)
 			);
 	}
+
+	@GetMapping("/use")
+	public ResponseEntity<ApiResponse> getUsePointLogList(
+		@CurrentUser User user,
+		@PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC)
+		Pageable pageable
+	) {
+		var response = pointService.getUsePointLogList(user, pageable);
+		return ResponseEntity.status(SUCCESS_GET_USE_POINT_LOG_LIST.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GET_USE_POINT_LOG_LIST.getCode(),
+					SUCCESS_GET_USE_POINT_LOG_LIST.getMessage(),
+					response
+				)
+			);
+	}
 }

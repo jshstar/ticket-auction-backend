@@ -17,6 +17,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.response.PointChargeResponse;
+import com.sparta.ticketauction.domain.user.response.PointUseResponse;
 
 @Repository
 
@@ -40,6 +41,30 @@ public class PointRepositoryCustomImpl implements PointRepositoryCustom {
 			.where(
 				point.user.id.eq(userId)
 					.and(point.type.eq(PointType.CHARGE))
+			)
+			.orderBy(sortPoint(pageable))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		JPAQuery<Long> count = jpaQueryFactory.select(point.count())
+			.from(point);
+
+		return PageableExecutionUtils.getPage(list, pageable, count::fetchOne);
+	}
+
+	@Override
+	public Page<PointUseResponse> findUsePointListByPage(Long userId, Pageable pageable) {
+		List<PointUseResponse> list = jpaQueryFactory
+			.select(Projections.constructor(PointUseResponse.class,
+				point.id,
+				point.createdAt,
+				point.changePoint
+			))
+			.from(point)
+			.where(
+				point.user.id.eq(userId)
+					.and(point.type.eq(PointType.USE))
 			)
 			.orderBy(sortPoint(pageable))
 			.offset(pageable.getOffset())
