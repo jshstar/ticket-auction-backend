@@ -33,10 +33,11 @@ public enum SuccessCode {
 	SUCCESS_GET_ALL_SCHEDULE(HttpStatus.OK, "S00000", "전 회차 조회 성공했습니다."),
 
 	/* AUCTION */
-	SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "B00500", "경매 정보 조회에 성공했습니다."),
+	SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "A00500", "경매 정보 조회에 성공했습니다."),
 
 	/* BID */
-	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
+	SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
+	SUCCESS_BID(HttpStatus.CREATED, "B00100", "입찰에 성공했습니다."),
 
 
 
