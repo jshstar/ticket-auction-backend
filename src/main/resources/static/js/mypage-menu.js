@@ -1,13 +1,3 @@
-$(document).ready(function () {
-    $("#settings-menu a").click(function () {
-        // 모든 링크에서 'active' 클래스 제거
-        $("#settings-menu a").removeClass("active");
-
-        // 클릭된 링크에 'active' 클래스 추가
-        $(this).addClass("active");
-    });
-});
-
 function getMyInfo(token, id) {
     $.ajax({
         type: "GET",

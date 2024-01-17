@@ -46,7 +46,7 @@
                 <h3 class="dropdown-item" id="header-point">보유 포인트</h3>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" id="charge-point">포인트 충전</a>
-                <a class="dropdown-item" href="#">마이페이지</a>
+                <a class="dropdown-item" id="mypage">마이페이지</a>
                 <a class="dropdown-item logout" style="color: black;">로그아웃</a>
             </div>
         </li>
@@ -78,6 +78,9 @@
     });
     $(".logout").on("click", function () {
         confirmFuncLogout();
+    });
+    $("#mypage").on("click", function () {
+        movePageWithToken(`/user-info.html`);
     });
 </script>
 </html>

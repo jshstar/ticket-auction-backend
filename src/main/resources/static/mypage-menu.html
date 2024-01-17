@@ -24,30 +24,28 @@
     <div class="col-8">
         <div>
             <div class="list-group" id="settings-menu">
-                <a class="list-group-item list-group-item-action" data-menu="profile" href="/settings/profile">
+                <a class="list-group-item list-group-item-action" href="#" id="get-user-info">
                     회원 정보
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="password" href="/settings/password">
+                <a class="list-group-item list-group-item-action" href="#">
                     회원 정보 변경
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="tags" href="/settings/tags">
+                <a class="list-group-item list-group-item-action" href="#">
                     비밀 번호 변경
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="notification"
-                   href="/settings/notification">
+                <a class="list-group-item list-group-item-action" href="#">
                     포인트 충전 내역
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="zones" href="/settings/zones">
+                <a class="list-group-item list-group-item-action" href="#">
                     포인트 사용 내역
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="zones" href="/settings/zones">
+                <a class="list-group-item list-group-item-action" href="#">
                     예매 내역
                 </a>
-                <a class="list-group-item list-group-item-action" data-menu="zones" href="/settings/zones">
+                <a class="list-group-item list-group-item-action" href="#">
                     참여 경매 내역
                 </a>
-                <a class="list-group-item list-group-item-action list-group-item-danger" data-menu="account"
-                   href="/settings/account">
+                <a class="list-group-item list-group-item-action list-group-item-danger" href="#">
                     회원 탈퇴
                 </a>
             </div>
@@ -55,4 +53,9 @@
     </div>
 </div>
 </body>
+<script>
+    $("#get-user-info").on("click", function () {
+        movePageWithToken(`/user-info.html`);
+    });
+</script>
 </html>

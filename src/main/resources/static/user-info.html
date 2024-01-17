@@ -59,7 +59,15 @@
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    $("#menu").load("/mypage-menu.html");
+    $("#menu").load("/mypage-menu.html", function (response, status, xhr) {
+        $(document).ready(function () {
+            // 모든 링크에서 'active' 클래스 제거
+            $("#settings-menu a").removeClass("active");
+
+            // 클릭된 링크에 'active' 클래스 추가
+            $("#get-user-info").addClass("active");
+        });
+    });
 
     const id = getUserId();
     reissueToken((token => {
