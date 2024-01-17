@@ -31,7 +31,7 @@
                 <a class="list-group-item list-group-item-action" href="#" id="update-user-info">
                     회원 정보 변경
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
+                <a class="list-group-item list-group-item-action" href="#" id="update-user-password">
                     비밀 번호 변경
                 </a>
                 <a class="list-group-item list-group-item-action" href="#">
@@ -61,6 +61,9 @@
     });
     $("#update-user-info").on("click", function () {
         movePageWithToken(`/update-user-info.html`);
+    });
+    $("#update-user-password").on("click", function () {
+        movePageWithToken(`/update-password.html`);
     });
 </script>
 </html>

@@ -93,3 +93,55 @@ function resetValidationMessages() {
     $("#update-nickname-span, #update-phoneNumber-span, #update-verificationNumber-span")
         .text("");
 }
+
+let readyToUpdate = false;
+
+function checkPasswordMatch() {
+    let password = $("#update-password").val();
+    let confirmPassword = $("#update-password-check").val();
+    let messageElement = $("#update-passwordMatchMessage");
+
+    // 비밀번호와 비밀번호 확인 값이 동일한지 확인
+    if (password === confirmPassword) {
+        messageElement.text("비밀번호가 일치합니다.").css("color", "green")
+            .removeClass("password-mismatch").addClass("password-match");
+        readyToUpdate = true;
+    } else {
+        messageElement.text("비밀번호가 일치하지 않습니다.").css("color", "red")
+            .removeClass("password-match").addClass("password-mismatch");
+        readyToUpdate = false;
+    }
+}
+
+function updatePassword(token, id) {
+    let password = $("#update-password").val();
+
+    $.ajax({
+        type: "PATCH",
+        url: `/api/v1/users/${id}`,
+        contentType: 'application/json',
+        headers: {
+            "Authorization": token
+        },
+        data: JSON.stringify({
+            password: password
+        }),
+        success: function (data) {
+            alert("비밀 번호 변경이 완료되었습니다.");
+            movePageWithToken(`/user-info.html`);
+        },
+        error: function (jqXHR, textStatus) {
+            resetValidationMessages();
+            let response = jqXHR.responseJSON;
+            if (response.data) {
+                $("#update-password-span").text(response.data.password);
+            }
+            if (response) {
+                if (response.code.substring(2, 4) === "02") {
+                    $("#update-password-span").text(response.message);
+                }
+
+            }
+        }
+    });
+}
