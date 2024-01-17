@@ -4,7 +4,7 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import org.springframework.stereotype.Service;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
@@ -19,8 +19,9 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public final GoodsRepository goodsRepository;
 
-	public Goods createGoods(GoodsRequest goodsRequest, Place place, GoodsInfo goodsInfo) {
-		Goods goods = goodsRequest.toGoodsEntity(place, goodsInfo);
+	@Override
+	public Goods createGoods(GoodsCreateRequest goodsCreateRequest, Place place, GoodsInfo goodsInfo) {
+		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
 
 		return goodsRepository.save(goods);
 	}

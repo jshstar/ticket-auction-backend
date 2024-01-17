@@ -30,6 +30,10 @@ public class Goods extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Comment("공연 제목")
+	@Column(name = "title", nullable = false)
+	private String title;
+
 	@Comment("공연 시작일")
 	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
@@ -49,7 +53,8 @@ public class Goods extends BaseEntity {
 	private Place place;
 
 	@Builder
-	private Goods(LocalDate startDate, LocalDate endDate, GoodsInfo goodsInfo, Place place) {
+	private Goods(String title, LocalDate startDate, LocalDate endDate, GoodsInfo goodsInfo, Place place) {
+		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.goodsInfo = goodsInfo;

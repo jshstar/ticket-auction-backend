@@ -2,12 +2,15 @@ package com.sparta.ticketauction.domain.goods.response;
 
 import java.util.List;
 
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 
 import lombok.Getter;
 
 @Getter
 public class GoodsInfoGetResponse {
+	private final List<GoodsGetResponse> goodsGetResponse;
+
 	private final String name;
 
 	private final String description;
@@ -20,7 +23,8 @@ public class GoodsInfoGetResponse {
 
 	private final List<GoodsImageResponse> goodsImages;
 
-	public GoodsInfoGetResponse(GoodsInfo goodsInfo) {
+	public GoodsInfoGetResponse(GoodsInfo goodsInfo, List<Goods> goodsList) {
+		this.goodsGetResponse = goodsList.stream().map(GoodsGetResponse::new).toList();
 		this.name = goodsInfo.getName();
 		this.description = goodsInfo.getDescription();
 		this.runningTime = goodsInfo.getRunningTime();

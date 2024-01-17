@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class GradeRequest {
+public class GradeCreateRequest {
 	@Size(min = 1, max = 30, message = "1~30자 사이로 입력해주세요.")
 	private final String name;
 

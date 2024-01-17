@@ -3,7 +3,9 @@ package com.sparta.ticketauction.domain.goods.service;
 import static com.sparta.ticketauction.domain.admin.service.AdminServiceImpl.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -12,13 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sparta.ticketauction.domain.admin.request.GoodsRequest;
+import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
+import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
+import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetSliceResponse;
 import com.sparta.ticketauction.global.exception.ApiException;
@@ -37,10 +41,12 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 
 	private final GoodsCategoryRepository goodsCategoryRepository;
 
+	private final GoodsRepository goodsRepository;
+
 	// 공연 정보 생성
 	@Override
-	public GoodsInfo createGoodsInfo(GoodsRequest goodsRequest) {
-		GoodsInfo goodsInfo = goodsRequest.toGoodsInfoEntity();
+	public GoodsInfo createGoodsInfo(GoodsInfoCreateRequest goodsInfoCreateRequest) {
+		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
 
 		return goodsInfoRepository.save(goodsInfo);
 	}
@@ -118,10 +124,18 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	@Override
 	@Transactional(readOnly = true)
 	public GoodsInfoGetResponse getGoodsInfo(Long goodsInfoId) {
-		GoodsInfo goodsInfo = goodsInfoRepository.findById(goodsInfoId)
-			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS_INFO)
-			);
-		return new GoodsInfoGetResponse(goodsInfo);
+		GoodsInfo goodsInfo = findByGoodsInfoId(goodsInfoId);
+		List<Goods> filterGoodsList = checkGoods(goodsInfo);
+		return new GoodsInfoGetResponse(goodsInfo, filterGoodsList);
+	}
+
+	// 공연 체크 이미 끝난 공연은 제외
+	@Override
+	public List<Goods> checkGoods(GoodsInfo goodsInfo) {
+		return goodsInfo.getGoods().stream()
+			.filter(goods -> goods.getEndDate().isAfter(LocalDate.now()))
+			.sorted(Comparator.comparing(Goods::getStartDate))
+			.toList();
 	}
 
 	// 공연 정보 카테고리별 페이징 페이징 조회
@@ -130,6 +144,13 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
 	public GoodsInfoGetSliceResponse getSliceGoodsInfo(Pageable pageable, String categoryName) {
 		Slice<GoodsInfo> goodsInfoSlice = goodsInfoRepository.findAllByCategoryName(pageable, categoryName);
 		return new GoodsInfoGetSliceResponse(goodsInfoSlice);
+	}
+
+	@Override
+	public GoodsInfo findByGoodsInfoId(Long goodsInfoId) {
+		return goodsInfoRepository.findById(goodsInfoId)
+			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS_INFO));
+
 	}
 
 }

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ZoneGradeResponse {
+public class ZoneGradeCreateResponse {
 	private final String gradeName;
 
 	private final Long auctionPrice;
@@ -16,7 +16,7 @@ public class ZoneGradeResponse {
 
 	private final String zoneName;
 
-	public ZoneGradeResponse(ZoneGrade zoneGrade) {
+	public ZoneGradeCreateResponse(ZoneGrade zoneGrade) {
 		this.gradeName = zoneGrade.getGrade().getName();
 		this.auctionPrice = zoneGrade.getGrade().getAuctionPrice();
 		this.zoneGradeId = zoneGrade.getId();
