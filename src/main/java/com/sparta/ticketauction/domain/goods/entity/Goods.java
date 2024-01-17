@@ -54,6 +54,7 @@ public class Goods extends BaseEntity {
 
 	@Builder
 	private Goods(String title, LocalDate startDate, LocalDate endDate, GoodsInfo goodsInfo, Place place) {
+		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.goodsInfo = goodsInfo;
