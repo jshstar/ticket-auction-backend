@@ -115,8 +115,6 @@ function submitGoodsInfo(token) {
         categoryName: $('#category').val().trim()// 'category' 필드를 'categoryName'으로 매핑
     };
 
-    console.log(jsonPart);
-
     var isValid = isValidPerformanceInput(
         $('#title').val().trim(),
         $('#content').val().trim(),
