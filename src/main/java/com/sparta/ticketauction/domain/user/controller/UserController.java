@@ -82,7 +82,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse> updateUserPassword(
 		@CurrentUser User user,
 		@PathVariable Long userId,
-		@RequestBody UserPasswordUpdateRequest request
+		@RequestBody @Valid UserPasswordUpdateRequest request
 	) {
 		userService.updateUserPassword(user, userId, request);
 		return ResponseEntity.status(SUCCESS_UPDATE_USER_PASSWORD.getHttpStatus())
