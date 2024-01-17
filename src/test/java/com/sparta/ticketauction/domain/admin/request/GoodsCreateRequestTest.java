@@ -93,7 +93,7 @@ public class GoodsCreateRequestTest {
 		violations
 			.forEach(
 				error -> {
-					assertThat(error.getMessage()).isEqualTo("입력 양식: (공연제목)-(지역 및 목표) 입니다.");
+					assertThat(error.getMessage()).isEqualTo("입력 양식: (공연제목) - (지역 및 목표) 입니다.");
 				});
 
 	}
