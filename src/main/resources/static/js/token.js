@@ -12,6 +12,14 @@ function parseJwt(token) {
     }
 }
 
+function getUserId() {
+    let token = Cookies.get('Authorization');
+    const decodedToken = parseJwt(token);
+    if (decodedToken) {
+        return decodedToken.identify;
+    }
+}
+
 // 토큰 만료 여부를 체크하는 함수
 function isTokenExpiring(token) {
     const decodedToken = parseJwt(token);
