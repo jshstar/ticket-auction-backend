@@ -17,6 +17,8 @@ public class UserUtil {
 	public static final String TEST_NICKNAME = "두루미";
 	public static final String TEST_PHONE_NUMBER = "01012345678";
 	public static final LocalDate TEST_BIRTH = LocalDate.of(1990, 1, 1);
+	public static final String TEST_STRING_BIRTH = "1990-01-01";
+
 	public static final String TEST_VERIFICATION_CODE = "123456";
 	public static final String ADMIN_TEST_EMAIL = "admin@gmail.com";
 	public static final String ADMIN_TEST_PASSWORD = "test123!@#";
@@ -61,7 +63,7 @@ public class UserUtil {
 			TEST_NAME,
 			TEST_NICKNAME,
 			TEST_PHONE_NUMBER,
-			TEST_BIRTH,
+			TEST_STRING_BIRTH,
 			TEST_VERIFICATION_CODE
 		);
 	}
@@ -81,7 +83,7 @@ public class UserUtil {
 			name,
 			nickname,
 			phoneNumber,
-			birth,
+			TEST_STRING_BIRTH,
 			verificationNumber
 		);
 	}

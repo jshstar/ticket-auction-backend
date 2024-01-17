@@ -70,7 +70,7 @@ class PointServiceImplTest {
 			Point point = Point.builder()
 				.user(user)
 				.type(PointType.USE)
-				.point(10L)
+				.changePoint(10L)
 				.build();
 
 			given(pointRepository.save(any(Point.class))).willReturn(point);
@@ -85,8 +85,8 @@ class PointServiceImplTest {
 			assertThat(argumentCaptor.getValue().getType().getType())
 				.isEqualTo(point.getType().getType());
 
-			assertThat(argumentCaptor.getValue().getPoint())
-				.isEqualTo(point.getPoint());
+			assertThat(argumentCaptor.getValue().getChangePoint())
+				.isEqualTo(point.getChangePoint());
 		}
 	}
 
@@ -100,20 +100,20 @@ class PointServiceImplTest {
 			Point point = Point.builder()
 				.user(user)
 				.type(PointType.CHARGE)
-				.point(10L)
+				.changePoint(10L)
 				.build();
 
 			given(pointRepository.save(any(Point.class))).willReturn(point);
 
 			// When
-			sut.chargePoint(user, 10L);
+			sut.chargePoint(user, 10L, null);
 
 			// Then
 			verify(pointRepository).save(any(Point.class));
 			verify(pointRepository).save(argumentCaptor.capture());
 
 			assertThat(argumentCaptor.getValue().getUser().getPoint())
-				.isEqualTo(point.getPoint());
+				.isEqualTo(point.getChangePoint());
 		}
 	}
 }
