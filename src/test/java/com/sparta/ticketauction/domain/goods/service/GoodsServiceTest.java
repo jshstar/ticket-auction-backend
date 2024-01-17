@@ -189,7 +189,7 @@ public class GoodsServiceTest {
 		Pageable pageable = PageRequest.of(page, size);
 
 		List<Goods> filteredGoods = this.goodsList.stream()
-			.filter(goods -> goods.getGoodsInfo().getName().equals("연극"))
+			.filter(goods -> goods.getGoodsInfo().getGoodsCategory().getName().equals("연극"))
 			.toList();
 
 		int start = (int)pageable.getOffset();
@@ -213,7 +213,7 @@ public class GoodsServiceTest {
 			this.goodsList.get(0).getId());
 		assertEquals(
 			goodsGetSliceResponse.getGoodsSlice().getContent().get(0).getS3Url(),
-			FILE_PATH + this.goodsList.get(0).getGoodsInfo().getGoodsImage().get(0));
+			S3_PATH + this.goodsList.get(0).getGoodsInfo().getGoodsImage().get(0).getS3Key());
 		assertEquals(goodsGetSliceResponse.getGoodsSlice().getContent().get(0).getTitle(),
 			this.goodsList.get(0).getTitle());
 
