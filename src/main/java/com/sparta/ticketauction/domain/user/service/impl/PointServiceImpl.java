@@ -2,6 +2,8 @@ package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +11,7 @@ import com.sparta.ticketauction.domain.user.entity.Point;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
+import com.sparta.ticketauction.domain.user.response.PointChargeResponse;
 import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -29,7 +32,7 @@ public class PointServiceImpl implements PointService {
 		}
 
 		Point usePoint = Point.builder()
-			.point(point)
+			.changePoint(point)
 			.user(user)
 			.type(PointType.USE)
 			.build();
@@ -40,14 +43,20 @@ public class PointServiceImpl implements PointService {
 
 	@Override
 	@Transactional
-	public void chargePoint(User user, Long point) {
+	public void chargePoint(User user, Long point, String orderId) {
 		Point chargePoint = Point.builder()
-			.point(point)
+			.changePoint(point)
 			.user(user)
 			.type(PointType.CHARGE)
+			.orderId(orderId)
 			.build();
 
 		user.chargePoint(point);
 		pointRepository.save(chargePoint);
+	}
+
+	@Override
+	public Page<PointChargeResponse> getChargePointLogList(User loginUser, Pageable pageable) {
+		return pointRepository.findChargePointListByPage(loginUser.getId(), pageable);
 	}
 }
