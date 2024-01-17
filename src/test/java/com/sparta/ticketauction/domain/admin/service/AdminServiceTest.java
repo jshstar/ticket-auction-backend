@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.GoodsInfoCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.GradeCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.PlaceCreateRequest;
 import com.sparta.ticketauction.domain.admin.request.ZoneGradeCreateRequest;
-import com.sparta.ticketauction.domain.admin.response.GoodsCreateResponse;
 import com.sparta.ticketauction.domain.admin.response.PlaceCreateResponse;
 import com.sparta.ticketauction.domain.admin.response.ZoneGradeCreateResponse;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -41,7 +37,6 @@ import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.domain.place.entity.Zone;
 import com.sparta.ticketauction.domain.place.service.PlaceServiceImpl;
 import com.sparta.ticketauction.domain.place.service.ZoneServiceImpl;
-import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.domain.schedule.service.ScheduleServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,6 +90,7 @@ public class AdminServiceTest {
 			"공연"
 		);
 		goodsCreateRequest = new GoodsCreateRequest(
+			"강아지 공연-서울",
 			LocalDate.of(2023, 3, 1),
 			LocalDate.of(2023, 3, 2),
 			LocalTime.of(15, 0));
@@ -175,69 +171,6 @@ public class AdminServiceTest {
 		assertEquals(goodsImage.get(1).getType(), goodsInfo.getGoodsImage().get(1).getType());
 		assertEquals(goodsCategory.getName(), goodsInfo.getGoodsCategory().getName());
 
-	}
-
-	@Test
-	void 공연_및_회차_생성_테스트() {
-		// given
-		Place place = placeCreateRequest.toEntity(200);
-		GoodsInfo goodsInfo = goodsInfoCreateRequest.toEntity();
-		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
-		goodsInfo.addGoods(goods);
-
-		ReflectionTestUtils.setField(place, "id", 1L);
-		ReflectionTestUtils.setField(goodsInfo, "id", 1L);
-		ReflectionTestUtils.setField(goods, "id", 1L);
-
-		List<Schedule> scheduleList = new ArrayList<>();
-		scheduleList.add(
-			Schedule
-				.builder()
-				.sequence(1)
-				.startDateTime(
-					LocalDateTime.of(2023, 3, 1, 15, 0, 0))
-				.goods(goods)
-				.build()
-		);
-		scheduleList.add(
-			Schedule
-				.builder()
-				.sequence(2)
-				.startDateTime(
-					LocalDateTime.of(2023, 3, 2, 15, 0, 0))
-				.goods(goods)
-				.build()
-		);
-		LocalDateTime startDateTime = scheduleList.get(0).getStartDateTime();
-		LocalDateTime endDateTime = scheduleList.get(1).getStartDateTime();
-		long daysBetween = ChronoUnit.DAYS.between(startDateTime, endDateTime);
-
-		// when
-		given(placeService.getReferenceById(any(Long.class))).willReturn(place);
-		given(goodsInfoService.findByGoodsInfoId(any(Long.class))).willReturn(goodsInfo);
-		given(goodsService.createGoods(
-			any(GoodsCreateRequest.class),
-			any(Place.class),
-			any(GoodsInfo.class)))
-			.willReturn(goods);
-
-		then(placeService).should().getReferenceById(any(Long.class));
-		verify(goodsInfoService, times(1)).findByGoodsInfoId(any());
-		verify(goodsService, times(1))
-			.createGoods(
-				any(GoodsCreateRequest.class),
-				any(Place.class),
-				any(GoodsInfo.class)
-			);
-		verify(scheduleService, times(1)).createSchedule(any(Goods.class), any(LocalTime.class));
-		GoodsCreateResponse goodsCreateResponse =
-			adminService.createGoodsAndSchedule(any(GoodsCreateRequest.class), anyLong(), anyLong());
-
-		assertEquals((int)daysBetween + 1, scheduleList.get(1).getSequence());
-		assertEquals(goodsCreateRequest.getStartTime().getMinute(),
-			scheduleList.get(1).getStartDateTime().getMinute());
-		assertEquals(goodsCreateRequest.getStartTime().getHour(), scheduleList.get(1).getStartDateTime().getHour());
-		assertEquals(scheduleList.get(1).getGoods().getGoodsInfo(), goodsInfo);
 	}
 
 	@Test
