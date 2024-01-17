@@ -45,7 +45,7 @@ function removeZone(button) {
 }
 
 
-function submitPlace() {
+function submitPlace(token) {
     const name = $('#placeName').val().trim();
     const address = $('#address').val().trim();
     let zoneInfos = zones.map(zone => ({
@@ -62,9 +62,6 @@ function submitPlace() {
         address: address,
         zoneInfos: zoneInfos
     };
-
-    // 토큰을 로컬 스토리지에서 가져옵니다.
-    var token = Cookies.get('Authorization');
 
     $.ajax({
         url: '/api/v1/admin/places',
