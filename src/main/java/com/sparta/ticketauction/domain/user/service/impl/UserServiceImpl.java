@@ -2,7 +2,7 @@ package com.sparta.ticketauction.domain.user.service.impl;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
-import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,13 +71,23 @@ public class UserServiceImpl implements UserService {
 	public UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
 		User user = checkAndGetUser(loginUser, userId);
 
-		if (!Objects.requireNonNullElse(request.getNickname(), "").isBlank()) {
+		if (!request.getNickname().isBlank()) {
+			if (request.getNickname().length() < 2 || request.getNickname().length() > 10) {
+				throw new ApiException(INVALID_NICKNAME_LENGTH);
+			}
+			String nicknameRegexp = "^[가-힣]+$";
+			if (!Pattern.matches(nicknameRegexp, request.getNickname())) {
+				throw new ApiException(INVALID_NICKNAME_PATTERN);
+			}
 			checkNickname(request.getNickname());
 			user.updateUserNickName(request.getNickname());
 		}
 
-		if (!Objects.requireNonNullElse(request.getPhoneNumber(), "").isBlank()
-			&& !Objects.requireNonNullElse(request.getVerificationNumber(), "").isBlank()) {
+		if (!request.getPhoneNumber().isBlank()) {
+			String phoneRegexp = "^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$";
+			if (!Pattern.matches(phoneRegexp, request.getPhoneNumber())) {
+				throw new ApiException(INVALID_PHONE_NUMBER_PATTERN);
+			}
 			checkPhoneVerificationCode(request.getPhoneNumber(), request.getVerificationNumber());
 			user.updatePhoneNumber(request.getPhoneNumber());
 		}
