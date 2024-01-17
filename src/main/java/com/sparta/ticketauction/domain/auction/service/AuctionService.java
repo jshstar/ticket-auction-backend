@@ -1,6 +1,9 @@
 package com.sparta.ticketauction.domain.auction.service;
 
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
+import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.global.exception.ApiException;
 
 public interface AuctionService {
 	/**
@@ -19,7 +22,24 @@ public interface AuctionService {
 	 * 경매 상태 변경
 	 * 예매 서비스 - 예매 호출
 	 *
-	 * @param auctionId - 경매 id
+	 * @param auctionId - 경매 식별자 ID
 	 */
 	void endAuction(Long auctionId);
+
+	/**
+	 * 경매 정보 조회
+	 *
+	 * @param auctionId - 경매 식별자 ID
+	 * @return AuctionInfoResponse - 경매 정보 응답 DTO
+	 */
+	AuctionInfoResponse getAuctionInfo(Long auctionId);
+
+	/**
+	 *
+	 * @param auctionId - 경매 식별자 ID
+	 * @return Auction - 경매 Entity
+	 * @exception ApiException - 경매를 못찾는 경우
+	 */
+	Auction getAuction(Long auctionId);
+
 }

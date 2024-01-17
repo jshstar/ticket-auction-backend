@@ -28,4 +28,12 @@ public class LettuceUtils {
 	public boolean hasKey(String key) {
 		return Boolean.TRUE.equals(lettuceTemplate.hasKey(key));
 	}
+
+	public void sendMessage(String channel, Object message) {
+		lettuceTemplate.convertAndSend(channel, message);
+	}
+
+	public String deserializeString(byte[] data) {
+		return lettuceTemplate.getStringSerializer().deserialize(data);
+	}
 }

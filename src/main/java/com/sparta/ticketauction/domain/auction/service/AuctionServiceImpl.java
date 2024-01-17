@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
 import com.sparta.ticketauction.domain.bid.service.BidRedisService;
 import com.sparta.ticketauction.domain.bid.service.BidService;
 import com.sparta.ticketauction.domain.reservation.service.ReservationService;
@@ -53,8 +54,20 @@ public class AuctionServiceImpl implements AuctionService {
 		auction.ended();
 
 		User bidWinner = getBidWinner(auction);
-
 		reservationService.reserve(bidWinner, auction);
+	}
+
+	@Override
+	public AuctionInfoResponse getAuctionInfo(Long auctionId) {
+		Auction auction = getAuction(auctionId);
+		Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
+		return AuctionInfoResponse.from(auction, remainTimeMilli);
+	}
+
+	@Override
+	public Auction getAuction(Long auctionId) {
+		return auctionRepository.findById(auctionId)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
 	}
 
 	public User getBidWinner(Auction auction) {
@@ -63,10 +76,6 @@ public class AuctionServiceImpl implements AuctionService {
 			.getUser();
 	}
 
-	public Auction getAuction(Long auctionId) {
-		return auctionRepository.findById(auctionId)
-			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
-	}
 
 	private long genRemainSeconds(Auction auction) {
 		Duration duration = Duration.between(auction.getStartDateTime(), auction.getEndDateTime());
