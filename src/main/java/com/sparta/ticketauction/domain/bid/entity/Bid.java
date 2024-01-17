@@ -3,11 +3,14 @@ package com.sparta.ticketauction.domain.bid.entity;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.bid.constant.BidStatus;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,6 +45,11 @@ public class Bid extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "auction_id", nullable = false)
 	private Auction auction;
+
+	@Comment("입찰 상태")
+	@Column(name = "status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private BidStatus status = BidStatus.PROCESS;
 
 	@Builder
 	private Bid(Long price, User user, Auction auction) {
