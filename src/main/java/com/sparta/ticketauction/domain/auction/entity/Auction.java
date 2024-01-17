@@ -40,7 +40,7 @@ public class Auction extends BaseEntity {
 	private Schedule schedule;
 
 	@Comment("구역등급")
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zone_grade_id")
 	private ZoneGrade zoneGrade;
 

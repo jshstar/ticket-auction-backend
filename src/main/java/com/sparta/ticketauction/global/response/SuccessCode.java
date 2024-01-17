@@ -34,6 +34,7 @@ public enum SuccessCode {
 
 	/* AUCTION */
 	SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "A00500", "경매 정보 조회에 성공했습니다."),
+	SUCCESS_GET_ALL_JOINED_AUCTION(HttpStatus.OK, "A00600", "참가한 경매 목록 조회에 성공했습니다."),
 
 	/* BID */
 	SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
