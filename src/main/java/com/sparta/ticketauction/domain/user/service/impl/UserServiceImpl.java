@@ -114,8 +114,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void deleteUser(User loginUser, UserDeleteRequest request) {
-		User user = findByUserId(loginUser.getId());
+	public void deleteUser(User loginUser, Long userId, UserDeleteRequest request) {
+		User user = checkAndGetUser(loginUser, userId);
 		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 			throw new ApiException(NOT_MATCH_PASSWORD);
 		}

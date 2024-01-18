@@ -445,7 +445,7 @@ class UserServiceImplTest {
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 
 			// When
-			sut.deleteUser(user, request);
+			sut.deleteUser(user, 1L, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -456,18 +456,18 @@ class UserServiceImplTest {
 			// Given
 			User user = TEST_USER;
 			UserDeleteRequest request = UserDeleteRequest.builder()
-				.password("abcdefg")
+				.password(TEST_PASSWORD)
 				.build();
 
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.deleteUser(user, request)
+				() -> sut.deleteUser(user, 2L, request)
 			);
 
 			// Then
 			assertThat(exception)
-				.hasMessage(NOT_MATCH_PASSWORD.getMessage());
+				.hasMessage(ACCESS_DENIED.getMessage());
 		}
 	}
 
