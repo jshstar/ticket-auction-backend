@@ -1,8 +1,13 @@
 package com.sparta.ticketauction.domain.auction.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
-import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
+import com.sparta.ticketauction.domain.auction.response.AuctionDetailResponse;
 import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
+import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.exception.ApiException;
 
 public interface AuctionService {
@@ -32,7 +37,7 @@ public interface AuctionService {
 	 * @param auctionId - 경매 식별자 ID
 	 * @return AuctionInfoResponse - 경매 정보 응답 DTO
 	 */
-	AuctionInfoResponse getAuctionInfo(Long auctionId);
+	AuctionDetailResponse getAuctionInfo(Long auctionId);
 
 	/**
 	 *
@@ -42,4 +47,12 @@ public interface AuctionService {
 	 */
 	Auction getAuction(Long auctionId);
 
+	/**
+	 * 참가한 경매 내역 조회
+	 *
+	 * @param loginUser - 참가 대상 유저
+	 * @param pageable  - 페이징 처리 구현체
+	 * @return
+	 */
+	Page<AuctionInfoResponse> getMyJoinedAuctions(User loginUser, Pageable pageable);
 }

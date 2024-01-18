@@ -58,16 +58,21 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	@Override
-	public AuctionInfoResponse getAuctionInfo(Long auctionId) {
+	public AuctionDetailResponse getAuctionInfo(Long auctionId) {
 		Auction auction = getAuction(auctionId);
 		Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
-		return AuctionInfoResponse.from(auction, remainTimeMilli);
+		return AuctionDetailResponse.from(auction, remainTimeMilli);
 	}
 
 	@Override
 	public Auction getAuction(Long auctionId) {
 		return auctionRepository.findById(auctionId)
 			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
+	}
+
+	@Override
+	public Page<AuctionInfoResponse> getMyJoinedAuctions(User loginUser, Pageable pageable) {
+		return auctionRepository.getJoinedMyAuctions(loginUser, pageable);
 	}
 
 	public User getBidWinner(Auction auction) {
