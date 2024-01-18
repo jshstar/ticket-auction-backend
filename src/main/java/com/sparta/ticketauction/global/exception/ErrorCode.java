@@ -17,6 +17,7 @@ public enum ErrorCode {
 	// 검증 실패 XXABXX (AB : 01 이메일, 02: 비밀번호, 03: 이름, 04:닉네임, 05: 생일, 06: 전화번호, 07: 검증번호),
 	EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10100", "사용 중인 이메일 입니다."),
 	ALREADY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "U10200", "기존과 다른 비밀 번호를 입력해주세요."),
+	NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "U10201", "비밀번호가 틀렸습니다."),
 	EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10400", "사용 중인 닉네임 입니다."),
 	INVALID_NICKNAME_LENGTH(HttpStatus.BAD_REQUEST, "U10401", "최소 2자, 최대 10자로 입력해주세요."),
 	INVALID_NICKNAME_PATTERN(HttpStatus.BAD_REQUEST, "U10402", "한글로만 입력해주세요."),

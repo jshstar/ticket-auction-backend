@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.user.service;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserDeleteRequest;
 import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
@@ -65,8 +66,9 @@ public interface UserService {
 	 *
 	 * @param user 		로그인 한 유저 정보
 	 * @param userId  	탈퇴할 유저의 id
+	 * @param request	확인용 비밀번호
 	 * */
-	void deleteUser(User user, Long userId);
+	void deleteUser(User user, Long userId, UserDeleteRequest request);
 
 	/*
 	 * 해당 회원의 포인트 찾기
