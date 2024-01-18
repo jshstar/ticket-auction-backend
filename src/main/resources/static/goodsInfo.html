@@ -51,22 +51,20 @@
         </div>
 
     </form>
-    <button onclick="submitGoodsInfo()" id="submitButton">공연 정보 추가</button>
+    <button onclick="submitGoodsInfo()" id="submitGoodsInfoButton">공연 정보 추가</button>
     <button onclick="movePageWithToken()" id="goodsPage">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    $("#submitButton").on("click", function () {
+    $("#submitGoodsInfoButton").on("click", function () {
         reissueToken((token => {
             submitGoodsInfo(token);
         }));
     });
     $("#goodsPage").on("click", function () {
-        reissueToken((token => {
-            submitGoodsInfo(token);
-        }));
+        movePageWithToken("/goods.html");
     });
 </script>
 </body>

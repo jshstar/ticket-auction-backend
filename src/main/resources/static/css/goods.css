@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center; /* 이미지와 폼 가운데 정렬 */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 폼 요소들을 가운데 정렬 */
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-top: 5px;
+    width: 50%; /* 폼 요소 너비 설정 */
+}
+
+button {
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* 이미지 스타일 */
+#goodsInfoImage {
+    max-width: 100%; /* 이미지가 컨테이너 너비를 초과하지 않도록 설정 */
+    height: auto; /* 비율을 유지하면서 높이 자동 조절 */
+    border: 1px solid #ddd; /* 이미지 주변에 경계선 추가 */
+    border-radius: 4px; /* 이미지 모서리 둥글게 */
+    padding: 5px; /* 이미지 주변에 약간의 여백 추가 */
+    margin-top: 20px; /* 이미지와 셀렉트 박스 사이의 여백 추가 */
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    input, select, button {
+        width: 100%; /* 작은 화면에서 폼 요소 너비 조절 */
+    }
+}

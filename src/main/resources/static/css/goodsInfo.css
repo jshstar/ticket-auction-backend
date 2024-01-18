@@ -27,7 +27,7 @@ body {
     margin-bottom: 10px;
 }
 
-#submitButton {
+#submitGoodsInfoButton {
     background-color: #4CAF50;
     color: white;
     padding: 10px 15px;
@@ -35,7 +35,7 @@ body {
     cursor: pointer;
 }
 
-#submitButton:disabled {
+#submitGoodsInfoButton:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
