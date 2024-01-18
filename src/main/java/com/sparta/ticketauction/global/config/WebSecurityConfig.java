@@ -3,6 +3,7 @@ package com.sparta.ticketauction.global.config;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -75,6 +76,8 @@ public class WebSecurityConfig {
 					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
 					.requestMatchers("/*.html").permitAll()
 					.requestMatchers("/api/v1/users/signup").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/v1/place/**").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
