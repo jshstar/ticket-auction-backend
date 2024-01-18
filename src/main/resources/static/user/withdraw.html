@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
-    <script src="/js/mypage-menu.js"></script>
+    <script src="/js/common-menu.js"></script>
 </head>
 <body>
 
@@ -28,23 +28,23 @@
     <div class="col-8">
 
         <div class="row page-name">
-            <h2 class="col-sm-12">비밀번호 수정</h2>
+            <h2 class="col-sm-12">회원 탈퇴</h2>
         </div>
         <div class="form-control px-4 py-3">
             <div class="form-group">
-                <label class="fs-5" for="update-password"><img class="logo" src="/images/pw-icon.png"/>비밀번호</label>
-                <input class="form-control" id="update-password" name="password" type="password">
-                <span>영어, 숫자, 특수문자(!,@,#,$,%,^) 조합으로 최소 8자, 최대 15자로 입력해주세요.</span><br>
-                <span id="update-password-span" style="color: red;"></span>
+                <label class="fs-5" for="delete-password"><img class="logo" src="/images/pw-icon.png"/>비밀번호</label>
+                <input class="form-control password" id="delete-password" name="password" type="password">
+                <span id="delete-password-span" style="color: red;"></span>
             </div>
             <div class="form-group">
-                <label class="fs-5" for="update-password-check"><img class="logo" src="/images/pw-icon.png"/>비밀번호
+                <label class="fs-5" for="delete-password-check"><img class="logo" src="/images/pw-icon.png"/>비밀번호
                     확인</label>
-                <input class="form-control" id="update-password-check" name="password-check" type="password">
-                <span id="update-passwordMatchMessage"></span>
+                <input class="form-control password-check" id="delete-password-check" name="password-check"
+                       type="password">
+                <span class="passwordMatchMessage"></span>
             </div>
             <div class="form-group mt-3">
-                <button class="btn btn-dark w-100 custom-btn" id="update-password-btn" type="submit">수정</button>
+                <button class="btn btn-dark w-100 custom-btn" id="delete-btn" type="submit">회원 탈퇴</button>
             </div>
         </div>
     </div>
@@ -55,25 +55,27 @@
         checkLoginStatus();
     });
 
-    $("#menu").load("/mypage-menu.html", function (response, status, xhr) {
+    $("#menu").load("/user/common-menu.html", function (response, status, xhr) {
         $(document).ready(function () {
             // 모든 링크에서 'active' 클래스 제거
             $("#settings-menu a").removeClass("active");
 
             // 클릭된 링크에 'active' 클래스 추가
-            $("#update-user-password").addClass("active");
+            $("#").addClass("active");
         });
     });
 
     $(document).ready(function () {
-        $("#update-password, #update-password-check").on("input", checkPasswordMatch);
+        $("#delete-password, #delete-password-check").on("input", checkPasswordMatch);
     });
 
     let id = getUserId();
-    $("#update-password-btn").on("click", function () {
-        reissueToken((token => {
-            updatePassword(token, id);
-        }));
+    $("#delete-btn").on("click", function () {
+        if (confirm("잔여 포인트는 모두 소멸됩니다. 정말 탈퇴하시겠습니까? ")) {
+            reissueToken((token => {
+                withdrawUser(token);
+            }));
+        }
     });
 </script>
 </html>

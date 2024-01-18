@@ -74,7 +74,7 @@ public class WebSecurityConfig {
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
-					.requestMatchers("/*.html").permitAll()
+					.requestMatchers("/*.html", "/*/*.html").permitAll()
 					.requestMatchers("/api/v1/users/signup").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
