@@ -21,7 +21,7 @@ public interface BidService {
 	 * @param bidRequest - 입찰 요청 DTO
 	 * @param loginUser - 인증된 로그인 유저
 	 */
-	void handleBid(Long auctionId, BidRequest bidRequest, User loginUser);
+	void bid(Long auctionId, BidRequest bidRequest, User loginUser);
 
 	/**
 	 * 경매의 최근입찰 조회
@@ -41,4 +41,11 @@ public interface BidService {
 	 * @return - 페이징된 입찰내역
 	 */
 	Page<BidInfoResponse> getMyBids(Long auctionId, User loginUser, Pageable pageable);
+
+	/**
+	 * 경매 최고 입찰가 조회
+	 * @param auction
+	 * @return - 해당 경매의 최고 입찰가
+	 */
+	Optional<Long> getMaxBidPrice(Auction auction);
 }

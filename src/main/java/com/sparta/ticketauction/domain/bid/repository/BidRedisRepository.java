@@ -27,9 +27,9 @@ public class BidRedisRepository {
 	private final RedissonClient redissonClient;
 	private final ApplicationEventPublisher publisher;
 
-	public void saveWithExpire(Auction auction, long seconds) {
+	public void saveWithExpire(Auction auction) {
 		RBucket<Long> bucket = getBucket(auction.getId());
-		bucket.set(auction.getStartPrice(), Duration.ofSeconds(seconds));
+		bucket.set(auction.getStartPrice(), Duration.ofSeconds(auction.genRemainSeconds()));
 
 		bucket.addListener((ExpiredObjectListener)name -> {
 			publisher.publishEvent(
@@ -43,7 +43,7 @@ public class BidRedisRepository {
 
 	public Optional<Long> getValue(Long auctionId) {
 		RBucket<Long> bucket = getBucket(auctionId);
-		return Optional.of(bucket.get());
+		return Optional.ofNullable(bucket.get());
 	}
 
 	public void setValue(Long auctionId, Long bidPrice) {
@@ -60,8 +60,8 @@ public class BidRedisRepository {
 		return getBucket(auctionId).remainTimeToLive() < 1;
 	}
 
-	public Optional<Long> getRemainTIme(Long auctionId) {
+	public long getRemainTIme(Long auctionId) {
 		RBucket<Long> bucket = getBucket(auctionId);
-		return Optional.of(bucket.remainTimeToLive());
+		return bucket.remainTimeToLive();
 	}
 }

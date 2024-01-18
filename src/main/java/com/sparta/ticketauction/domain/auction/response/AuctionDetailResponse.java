@@ -16,10 +16,10 @@ public class AuctionDetailResponse {
 	//남은시간
 	private final Long remainTimeMilli;
 
-	public static AuctionDetailResponse from(Auction entity, Long remainTimeMilli) {
+	public static AuctionDetailResponse from(Auction entity, Long bidPrice, Long remainTimeMilli) {
 		return new AuctionDetailResponse(
 			entity.getId(),
-			entity.getBidPrice(),
+			bidPrice,
 			entity.getStartPrice(),
 			remainTimeMilli
 		);
