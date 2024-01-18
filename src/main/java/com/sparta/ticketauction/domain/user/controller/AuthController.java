@@ -38,7 +38,7 @@ public class AuthController {
 			.body(ApiResponse.of(SUCCESS_USER_LOGOUT.getCode(), SUCCESS_USER_LOGOUT.getMessage()));
 	}
 
-	@PostMapping("/signup/sms")
+	@PostMapping("/sms")
 	public ResponseEntity<ApiResponse> verifyPhone(@RequestBody @Valid UserForVerificationRequest request) {
 		SmsResponse response = authService.verifyPhone(request);
 		return ResponseEntity.status(SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS.getHttpStatus())

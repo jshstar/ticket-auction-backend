@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Auction</title>
+
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <script crossorigin="anonymous"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/token.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/mypage-menu.js"></script>
+</head>
+<body>
+
+<header id="headers"></header>
+
+<div class="row mt-5 justify-content-center container">
+    <div class="col-4" id="menu"></div>
+    <div class="col-8">
+
+        <div class="row page-name">
+            <h2 class="col-sm-12">정보 수정</h2>
+        </div>
+        <div class="form-control px-4 py-3">
+            <div class="form-group">
+                <label class="fs-5" for="update-nickname">
+                    <img class="logo" src="/images/email-icon.png"/>닉네임
+                </label>
+                <input class="form-control" id="update-nickname" name="nickname" type="text">
+                <span id="update-nickname-span" style="color: red;"></span>
+            </div>
+            <div class="form-group">
+                <label class="fs-5" for="update-phone">
+                    <img class="logo" src="/images/phone-icon.png"/>핸드폰 번호
+                </label>
+                <div class="row">
+                    <div class="col-md-9">
+                        <input class="form-control" id="update-phone" name="phone" type="tel">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-dark mt-2 custom-btn" id="update-verification-btn" type="submit">
+                            인증번호 발송
+                        </button>
+                    </div>
+                </div>
+                <span id="update-phoneNumber-span" style="color: red;"></span>
+            </div>
+            <label class="fs-5" for="update-verificationCode">
+                <img class="logo" src="/images/phone-icon.png"/>인증번호
+            </label>
+            <div class="row">
+                <div class=" col-md-5">
+                    <input class="form-control" id="update-verificationCode" name="verificationCode" type="text">
+                </div>
+            </div>
+            <span>5분 이내로 입력해주세요.</span>
+            <span id="update-verificationNumber-span" style="color: red;"></span>
+            <div class="form-group mt-3">
+                <button class="btn btn-dark w-100 custom-btn" id="update-info-btn" type="submit">수정</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    });
+
+    $("#menu").load("/mypage-menu.html", function (response, status, xhr) {
+        $(document).ready(function () {
+            // 모든 링크에서 'active' 클래스 제거
+            $("#settings-menu a").removeClass("active");
+
+            // 클릭된 링크에 'active' 클래스 추가
+            $("#update-user-info").addClass("active");
+        });
+    });
+
+    $("#update-verification-btn").on("click", function () {
+        verificationPhone();
+    });
+
+    const id = getUserId();
+    $("#update-info-btn").on("click", function () {
+        reissueToken((token => {
+            updateUserInfo(token, id);
+        }));
+    });
+</script>
+</html>
