@@ -97,9 +97,12 @@ function resetValidationMessages() {
 let readyToUpdate = false;
 
 function checkPasswordMatch() {
-    let password = $("#update-password").val();
-    let confirmPassword = $("#update-password-check").val();
-    let messageElement = $("#update-passwordMatchMessage");
+    let password = $(".password").val();
+    let confirmPassword = $(".password-check").val();
+    let messageElement = $(".passwordMatchMessage");
+
+    console.log(password);
+    console.log(confirmPassword);
 
     // 비밀번호와 비밀번호 확인 값이 동일한지 확인
     if (password === confirmPassword) {
@@ -141,6 +144,34 @@ function updatePassword(token, id) {
                     $("#update-password-span").text(response.message);
                 }
 
+            }
+        }
+    });
+}
+
+function withdrawUser(token, id) {
+    let password = $("#delete-password").val();
+
+    $.ajax({
+        type: "DELETE",
+        url: `/api/v1/users/${id}`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": token
+        },
+        data: JSON.stringify({
+            password: password
+        }),
+        success: function (data) {
+            alert('탈퇴가 완료되었습니다.');
+            requestLogout();
+        },
+        error: function (jqXHR, textStatus) {
+            let response = jqXHR.responseJSON;
+            if (response) {
+                if (response.code.substring(2, 4) === "02") {
+                    $("#delete-password-span").text(response.message);
+                }
             }
         }
     });
