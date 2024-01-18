@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
@@ -72,5 +73,21 @@ public class GoodsController {
 					SUCCESS_GET_SLICE_GOODS.getMessage(),
 					goodsGetSliceResponse)
 			);
+	}
+
+	// 공연 카테고리 조회
+	@GetMapping("/goods-categorys")
+	public ResponseEntity<ApiResponse<List<GoodsCategoryGetResponse>>> getAllCategory() {
+		List<GoodsCategoryGetResponse> goodsCategoryGetResponseList = goodsService.getAllGoodsCategory();
+
+		return ResponseEntity
+			.status(
+				SUCCESS_GET_ALL_GOODS_CATEGORY.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GET_ALL_GOODS_CATEGORY.getCode(),
+					SUCCESS_GET_ALL_GOODS_CATEGORY.getMessage(),
+					goodsCategoryGetResponseList));
+
 	}
 }
