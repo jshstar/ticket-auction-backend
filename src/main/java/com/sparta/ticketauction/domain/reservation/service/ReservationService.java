@@ -3,10 +3,13 @@ package com.sparta.ticketauction.domain.reservation.service;
 import java.util.List;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.reservation.request.ReservationCreateRequest;
 import com.sparta.ticketauction.domain.reservation.response.ReservationDetailResponse;
 import com.sparta.ticketauction.domain.reservation.response.ReservationResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface ReservationService {
 
@@ -21,11 +24,11 @@ public interface ReservationService {
 
 	/**
 	 * 공연 좌석 경매 기록으로 예매 기록을 생성한다.
-	 * @param user 경매 낙찰 유저
+	 * @param bid 경매 낙찰한 입찰
 	 * @param auction 경매 정보
 	 * @return 예매 정보를 반환한다.
 	 */
-	ReservationDetailResponse reserve(User user, Auction auction);
+	ReservationDetailResponse reserve(Bid bid, Auction auction);
 
 	/**
 	 * 예매 상세 정보를 가져온다.
@@ -55,9 +58,10 @@ public interface ReservationService {
 	 * 인증용 QR Code 이미지를 Base64로 인코딩하여 생성한다.
 	 * @param user 실행 유저
 	 * @param reservationId 인증할 예매 id
+	 * @param request HttpServletRequest
 	 * @return Base64로 인코딩한 QR Code 이미지를 반환한다.
 	 */
-	String createQRCode(User user, Long reservationId);
+	String createQRCode(User user, Long reservationId, HttpServletRequest request);
 
 	/**
 	 * 예매 티켓 입장용 QR코드를 검사한다.

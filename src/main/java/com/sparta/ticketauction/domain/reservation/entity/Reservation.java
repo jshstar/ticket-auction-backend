@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.Comment;
 
 import com.sparta.ticketauction.domain.reservation.reservation_seat.entity.ReservationSeat;
+import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
@@ -53,19 +54,34 @@ public class Reservation extends BaseEntity {
 	private ReservationStatus status;
 
 	@Comment("예매 좌석 목록")
-	@OneToMany(mappedBy = "reservation", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReservationSeat> reservationSeats = new ArrayList<>();
 
+	@Comment("예매 수량")
+	@Column(name = "reservation_amount", nullable = false)
+	private Integer reservationAmount;
+
+	@Comment("회차")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "schedule_id")
+	private Schedule schedule;
+
 	@Builder
-	private Reservation(User user, Long price, ReservationStatus status) {
+	private Reservation(User user, Long price, ReservationStatus status, Schedule schedule, Integer reservationAmount) {
 		this.user = user;
 		this.price = price;
 		this.status = status;
+		this.schedule = schedule;
+		this.reservationAmount = reservationAmount;
 	}
 
 	public void addSeat(ReservationSeat seat) {
 		seat.setReservation(this);
 		reservationSeats.add(seat);
+	}
+
+	public void deleteSeats(List<ReservationSeat> seats) {
+		reservationSeats.removeAll(seats);
 	}
 
 	public void updateStatus(ReservationStatus status) {

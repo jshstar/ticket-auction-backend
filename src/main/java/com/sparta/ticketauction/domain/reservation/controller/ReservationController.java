@@ -21,8 +21,11 @@ import com.sparta.ticketauction.domain.reservation.service.ReservationService;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.dto.EmptyObject;
+import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.exception.ErrorCode;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,16 +40,19 @@ public class ReservationController {
 		@RequestBody ReservationCreateRequest request,
 		@CurrentUser User user
 	) {
-		ReservationDetailResponse response = reservationService.reserve(user, request);
-
-		return ResponseEntity
-			.status(SUCCESS_RESERVE.getHttpStatus())
-			.body(
-				ApiResponse.of(
-					SUCCESS_RESERVE.getCode(),
-					SUCCESS_RESERVE.getMessage(),
-					response)
-			);
+		try {
+			ReservationDetailResponse response = reservationService.reserve(user, request);
+			return ResponseEntity
+				.status(SUCCESS_RESERVE.getHttpStatus())
+				.body(
+					ApiResponse.of(
+						SUCCESS_RESERVE.getCode(),
+						SUCCESS_RESERVE.getMessage(),
+						response)
+				);
+		} catch (Exception e) {
+			throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
+		}
 	}
 
 	@GetMapping("/{reservationId}")
@@ -54,7 +60,6 @@ public class ReservationController {
 		@PathVariable Long reservationId,
 		@CurrentUser User user
 	) {
-
 		ReservationDetailResponse response =
 			reservationService.getReservationDetailResponse(user, reservationId);
 
@@ -108,9 +113,10 @@ public class ReservationController {
 	@PostMapping("/{reservationId}/qrcode")
 	public ResponseEntity<ApiResponse<String>> createQRCode(
 		@PathVariable Long reservationId,
-		@CurrentUser User user
+		@CurrentUser User user,
+		HttpServletRequest request
 	) {
-		String qrCode = reservationService.createQRCode(user, reservationId);
+		String qrCode = reservationService.createQRCode(user, reservationId, request);
 
 		return ResponseEntity
 			.status(SUCCESS_CREATE_RESERVATION_AUTHENTICATION_QRCODE.getHttpStatus())
@@ -126,7 +132,7 @@ public class ReservationController {
 	@PostMapping("/{reservationId}/auth")
 	public ResponseEntity<ApiResponse<EmptyObject>> authenticateReservation(
 		@PathVariable Long reservationId,
-		@RequestParam String authCode
+		@RequestParam(name = "authcode") String authCode
 	) {
 		reservationService.authenticateReservation(reservationId, authCode);
 

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 
-public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleQueryRepository {
 
 	// @Query("select s from Schedule s "
 	// 	// 	+ "join fetch s.goods g "
