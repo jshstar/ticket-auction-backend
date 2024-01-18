@@ -36,12 +36,12 @@ public class Auction extends BaseEntity {
 
 	@Comment("공연 회차")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "schedule_id", nullable = false)
+	@JoinColumn(name = "schedule_id")
 	private Schedule schedule;
 
 	@Comment("구역등급")
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "zone_grade_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "zone_grade_id")
 	private ZoneGrade zoneGrade;
 
 	@Comment("시작가")
