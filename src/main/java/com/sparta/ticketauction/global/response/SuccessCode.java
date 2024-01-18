@@ -20,11 +20,15 @@ public enum SuccessCode {
 	SUCCESS_DELETE_USER(HttpStatus.OK, "U00600", "회원 탈퇴에 성공했습니다."),
 
 	/* GOODS */
-	SUCCESS_GET_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 조회 성공했습니다."),
-	SUCCESS_GET_SLICE_GOODS_INFO(HttpStatus.OK, "G00001", "공연 페이징 조회 성공했습니다."),
+	SUCCESS_GET_ALL_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 전체 조회 성공했습니다."),
+	SUCCESS_GET_SLICE_GOODS(HttpStatus.OK, "G00100", "공연 페이징 조회 성공했습니다."),
+	SUCCESS_GET_GOODS(HttpStatus.OK, "G00200", "공연 단건 조회 성공했습니다."),
 
 	/* PLACE */
 	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),
+
+	/* GRADE */
+	SUCCESS_GET_ALL_GRADE(HttpStatus.OK, "F00000", "등급 전체 조회를 성공했습니다."),
 
 	/* ZONE */
 	SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공했습니다."),
@@ -33,10 +37,12 @@ public enum SuccessCode {
 	SUCCESS_GET_ALL_SCHEDULE(HttpStatus.OK, "S00000", "전 회차 조회 성공했습니다."),
 
 	/* AUCTION */
-	SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "B00500", "경매 정보 조회에 성공했습니다."),
+	SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "A00500", "경매 정보 조회에 성공했습니다."),
+	SUCCESS_GET_ALL_JOINED_AUCTION(HttpStatus.OK, "A00600", "참가한 경매 목록 조회에 성공했습니다."),
 
 	/* BID */
-	SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
+	SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
+	SUCCESS_BID(HttpStatus.CREATED, "B00100", "입찰에 성공했습니다."),
 
 
 
@@ -50,11 +56,9 @@ public enum SuccessCode {
 
 
 
-
-
-
-
-
+	/* POINT */
+	SUCCESS_GET_CHARGE_POINT_LOG_LIST(HttpStatus.OK, "P00000", "포인트 충전 내역 조회에 성공했습니다."),
+	SUCCESS_GET_CHANGING_POINT_LOG_LIST(HttpStatus.OK, "P00001", "포인트 변동 내역 조회에 성공했습니다."),
 	/* ADMIN */
 	SUCCESS_GOODS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "M09900", "공연 및 회차 생성을 성공했습니다."),
 	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "M09901", "공연장 및 구역 생성을 성공했습니다."),

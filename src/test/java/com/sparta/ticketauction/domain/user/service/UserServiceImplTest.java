@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserDeleteRequest;
 import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
@@ -437,11 +438,14 @@ class UserServiceImplTest {
 		void 성공() {
 			// Given
 			User user = TEST_USER;
+			UserDeleteRequest request = UserDeleteRequest.builder()
+				.password(TEST_PASSWORD)
+				.build();
 
 			given(userRepository.findByIdAndIsDeletedIsFalse(any())).willReturn(Optional.ofNullable(user));
 
 			// When
-			sut.deleteUser(user, 1L);
+			sut.deleteUser(user, request);
 
 			// Then
 			verify(userRepository).findByIdAndIsDeletedIsFalse(any());
@@ -451,16 +455,19 @@ class UserServiceImplTest {
 		void 권한_없음으로_실패() {
 			// Given
 			User user = TEST_USER;
+			UserDeleteRequest request = UserDeleteRequest.builder()
+				.password("aaaaaa")
+				.build();
 
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.deleteUser(user, 2L)
+				() -> sut.deleteUser(user, request)
 			);
 
 			// Then
 			assertThat(exception)
-				.hasMessage(ACCESS_DENIED.getMessage());
+				.hasMessage(NOT_MATCH_PASSWORD.getMessage());
 		}
 	}
 

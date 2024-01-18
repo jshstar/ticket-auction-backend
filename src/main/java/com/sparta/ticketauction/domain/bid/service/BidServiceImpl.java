@@ -4,9 +4,13 @@ import static com.sparta.ticketauction.domain.bid.constant.BidConstant.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
@@ -16,8 +20,10 @@ import com.sparta.ticketauction.domain.bid.redis.RedisSubscriber;
 import com.sparta.ticketauction.domain.bid.repository.BidRepository;
 import com.sparta.ticketauction.domain.bid.repository.SseRepository;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
+import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.service.PointService;
+import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.annotaion.DistributedLock;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -35,29 +41,42 @@ public class BidServiceImpl implements BidService {
 	private final BidRepository bidRepository;
 	private final BidRedisService bidRedisService;
 	private final PointService pointService;
+	private final UserService userService;
 
 	//Sse
 	private final SseRepository sseRepository;
 	private final RedisSubscriber redisSubscriber;
 
 	@Override
-	@DistributedLock(key = "T(com.sparta.ticketauction.domain.bid.constant.BidConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
-	public void bid(Long auctionId, BidRequest bidRequest, User bidder) {
+	public void handleBid(Long auctionId, BidRequest bidRequest, User loginUser) {
+		String key = AUCTION_BID_KEY_PREFIX + auctionId;
+		bid(key, auctionId, bidRequest, loginUser);
+	}
+
+	@DistributedLock(key = "#key")
+	public void bid(String key, Long auctionId, BidRequest bidRequest, User loginUser) {
 		//redis에 경매 정보 확인
 		if (bidRedisService.isExpired(auctionId)) {
 			throw new ApiException(ENDED_AUCTION);
 		}
 
 		//입찰 검증
+		User bidder = userService.findByUserId(loginUser.getId());
 		long newBidPrice = bidRequest.getPrice();
 		long currentBidPrice = bidRedisService.getBidPrice(auctionId);
 		validateBid(currentBidPrice, newBidPrice);
 
 		//기존 입찰자, 새입찰자 포인트 업데이트
-		Auction auction = getAuction(auctionId);
+		Auction auction = auctionRepository.getReferenceById(auctionId);
 		updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
 		//새 입찰 등록
 		saveBid(bidder, newBidPrice, auction);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<BidInfoResponse> getMyBids(Long auctionId, User loginUser, Pageable pageable) {
+		return bidRepository.getMyBids(auctionId, loginUser, pageable);
 	}
 
 	@Override
@@ -86,6 +105,7 @@ public class BidServiceImpl implements BidService {
 	}
 
 
+
 	public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Auction auction) {
 		Optional<Bid> currentBid = getCurrentBid(auction);
 		if (currentBid.isPresent()) {
@@ -104,7 +124,6 @@ public class BidServiceImpl implements BidService {
 			.auction(auction)
 			.build();
 
-		auction.updateBidPrice(newBidPrice);
 		bidRepository.save(newBid);
 		bidRedisService.setBidPrice(auction.getId(), newBidPrice);
 	}

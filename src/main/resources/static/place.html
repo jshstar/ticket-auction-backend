@@ -15,6 +15,7 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
             src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
     <link rel="stylesheet" href="/css/place.css">
@@ -44,7 +45,21 @@
     </table>
 
     <button onclick="addZone()">구역 추가</button>
-    <button onclick="submitPlace()">공연장 추가하기</button>
+    <button id="createPlace">공연장 추가하기</button>
+    <button id="goodsInfoPage">다음 페이지</button>
 </div>
 </body>
+<script>
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    });
+    $("#createPlace").on("click", function () {
+        reissueToken((token => {
+            submitPlace(token);
+        }));
+    });
+    $("#goodsInfoPage").on("click", function () {
+        movePageWithToken("/goodsInfo.html");
+    });
+</script>
 </html>

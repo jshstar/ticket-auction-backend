@@ -45,7 +45,7 @@ class AuthServiceImplTest {
 
 	@BeforeEach
 	void beforeEach() {
-		ReflectionTestUtils.setField(jwtUtil, "ACCESS_TOKEN_TIME", ACCESS_TOKEN_TIME);
+		// ReflectionTestUtils.setField(jwtUtil, "ACCESS_TOKEN_TIME", ACCESS_TOKEN_TIME);
 		// ReflectionTestUtils.setField(jwtUtil, "REFRESH_TOKEN_TIME", REFRESH_TOKEN_TIME);
 		ReflectionTestUtils.setField(jwtUtil, "secretKey", secretKey);
 		jwtUtil.init();

@@ -1,27 +1,25 @@
 package com.sparta.ticketauction.domain.auction.response;
 
-import com.sparta.ticketauction.domain.auction.entity.Auction;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class AuctionInfoResponse {
 	private final Long id;
-	//입찰가
-	private final Long bidPrice;
-	//시작가
-	private final Long startPrice;
-	//남은시간
-	private final Long remainTimeMilli;
 
-	public static AuctionInfoResponse from(Auction entity, Long remainTimeMilli) {
-		return new AuctionInfoResponse(
-			entity.getId(),
-			entity.getBidPrice(),
-			entity.getStartPrice(),
-			remainTimeMilli
-		);
+	private final Boolean isEnded;
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private final LocalDateTime startDateTime;
+
+	@QueryProjection
+	public AuctionInfoResponse(Long id, Boolean isEnded, LocalDateTime startDateTime) {
+		this.id = id;
+		this.isEnded = isEnded;
+		this.startDateTime = startDateTime;
 	}
 }

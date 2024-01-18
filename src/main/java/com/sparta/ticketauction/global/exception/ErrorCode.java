@@ -10,15 +10,21 @@ import lombok.Getter;
 public enum ErrorCode {
 
 	/* USER */
+	// 00: not found, 99 : 관리자 관련
 	NOT_FOUND_BY_ID(HttpStatus.NOT_FOUND, "U10000", "해당 id를 가지는 유저를 찾을 수 없습니다."),
-	EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10100", "사용 중인 이메일 입니다."),
-	EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10101", "사용 중인 닉네임 입니다."),
-	EXISTED_USER_PHONE_NUMBER(HttpStatus.CONFLICT, "U10102", "사용 중인 전화 번호 입니다."),
-	INVALID_VERIFICATION_NUMBER(HttpStatus.BAD_REQUEST, "U10103", "잘못된 인증 번호 입니다."),
-	EXCEED_VERIFICATION_TIME(HttpStatus.BAD_REQUEST, "U10104", "인증 번호 입력 시간 초과 입니다."),
-	ALREADY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "U10105", "기존과 다른 비밀 번호를 입력해주세요."),
-	NOT_FOUND_USER_FOR_LOGIN(HttpStatus.NOT_FOUND, "U10201", "존재하지 않는 회원입니다."),
+	NOT_FOUND_USER_FOR_LOGIN(HttpStatus.NOT_FOUND, "U10001", "존재하지 않는 회원입니다."),
 	REQUIRED_ADMIN_USER_AUTHORITY(HttpStatus.UNAUTHORIZED, "U19900", "관리자 권한이 필요합니다."),
+	// 검증 실패 XXABXX (AB : 01 이메일, 02: 비밀번호, 03: 이름, 04:닉네임, 05: 생일, 06: 전화번호, 07: 검증번호),
+	EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10100", "사용 중인 이메일 입니다."),
+	ALREADY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "U10200", "기존과 다른 비밀 번호를 입력해주세요."),
+	NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "U10201", "비밀번호가 틀렸습니다."),
+	EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10400", "사용 중인 닉네임 입니다."),
+	INVALID_NICKNAME_LENGTH(HttpStatus.BAD_REQUEST, "U10401", "최소 2자, 최대 10자로 입력해주세요."),
+	INVALID_NICKNAME_PATTERN(HttpStatus.BAD_REQUEST, "U10402", "한글로만 입력해주세요."),
+	EXISTED_USER_PHONE_NUMBER(HttpStatus.CONFLICT, "U10600", "사용 중인 전화 번호 입니다."),
+	INVALID_PHONE_NUMBER_PATTERN(HttpStatus.BAD_REQUEST, "U10601", "전화번호 형식으로, 숫자로만 입력해주세요."),
+	INVALID_VERIFICATION_NUMBER(HttpStatus.BAD_REQUEST, "U10700", "잘못된 인증 번호 입니다."),
+	EXCEED_VERIFICATION_TIME(HttpStatus.BAD_REQUEST, "U10701", "인증 번호 입력 시간 초과 입니다."),
 
 	/* GOODS */
 	NOT_FOUND_GOODS(HttpStatus.NOT_FOUND, "G10000", "해당하는 공연이 없습니다."),

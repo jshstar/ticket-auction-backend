@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserDeleteRequest;
 import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
@@ -94,12 +95,12 @@ public class UserController {
 			);
 	}
 
-	@DeleteMapping("/{userId}")
+	@DeleteMapping
 	public ResponseEntity<ApiResponse> deleteUser(
 		@CurrentUser User user,
-		@PathVariable Long userId
+		@RequestBody UserDeleteRequest request
 	) {
-		userService.deleteUser(user, userId);
+		userService.deleteUser(user, request);
 		return ResponseEntity.status(SUCCESS_DELETE_USER.getHttpStatus())
 			.body(
 				ApiResponse.of(
