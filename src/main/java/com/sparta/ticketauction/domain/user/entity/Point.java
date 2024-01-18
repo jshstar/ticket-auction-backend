@@ -5,6 +5,7 @@ import org.hibernate.annotations.Comment;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,16 +37,22 @@ public class Point extends BaseEntity {
 	private User user;
 
 	@Comment("변동된 포인트")
-	private Long point;
+	@Column(name = "change_point", nullable = false)
+	private Long changePoint;
 
 	@Comment("변동 타입")
 	@Enumerated(EnumType.STRING)
 	private PointType type;
 
+	@Column(name = "order_id")
+	@Comment("충전 시 결제 아이디")
+	private String orderId;
+
 	@Builder
-	public Point(User user, Long point, PointType type) {
+	public Point(User user, Long changePoint, PointType type, String orderId) {
 		this.user = user;
-		this.point = point;
+		this.changePoint = changePoint;
 		this.type = type;
+		this.orderId = orderId;
 	}
 }

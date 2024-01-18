@@ -56,11 +56,9 @@ public enum SuccessCode {
 
 
 
-
-
-
-
-
+	/* POINT */
+	SUCCESS_GET_CHARGE_POINT_LOG_LIST(HttpStatus.OK, "P00000", "포인트 충전 내역 조회에 성공했습니다."),
+	SUCCESS_GET_CHANGING_POINT_LOG_LIST(HttpStatus.OK, "P00001", "포인트 변동 내역 조회에 성공했습니다."),
 	/* ADMIN */
 	SUCCESS_GOODS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "M09900", "공연 및 회차 생성을 성공했습니다."),
 	SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "M09901", "공연장 및 구역 생성을 성공했습니다."),

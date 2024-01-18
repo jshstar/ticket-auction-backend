@@ -81,8 +81,8 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.addPaymentKey(paymentKey);
 
 		User user = userService.findByUserId(payment.getUser().getId());
-		pointService.chargePoint(user, amountLong);
-		
+		pointService.chargePoint(user, amountLong, orderId);
+
 		return requestPaymentAccept(paymentKey, orderId, amountLong);
 
 	}
