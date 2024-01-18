@@ -42,7 +42,7 @@ public class BidController {
 		@Valid @RequestBody BidRequest bidRequest,
 		@CurrentUser User loginUser
 	) {
-		bidService.bid(auctionId, bidRequest, loginUser);
+		bidService.handleBid(auctionId, bidRequest, loginUser);
 
 		//입찰 갱신 sse
 		redisPublisher.publish(AUCTION_SSE_PREFIX + auctionId, bidRequest.getPrice());
