@@ -149,12 +149,12 @@ function updatePassword(token, id) {
     });
 }
 
-function withdrawUser(token, id) {
+function withdrawUser(token) {
     let password = $("#delete-password").val();
 
     $.ajax({
         type: "DELETE",
-        url: `/api/v1/users/${id}`,
+        url: `/api/v1/users`,
         contentType: "application/json",
         headers: {
             "Authorization": token
