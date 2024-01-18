@@ -24,7 +24,6 @@ import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
-import com.sparta.ticketauction.domain.goods.service.GoodsInfoService;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
 import com.sparta.ticketauction.domain.grade.entity.Grade;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
@@ -48,8 +47,6 @@ public class AdminServiceImpl implements AdminService {
 	private final GoodsService goodsService;
 
 	private final ZoneService zoneService;
-
-	private final GoodsInfoService goodsInfoService;
 
 	private final ScheduleService scheduleService;
 
@@ -100,12 +97,12 @@ public class AdminServiceImpl implements AdminService {
 		GoodsInfoCreateRequest goodsInfoCreateRequest,
 		List<MultipartFile> multipartFiles) {
 
-		GoodsInfo goodsInfo = goodsInfoService.createGoodsInfo(goodsInfoCreateRequest);
+		GoodsInfo goodsInfo = goodsService.createGoodsInfo(goodsInfoCreateRequest);
 
-		List<GoodsImage> goodsImages = goodsInfoService.createGoodsImage(multipartFiles, goodsInfo);
+		List<GoodsImage> goodsImages = goodsService.createGoodsImage(multipartFiles, goodsInfo);
 		goodsInfo.addGoodsImage(goodsImages);
 
-		GoodsCategory goodsCategory = goodsInfoService.createGoodsCategory(goodsInfoCreateRequest.getCategoryName());
+		GoodsCategory goodsCategory = goodsService.createGoodsCategory(goodsInfoCreateRequest.getCategoryName());
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		return new GoodsInfoCreateResponse(goodsInfo.getId());
@@ -122,7 +119,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Place place = placeService.getReferenceById(placeId);
 
-		GoodsInfo goodsInfo = goodsInfoService.findByGoodsInfoId(goodsInfoId);
+		GoodsInfo goodsInfo = goodsService.findByGoodsInfoId(goodsInfoId);
 
 		Goods goods = goodsService.createGoods(goodsCreateRequest, place, goodsInfo);
 		goodsInfo.addGoods(goods);
@@ -138,7 +135,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	@Transactional
 	public GradeCreateResponse createGrade(Long goodsId, GradeCreateRequest gradeCreateRequest) {
-		Goods goods = goodsService.findById(goodsId);
+		Goods goods = goodsService.findByGoodsId(goodsId);
 
 		Grade grade = gradeService.createGrade(gradeCreateRequest, goods);
 

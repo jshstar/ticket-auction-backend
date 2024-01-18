@@ -26,7 +26,6 @@ import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
-import com.sparta.ticketauction.domain.goods.service.GoodsInfoServiceImpl;
 import com.sparta.ticketauction.domain.goods.service.GoodsServiceImpl;
 import com.sparta.ticketauction.domain.grade.entity.Grade;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
@@ -50,9 +49,6 @@ public class AdminServiceTest {
 
 	@Mock
 	ZoneServiceImpl zoneService;
-
-	@Mock
-	GoodsInfoServiceImpl goodsInfoService;
 
 	@Mock
 	GoodsServiceImpl goodsService;
@@ -155,15 +151,15 @@ public class AdminServiceTest {
 		goodsInfo.updateGoodsCategory(goodsCategory);
 
 		// when
-		given(goodsInfoService.createGoodsInfo(any(GoodsInfoCreateRequest.class))).willReturn(goodsInfo);
-		given(goodsInfoService.createGoodsImage(any(), any())).willReturn(goodsImage);
-		given(goodsInfoService.createGoodsCategory(any())).willReturn(goodsCategory);
+		given(goodsService.createGoodsInfo(any(GoodsInfoCreateRequest.class))).willReturn(goodsInfo);
+		given(goodsService.createGoodsImage(any(), any())).willReturn(goodsImage);
+		given(goodsService.createGoodsCategory(any())).willReturn(goodsCategory);
 		adminService.createGoodsBundle(goodsInfoCreateRequest, mock());
 
 		// then
-		verify(goodsInfoService, times(1)).createGoodsInfo(any(GoodsInfoCreateRequest.class));
-		verify(goodsInfoService, times(1)).createGoodsImage(any(), any(GoodsInfo.class));
-		verify(goodsInfoService, times(1)).createGoodsCategory(any());
+		verify(goodsService, times(1)).createGoodsInfo(any(GoodsInfoCreateRequest.class));
+		verify(goodsService, times(1)).createGoodsImage(any(), any(GoodsInfo.class));
+		verify(goodsService, times(1)).createGoodsCategory(any());
 
 		assertEquals(goodsImage.get(0).getS3Key(), goodsInfo.getGoodsImage().get(0).getS3Key());
 		assertEquals(goodsImage.get(1).getS3Key(), goodsInfo.getGoodsImage().get(1).getS3Key());
@@ -182,12 +178,12 @@ public class AdminServiceTest {
 		Grade grade = gradeCreateRequest.toEntity(goods);
 
 		// when
-		given(goodsService.findById(any())).willReturn(goods);
+		given(goodsService.findByGoodsId(any())).willReturn(goods);
 		given(gradeService.createGrade(any(GradeCreateRequest.class), any(Goods.class))).willReturn(grade);
 		adminService.createGrade(1L, gradeCreateRequest);
 
 		// then
-		verify(goodsService, times(1)).findById(any());
+		verify(goodsService, times(1)).findByGoodsId(any());
 		verify(gradeService, times(1)).createGrade(any(GradeCreateRequest.class), any(Goods.class));
 		assertEquals(gradeCreateRequest.getName(), grade.getName());
 		assertEquals(gradeCreateRequest.getNormalPrice(), grade.getNormalPrice());

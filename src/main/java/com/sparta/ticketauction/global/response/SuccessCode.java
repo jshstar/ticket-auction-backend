@@ -20,11 +20,15 @@ public enum SuccessCode {
 	SUCCESS_DELETE_USER(HttpStatus.OK, "U00600", "회원 탈퇴에 성공했습니다."),
 
 	/* GOODS */
-	SUCCESS_GET_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 조회 성공했습니다."),
-	SUCCESS_GET_SLICE_GOODS_INFO(HttpStatus.OK, "G00001", "공연 페이징 조회 성공했습니다."),
+	SUCCESS_GET_ALL_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 전체 조회 성공했습니다."),
+	SUCCESS_GET_SLICE_GOODS(HttpStatus.OK, "G00100", "공연 페이징 조회 성공했습니다."),
+	SUCCESS_GET_GOODS(HttpStatus.OK, "G00200", "공연 단건 조회 성공했습니다."),
 
 	/* PLACE */
 	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),
+
+	/* GRADE */
+	SUCCESS_GET_ALL_GRADE(HttpStatus.OK, "F00000", "등급 전체 조회를 성공했습니다."),
 
 	/* ZONE */
 	SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공했습니다."),
