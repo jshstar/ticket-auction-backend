@@ -42,12 +42,12 @@ public class PointController {
 	}
 
 	@GetMapping("/change")
-	public ResponseEntity<ApiResponse> getBiddingAndPurchasingPointLogList(
+	public ResponseEntity<ApiResponse> getUseAndRefundPointLogList(
 		@CurrentUser User user,
 		@PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC)
 		Pageable pageable
 	) {
-		var response = pointService.getBidOrReservationPointLogList(user, pageable);
+		var response = pointService.getUseAndRefundPointLogList(user, pageable);
 		return ResponseEntity.status(SUCCESS_GET_CHANGING_POINT_LOG_LIST.getHttpStatus())
 			.body(
 				ApiResponse.of(

@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PointType {
 
-	USE_BIDDING("입찰"),
-	USE_PURCHASE("일반 예매"),
-	REFUND_BIDDING("낙찰 실패 환불"),
+	USE("사용"),
+	REFUND("환불"),
 	CHARGE("충전");
 
 	private final String type;

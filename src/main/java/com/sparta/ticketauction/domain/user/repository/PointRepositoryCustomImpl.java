@@ -54,7 +54,7 @@ public class PointRepositoryCustomImpl implements PointRepositoryCustom {
 	}
 
 	@Override
-	public Page<PointResponse> findBidOrReservationPointListByPage(Long userId, Pageable pageable) {
+	public Page<PointResponse> findUseAndRefundpointListByPage(Long userId, Pageable pageable) {
 		List<PointResponse> list = jpaQueryFactory
 			.select(Projections.constructor(PointResponse.class,
 				point.id,
@@ -65,7 +65,7 @@ public class PointRepositoryCustomImpl implements PointRepositoryCustom {
 			.from(point)
 			.where(
 				point.user.id.eq(userId)
-					.and(point.type.ne(PointType.CHARGE))
+					.and(point.type.ne(PointType.USE))
 			)
 			.orderBy(sortPoint(pageable))
 			.offset(pageable.getOffset())

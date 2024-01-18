@@ -54,7 +54,7 @@ class PointServiceImplTest {
 			// When
 			ApiException exception = assertThrows(
 				ApiException.class,
-				() -> sut.usePointForBid(user, 100L)
+				() -> sut.usePoint(user, 100L)
 			);
 
 			// Then
@@ -69,14 +69,14 @@ class PointServiceImplTest {
 
 			Point point = Point.builder()
 				.user(user)
-				.type(PointType.USE_BIDDING)
+				.type(PointType.USE)
 				.changePoint(10L)
 				.build();
 
 			given(pointRepository.save(any(Point.class))).willReturn(point);
 
 			// When
-			sut.usePointForBid(user, 10L);
+			sut.usePoint(user, 10L);
 
 			// Then
 			verify(pointRepository).save(any(Point.class));
