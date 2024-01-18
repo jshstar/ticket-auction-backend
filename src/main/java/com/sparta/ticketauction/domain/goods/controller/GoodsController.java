@@ -16,6 +16,8 @@ import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
+import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class GoodsController {
 
 	// 공연 정보 전체 조회
 	@GetMapping("goods-infos")
-	public ResponseEntity<ApiResponse<List<GoodsInfoGetResponse>>> getAllGoodsInfo() {
+	public ResponseEntity<ApiResponse<List<GoodsInfoGetResponse>>> getAllGoodsInfo(@CurrentUser User user) {
 		List<GoodsInfoGetResponse> goodsInfoGetResponseList = goodsService.getAllGoodsInfo();
 		return ResponseEntity
 			.status(
