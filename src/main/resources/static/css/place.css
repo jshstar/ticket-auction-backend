@@ -72,3 +72,8 @@ button[onclick*="removeZone"] {
 button[onclick*="removeZone"]:hover {
     background-color: #c9302c;
 }
+
+#goodsInfoPage {
+    float: right;
+    /* 다른 스타일 속성 추가 가능 */
+}
