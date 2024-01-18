@@ -216,6 +216,8 @@ function fetchGoodsInfos(token) {
         success: function (response) {
             console.log(response);
             $('#goodsInfoLabel').empty(); // 셀렉트 박스 초기화
+            var option = new Option("공연 정보를 선택해 주세요");
+            $('#goodsInfoLabel').append(option);
             response.data.forEach(function (goodsInfo) {
                 var option = new Option(goodsInfo.name, goodsInfo.goodsInfoId);
                 // s3Url이 있는 경우, 옵션에 해당 URL을 데이터 속성으로 저장합니다.
@@ -239,6 +241,8 @@ function fetchPlace() {
         success: function (response) {
             console.log(response);
             $('#placeLabel').empty(); // 셀렉트 박스 초기화
+            var option = new Option("공연장을 선택해 주세요");
+            $('#placeLabel').append(option);
             response.data.forEach(function (place) { // 'response.data'가 아닌 'response'를 순회
                 var option = new Option(place.name, place.placeId);
                 $('#placeLabel').append(option);

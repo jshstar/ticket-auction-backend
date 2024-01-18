@@ -45,8 +45,8 @@
         <label for="startTime">상영 시간:</label>
         <input type="time" id="startTime" name="startTime" required>
     </form>
-    <button onclick="submitGoodsAndSchedule()" id="submitGoodsButton">공연 추가하기</button>
-    <button onclick="movePageWithToken()" id="gradePage">다음 페이지</button>
+    <button id="submitGoodsButton">공연 추가하기</button>
+    <button id="gradePage">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
