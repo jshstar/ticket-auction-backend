@@ -65,10 +65,9 @@ public interface UserService {
 	 * 회원 탈퇴
 	 *
 	 * @param user 		로그인 한 유저 정보
-	 * @param userId  	탈퇴할 유저의 id
 	 * @param request	확인용 비밀번호
 	 * */
-	void deleteUser(User user, Long userId, UserDeleteRequest request);
+	void deleteUser(User user, UserDeleteRequest request);
 
 	/*
 	 * 해당 회원의 포인트 찾기

@@ -73,7 +73,7 @@
     $("#delete-btn").on("click", function () {
         if (confirm("잔여 포인트는 모두 소멸됩니다. 정말 탈퇴하시겠습니까? ")) {
             reissueToken((token => {
-                withdrawUser(token, id);
+                withdrawUser(token);
             }));
         }
     });
