@@ -38,7 +38,7 @@ button:hover {
 
 /* 이미지 스타일 */
 #goodsInfoImage {
-    max-width: 100%; /* 이미지가 컨테이너 너비를 초과하지 않도록 설정 */
+    max-width: 50%; /* 이미지가 컨테이너 너비를 초과하지 않도록 설정 */
     height: auto; /* 비율을 유지하면서 높이 자동 조절 */
     border: 1px solid #ddd; /* 이미지 주변에 경계선 추가 */
     border-radius: 4px; /* 이미지 모서리 둥글게 */
@@ -56,4 +56,13 @@ button:hover {
     input, select, button {
         width: 100%; /* 작은 화면에서 폼 요소 너비 조절 */
     }
+}
+
+#gradePage {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    float: right;
 }

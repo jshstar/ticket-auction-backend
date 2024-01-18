@@ -20,15 +20,19 @@
     <script src="/js/admin.js"></script>
     <link rel="stylesheet" href="/css/goods.css">
 </head>
-<body class="goods">
+<body class="goodsClass">
+<header id="headers"></header>
 <div class="container">
     <h1>공연 추가</h1>
     <form id="goodsForm">
-        <label for="goodsInfo">공연 제목:</label>
-        <select id="goodsInfo" name="goodsInfo"></select>
-        <img id="goodsInfoImage" src="기본이미지URL" alt="상품 이미지">
+        <label for="goodsInfoLabel">공연 정보 선택</label>
+        <select id="goodsInfoLabel" name="goodsInfoLabel"></select>
+        <img id="goodsInfoImage" src="기본이미지URL" alt="공연 정보 이미지">
 
-        <label for="title">제목:</label>
+        <label for="placeLabel">공연장</label>
+        <select id="placeLabel" name="placeLabel"></select>
+
+        <label for="title">추가할 공연의 제목:</label>
         <input type="text" id="title" name="title" required
                pattern="([A-Za-z0-9\\s(){}<>가-힣]+) - ([A-Za-z0-9\\s(){}<>가-힣]+)">
 
@@ -41,8 +45,8 @@
         <label for="startTime">상영 시간:</label>
         <input type="time" id="startTime" name="startTime" required>
     </form>
-    <button onclick="submitGoodsInfo()" id="submitGoodsButton">공연 추가하기</button>
-    <button onclick="movePageWithToken()" id="goodsPage">다음 페이지</button>
+    <button onclick="submitGoodsAndSchedule()" id="submitGoodsButton">공연 추가하기</button>
+    <button onclick="movePageWithToken()" id="gradePage">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
@@ -50,10 +54,10 @@
     });
     $("#submitGoodsButton").on("click", function () {
         reissueToken((token => {
-            submitGoodsInfo(token);
+            submitGoodsAndSchedule(token);
         }));
     });
-    $("#goodsPage").on("click", function () {
+    $("#gradePage").on("click", function () {
         movePageWithToken("/grade.html");
     });
 </script>
