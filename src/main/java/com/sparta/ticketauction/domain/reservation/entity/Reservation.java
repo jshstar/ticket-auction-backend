@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.hibernate.annotations.Comment;
 
-import com.sparta.ticketauction.domain.reservation_seat.entity.ReservationSeat;
+import com.sparta.ticketauction.domain.reservation.reservation_seat.entity.ReservationSeat;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.entity.BaseEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -51,7 +52,8 @@ public class Reservation extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ReservationStatus status;
 
-	@OneToMany(mappedBy = "reservation")
+	@Comment("예매 좌석 목록")
+	@OneToMany(mappedBy = "reservation", cascade = CascadeType.PERSIST)
 	private List<ReservationSeat> reservationSeats = new ArrayList<>();
 
 	@Builder
@@ -64,5 +66,9 @@ public class Reservation extends BaseEntity {
 	public void addSeat(ReservationSeat seat) {
 		seat.setReservation(this);
 		reservationSeats.add(seat);
+	}
+
+	public void updateStatus(ReservationStatus status) {
+		this.status = status;
 	}
 }

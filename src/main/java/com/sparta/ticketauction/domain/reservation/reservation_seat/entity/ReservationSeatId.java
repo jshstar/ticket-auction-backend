@@ -1,4 +1,4 @@
-package com.sparta.ticketauction.domain.reservation_seat.entity;
+package com.sparta.ticketauction.domain.reservation.reservation_seat.entity;
 
 import java.io.Serializable;
 import java.util.Objects;

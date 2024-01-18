@@ -1,10 +1,11 @@
 package com.sparta.ticketauction.domain.reservation.request;
 
-import com.sparta.ticketauction.domain.goods_sequence_seat.entity.GoodsSequenceSeat;
-import com.sparta.ticketauction.domain.reservation.entity.Reservation;
-import com.sparta.ticketauction.domain.user.entity.User;
+import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
+import com.sparta.ticketauction.domain.reservation.reservation_seat.request.ReservationSeatCreateRequest;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,17 +19,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReservationCreateRequest {
 
-	@NotBlank(message = "구역을 입력하세요.")
-	private String zone;
-
 	@NotNull(message = "가격을 입력하세요.")
 	private Long price;
 
-	public Reservation toEntity(User user, GoodsSequenceSeat goodsSequenceSeat, Long price) {
-		return Reservation.builder()
-			.user(user)
-			.goodsSequenceSeat(goodsSequenceSeat)
-			.price(price)
-			.build();
-	}
+	@NotEmpty(message = "좌석 정보를 입력하세요.")
+	private List<@Valid ReservationSeatCreateRequest> reservationSeats;
 }
