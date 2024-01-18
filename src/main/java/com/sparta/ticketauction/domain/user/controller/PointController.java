@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/points")
 public class PointController {
 
-	private PointService pointService;
+	private final PointService pointService;
 
 	@GetMapping("/charge")
 	public ResponseEntity<ApiResponse> getChargePointLogList(
