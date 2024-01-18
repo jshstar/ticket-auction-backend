@@ -12,7 +12,7 @@ import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
 import com.sparta.ticketauction.domain.user.response.PointChargeResponse;
-import com.sparta.ticketauction.domain.user.response.PointUseResponse;
+import com.sparta.ticketauction.domain.user.response.PointResponse;
 import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -27,7 +27,7 @@ public class PointServiceImpl implements PointService {
 
 	@Override
 	@Transactional
-	public void usePoint(User user, Long point) {
+	public void usePointForBid(User user, Long point) {
 		if (user.getPoint() < point) {
 			throw new ApiException(NOT_ENOUGH_POINT);
 		}
@@ -35,7 +35,37 @@ public class PointServiceImpl implements PointService {
 		Point usePoint = Point.builder()
 			.changePoint(point)
 			.user(user)
-			.type(PointType.USE)
+			.type(PointType.USE_BIDDING)
+			.build();
+
+		user.usePoint(point);
+		pointRepository.save(usePoint);
+	}
+
+	@Override
+	@Transactional
+	public void refundPoint(User user, Long point) {
+		Point refundPoint = Point.builder()
+			.changePoint(point)
+			.user(user)
+			.type(PointType.REFUND_BIDDING)
+			.build();
+
+		user.addPoint(point);
+		pointRepository.save(refundPoint);
+	}
+
+	@Override
+	@Transactional
+	public void usePointForGeneralPurchase(User user, Long point) {
+		if (user.getPoint() < point) {
+			throw new ApiException(NOT_ENOUGH_POINT);
+		}
+		
+		Point usePoint = Point.builder()
+			.changePoint(point)
+			.user(user)
+			.type(PointType.USE_PURCHASE)
 			.build();
 
 		user.usePoint(point);
@@ -52,7 +82,7 @@ public class PointServiceImpl implements PointService {
 			.orderId(orderId)
 			.build();
 
-		user.chargePoint(point);
+		user.addPoint(point);
 		pointRepository.save(chargePoint);
 	}
 
@@ -62,7 +92,7 @@ public class PointServiceImpl implements PointService {
 	}
 
 	@Override
-	public Page<PointUseResponse> getUsePointLogList(User user, Pageable pageable) {
-		return pointRepository.findUsePointListByPage(user.getId(), pageable);
+	public Page<PointResponse> getBidOrReservationPointLogList(User user, Pageable pageable) {
+		return pointRepository.findBidOrReservationPointListByPage(user.getId(), pageable);
 	}
 }

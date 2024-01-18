@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.sparta.ticketauction.domain.user.response.PointChargeResponse;
-import com.sparta.ticketauction.domain.user.response.PointUseResponse;
+import com.sparta.ticketauction.domain.user.response.PointResponse;
 
 public interface PointRepositoryCustom {
 	/*
@@ -25,5 +25,5 @@ public interface PointRepositoryCustom {
 	 *
 	 * @return  해당 페이지 정보에 맞는 유저의 포인트 사용 내역 리스트
 	 * */
-	Page<PointUseResponse> findUsePointListByPage(Long userId, Pageable pageable);
+	Page<PointResponse> findBidOrReservationPointListByPage(Long userId, Pageable pageable);
 }
