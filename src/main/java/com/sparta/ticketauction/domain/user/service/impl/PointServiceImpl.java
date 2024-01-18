@@ -12,6 +12,7 @@ import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.enums.PointType;
 import com.sparta.ticketauction.domain.user.repository.PointRepository;
 import com.sparta.ticketauction.domain.user.response.PointChargeResponse;
+import com.sparta.ticketauction.domain.user.response.PointUseResponse;
 import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.global.exception.ApiException;
 
@@ -58,5 +59,10 @@ public class PointServiceImpl implements PointService {
 	@Override
 	public Page<PointChargeResponse> getChargePointLogList(User loginUser, Pageable pageable) {
 		return pointRepository.findChargePointListByPage(loginUser.getId(), pageable);
+	}
+
+	@Override
+	public Page<PointUseResponse> getUsePointLogList(User user, Pageable pageable) {
+		return pointRepository.findUsePointListByPage(user.getId(), pageable);
 	}
 }
