@@ -100,9 +100,7 @@ function checkPasswordMatch() {
     let password = $(".password").val();
     let confirmPassword = $(".password-check").val();
     let messageElement = $(".passwordMatchMessage");
-
-    console.log(password);
-    console.log(confirmPassword);
+    
 
     // 비밀번호와 비밀번호 확인 값이 동일한지 확인
     if (password === confirmPassword) {
