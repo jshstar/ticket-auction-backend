@@ -48,8 +48,13 @@ public class BidServiceImpl implements BidService {
 	private final RedisSubscriber redisSubscriber;
 
 	@Override
-	@DistributedLock(key = "T(com.sparta.ticketauction.domain.bid.constant.BidConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
-	public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
+	public void handleBid(Long auctionId, BidRequest bidRequest, User loginUser) {
+		String key = AUCTION_BID_KEY_PREFIX + auctionId;
+		bid(key, auctionId, bidRequest, loginUser);
+	}
+
+	@DistributedLock(key = "#key")
+	public void bid(String key, Long auctionId, BidRequest bidRequest, User loginUser) {
 		//redis에 경매 정보 확인
 		if (bidRedisService.isExpired(auctionId)) {
 			throw new ApiException(ENDED_AUCTION);
@@ -62,7 +67,7 @@ public class BidServiceImpl implements BidService {
 		validateBid(currentBidPrice, newBidPrice);
 
 		//기존 입찰자, 새입찰자 포인트 업데이트
-		Auction auction = getAuction(auctionId);
+		Auction auction = auctionRepository.getReferenceById(auctionId);
 		updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
 		//새 입찰 등록
 		saveBid(bidder, newBidPrice, auction);
@@ -119,7 +124,6 @@ public class BidServiceImpl implements BidService {
 			.auction(auction)
 			.build();
 
-		auction.updateBidPrice(newBidPrice);
 		bidRepository.save(newBid);
 		bidRedisService.setBidPrice(auction.getId(), newBidPrice);
 	}

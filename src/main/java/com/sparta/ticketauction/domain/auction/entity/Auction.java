@@ -1,10 +1,13 @@
 package com.sparta.ticketauction.domain.auction.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.global.entity.BaseEntity;
@@ -17,7 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -53,9 +56,6 @@ public class Auction extends BaseEntity {
 	@Column(name = "start_price", nullable = false)
 	private Long startPrice;
 
-	@Comment("입찰가")
-	@Column(name = "bid_price", nullable = false)
-	private Long bidPrice;
 	@Comment("시작일시")
 	@Column(name = "start_date", nullable = false)
 	private LocalDateTime startDateTime;
@@ -69,6 +69,10 @@ public class Auction extends BaseEntity {
 	@Column(name = "is_ended")
 	private Boolean isEnded = false;
 
+	@Comment("입찰")
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<Bid> bids = new ArrayList<>();
+
 
 	@Builder
 	private Auction(
@@ -76,7 +80,6 @@ public class Auction extends BaseEntity {
 		ZoneGrade zoneGrade,
 		Integer seatNumber,
 		Long startPrice,
-		Long bidPrice,
 		LocalDateTime startDateTime,
 		LocalDateTime endDateTime
 	) {
@@ -84,14 +87,10 @@ public class Auction extends BaseEntity {
 		this.zoneGrade = zoneGrade;
 		this.seatNumber = seatNumber;
 		this.startPrice = startPrice;
-		this.bidPrice = bidPrice;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 	}
 
-	public void updateBidPrice(Long bidPrice) {
-		this.bidPrice = bidPrice;
-	}
 
 	public void ended() {
 		this.isEnded = true;

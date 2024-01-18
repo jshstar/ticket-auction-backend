@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Auction</title>
+
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <script crossorigin="anonymous"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/token.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/common-menu.js"></script>
+</head>
+<body>
+
+<header id="headers"></header>
+
+<div class="row mt-5 justify-content-center container">
+    <div class="col-4" id="menu"></div>
+    <div class="col-8">
+
+        <div class="row page-name">
+            <h2 class="col-sm-12">비밀번호 수정</h2>
+        </div>
+        <div class="form-control px-4 py-3">
+            <div class="form-group">
+                <label class="fs-5" for="update-password"><img class="logo" src="/images/pw-icon.png"/>비밀번호</label>
+                <input class="form-control password" id="update-password" name="password" type="password">
+                <span>영어, 숫자, 특수문자(!,@,#,$,%,^) 조합으로 최소 8자, 최대 15자로 입력해주세요.</span><br>
+                <span id="update-password-span" style="color: red;"></span>
+            </div>
+            <div class="form-group">
+                <label class="fs-5" for="update-password-check"><img class="logo" src="/images/pw-icon.png"/>비밀번호
+                    확인</label>
+                <input class="form-control password-check" id="update-password-check" name="password-check"
+                       type="password">
+                <span class="passwordMatchMessage"></span>
+            </div>
+            <div class="form-group mt-3">
+                <button class="btn btn-dark w-100 custom-btn" id="update-password-btn" type="submit">수정</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    });
+
+    $("#menu").load("/user/common-menu.html", function (response, status, xhr) {
+        $(document).ready(function () {
+            // 모든 링크에서 'active' 클래스 제거
+            $("#settings-menu a").removeClass("active");
+
+            // 클릭된 링크에 'active' 클래스 추가
+            $("#update-user-password").addClass("active");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#update-password, #update-password-check").on("input", checkPasswordMatch);
+    });
+
+    let id = getUserId();
+    $("#update-password-btn").on("click", function () {
+        reissueToken((token => {
+            updatePassword(token, id);
+        }));
+    });
+</script>
+</html>

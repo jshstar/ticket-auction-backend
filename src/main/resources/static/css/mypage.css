@@ -32,3 +32,42 @@ input {
 .custom-btn {
     height: 50px;
 }
+
+.table-d2-list {
+    margin-top: 10px;
+    border-top: 1px solid black;
+}
+
+table {
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    border-collapse: collapse;
+}
+
+thead {
+    font-size: 20px;
+}
+
+th, td {
+    border-bottom: 1px solid #dddddd;
+    padding: 10px;
+}
+
+.pagination {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.pagination > a {
+    text-decoration: none;
+    vertical-align: middle;
+    padding: 0 10px;
+    height: 18px;
+    font-size: 18px;
+    line-height: 18px;
+}
+
+.now {
+    color: #333333;
+    font-weight: 900;
+}

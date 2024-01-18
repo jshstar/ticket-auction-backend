@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.repository.UserRepository;
 import com.sparta.ticketauction.domain.user.request.UserCreateRequest;
+import com.sparta.ticketauction.domain.user.request.UserDeleteRequest;
 import com.sparta.ticketauction.domain.user.request.UserPasswordUpdateRequest;
 import com.sparta.ticketauction.domain.user.request.UserUpdateRequest;
 import com.sparta.ticketauction.domain.user.response.UserResponse;
@@ -113,9 +114,11 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void deleteUser(User loginUser, Long userId) {
-		User user = checkAndGetUser(loginUser, userId);
-
+	public void deleteUser(User loginUser, UserDeleteRequest request) {
+		User user = findByUserId(loginUser.getId());
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+			throw new ApiException(NOT_MATCH_PASSWORD);
+		}
 		user.delete();
 	}
 

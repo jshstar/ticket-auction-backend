@@ -48,3 +48,9 @@ naver-cloud:
   service-id: ${SERVICE_ID}
   sender-phone: ${SENDER_PHONE}
 
+payment:
+  toss:
+    client-key: ${TOSS_CLIENT_KEY}
+    secret-key: ${TOSS_SECRET_KEY}
+    success-url: ${SUCCESS_URL}
+    fail-url: ${FAIL_URL}

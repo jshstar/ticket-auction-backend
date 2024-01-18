@@ -34,11 +34,11 @@
                 <a class="list-group-item list-group-item-action" href="#" id="update-user-password">
                     비밀 번호 변경
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
+                <a class="list-group-item list-group-item-action" href="#" id="charge-point-list">
                     포인트 충전 내역
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
-                    포인트 사용 내역
+                <a class="list-group-item list-group-item-action" href="#" id="point-list">
+                    포인트 변동 내역
                 </a>
                 <a class="list-group-item list-group-item-action" href="#">
                     예매 내역
@@ -46,7 +46,7 @@
                 <a class="list-group-item list-group-item-action" href="#">
                     참여 경매 내역
                 </a>
-                <a class="list-group-item list-group-item-action list-group-item-danger" href="#">
+                <a class="list-group-item list-group-item-action list-group-item-danger" href="#" id="withdraw-user">
                     회원 탈퇴
                 </a>
             </div>
@@ -54,16 +54,25 @@
     </div>
 </div>
 
-</body>
 <script>
     $("#get-user-info").on("click", function () {
-        movePageWithToken(`/user-info.html`);
+        movePageWithToken(`/user/info.html`);
     });
     $("#update-user-info").on("click", function () {
-        movePageWithToken(`/update-user-info.html`);
+        movePageWithToken(`/user/update-info.html`);
     });
     $("#update-user-password").on("click", function () {
-        movePageWithToken(`/update-password.html`);
+        movePageWithToken(`/user/update-pw.html`);
+    });
+    $("#withdraw-user").on("click", function () {
+        movePageWithToken(`/user/withdraw.html`);
+    });
+    $("#charge-point-list").on("click", function () {
+        movePageWithToken(`/point-charge-list.html`);
+    });
+    $("#point-list").on("click", function () {
+        movePageWithToken(`/point-list.html`);
     });
 </script>
+</body>
 </html>
