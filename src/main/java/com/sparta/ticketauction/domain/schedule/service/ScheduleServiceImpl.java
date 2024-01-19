@@ -73,4 +73,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return scheduleList.stream().map(ScheduleGetResponse::new).toList();
 	}
 
+	@Override
+	public Schedule findScheduleWithGoodsPlace(Long scheduleId, boolean fetchGoods, boolean fetchPlace) {
+		return scheduleRepository.findByIdWithGoodsInfo(scheduleId, fetchGoods, fetchPlace)
+			.orElseThrow(() -> new ApiException(NOT_FOUND_SCHEDULE));
+	}
 }

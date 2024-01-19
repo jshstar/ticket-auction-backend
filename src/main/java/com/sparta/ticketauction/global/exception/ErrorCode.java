@@ -32,6 +32,7 @@ public enum ErrorCode {
 
 	/* SCHEDULE */
 	NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
+	ALREADY_START_SCHEDULE(HttpStatus.BAD_REQUEST, "S10001", "이미 시작한 공연입니다."),
 
 	/* PLACE */
 	NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
@@ -48,6 +49,13 @@ public enum ErrorCode {
 	/* RESERVATION */
 	ALREADY_RESERVED_SEAT(HttpStatus.CONFLICT, "R10000", "이미 예약된 좌석입니다."),
 	INVALID_SEAT_PRICE(HttpStatus.BAD_REQUEST, "R10001", "좌석 가격이 올바르지 않습니다."),
+	INVALID_SEAT_NUMBER(HttpStatus.BAD_REQUEST, "R10002", "좌석 번호가 올바르지 않습니다."),
+	MAX_RESERVATION_LIMIT(HttpStatus.BAD_REQUEST, "R10003", "최대 예매 가능 좌석 수를 초과했습니다."),
+	NOT_FOUND_RESERVATION(HttpStatus.NOT_FOUND, "R10004", "해당하는 예매 정보를 찾지 못했습니다."),
+	RESERVATION_AUTHENTICATE_FAIL(HttpStatus.FORBIDDEN, "R10005", "예매 인증에 실패했습니다."),
+
+	/* ZONE_GRADE*/
+	NOT_FOUND_ZONE_GRADE(HttpStatus.NOT_FOUND, "ZG10001", "해당하는 좌석 등급을 찾지 못했습니다"),
 
 	/* PAYMENT */
 	NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "P10000", "결제할 포인트가 부족합니다"),
