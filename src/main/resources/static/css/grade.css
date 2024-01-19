@@ -116,3 +116,8 @@ body {
     border-color: #cccccc;
     cursor: not-allowed;
 }
+
+#gradesTable .saveRowBtn.saved {
+    background-color: #6c757d; /* 부트스트랩의 회색 */
+    border-color: #6c757d;
+}

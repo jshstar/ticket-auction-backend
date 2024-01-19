@@ -1,0 +1,130 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    /* 헤더 스타일링이 필요하다면 여기에 추가 */
+}
+
+.container-flex {
+    display: flex;
+    width: 100%; /* 전체 너비를 사용 */
+    margin: 20px auto;
+}
+
+#goods-container {
+    flex: 0 0 70%; /* 상품 정보 컨테이너의 너비를 70%로 고정 */
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+
+.goods-info-box {
+    width: auto;
+    display: flex;
+}
+
+.image-container {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-right: 20px;
+}
+
+.goods-info, .image-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#goodsTitle {
+    order: 1;
+    margin-bottom: 10px;
+}
+
+#main-image {
+    width: 100%;
+    height: auto;
+    order: 2;
+}
+
+#schedule-container {
+    flex: 0 0 30%; /* 캘린더 컨테이너의 너비를 30%로 고정 */
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    /* 캘린더의 최소 너비를 설정하여 내용이 잘리지 않도록 합니다. 필요에 따라 조절하세요. */
+    min-width: 300px;
+}
+
+#images-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+.images-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.images-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.images-list img {
+    width: 80px;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+#book-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#book-btn:hover {
+    background-color: #0056b3;
+}
+
+/* FullCalendar 스타일링 */
+#calendar-container {
+    width: 100%; /* 캘린더의 너비를 조정 */
+}
+
+.fc-header-toolbar {
+    margin-bottom: 10px;
+}
+
+.fc-button {
+    background-color: #007bff;
+    color: white;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.fc-button:hover {
+    background-color: #0056b3;
+}
+
+.fc {
+    width: 100%; /* FullCalendar의 너비를 조정 */
+}
