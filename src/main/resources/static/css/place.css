@@ -1,7 +1,6 @@
 /* 전체 페이지에 대한 기본 스타일 */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
     margin: 0;
     padding: 0;
 }
@@ -27,7 +26,7 @@ input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid black;
     border-radius: 4px;
     box-sizing: border-box; /* Border and padding should be included in width */
 }
@@ -50,49 +49,79 @@ th {
 }
 
 /* 버튼 스타일 */
-button {
+.place-btn-div > .place-btn {
     padding: 10px 15px;
     margin-top: 20px;
-    border: none;
+    border: 1px solid #8637DF;
     border-radius: 4px;
-    background-color: #5cb85c;
+    background-color: #8637DF;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-button:hover {
-    background-color: #4cae4c;
+.place-btn-div > .place-btn:hover {
+    background-color: #8637DF;
+    color: white;
 }
 
-/* 구역 제거 버튼 스타일 */
-.remove-zone {
-    background-color: #d9534f;
+#createPlaceButton {
+    border: 1px solid #FADAD8;
+    background-color: #FADAD8;
     color: white;
-    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+#createPlaceButton:hover {
+    background-color: #FADAD8;
+    color: white;
+}
+
+#goodsInfoPage {
+    background-color: #A593E0;
+    color: white;
+    padding: 10px 15px;
+    border: 1px solid #A593E0;
+    cursor: pointer;
+    float: right;
+}
+
+#goodsInfoPage:hover {
+    background-color: #A593E0;
+    color: white;
+}
+
+
+/* 구역 제거 버튼 스타일 */
+#zonesTable > tbody > tr > td > .remove-zone {
+    border: 1px solid red;
+    background-color: red;
+    color: white;
     padding: 5px 10px;
     cursor: pointer;
     margin-top: 5px;
 }
 
-.remove-zone:hover {
-    background-color: #c9302c;
+#zonesTable > tbody > tr > td > .remove-zone:hover {
+    background-color: red;
+    color: white;
 }
 
 /* 다음 페이지 버튼 스타일 */
-#goodsInfoPageButton {
+.place-btn-div > #goodsInfoPageButton {
     float: right;
     padding: 10px 15px;
-    background-color: #337ab7; /* Bootstrap primary blue */
+    background-color: inherit; /* Bootstrap primary blue */
     color: white;
-    border: none;
     border-radius: 4px;
+    border: 1px solid #8637DF;
     margin-top: 20px;
     transition: background-color 0.3s;
 }
 
-#goodsInfoPageButton:hover {
-    background-color: #286090;
+.place-btn-div > #goodsInfoPageButton:hover {
+    background-color: #8637DF;
 }
 
 .section {

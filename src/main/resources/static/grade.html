@@ -18,19 +18,19 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/grade.css">
+    <link href="/css/grade.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
-<div class="grade-form-container">
-    <h1>좌석 등급 및 가격 설정</h1>
+<div class="grade-form-container px-4 py-4">
+    <h1 class="text-center">좌석 등급 및 가격 설정</h1>
     <form id="gradeForm">
-        <input type="text" id="gradeName" placeholder="좌석 등급" required>
-        <input type="number" id="normalPrice" placeholder="일반 가격" required>
-        <input type="number" id="auctionPrice" placeholder="경매 가격" required>
-        <button type="button" id="addGrade">추가</button>
+        <input class="form-control mt-4" id="gradeName" placeholder="좌석 등급" required type="text">
+        <input class="form-control mt-4" id="normalPrice" placeholder="일반 가격" required type="number">
+        <input class="form-control mt-4" id="auctionPrice" placeholder="경매 가격" required type="number">
+        <button class="form-control mt-4" id="addGrade" type="button">추가</button>
     </form>
-    <table id="gradesTable">
+    <table class="text-center" id="gradesTable">
         <thead>
         <tr>
             <th>좌석 등급</th>
@@ -44,7 +44,7 @@
         <!-- 동적으로 행이 추가될 부분 -->
         </tbody>
     </table>
-    <button id="zoneGradePage">다음 페이지</button>
+    <button class="mt-4" id="zoneGradePage">다음 페이지</button>
 </div>
 
 <script>

@@ -7,7 +7,94 @@ a {
     color: black;
 }
 
+body {
+    background-color: white;
+}
+
+#headers {
+    background-color: #FADAD8;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
 .dropdown-item:hover {
-    background-color: black !important;
+    background-color: #D1C2E9 !important;
     color: white !important;
+}
+
+.goods-menu-ul {
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.round-btn {
+    padding-right: 10px;
+    border-radius: 20px;
+    font-size: 20px;
+    border-color: #D1C2E9;
+    background-color: inherit;
+    color: black;
+    width: 150px;
+}
+
+.round-btn:hover {
+    background-color: #D1C2E9;
+    color: white;
+    transition: 0.7s;
+}
+
+.btn-div {
+    padding-right: 20px;
+}
+
+.btn-div > .active {
+    color: white;
+    background-color: #D1C2E9 !important;
+    border-color: #D1C2E9;
+}
+
+.goods-poster-img {
+    width: 240px;
+}
+
+.goods-posters-row {
+    width: 100%;
+}
+
+.pd {
+    margin-left: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.goods-poster-img {
+    width: 240px;
+    height: auto;
+    flex: 1;
+    border-radius: 10px;
+}
+
+.posters-div {
+    margin-top: 40px;
+}
+
+.goods-title {
+    padding-top: 10px;
+    margin-top: auto;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.category-a {
+    cursor: pointer;
+}
+
+.pd {
+    cursor: pointer;
 }

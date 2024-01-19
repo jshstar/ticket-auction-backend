@@ -1,11 +1,13 @@
-body {
-    font-family: Arial, sans-serif;
-}
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/
 
 .container {
     margin: 0 auto;
     width: 50%;
     padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -28,10 +30,10 @@ body {
 }
 
 #submitGoodsInfoButton {
-    background-color: #4CAF50;
+    border: none;
+    background-color: #FADAD8;
     color: white;
     padding: 10px 15px;
-    border: none;
     cursor: pointer;
 }
 
@@ -41,10 +43,10 @@ body {
 }
 
 #goodsPage {
-    background-color: #4CAF50;
+    background-color: #A593E0;
     color: white;
     padding: 10px 15px;
-    border: none;
     cursor: pointer;
     float: right;
 }
+

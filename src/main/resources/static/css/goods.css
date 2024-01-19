@@ -1,17 +1,20 @@
-body {
-    font-family: Arial, sans-serif;
-}
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*}*/
 
 .container {
     width: 80%;
     margin: 0 auto;
-    text-align: center; /* 이미지와 폼 가운데 정렬 */
+    /*text-align: center; !* 이미지와 폼 가운데 정렬 *!*/
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
     display: flex;
     flex-direction: column;
-    align-items: center; /* 폼 요소들을 가운데 정렬 */
+    /*align-items: center; !* 폼 요소들을 가운데 정렬 *!*/
 }
 
 label {
@@ -24,18 +27,6 @@ input, select, button {
     width: 50%; /* 폼 요소 너비 설정 */
 }
 
-button {
-    margin-top: 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
 /* 이미지 스타일 */
 #goodsInfoImage {
     max-width: 50%; /* 이미지가 컨테이너 너비를 초과하지 않도록 설정 */
@@ -45,6 +36,19 @@ button:hover {
     padding: 5px; /* 이미지 주변에 약간의 여백 추가 */
     margin-top: 20px; /* 이미지와 셀렉트 박스 사이의 여백 추가 */
 }
+
+#submitGoodsButton {
+    border: 1px solid #A593E0;
+    background-color: #A593E0;
+    color: white;
+}
+
+#submitGoodsButton:hover {
+    background-color: #A593E0;
+    color: white;
+    opacity: 0.8;
+}
+
 
 /* 반응형 디자인을 위한 미디어 쿼리 */
 @media (max-width: 600px) {
