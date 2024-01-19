@@ -1,19 +1,23 @@
 package com.sparta.ticketauction.domain.auction.service;
 
-import java.time.Duration;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
+import com.sparta.ticketauction.domain.auction.response.AuctionDetailResponse;
 import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.service.BidRedisService;
 import com.sparta.ticketauction.domain.bid.service.BidService;
-import com.sparta.ticketauction.domain.reservation.service.ReservationService;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
+import com.sparta.ticketauction.domain.reservation.service.ReservationService;
 import com.sparta.ticketauction.domain.schedule.entity.Schedule;
 import com.sparta.ticketauction.domain.schedule.repository.ScheduleRepository;
 import com.sparta.ticketauction.domain.user.entity.User;
@@ -43,7 +47,7 @@ public class AuctionServiceImpl implements AuctionService {
 
 		Auction auction = request.toEntity(schedule, zoneGrade);
 		auctionRepository.save(auction);
-		bidRedisService.saveWithExpire(auction, genRemainSeconds(auction));
+		bidRedisService.saveWithExpire(auction);
 	}
 
 	// TODO: 1/10/24  추후 예매와 이벤트기반으로 의존성 분리하기
@@ -53,15 +57,21 @@ public class AuctionServiceImpl implements AuctionService {
 		Auction auction = getAuction(auctionId);
 		auction.ended();
 
-		User bidWinner = getBidWinner(auction);
-		reservationService.reserve(bidWinner, auction);
+		//경매 종료 시 입찰자가 없으면 예매 x
+		Optional<Bid> bidOptional = bidService.getCurrentBid(auction);
+		bidOptional.ifPresent(bid -> reservationService.reserve(bid, auction));
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public AuctionDetailResponse getAuctionInfo(Long auctionId) {
 		Auction auction = getAuction(auctionId);
-		Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
-		return AuctionDetailResponse.from(auction, remainTimeMilli);
+		long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
+		long bidPrice = bidRedisService.getBidPrice(auctionId)
+			.orElseGet(() ->
+				bidService.getMaxBidPrice(auction).orElse(auction.getStartPrice())
+			);
+		return AuctionDetailResponse.from(auction, bidPrice, remainTimeMilli);
 	}
 
 	@Override
@@ -71,19 +81,8 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<AuctionInfoResponse> getMyJoinedAuctions(User loginUser, Pageable pageable) {
 		return auctionRepository.getJoinedMyAuctions(loginUser, pageable);
-	}
-
-	public User getBidWinner(Auction auction) {
-		return bidService.getCurrentBid(auction)
-			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_WIN_BID))
-			.getUser();
-	}
-
-
-	private long genRemainSeconds(Auction auction) {
-		Duration duration = Duration.between(auction.getStartDateTime(), auction.getEndDateTime());
-		return duration.getSeconds();
 	}
 }

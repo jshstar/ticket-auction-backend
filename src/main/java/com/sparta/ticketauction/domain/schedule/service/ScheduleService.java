@@ -20,4 +20,7 @@ public interface ScheduleService {
 
 	// 해당 공연에 대한 전 회차 조회
 	List<ScheduleGetResponse> getAllSchedule(Long goodsId);
+
+	// 회차 공연과 공연장 fetch join 선택 조회
+	Schedule findScheduleWithGoodsPlace(Long scheduleId, boolean fetchGoods, boolean fetchPlace);
 }

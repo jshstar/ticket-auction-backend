@@ -4,7 +4,6 @@ import static com.sparta.ticketauction.domain.bid.constant.BidConstant.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -48,28 +47,33 @@ public class BidServiceImpl implements BidService {
 	private final RedisSubscriber redisSubscriber;
 
 	@Override
-	public void handleBid(Long auctionId, BidRequest bidRequest, User loginUser) {
-		String key = AUCTION_BID_KEY_PREFIX + auctionId;
-		bid(key, auctionId, bidRequest, loginUser);
-	}
+	@DistributedLock(key = "#auctionId")
+	public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
+		Auction auction = getAuction(auctionId);
+		boolean isEnded = auction.getIsEnded();
 
-	@DistributedLock(key = "#key")
-	public void bid(String key, Long auctionId, BidRequest bidRequest, User loginUser) {
-		//redis에 경매 정보 확인
-		if (bidRedisService.isExpired(auctionId)) {
+		if (isEnded) {
 			throw new ApiException(ENDED_AUCTION);
 		}
 
-		//입찰 검증
 		User bidder = userService.findByUserId(loginUser.getId());
 		long newBidPrice = bidRequest.getPrice();
-		long currentBidPrice = bidRedisService.getBidPrice(auctionId);
-		validateBid(currentBidPrice, newBidPrice);
+		long currentBidPrice = bidRedisService.getBidPrice(auctionId)
+			.orElseGet(() -> {
+				//redis에 입찰정보 없는 경우 재처리
+				bidRedisService.saveWithExpire(auction);
+				return auction.getStartPrice();
+			});
 
-		//기존 입찰자, 새입찰자 포인트 업데이트
-		Auction auction = auctionRepository.getReferenceById(auctionId);
+		//DB에 입찰기록이 존재하는 경우
+		Optional<Long> maxBidPriceOptional = getMaxBidPrice(auction);
+		if (maxBidPriceOptional.isPresent()) {
+			currentBidPrice = maxBidPriceOptional.get();
+			bidRedisService.setBidPrice(auctionId, currentBidPrice);
+		}
+
+		validateBid(currentBidPrice, newBidPrice);
 		updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
-		//새 입찰 등록
 		saveBid(bidder, newBidPrice, auction);
 	}
 
@@ -80,13 +84,18 @@ public class BidServiceImpl implements BidService {
 	}
 
 	@Override
+	public Optional<Long> getMaxBidPrice(Auction auction) {
+		return bidRepository.getMaxBidPrice(auction);
+	}
+
+	@Override
 	public SseEmitter subscribe(Long auctionId) {
 		String channelName = AUCTION_SSE_PREFIX + auctionId;
 		redisSubscriber.createChannel(channelName);
 
 		SseEmitter sseEmitter = new SseEmitter(DEFAULT_SSE_TIMEOUT);
-		sseEmitter.onCompletion(()->sseRepository.deleteAll(channelName));
-		sseEmitter.onTimeout(()-> {
+		sseEmitter.onCompletion(() -> sseRepository.deleteAll(channelName));
+		sseEmitter.onTimeout(() -> {
 			sseRepository.deleteAll(channelName);
 			sseEmitter.complete();
 		});
@@ -103,8 +112,6 @@ public class BidServiceImpl implements BidService {
 		}
 		return sseEmitter;
 	}
-
-
 
 	public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Auction auction) {
 		Optional<Bid> currentBid = getCurrentBid(auction);

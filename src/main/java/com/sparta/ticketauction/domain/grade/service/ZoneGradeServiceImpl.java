@@ -7,6 +7,8 @@ import com.sparta.ticketauction.domain.grade.entity.Grade;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
 import com.sparta.ticketauction.domain.place.entity.Zone;
+import com.sparta.ticketauction.global.exception.ApiException;
+import com.sparta.ticketauction.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,4 +25,9 @@ public class ZoneGradeServiceImpl implements ZoneGradeService {
 		return zoneGradeRepository.save(zoneGrade);
 	}
 
+	@Override
+	public ZoneGrade findZoneGradeWithFetch(Long id, boolean fetchZone, boolean fetchGrade) {
+		return zoneGradeRepository.findZoneGrade(id, fetchZone, fetchGrade)
+			.orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_ZONE_GRADE));
+	}
 }

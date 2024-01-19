@@ -23,6 +23,7 @@ public enum SuccessCode {
 	SUCCESS_GET_ALL_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 전체 조회 성공했습니다."),
 	SUCCESS_GET_SLICE_GOODS(HttpStatus.OK, "G00100", "공연 페이징 조회 성공했습니다."),
 	SUCCESS_GET_GOODS(HttpStatus.OK, "G00200", "공연 단건 조회 성공했습니다."),
+	SUCCESS_GET_ALL_GOODS_CATEGORY(HttpStatus.OK, "G00300", "카테고리 전체 조회 성공했습니다."),
 
 	/* PLACE */
 	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),
@@ -69,6 +70,11 @@ public enum SuccessCode {
 
 	/* RESERVATION */
 	SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
+	SUCCESS_SEARCH_RESERVATION(HttpStatus.OK, "R00001", "예매 조회 성공"),
+	SUCCESS_SEARCH_RESERVATIONS(HttpStatus.OK, "R00002", "예매 목록 조회 성공"),
+	SUCCESS_CANCEL_RESERVATION(HttpStatus.OK, "R00003", "예매 취소 성공"),
+	SUCCESS_CREATE_RESERVATION_AUTHENTICATION_QRCODE(HttpStatus.OK, "R00004", "예매 인증 QR코드 생성 성공"),
+	SUCCESS_AUTHENTICATE_RESERVATION(HttpStatus.OK, "R00005", "예매 인증 성공"),
 
 	/* TOKEN */
 	SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),

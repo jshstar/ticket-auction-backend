@@ -14,12 +14,12 @@ import lombok.RequiredArgsConstructor;
 public class BidRedisService {
 	private final BidRedisRepository redisRepository;
 
-	public void saveWithExpire(Auction auction, long seconds) {
-		redisRepository.saveWithExpire(auction, seconds);
+	public void saveWithExpire(Auction auction) {
+		redisRepository.saveWithExpire(auction);
 	}
 
-	public Long getBidPrice(Long auctionId) {
-		return redisRepository.getValue(auctionId).orElse(null);
+	public Optional<Long> getBidPrice(Long auctionId) {
+		return redisRepository.getValue(auctionId);
 	}
 
 	public void setBidPrice(Long auctionId, Long bidPrice) {
@@ -31,7 +31,7 @@ public class BidRedisService {
 	}
 
 	public long getRemainTimeMilli(Long auctionId) {
-		Optional<Long> remainTimeMilliOps = redisRepository.getRemainTIme(auctionId);
-		return remainTimeMilliOps.orElse(0L);
+		long remainTimeMilli = redisRepository.getRemainTIme(auctionId);
+		return Math.max(remainTimeMilli, 0L);
 	}
 }

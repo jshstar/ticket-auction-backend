@@ -3,6 +3,7 @@ package com.sparta.ticketauction.domain.bid.repository;
 import static com.sparta.ticketauction.domain.bid.entity.QBid.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
 
@@ -53,6 +55,17 @@ public class BidRepositoryCustomImpl implements BidRepositoryCustom {
 		// 1. 첫 번째 페이지이면서 content 크기가 한 페이지의 사이즈보다 작을 때 (ex, content:3개, page 크기: 10)
 		// 2. 마지막 페이지일 때 (getOffset이 0이 아니면서, content 크기가 한 페이지의 사이즈보다 작을 때)
 		return PageableExecutionUtils.getPage(myBids, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public Optional<Long> getMaxBidPrice(Auction auction) {
+		Long maxPrice = jpaQueryFactory
+			.select(bid.price.max())
+			.from(bid)
+			.where(bid.auction.eq(auction))
+			.fetchOne();
+
+		return Optional.ofNullable(maxPrice);
 	}
 
 	private OrderSpecifier<?> sortBid(Pageable pageable) {
