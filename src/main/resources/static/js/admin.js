@@ -349,7 +349,9 @@ function saveGradeData(button, token) {
         },
         success: function (response) {
             alert('저장 성공!');
-            $(button).prop('disabled', true); // 버튼 비활성화
+            var row = $(button).closest('tr');
+            row.find('.saveRowBtn').prop('disabled', true).addClass('saved'); // 저장 버튼 비활성화 및 클래스 추가
+            row.find('.deleteRowBtn').prop('disabled', true); // 삭제 버튼 비활성화
             saveRequested = true; // 저장 요청 플래그를 true로 설정
         },
         error: function (xhr, status, error) {
