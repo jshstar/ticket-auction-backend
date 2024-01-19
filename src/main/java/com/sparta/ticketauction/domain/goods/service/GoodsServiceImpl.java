@@ -24,6 +24,7 @@ import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
+import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
@@ -161,6 +162,13 @@ public class GoodsServiceImpl implements GoodsService {
 
 	}
 
+	// 공연 카테고리 전체 조회
+	@Override
+	public List<GoodsCategoryGetResponse> getAllGoodsCategory() {
+		List<GoodsCategory> goodsCategorieList = goodsCategoryRepository.findAll();
+		return goodsCategorieList.stream().map(GoodsCategoryGetResponse::new).toList();
+	}
+
 	// 공연 정보 조회
 	@Override
 	public GoodsInfo findByGoodsInfoId(Long goodsInfoId) {
@@ -168,7 +176,7 @@ public class GoodsServiceImpl implements GoodsService {
 			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS_INFO));
 	}
 
-	// 공연 정보 조회
+	// 공연 조회
 	public Goods findByGoodsId(Long goodsId) {
 		return goodsRepository.findById(goodsId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS));

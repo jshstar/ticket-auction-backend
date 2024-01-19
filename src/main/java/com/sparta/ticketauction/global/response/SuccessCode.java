@@ -23,6 +23,7 @@ public enum SuccessCode {
 	SUCCESS_GET_ALL_GOODS_INFO(HttpStatus.OK, "G00000", "공연 정보 전체 조회 성공했습니다."),
 	SUCCESS_GET_SLICE_GOODS(HttpStatus.OK, "G00100", "공연 페이징 조회 성공했습니다."),
 	SUCCESS_GET_GOODS(HttpStatus.OK, "G00200", "공연 단건 조회 성공했습니다."),
+	SUCCESS_GET_ALL_GOODS_CATEGORY(HttpStatus.OK, "G00300", "카테고리 전체 조회 성공했습니다."),
 
 	/* PLACE */
 	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),

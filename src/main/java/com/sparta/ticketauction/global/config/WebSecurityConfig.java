@@ -76,6 +76,7 @@ public class WebSecurityConfig {
 					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
 					.requestMatchers("/*.html", "/*/*.html").permitAll()
 					.requestMatchers("/api/v1/users/signup").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/v1/goods-categorys/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
