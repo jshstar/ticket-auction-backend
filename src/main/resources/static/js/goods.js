@@ -65,7 +65,7 @@ function clickOnCategoryBtn(name) {
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("goods-poster-img")
                             .on("click", function () {
-                                // 공연 상세 정보  페이지로 이동
+                                redirectToPageWithParameter("/goods-details.html", "goodsId", d.goodsId);
                             })
                     )
                     .append($('<p>').text(title[0]).addClass("goods-title"))

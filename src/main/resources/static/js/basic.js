@@ -168,3 +168,40 @@ function redirectToPage(pageUrl) {
             console.error('페이지 이동 실패:', error);
         });
 }
+
+// 쿼리 파라미터와 함께 보내기
+function redirectToPageWithParameter(pageUrl, parameter, value) {
+    fetch(pageUrl, {
+        method: 'GET'
+    })
+        .then(response => {
+            // 응답을 확인하고, 필요한 처리를 수행
+            if (response.ok) {
+                // 페이지 이동 또는 다른 동작 수행
+                window.location.href = pageUrl + `?${parameter}=${value}`;
+            } else {
+                console.error('페이지 이동 실패:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('페이지 이동 실패:', error);
+        });
+}
+
+function getQueryParams() {
+    var queryParams = {};
+    var queryString = window.location.search.substring(1); // ? 제외한 쿼리 문자열
+
+    // 쿼리 문자열을 &로 분리하여 배열로 만듦
+    var queryParamsArray = queryString.split("&");
+
+    // 각 쿼리 파라미터를 처리
+    queryParamsArray.forEach(function (param) {
+        var pair = param.split("=");
+        var key = decodeURIComponent(pair[0]); // 특수 문자를 디코딩
+        var value = decodeURIComponent(pair[1]); // 특수 문자를 디코딩
+        queryParams[key] = value;
+    });
+
+    return queryParams;
+}

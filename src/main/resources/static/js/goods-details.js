@@ -1,14 +1,13 @@
 $(document).ready(function () {
-    var goodsId = localStorage.getItem('goodsId'); // js-cookie 라이브러리를 사용하여 goodsId 가져오기
-    if (goodsId) {
-        fetchGoodsInfo(goodsId);
-        fetchGradesInfo(goodsId);
-        fetchScheduleInfo(goodsId);
+    var queryParams = getQueryParams();
+    if (queryParams["goodsId"]) {
+        fetchGoodsInfo(queryParams["goodsId"]);
+        fetchGradesInfo(queryParams["goodsId"]);
+        fetchScheduleInfo(queryParams["goodsId"]);
     } else {
         // goodsId가 없다면 에러 처리
         console.error('No goodsId found');
     }
-
 });
 
 function fetchGoodsInfo(goodsId) {
@@ -29,11 +28,11 @@ function fetchGoodsInfo(goodsId) {
                 }
             });
 
-            $('#placeFullName').text('장소: ' + response.placeName);
-            $('#placeLocationAddress').text('주소: ' + response.placeAddress);
-            $('#goodsDate').text('공연 기간: ' + formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
-            $('#goodsTime').text('공연 시간: ' + response.runningTime + '분');
-            $('#goodsAge').text('관람 연령: ' + response.ageGrade);
+            $('#placeFullName').text(response.placeName);
+            $('#placeLocationAddress').text(response.placeAddress);
+            $('#goodsDate').text(formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
+            $('#goodsTime').text(response.runningTime + '분');
+            $('#goodsAge').text(response.ageGrade);
 
             // 여기에 추가적인 처리를 할 수 있습니다.
         },
