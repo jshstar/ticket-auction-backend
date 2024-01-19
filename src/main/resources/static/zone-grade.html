@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head id="head">
+    <meta charset="UTF-8">
+    <title>Ticket Auction</title>
+
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <script crossorigin="anonymous"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/token.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/admin.js"></script>
+    <link rel="stylesheet" href="/css/zone-grade.css">
+</head>
+<body class="zoneGradeClass">
+<header id="headers"></header>
+<div id="zone-grade-container">
+    <table id="zone-grade-table">
+        <thead>
+        <tr>
+            <th>구역명</th>
+            <th>총좌석수</th>
+            <th>좌석등급</th>
+            <th>가격</th>
+            <th>작업</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- JavaScript를 통해 동적으로 행 추가 -->
+        </tbody>
+    </table>
+    <button id="auction-page-button" disabled>다음 페이지</button>
+</div>
+<script>
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    });
+
+    // '저장' 버튼 클릭 이벤트 핸들러에서 updateNextPageButtonState 함수 호출
+    $(document).on('click', '.save-btn', function () {
+        // 기존 로직 ...
+        updateNextPageButtonState();
+    });
+    $("#auction-page-button").on("click", function () {
+        movePageWithToken("/auction.html");
+    });
+    // 페이지 로드 시 '다음 페이지' 버튼 상태 초기화
+    updateNextPageButtonState();
+</script>
+</body>
+</html>
