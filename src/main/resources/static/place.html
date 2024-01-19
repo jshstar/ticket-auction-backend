@@ -23,29 +23,37 @@
 <body>
 <header id="headers"></header>
 <div class="container">
-    <label for="placeName">공연장 이름:</label>
-    <input type="text" id="placeName" required>
+    <div class="section">
+        <label for="placeName">공연장 이름:</label>
+        <input type="text" id="placeName" required>
 
-    <label for="address">공연장 주소:</label>
-    <input type="text" id="address" required>
+        <label for="address">공연장 주소:</label>
+        <input type="text" id="address" required>
+    </div>
+
+    <div class="section zones-section">
+        <label for="zoneName">구역명:</label>
+        <input type="text" id="zoneName" placeholder="구역명 입력" required>
+
+        <label for="zoneSeats">총 좌석 수:</label>
+        <input type="number" id="zoneSeats" placeholder="총 좌석 수 입력" required>
+
+        <button id="addZoneButton">구역 추가</button>
+    </div>
 
     <table id="zonesTable">
+        <thead>
         <tr>
             <th>구역명</th>
             <th>총 좌석 수</th>
-            <th>제거</th> <!-- 제거 버튼을 위한 열을 추가 -->
+            <th>제거</th>
         </tr>
-        <tr id="inputRow">
-            <td><input type="text" id="zoneName" placeholder="구역명 입력"></td>
-            <td><input type="number" id="zoneSeats" placeholder="총 좌석 수 입력"></td>
-            <td>
-                <button onclick="removeZone(this)">제거</button>
-            </td> <!-- 제거 기능을 위한 버튼 -->
-        </tr>
+        </thead>
+        <tbody>
+        <!-- 입력된 구역 정보가 여기에 행으로 추가됩니다 -->
+        </tbody>
     </table>
-
-    <button onclick="addZone()">구역 추가</button>
-    <button id="createPlace">공연장 추가하기</button>
+    <button id="createPlaceButton">공연장 추가하기</button>
     <button id="goodsInfoPage">다음 페이지</button>
 </div>
 </body>
@@ -53,13 +61,16 @@
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    $("#createPlace").on("click", function () {
+    $("#createPlaceButton").on("click", function () {
         reissueToken((token => {
             submitPlace(token);
         }));
     });
+    $('#addZoneButton').on('click', addZone); // 구역 추가 이벤트 핸들러
+
     $("#goodsInfoPage").on("click", function () {
         movePageWithToken("/goodsInfo.html");
     });
+
 </script>
 </html>

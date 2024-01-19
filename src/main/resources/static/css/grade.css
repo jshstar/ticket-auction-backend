@@ -1,0 +1,118 @@
+body {
+    font-family: 'Noto Sans', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.header {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.grade-form-container {
+    width: 80%;
+    max-width: 500px; /* Adjust width as needed */
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.grade-form-container h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#gradeForm input,
+#gradeForm button,
+#gradesTable input,
+#gradesTable button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding in the width */
+}
+
+#gradeForm button,
+#gradesTable button {
+    background-color: #5cb85c; /* Bootstrap 'success' green */
+    color: white;
+    border-color: #4cae4c;
+}
+
+#gradeForm button:hover,
+#gradesTable button:hover {
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+#gradesTable {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+#gradesTable th,
+#gradesTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#gradesTable th {
+    background-color: #f9f9f9;
+}
+
+#zoneGradePage {
+    width: auto;
+    padding: 10px 20px;
+    background-color: #337ab7; /* Bootstrap 'primary' blue */
+    color: white;
+    border: 1px solid #2e6da4;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+#zoneGradePage:hover {
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .grade-form-container {
+        width: 95%;
+        margin-top: 15px;
+    }
+
+    #gradeForm input,
+    #gradeForm button,
+    #gradesTable input,
+    #gradesTable button {
+        width: 100%;
+    }
+}
+
+#gradesTable .deleteRowBtn {
+    background-color: #d9534f; /* Bootstrap 'danger' red */
+    color: white;
+    border-color: #d43f3a;
+}
+
+#gradesTable .deleteRowBtn:hover {
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+#gradesTable .deleteRowBtn:disabled {
+    background-color: #cccccc;
+    border-color: #cccccc;
+    cursor: not-allowed;
+}

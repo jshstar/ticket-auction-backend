@@ -46,7 +46,6 @@
         <input type="time" id="startTime" name="startTime" required>
     </form>
     <button id="submitGoodsButton">공연 추가하기</button>
-    <button id="gradePage">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
@@ -56,9 +55,6 @@
         reissueToken((token => {
             submitGoodsAndSchedule(token);
         }));
-    });
-    $("#gradePage").on("click", function () {
-        movePageWithToken("/grade.html");
     });
 </script>
 </body>

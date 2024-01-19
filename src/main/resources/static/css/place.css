@@ -17,17 +17,19 @@ body {
 
 /* 라벨과 인풋 필드 스타일 */
 label {
+    display: block;
     margin-top: 10px;
     color: #333;
 }
 
 input[type="text"],
 input[type="number"] {
-    width: calc(100% - 22px);
+    width: 100%;
     padding: 10px;
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box; /* Border and padding should be included in width */
 }
 
 /* 테이블 스타일 */
@@ -63,17 +65,42 @@ button:hover {
     background-color: #4cae4c;
 }
 
-/* '제거' 버튼에 대한 추가 스타일 */
-button[onclick*="removeZone"] {
+/* 구역 제거 버튼 스타일 */
+.remove-zone {
     background-color: #d9534f;
+    color: white;
+    border: none;
     padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 5px;
 }
 
-button[onclick*="removeZone"]:hover {
+.remove-zone:hover {
     background-color: #c9302c;
 }
 
-#goodsInfoPage {
+/* 다음 페이지 버튼 스타일 */
+#goodsInfoPageButton {
     float: right;
-    /* 다른 스타일 속성 추가 가능 */
+    padding: 10px 15px;
+    background-color: #337ab7; /* Bootstrap primary blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+#goodsInfoPageButton:hover {
+    background-color: #286090;
+}
+
+.section {
+    margin-bottom: 20px; /* 섹션 간 간격을 주기 위해 margin-bottom 추가 */
+}
+
+.zones-section {
+    background-color: #f8f8f8; /* 구역명 입력 섹션 배경색 변경 */
+    padding: 10px; /* 패딩 추가 */
+    border-radius: 4px; /* 모서리 둥글게 */
 }
