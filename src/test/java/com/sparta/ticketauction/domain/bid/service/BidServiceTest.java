@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,8 @@ import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.repository.BidRepository;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.user.entity.User;
+import com.sparta.ticketauction.domain.user.service.PointService;
+import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.domain.user.util.UserUtil;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.exception.ErrorCode;
@@ -40,6 +43,11 @@ class BidServiceTest {
 	@Mock
 	private BidRedisService bidRedisService;
 
+	@Mock
+	private UserService userService;
+
+	@Mock
+	private PointService pointService;
 
 	//로그인한 유저가
 	//특정 경매에 입찰금액을 적고 입찰하기 버튼을 눌렀을때.
@@ -49,25 +57,22 @@ class BidServiceTest {
 	void 입찰하기_정상_테스트() throws Exception {
 		//Given
 		Long auctionId = 1L;
+		Auction auction = getAuction(auctionId);
+
 		BidRequest bidRequest = new BidRequest(10_0000L);
-		Auction auction = Auction.builder()
-			.startDateTime(LocalDateTime.now())
-			.endDateTime(LocalDateTime.now().plusDays(7))
-			.startPrice(1000L)
-			.build();
 
 		User bidder = UserUtil.createUser();
 		ReflectionTestUtils.setField(bidder, "point", 10_0000L);
 
+		given(auctionRepository.findById(auctionId))
+			.willReturn(Optional.of(auction));
+
+		given(userService.findByUserId(any()))
+			.willReturn(bidder);
 		System.out.println(bidder.getPoint());
-		given(bidRedisService.isExpired(any()))
-			.willReturn(false);
 
 		given(bidRedisService.getBidPrice(any()))
 			.willReturn(Optional.of(1000L));
-
-		given(auctionRepository.findById(auctionId))
-			.willReturn(Optional.of(auction));
 
 		//When
 		sut.bid(auctionId, bidRequest, bidder);
@@ -75,19 +80,21 @@ class BidServiceTest {
 		//Then
 		then(bidRepository).should().save(any(Bid.class));
 		then(bidRedisService).should().setBidPrice(any(), any());
+		then(pointService).should().usePoint(bidder, bidRequest.getPrice());
 	}
 
 	@Test
 	void 입찰하기_하회입찰_실패_테스트() throws Exception {
 		//Given
 		Long auctionId = 1L;
+		Auction auction = getAuction(auctionId);
 		BidRequest bidRequest = new BidRequest(10_000L);
 
 		User bidder = UserUtil.createUser();
 		ReflectionTestUtils.setField(bidder, "point", 10_0000L);
 
-		given(bidRedisService.isExpired(any()))
-			.willReturn(false);
+		given(auctionRepository.findById(auctionId))
+			.willReturn(Optional.of(auction));
 
 		given(bidRedisService.getBidPrice(any()))
 			.willReturn(Optional.of(1000_000L));
@@ -102,14 +109,28 @@ class BidServiceTest {
 	void 입찰하기_경매종료_테스트() throws Exception {
 		//Given
 		Long auctionId = 1L;
+		Auction auction = getAuction(auctionId);
+		ReflectionTestUtils.setField(auction, "isEnded", true);
+
 		BidRequest bidRequest = new BidRequest(10_0000L);
 
-		given(bidRedisService.isExpired(any()))
-			.willReturn(true);
+		given(auctionRepository.findById(auctionId))
+			.willReturn(Optional.of(auction));
 
 		//When & Then
 		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, UserUtil.createUser()))
 			.isInstanceOf(ApiException.class)
 			.hasMessage(ErrorCode.ENDED_AUCTION.getMessage());
 	}
+
+	private static Auction getAuction(Long auctionId) {
+		Auction auction = Auction.builder()
+			.startDateTime(LocalDateTime.now())
+			.endDateTime(LocalDateTime.now().plusDays(7))
+			.startPrice(1000L)
+			.build();
+		ReflectionTestUtils.setField(auction, "id", auctionId);
+		return auction;
+	}
+
 }
