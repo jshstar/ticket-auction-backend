@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.place.response.ZoneGetResponse;
@@ -36,4 +37,19 @@ public class ZoneController {
 					zoneGetResponses)
 			);
 	}
+
+	// 해당 공연의 공연장 구역 전체 조회
+	@GetMapping("/zones")
+	public ResponseEntity<ApiResponse<List<ZoneGetResponse>>> getAllZoneFromGoods(@RequestParam Long goodsId) {
+		List<ZoneGetResponse> zoneGetResponses = zoneService.getAllZoneFromGoods(goodsId);
+		return ResponseEntity
+			.status(
+				SUCCESS_GET_ALL_ZONE_FROM_GOODS.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GET_ALL_ZONE_FROM_GOODS.getCode(),
+					SUCCESS_GET_ALL_ZONE_FROM_GOODS.getMessage(), zoneGetResponses)
+			);
+	}
+
 }

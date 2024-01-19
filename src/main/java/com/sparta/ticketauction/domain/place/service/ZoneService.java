@@ -16,4 +16,7 @@ public interface ZoneService {
 
 	// 공연장 구역 전체 조회
 	List<ZoneGetResponse> getAllZone(Long placeId);
+
+	// 해당 공연의 공연장 구역 전체 조회
+	List<ZoneGetResponse> getAllZoneFromGoods(Long goodsId);
 }

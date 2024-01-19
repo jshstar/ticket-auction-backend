@@ -1,0 +1,42 @@
+/* zone-grade.css */
+
+#zone-grade-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+#zone-grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#zone-grade-table th, #zone-grade-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#zone-grade-table th {
+    background-color: #f2f2f2;
+}
+
+#auction-page-button {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    margin: 20px auto;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#auction-page-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
