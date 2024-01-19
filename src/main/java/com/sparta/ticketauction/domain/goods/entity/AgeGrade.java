@@ -9,6 +9,8 @@ import lombok.Getter;
 public enum AgeGrade {
 	AGE_ALL(0, "전체 이용가"),
 
+	AGE_7(7, "7세 이용가"),
+
 	AGE_12(12, "12세 이용가"),
 
 	AGE_15(15, "15세 이용가"),
