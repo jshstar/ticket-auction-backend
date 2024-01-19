@@ -98,7 +98,6 @@ class AuctionRepositoryCustomImplTest {
 	private static Auction getAuction(Long auctionId, int plusDays) {
 		Auction auction = Auction.builder()
 			.seatNumber(1)
-			.bidPrice(1000L)
 			.startPrice(1000L)
 			.endDateTime(LocalDateTime.now())
 			.build();
