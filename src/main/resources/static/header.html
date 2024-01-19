@@ -23,7 +23,7 @@
 
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
     <a class="d-flex align-items-center ps-5 mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
-       href="/static">
+       href="#" id="main-logo">
         <img class="bi me-2" height="35" src="/images/ticket.png" width="40"/>
         <span class="fs-3 fw-bold">Ticket Auction</span>
     </a>
@@ -59,8 +59,9 @@
             <div aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-sm-right" id="admin-drop-menus">
                 <h3 class="dropdown-header" id="admin-nickname"></h3>
                 <a class="dropdown-item" href="#">관리자 추가</a>
-                <a class="dropdown-item">공연장 추가</a>
-                <a class="dropdown-item" href="#">공연 추가</a>
+                <a class="dropdown-item" id="add-place-btn">공연장 추가</a>
+                <a class="dropdown-item" href="#" id="add-goods-info-btn">공연 정보 추가</a>
+                <a class="dropdown-item" href="#" id="add-goods-btn">공연 추가</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item logout" style="color: black;">로그아웃</a>
             </div>
@@ -70,6 +71,9 @@
 
 </body>
 <script>
+    $("#main-logo").on("click", function () {
+        movePage();
+    });
     $("#login").on("click", function () {
         redirectToPage(`/login.html`);
     });
@@ -88,6 +92,18 @@
 
     $("#signup").on('click', function () {
         redirectToPage(`/user/signup.html`);
+    });
+
+    $("#add-place-btn").on('click', function () {
+        movePageWithToken(`/place.html`)
+    });
+
+    $("#add-goods-info-btn").on('click', function () {
+        movePageWithToken(`/goods-info.html`)
+    });
+
+    $("#add-goods-btn").on('click', function () {
+        movePageWithToken(`/goods.html`)
     });
 </script>
 </html>
