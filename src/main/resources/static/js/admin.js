@@ -42,7 +42,7 @@ function addZone() {
     let newRow = `<tr>
         <td>${zoneName}</td>
         <td>${zoneSeats}</td>
-        <td><button class="remove-zone" onclick="removeZone(this)">제거</button></td>
+        <td><button class="btn remove-zone" onclick="removeZone(this)">제거</button></td>
     </tr>`;
     $('#zonesTable tbody').append(newRow);
 

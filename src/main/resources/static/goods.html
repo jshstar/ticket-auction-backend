@@ -18,34 +18,41 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/goods.css">
+    <link href="/css/goods.css" rel="stylesheet">
 </head>
 <body class="goodsClass">
 <header id="headers"></header>
-<div class="container">
-    <h1>공연 추가</h1>
+<div class="container px-4 py-4">
+    <h1 class="text-center">공연 추가</h1>
+
     <form id="goodsForm">
-        <label for="goodsInfoLabel">공연 정보 선택</label>
-        <select id="goodsInfoLabel" name="goodsInfoLabel"></select>
-        <img id="goodsInfoImage" src="기본이미지URL" alt="공연 정보 이미지">
+        <label class="fs-5 mt-4" for="goodsInfoLabel">공연 정보 선택</label>
+        <select class="form-control mt-3 " id="goodsInfoLabel" name="goodsInfoLabel"></select>
+        <div class="d-flex justify-content-center mt-3 ">
+            <img alt="공연 정보 이미지" id="goodsInfoImage" src="기본이미지URL">
+        </div>
 
-        <label for="placeLabel">공연장</label>
-        <select id="placeLabel" name="placeLabel"></select>
+        <label class="fs-5 mt-4" for="placeLabel">공연장</label>
+        <select class="form-control mt-3 " id="placeLabel" name="placeLabel"></select>
 
-        <label for="title">추가할 공연의 제목:</label>
-        <input type="text" id="title" name="title" required
-               pattern="([A-Za-z0-9\\s(){}<>가-힣]+) - ([A-Za-z0-9\\s(){}<>가-힣]+)">
+        <label class="fs-5 mt-4" for="title">추가할 공연의 제목</label>
+        <input class="form-control mt-3 " id="title" name="title"
+               pattern="([A-Za-z0-9\\s(){}<>가-힣]+) - ([A-Za-z0-9\\s(){}<>가-힣]+)" required
+               type="text">
 
-        <label for="startDate">시작 일자:</label>
-        <input type="date" id="startDate" name="startDate" required>
+        <label class="fs-5 mt-4" for="startDate">시작 일자</label>
+        <input class="form-control mt-3 " id="startDate" name="startDate" required type="date">
 
-        <label for="endDate">종료 일자:</label>
-        <input type="date" id="endDate" name="endDate" required>
+        <label class="fs-5 mt-4" for="endDate">종료 일자</label>
+        <input class="form-control mt-3 " id="endDate" name="endDate" required type="date">
 
-        <label for="startTime">상영 시간:</label>
-        <input type="time" id="startTime" name="startTime" required>
+        <label class="fs-5 mt-4" for="startTime">상영 시간</label>
+        <input class="form-control mt-3 " id="startTime" name="startTime" required type="time">
     </form>
-    <button id="submitGoodsButton">공연 추가하기</button>
+
+    <div class="d-flex justify-content-center">
+        <button class="btn mt-5" id="submitGoodsButton">공연 추가하기</button>
+    </div>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {

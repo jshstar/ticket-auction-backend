@@ -22,3 +22,9 @@
     margin-bottom: 5px;
     margin-right: 10px;
 }
+
+.user-input-div-2 > .user-input-btn-2 {
+    background-color: #A9BCD0;
+    color: white;
+    cursor: pointer;
+}

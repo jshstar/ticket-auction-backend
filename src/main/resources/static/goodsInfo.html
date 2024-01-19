@@ -18,41 +18,42 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/goodsInfo.css">
+    <link href="/css/goodsInfo.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
-<div class="container">
-    <h1>공연 정보 기입</h1>
+<div class="container mt-5 px-4 py-4">
+    <h1 class="text-center">공연 정보 등록</h1>
     <form id="performanceForm">
         <div class="form-group">
-            <label for="title">제목:</label>
-            <input type="text" id="title" name="title" required>
+            <label class="fs-5 mt-3" for="title">제목</label>
+            <input class="form-control" id="title" name="title" required type="text">
         </div>
         <div class="form-group">
-            <label for="content">내용 소개:</label>
-            <textarea id="content" name="content" required></textarea>
+            <label class="fs-5 mt-3" for="content">내용 소개</label>
+            <textarea class="form-control" id="content" name="content" required></textarea>
         </div>
         <div class="form-group">
-            <label for="time">상영 시간:</label>
-            <input type="text" id="time" name="time" required>
+            <label class="fs-5 mt-3" for="time">상영 시간</label>
+            <input class="form-control" id="time" name="time" required type="text">
         </div>
         <div class="form-group">
-            <label for="age">관람연령:</label>
-            <input type="number" id="age" name="age" required>
+            <label class="fs-5 mt-3" for="age">관람연령</label>
+            <input class="form-control" id="age" name="age" required type="number">
         </div>
         <div class="form-group">
-            <label for="category">장르:</label>
-            <input type="text" id="category" name="category" required>
+            <label class="fs-5 mt-3" for="category">장르</label>
+            <input class="form-control" id="category" name="category" required type="text">
         </div>
         <div class="form-group">
-            <label for="photo">Photo:</label>
-            <input type="file" id="photo" name="photo" accept="image/*" required multiple>
+            <label class="fs-5 mt-3" for="photo">Photo</label>
+            <input accept="image/*" class="form-control" id="photo" multiple name="photo" required type="file">
         </div>
-
     </form>
-    <button id="submitGoodsInfoButton">공연 정보 추가</button>
-    <button id="goodsPage">다음 페이지</button>
+    <div class="mt-5">
+        <button class="goods-info-btn btn me-3" id="submitGoodsInfoButton">공연 정보 추가</button>
+        <button class="goods-info-btn btn ms-3" id="goodsPage">다음 페이지</button>
+    </div>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {

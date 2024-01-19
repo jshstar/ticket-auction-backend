@@ -117,19 +117,3 @@ function reissueToken(callback) {
     }
     return deferred.promise();
 }
-
-// 토큰을 포함하여 요청을 보내는 함수
-function fetchWithToken(url, token, method) {
-    return fetch(url, {
-        method: method,
-        headers: {
-            'Authorization': `${token}`
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Request failed');
-            }
-            return response.json();
-        });
-}
