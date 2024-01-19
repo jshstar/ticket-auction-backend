@@ -64,7 +64,7 @@ class BidServiceTest {
 			.willReturn(false);
 
 		given(bidRedisService.getBidPrice(any()))
-			.willReturn(1000L);
+			.willReturn(Optional.of(1000L));
 
 		given(auctionRepository.findById(auctionId))
 			.willReturn(Optional.of(auction));
@@ -90,7 +90,7 @@ class BidServiceTest {
 			.willReturn(false);
 
 		given(bidRedisService.getBidPrice(any()))
-			.willReturn(1000_000L);
+			.willReturn(Optional.of(1000_000L));
 
 		//When & Then
 		assertThatThrownBy(() -> sut.bid(auctionId, bidRequest, bidder))

@@ -28,7 +28,6 @@ public class AuctionCreateRequest {
 			.zoneGrade(zoneGrade)
 			.seatNumber(seatNumber)
 			.startPrice(zoneGrade.getGrade().getAuctionPrice())
-			.bidPrice(zoneGrade.getGrade().getAuctionPrice())
 			.startDateTime(LocalDateTime.parse(now, format))
 			.endDateTime(schedule.getStartDateTime().minusDays(3))
 			.build();

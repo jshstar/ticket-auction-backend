@@ -93,7 +93,7 @@ class AuctionServiceTest {
 			sut.endAuction(auctionId);
 
 			//then
-			then(reservationService).should().reserve(auction, bid.getUser());
+			then(reservationService).should().reserve(bid, auction);
 		}
 
 		@Test
