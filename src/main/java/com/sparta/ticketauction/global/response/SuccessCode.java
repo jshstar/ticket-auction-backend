@@ -33,6 +33,7 @@ public enum SuccessCode {
 
 	/* ZONE */
 	SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공했습니다."),
+	SUCCESS_GET_ALL_ZONE_FROM_GOODS(HttpStatus.OK, "Z00001", "해당 공연의 공연장 구역 전체조회 성공했습니다."),
 
 	/* SCHEDULE */
 	SUCCESS_GET_ALL_SCHEDULE(HttpStatus.OK, "S00000", "전 회차 조회 성공했습니다."),

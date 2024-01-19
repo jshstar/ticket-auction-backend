@@ -117,7 +117,7 @@ public class BidServiceImpl implements BidService {
 		Optional<Bid> currentBid = getCurrentBid(auction);
 		if (currentBid.isPresent()) {
 			User currentBidder = currentBid.get().getUser();
-			pointService.chargePoint(currentBidder, currentBidPrice);
+			pointService.refundPoint(currentBidder, currentBidPrice);
 		}
 
 		//새 입찰자 포인트 차감 및 경매 입찰가 갱신
