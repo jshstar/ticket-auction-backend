@@ -48,7 +48,7 @@ function refreshToken() {
 
     // 갱신 중 플래그를 true로 설정
     isRefreshingToken = true;
-    return fetch("/api/v1/auth/reissue", {
+    return fetch(getUrl() + "/api/v1/auth/reissue", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
