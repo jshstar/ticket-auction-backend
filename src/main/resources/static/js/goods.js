@@ -1,7 +1,7 @@
 function getGoodsCategories() {
     $.ajax({
         type: "GET",
-        url: `/api/v1/goods-categorys`,
+        url: getUrl() + `/api/v1/goods-categorys`,
         success: function (response) {
             for (let i = 0; i < response.data.length; i++) {
                 let name = response.data[i].categoryName;
@@ -45,7 +45,7 @@ function getGoodsCategories() {
 function clickOnCategoryBtn(name) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/goods`,
+        url: getUrl() + `/api/v1/goods`,
         data: {
             page: 0,
             size: 5,
