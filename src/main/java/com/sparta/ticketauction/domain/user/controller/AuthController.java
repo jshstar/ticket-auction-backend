@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.user.controller;
 
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
-import com.sparta.ticketauction.domain.user.response.SmsResponse;
 import com.sparta.ticketauction.domain.user.service.AuthService;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.response.ApiResponse;
@@ -40,12 +40,12 @@ public class AuthController {
 
 	@PostMapping("/sms")
 	public ResponseEntity<ApiResponse> verifyPhone(@RequestBody @Valid UserForVerificationRequest request) {
-		SmsResponse response = authService.verifyPhone(request);
+		Date expiredTime = authService.verifyPhone(request);
 		return ResponseEntity.status(SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS.getHttpStatus())
 			.body(ApiResponse.of(
 					SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS.getCode(),
 					SUCCESS_SEND_VERIFICATION_NUMBER_BY_SMS.getMessage(),
-					response
+					expiredTime
 				)
 			);
 	}

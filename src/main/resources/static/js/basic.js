@@ -6,19 +6,22 @@
 // });
 
 
-let urlData;
-(function () {
-    const hostname = window.location.hostname;
-
-    // API 경로 설정
-    const apiPath = '/api/v1/users/signup';
-
-    // 도메인 설정
-    urlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
-})();
+// let urlData;
+// (function () {
+//     const hostname = window.location.hostname;
+//
+//     // API 경로 설정
+//     const apiPath = '/api/v1/users/signup';
+//
+//     // 도메인 설정
+//     returnurlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
+// })();
 
 function getUrl() {
-    return urlData;
+    const hostname = window.location.hostname;
+
+    // 도메인 설정
+    return hostname === 'localhost' ? `http://${hostname}:8080` : ``;
 }
 
 function checkLoginStatus() {
@@ -41,7 +44,7 @@ function updateLoginStatus(token, stat) {
     }
 
     $.ajax({
-        url: urlData + "/api/v1/auth/status",
+        url: getUrl() + "/api/v1/auth/status",
         type: "GET",
         headers: {
             "Authorization": token
@@ -91,7 +94,7 @@ function confirmFuncLogout() {
 function requestLogout() {
     let token = Cookies.get('Authorization');
     $.ajax({
-        url: urlData + "/api/v1/auth/logout",
+        url: getUrl() + "/api/v1/auth/logout",
         type: "POST",
         headers: {
             "Authorization": token
@@ -102,7 +105,7 @@ function requestLogout() {
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
 
-            window.location.href = urlData + `/index.html`
+            window.location.href = getUrl() + `/index.html`
         },
         error: function (jqXHR, textStatus) {
             // 로그아웃에 실패한 경우 처리
@@ -118,7 +121,7 @@ function requestLogin() {
 
     $.ajax({
         type: "POST",
-        url: urlData + `/api/v1/auth/login`,
+        url: getUrl() + `/api/v1/auth/login`,
         contentType: "application/json",
         data: JSON.stringify({email: email, password: password}),
     })
@@ -127,7 +130,7 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.location.href = urlData + `/index.html`
+            window.location.href = getUrl() + `/index.html`
         })
         .fail(function (jqXHR, textStatus) {
             alert("fail");
@@ -155,7 +158,7 @@ function redirectToPageWithToken(pageUrl, token) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = urlData + pageUrl;
+                window.location.href = getUrl() + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -174,7 +177,7 @@ function redirectToPage(pageUrl) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = urlData + pageUrl;
+                window.location.href = getUrl() + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -193,7 +196,7 @@ function redirectToPageWithParameter(pageUrl, parameter, value) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = pageUrl + `?${parameter}=${value}`;
+                window.location.href = getUrl() + pageUrl + `?${parameter}=${value}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -230,4 +233,36 @@ function movePage() {
     } else {
         redirectToPage(`/index.html`);
     }
+}
+
+function displayRemainingTime(endTime, tag, btn) {
+    let now = new Date();
+    let timeDiff = endTime - now;
+
+    if (timeDiff <= 0) {
+        $(`#${tag}`).empty();
+        $(`#${btn}`).removeClass("disabled");
+    } else {
+        // 남은 시간을 초로 변환
+        let secondsRemaining = Math.floor(timeDiff / 1000);
+
+        // 분과 초 계산
+        let minutes = Math.floor(secondsRemaining / 60);
+        let seconds = secondsRemaining % 60;
+
+        // 시간 표시를 위해 2자리로 포맷팅
+        let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+
+        // 화면에 남은 시간 표시
+        $(`#${tag}`).text(`  ${formattedTime}`);
+
+        setTimeout(function () {
+            displayRemainingTime(endTime);
+        }, 1000);
+    }
+}
+
+// 10 미만의 숫자에 0을 붙이는 함수
+function padZero(number) {
+    return number < 10 ? `0${number}` : number;
 }

@@ -18,6 +18,7 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/common-menu.js"></script>
+    <script src="/js/reservation.js"></script>
     <link href="/css/mypage.css" rel="stylesheet">
 </head>
 <body>
@@ -25,34 +26,43 @@
 <header id="headers"></header>
 
 <div class="row mt-5 justify-content-center">
-    <div class="col-2 wrap" id="menu"></div>
-    <div class="col-8 wrap ms-4">
-
+    <div class="col-2" id="menu"></div>
+    <div class="col-8">
         <div class="row page-name">
-            <h2 class="col-sm-12">포인트 충전 내역</h2>
+            <h2 class="col-sm-12">예매 내역</h2>
         </div>
         <div class="table-d2-list text-center">
             <table>
                 <colgroup>
                     <col style="width: 10%;">
-                    <col style="width: 50%;">
+                    <col style="width: 15%">
                     <col style="width: 20%;">
-                    <col style="width: 20%;">
+                    <col style="width: 15%;">
+                    <col style="width: 15%;">
+                    <col style="width: 15%;">
+                    <col style="width: 10%;">
                 </colgroup>
                 <thead>
                 <tr>
                     <th scope="row">
-                        번호
+                        예매 번호
                     </th>
                     <th scope="row">
-                        결제 번호
+                        예매 일자
                     </th>
                     <th scope="row">
-                        충전 일자
+                        공연명
                     </th>
                     <th scope="row">
-                        충전 금액
+                        이용일/예매 수량
                     </th>
+                    <th scope="row">
+                        취소 가능 날짜
+                    </th>
+                    <th scope="row">
+                        현재 상태
+                    </th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody class="list-tb-body">
@@ -75,10 +85,10 @@
             $("#settings-menu a").removeClass("active");
 
             // 클릭된 링크에 'active' 클래스 추가
-            $("#charge-point-list").addClass("active");
+            $("#reservation-list").addClass("active");
 
             reissueToken((token => {
-                getPointChargeList(token, 0);
+                getReservationList(token, 0);
             }));
         });
     });

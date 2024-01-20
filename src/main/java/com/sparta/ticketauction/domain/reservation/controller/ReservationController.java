@@ -2,8 +2,7 @@ package com.sparta.ticketauction.domain.reservation.controller;
 
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,12 +74,12 @@ public class ReservationController {
 	}
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<List<ReservationResponse>>> searchReservations(
+	public ResponseEntity<ApiResponse<Page<ReservationResponse>>> searchReservations(
 		@CurrentUser User user,
 		@RequestParam Integer page,
 		@RequestParam Integer size
 	) {
-		List<ReservationResponse> response = reservationService.searchReservations(user, page, size);
+		Page<ReservationResponse> response = reservationService.searchReservations(user, page, size);
 
 		return ResponseEntity
 			.status(SUCCESS_SEARCH_RESERVATIONS.getHttpStatus())

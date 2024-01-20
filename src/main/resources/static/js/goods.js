@@ -59,16 +59,19 @@ function clickOnCategoryBtn(name) {
 
             for (let i = 0; i , response.data.goodsSlice.content.length; i++) {
                 let d = response.data.goodsSlice.content[i];
-                let title = d.title.split(" - ");
 
                 let pd = $('<div>')
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("goods-poster-img")
                             .on("click", function () {
-                                redirectToPageWithParameter("/goods-details.html", "goodsId", d.goodsId);
+                                redirectToPageWithParameter(
+                                    "/goods-details.html",
+                                    "goodsId",
+                                    d.goodsId
+                                );
                             })
                     )
-                    .append($('<p>').text(title[0]).addClass("goods-title"))
+                    .append($('<p>').text(d.title.split(" - ")[0]).addClass("goods-title"))
                     .addClass("pd");
 
                 $("#goods-posters").append(pd);

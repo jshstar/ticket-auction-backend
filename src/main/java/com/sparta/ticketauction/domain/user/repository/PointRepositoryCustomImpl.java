@@ -65,7 +65,7 @@ public class PointRepositoryCustomImpl implements PointRepositoryCustom {
 			.from(point)
 			.where(
 				point.user.id.eq(userId)
-					.and(point.type.ne(PointType.USE))
+					.and(point.type.ne(PointType.CHARGE))
 			)
 			.orderBy(sortPoint(pageable))
 			.offset(pageable.getOffset())

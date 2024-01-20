@@ -24,10 +24,9 @@
 
 <header id="headers"></header>
 
-<div class="row mt-5 justify-content-center container">
-    <div class="col-4" id="menu"></div>
-    <div class="col-8">
-
+<div class="row mt-5 justify-content-center">
+    <div class="col-2 wrap" id="menu"></div>
+    <div class="col-8 wrap ms-4">
         <div class="row page-name">
             <h2 class="col-sm-12">정보 수정</h2>
         </div>
@@ -60,11 +59,11 @@
                 <img class="logo" src="/images/phone-icon.png"/>인증번호
             </label>
             <div class="row">
-                <div class=" col-md-5">
+                <div class=" col-5">
                     <input class="form-control" id="update-verificationCode" name="verificationCode" type="text">
                 </div>
+                <div class="col-7 mt-3 fs-5" id="update-remaining-time"></div>
             </div>
-            <span>5분 이내로 입력해주세요.</span>
             <span id="update-verificationNumber-span" style="color: red;"></span>
             <div class="form-group user-input-div mt-3">
                 <button class="btn user-input-btn w-100 custom-btn" id="update-info-btn" type="submit">수정</button>
