@@ -1,6 +1,6 @@
 package com.sparta.ticketauction.domain.reservation.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
@@ -45,7 +45,7 @@ public interface ReservationService {
 	 * @param size 조회 사이즈
 	 * @return 예매한 기록들을 반환한다.
 	 */
-	List<ReservationResponse> searchReservations(User user, Integer page, Integer size);
+	Page<ReservationResponse> searchReservations(User user, Integer page, Integer size);
 
 	/**
 	 * 예매를 취소한다.

@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -214,9 +215,9 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
-	public List<ReservationResponse> searchReservations(User user, Integer page, Integer size) {
+	public Page<ReservationResponse> searchReservations(User user, Integer page, Integer size) {
 		Pageable pageable = PageRequest.of(page, size);
-		return reservationRepository.getReservationsResponse(user.getId(), pageable).getContent();
+		return reservationRepository.getReservationsResponse(user.getId(), pageable);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ZoneGradeQueryRepositoryImpl implements ZoneGradeQueryRepository {
 
-	private JPAQueryFactory query;
+	private final JPAQueryFactory query;
 
 	@Override
 	public Optional<ZoneGrade> findZoneGrade(Long id, boolean fetchZone, boolean fetchGrade) {
