@@ -34,11 +34,11 @@
     </div>
 
     <div class="section zones-section">
-        <label class="fs-5 mt-3" for="zoneName">구역명</label>
-        <input id="zoneName" placeholder="구역명 입력" required type="text">
-
-        <label class="fs-5 mt-3" for="zoneSeats">총 좌석 수</label>
-        <input id="zoneSeats" placeholder="총 좌석 수 입력" required type="number">
+        <label class="fs-5 mt-3" for="placeZoneName">구역명</label>
+        <input id="placeZoneName" placeholder="구역명 입력" required type="text">
+        <!--placeZoneName, placeZoneSeat-->
+        <label class="fs-5 mt-3" for="placeZoneSeat">총 좌석 수</label>
+        <input id="placeZoneSeat" placeholder="총 좌석 수 입력" required type="number">
 
         <div class="place-btn-div d-flex justify-content-center">
             <button class="btn place-btn" id="addZoneButton">구역 추가</button>
@@ -57,10 +57,8 @@
         <!-- 입력된 구역 정보가 여기에 행으로 추가됩니다 -->
         </tbody>
     </table>
-    <div class="d-flex justify-content-center place-btn-div mt-5">
-        <button class="btn me-4" id="createPlaceButton">공연장 추가하기</button>
-        <button class="btn " id="goodsInfoPage">다음 페이지</button>
-    </div>
+    <button id="createPlaceButton">공연장 추가하기</button>
+    <button id="goodsInfoPage">다음 페이지</button>
 </div>
 </body>
 <script>

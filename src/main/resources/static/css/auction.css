@@ -1,0 +1,83 @@
+#auction-container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px; /* 컨테이너의 최대 너비를 설정 */
+    background-color: #fff; /* 배경색 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    border-radius: 8px; /* 테두리 둥글게 설정 */
+}
+
+#auction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* 테이블 상단 여백 설정 */
+}
+
+#auction-table th, #auction-table td {
+    border: 1px solid #ddd; /* 경계선 색상 변경 */
+    padding: 15px; /* 패딩 증가 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+    font-size: 14px; /* 폰트 사이즈 설정 */
+}
+
+#auction-table thead th {
+    background-color: #f8f9fa; /* 테이블 헤더 배경색 설정 */
+    color: #495057; /* 테이블 헤더 글자색 설정 */
+}
+
+#auction-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2; /* 테이블 바디의 홀수 행 배경색 설정 */
+}
+
+button {
+    padding: 8px 12px; /* 버튼 패딩 설정 */
+    border: none; /* 버튼 경계선 제거 */
+    background-color: #007bff; /* 버튼 배경색 설정 */
+    color: white; /* 버튼 글자색 설정 */
+    border-radius: 4px; /* 버튼 테두리 둥글게 설정 */
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
+    font-size: 14px; /* 버튼 폰트 사이즈 설정 */
+    transition: background-color 0.3s ease; /* 배경색 변경시 트랜지션 효과 추가 */
+}
+
+button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 버튼 배경색 변경 */
+}
+
+button:disabled {
+    background-color: #6c757d; /* 비활성화된 버튼의 배경색 설정 */
+}
+
+select {
+    padding: 8px 12px; /* 드롭다운 패딩 설정 */
+    border-radius: 4px; /* 드롭다운 테두리 둥글게 설정 */
+    border: 1px solid #ddd; /* 드롭다운 경계선 색상 설정 */
+    font-size: 14px; /* 드롭다운 폰트 사이즈 설정 */
+    margin-right: 10px; /* 드롭다운 오른쪽 여백 설정 */
+}
+
+label {
+    margin-right: 5px; /* 라벨 오른쪽 여백 설정 */
+    font-weight: bold; /* 라벨 글자 두껍게 설정 */
+}
+
+#add-zone-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#add-zone-button:hover {
+    background-color: #0056b3;
+}
+
+#goToPlacePage {
+    /* 여기에 특정 스타일을 추가하세요. 예: */
+    font-weight: bold; /* 글자 두껍게 */
+    margin-top: 20px; /* 상단 여백 추가 */
+    /* 기타 필요한 스타일 */
+}

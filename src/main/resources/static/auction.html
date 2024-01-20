@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head id="head">
+    <meta charset="UTF-8">
+    <title>Ticket Auction</title>
+
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+
+    <script crossorigin="anonymous"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="/js/token.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/admin.js"></script>
+    <link rel="stylesheet" href="/css/auction.css">
+</head>
+<body class="auctionClass">
+<header id="headers"></header>
+<div id="auction-container">
+    <label for="sequence-select">회차 선택</label>
+    <select id="sequence-select" , name="sequence-select"></select>
+    <label for="zone-select">구역 선택</label>
+    <button id="add-zone-button">구역 추가</button>
+    <select id="zone-select" name="zone-select"></select>
+    <table id="auction-table">
+        <thead>
+        <tr>
+            <th>구역명</th>
+            <th>경매 좌석 번호</th>
+            <th>동작</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 경매 좌석 번호 행이 여기에 추가됩니다 -->
+        </tbody>
+    </table>
+    <button id="goToPlacePage">공연장 추가 페이지로 이동</button>
+</div>
+<script>
+    $("#headers").load("/header.html", function (response, status, xhr) {
+        checkLoginStatus();
+    });
+    $("#goToPlacePage").on("click", function () {
+        var userConfirmed = confirm("공연장 추가 페이지로 이동하시겠습니까?");
+
+        // 사용자가 '확인'을 클릭했을 경우
+        if (userConfirmed) {
+            movePageWithToken("/place.html");
+        }
+    });
+</script>
+</body>
+</html>

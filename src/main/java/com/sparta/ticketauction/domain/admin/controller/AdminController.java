@@ -148,7 +148,7 @@ public class AdminController {
 	public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
 		@PathVariable Long scheduleId,
 		@RequestParam Long zoneGradeId,
-		@RequestBody AuctionCreateRequest auctionCreateRequest
+		@Valid @RequestBody AuctionCreateRequest auctionCreateRequest
 	) {
 		adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
 		return ResponseEntity
