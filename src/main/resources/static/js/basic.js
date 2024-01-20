@@ -1,22 +1,3 @@
-// $(document).ready(function () {
-//     // 페이지 로드 시 로그인 상태 확인 후 UI 업데이트
-//     $("#headers").load("/header.html", function (response, status, xhr) {
-//         checkLoginStatus();
-//     })
-// });
-
-
-// let urlData;
-// (function () {
-//     const hostname = window.location.hostname;
-//
-//     // API 경로 설정
-//     const apiPath = '/api/v1/users/signup';
-//
-//     // 도메인 설정
-//     returnurlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
-// })();
-
 function getUrl() {
     const hostname = window.location.hostname;
 
