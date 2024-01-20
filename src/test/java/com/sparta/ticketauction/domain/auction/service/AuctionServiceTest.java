@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.auction.service;
 
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -16,8 +17,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
+import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
+import com.sparta.ticketauction.domain.bid.service.BidRedisService;
 import com.sparta.ticketauction.domain.bid.service.BidServiceImpl;
+import com.sparta.ticketauction.domain.grade.entity.Grade;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
 import com.sparta.ticketauction.domain.reservation.service.ReservationService;
@@ -48,30 +52,27 @@ class AuctionServiceTest {
 
 	@Mock
 	private BidServiceImpl bidService;
+	@Mock
+	private BidRedisService bidRedisService;
 
 	@Nested
 	class 경매_등록_테스트 {
 		@Test
 		void 정상() {
-			Long auctionId = 1L;
-			Long bidId = 1L;
-			Auction auction = getAuction(auctionId);
-			Bid bid = getBid(auction, bidId);
-			given(scheduleRepository.getReferenceById(any()))
-				.willReturn(any(Schedule.class));
-			given(zoneGradeRepository.getReferenceById(any()))
-				.willReturn(any(ZoneGrade.class));
-			given(auctionRepository.findById(auctionId))
-				.willReturn(Optional.of(auction));
+			AuctionCreateRequest request = new AuctionCreateRequest(100);
+			Grade grade = Grade.builder().auctionPrice(1000L).build();
+			Schedule schedule = Schedule.builder().startDateTime(LocalDateTime.now()).build();
+			ZoneGrade zoneGrade = ZoneGrade.builder().grade(grade).build();
 
-			given(bidService.getCurrentBid(auction))
-				.willReturn(Optional.of(bid));
+			given(scheduleRepository.getReferenceById(any())).willReturn(schedule);
+			given(zoneGradeRepository.getReferenceById(any())).willReturn(zoneGrade);
 
 			//when
-			sut.endAuction(auctionId);
+			sut.createAuction(1L, 1L, request);
 
 			//then
-			then(auctionRepository).should().save(auction);
+			then(auctionRepository).should().save(any(Auction.class));
+			then(bidRedisService).should().saveWithExpire(any(Auction.class));
 		}
 	}
 

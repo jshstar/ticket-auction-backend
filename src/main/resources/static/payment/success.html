@@ -58,7 +58,7 @@
 
         if (!response.ok) {
             console.log(json);
-            window.location.href = `/paymentFail.html?message=${json.message}&code=${json.code}`;
+            window.location.href = `/payment/fail.html?message=${json.message}&code=${json.code}`;
         }
 
         redirectToPageWithToken(`/index.html`);

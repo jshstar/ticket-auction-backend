@@ -17,7 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
-    <script src="/js/mypage-menu.js"></script>
+    <script src="/js/common-menu.js"></script>
+    <link href="/css/mypage.css" rel="stylesheet">
 </head>
 <body>
 
@@ -28,15 +29,15 @@
     <div class="col-8">
 
         <div class="row page-name">
-            <h2 class="col-sm-12">포인트 충전 내역</h2>
+            <h2 class="col-sm-12">포인트 사용/환불 내역</h2>
         </div>
         <div class="table-d2-list text-center">
             <table>
                 <colgroup>
                     <col style="width: 10%;">
-                    <col style="width: 50%;">
-                    <col style="width: 20%;">
-                    <col style="width: 20%;">
+                    <col style="width: 30%">
+                    <col style="width: 30%;">
+                    <col style="width: 30%;">
                 </colgroup>
                 <thead>
                 <tr>
@@ -44,13 +45,13 @@
                         번호
                     </th>
                     <th scope="row">
-                        결제 번호
+                        변동 타입
                     </th>
                     <th scope="row">
-                        충전 일자
+                        변동 일자
                     </th>
                     <th scope="row">
-                        충전 금액
+                        변동 금액
                     </th>
                 </tr>
                 </thead>
@@ -68,16 +69,16 @@
         checkLoginStatus();
     });
 
-    $("#menu").load("/mypage-menu.html", function (response, status, xhr) {
+    $("#menu").load("/user/common-menu.html", function (response, status, xhr) {
         $(document).ready(function () {
             // 모든 링크에서 'active' 클래스 제거
             $("#settings-menu a").removeClass("active");
 
             // 클릭된 링크에 'active' 클래스 추가
-            $("#charge-point-list").addClass("active");
+            $("#point-list").addClass("active");
 
             reissueToken((token => {
-                getPointChargeList(token, 0);
+                getPointList(token, 0);
             }));
         });
     });

@@ -124,14 +124,12 @@ function addZone() {
     // 구역 정보 객체 생성
     let zoneInfo = {zoneName, zoneSeats: parseInt(zoneSeats, 10)};
     zones.push(zoneInfo);
-    console.log(zoneName)
-    console.log(zoneInfo)
-    console.log(zones)
+
     // 테이블에 구역 정보 행 추가
     let newRow = `<tr>
         <td>${zoneName}</td>
         <td>${zoneSeats}</td>
-        <td><button class="remove-zone" onclick="removeZone(this)">제거</button></td>
+        <td><button class="btn remove-zone" onclick="removeZone(this)">제거</button></td>
     </tr>`;
     $('#zonesTable tbody').append(newRow);
 

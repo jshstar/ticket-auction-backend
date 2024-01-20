@@ -18,30 +18,34 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/place.css">
+
+    <link href="/css/place.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
 <div class="container">
+    <h1 class="text-center">공연장 등록</h1>
     <div class="section">
-        <label for="placeName">공연장 이름:</label>
-        <input type="text" id="placeName" required>
+        <label class="fs-5 mt-3" for="placeName">공연장 이름</label>
+        <input id="placeName" required type="text">
 
-        <label for="address">공연장 주소:</label>
-        <input type="text" id="address" required>
+        <label class="fs-5 mt-3" for="address">공연장 주소</label>
+        <input id="address" required type="text">
     </div>
 
     <div class="section zones-section">
-        <label for="placeZoneName">구역명:</label>
-        <input type="text" id="placeZoneName" placeholder="구역명 입력" required>
+        <label class="fs-5 mt-3" for="placeZoneName">구역명</label>
+        <input id="placeZoneName" placeholder="구역명 입력" required type="text">
+        <!--placeZoneName, placeZoneSeat-->
+        <label class="fs-5 mt-3" for="placeZoneSeat">총 좌석 수</label>
+        <input id="placeZoneSeat" placeholder="총 좌석 수 입력" required type="number">
 
-        <label for="placeZoneSeat">총 좌석 수:</label>
-        <input type="number" id="placeZoneSeat" placeholder="총 좌석 수 입력" required>
-
-        <button id="addZoneButton">구역 추가</button>
+        <div class="place-btn-div d-flex justify-content-center">
+            <button class="btn place-btn" id="addZoneButton">구역 추가</button>
+        </div>
     </div>
 
-    <table id="zonesTable">
+    <table class="text-center" id="zonesTable">
         <thead>
         <tr>
             <th>구역명</th>

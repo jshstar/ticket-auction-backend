@@ -37,9 +37,9 @@ public class PaymentServiceImpl implements PaymentService {
 	private final PointService pointService;
 	private final PaymentRepository paymentRepository;
 
-	@Value("${TOSS_SECRET_KEY}")
+	@Value("${payment.toss.secret-key}")
 	private String secretKey;
-	@Value("${TOSS_CLIENT_KEY}")
+	@Value("${payment.toss.client-key}")
 	private String clientKey;
 	@Value("${payment.toss.success-url}")
 	private String successUrl;

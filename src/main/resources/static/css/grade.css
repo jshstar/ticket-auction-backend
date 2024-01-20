@@ -1,5 +1,5 @@
 body {
-    font-family: 'Noto Sans', 'Arial', sans-serif;
+    /*font-family: 'Noto Sans', 'Arial', sans-serif;*/
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -13,8 +13,9 @@ body {
 }
 
 .grade-form-container {
-    width: 80%;
-    max-width: 500px; /* Adjust width as needed */
+    /*width: 100%;*/
+    /*max-width: 500px; !* Adjust width as needed *!*/
+    max-width: 800px;
     margin: 30px auto;
     padding: 20px;
     background-color: #fff;
@@ -42,28 +43,28 @@ body {
 
 #gradeForm button,
 #gradesTable button {
-    background-color: #5cb85c; /* Bootstrap 'success' green */
+    background-color: #D1C2E9; /* Bootstrap 'success' green */
     color: white;
-    border-color: #4cae4c;
+    border-color: #D1C2E9;
 }
 
 #gradeForm button:hover,
 #gradesTable button:hover {
-    background-color: #449d44;
-    border-color: #398439;
+    background-color: #D1C2E9;
+    border-color: #D1C2E9;
 }
 
 #gradesTable {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
+
 }
 
 #gradesTable th,
 #gradesTable td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
 }
 
 #gradesTable th {
@@ -71,18 +72,18 @@ body {
 }
 
 #zoneGradePage {
-    width: auto;
+    width: 100%;
     padding: 10px 20px;
-    background-color: #337ab7; /* Bootstrap 'primary' blue */
+    background-color: #A9BCD0; /* Bootstrap 'primary' blue */
     color: white;
-    border: 1px solid #2e6da4;
+    border: 1px solid #A9BCD0;
     margin-top: 20px;
     border-radius: 4px;
 }
 
 #zoneGradePage:hover {
-    background-color: #286090;
-    border-color: #204d74;
+    background-color: #A9BCD0;
+    border-color: #A9BCD0;
 }
 
 /* Media query for smaller screens */

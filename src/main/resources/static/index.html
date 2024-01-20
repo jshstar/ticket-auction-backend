@@ -18,22 +18,38 @@
 
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
+    <script src="/js/goods.js"></script>
 </head>
 <body>
 <header id="headers"></header>
-<div class="container">
 
+<nav class="goods-menu">
+    <div class="d-flex flex-wrap goods-menu-div">
+        <ul class="nav goods-menu-ul fs-5"></ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="text-center mb-5"><h1>장르별</h1></div>
+    <div class="btn-by-category d-flex justify-content-center"></div>
+    <div id="goods-poster-by-category"></div>
+
+    <div class="row goods-posters-row">
+        <div class="d-flex justify-content-around posters-div col-md-12" id="goods-posters"></div>
+    </div>
 </div>
 </body>
 
 <script>
-    // $(document).ready(function () {
-    //     $.getScript("/token.js", function () {
-    //         $("#headers").load("/header.html", function (response, status, xhr) {
-    //             checkLoginStatus();
-    //         });
-    //     });
-    // });
+    $(document).ready(function () {
+        $.getScript("/token.js", function () {
+            $("#headers").load("/header.html", function (response, status, xhr) {
+                checkLoginStatus();
+            });
+        });
+        getGoodsCategories();
+        clickOnCategoryBtn("연극");
+    });
 
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
