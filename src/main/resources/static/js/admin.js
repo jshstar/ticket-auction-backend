@@ -91,18 +91,6 @@ $(document).ready(function () {
         $(this).closest('tr').remove();
     });
 
-
-    // 구역 선택 이벤트 핸들러
-    // $('#zone-select').change(function () {
-    //     const selectedZoneOption = $(this).find('option:selected');
-    //     const selectedZoneName = selectedZoneOption.text();
-    //     const selectedZoneId = selectedZoneOption.val(); // 선택된 구역의 ID를 가져옵니다.
-    //
-    //     if (selectedZoneName !== "구역 선택") {
-    //         addAuctionSeatRow(selectedZoneName, selectedZoneId); // zoneName과 zoneId를 함께 전달합니다.
-    //     }
-    // });
-
     $('#add-zone-button').click(function () {
         const selectedZoneOption = $('#zone-select').find('option:selected');
         const selectedZoneName = selectedZoneOption.text();
