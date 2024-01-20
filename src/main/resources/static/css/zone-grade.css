@@ -29,7 +29,7 @@
     width: 200px;
     padding: 10px;
     margin: 20px auto;
-    background-color: #007bff;
+    background-color: #D1C2E9;
     color: white;
     border: none;
     border-radius: 5px;
@@ -39,4 +39,9 @@
 #auction-page-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
+}
+
+#zone-grade-table > tbody > tr > td > .saved-btn {
+    background-color: #A9BCD0;
+    color: white;
 }

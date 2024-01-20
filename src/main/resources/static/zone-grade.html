@@ -18,11 +18,12 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/zone-grade.css">
+    <link href="/css/zone-grade.css" rel="stylesheet">
 </head>
 <body class="zoneGradeClass">
 <header id="headers"></header>
 <div id="zone-grade-container">
+    <h2 class="text-center">좌석 등급 추가</h2>
     <table id="zone-grade-table">
         <thead>
         <tr>
@@ -37,7 +38,7 @@
         <!-- JavaScript를 통해 동적으로 행 추가 -->
         </tbody>
     </table>
-    <button id="auction-page-button" disabled>다음 페이지</button>
+    <button disabled id="auction-page-button">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {

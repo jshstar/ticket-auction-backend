@@ -40,7 +40,7 @@ function signup() {
     }
     $.ajax({
         type: "POST",
-        url: `/api/v1/users/signup`,
+        url: getUrl() + `/api/v1/users/signup`,
         contentType: "application/json",
         data: JSON.stringify({
             email: email,
@@ -120,7 +120,7 @@ function verificationPhone() {
     let phoneNumber = $("#signup-phone").val();
     $.ajax({
         type: "POST",
-        url: `/api/v1/auth/signup/sms`,
+        url: getUrl() + `/api/v1/auth/sms`,
         contentType: "application/json",
         data: JSON.stringify({
             to: phoneNumber

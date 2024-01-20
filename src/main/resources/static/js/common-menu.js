@@ -1,7 +1,7 @@
 function getMyInfo(token, id) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/users/${id}`,
+        url: getUrl() + `/api/v1/users/${id}`,
         headers: {
             "Authorization": token
         },
@@ -24,7 +24,7 @@ function verificationPhone() {
     let phoneNumber = $("#update-phone").val();
     $.ajax({
         type: "POST",
-        url: `/api/v1/auth/sms`,
+        url: getUrl() + `/api/v1/auth/sms`,
         contentType: "application/json",
         data: JSON.stringify({
             to: phoneNumber
@@ -57,7 +57,7 @@ function updateUserInfo(token, id) {
 
     $.ajax({
         type: "PUT",
-        url: `/api/v1/users/${id}`,
+        url: getUrl() + `/api/v1/users/${id}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -119,7 +119,7 @@ function updatePassword(token, id) {
 
     $.ajax({
         type: "PATCH",
-        url: `/api/v1/users/${id}`,
+        url: getUrl() + `/api/v1/users/${id}`,
         contentType: 'application/json',
         headers: {
             "Authorization": token
@@ -152,7 +152,7 @@ function withdrawUser(token) {
 
     $.ajax({
         type: "DELETE",
-        url: `/api/v1/users`,
+        url: getUrl() + `/api/v1/users`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -178,7 +178,7 @@ function withdrawUser(token) {
 function getPointChargeList(token, page) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/points/charge?page=${page}`,
+        url: getUrl() + `/api/v1/points/charge?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -204,7 +204,7 @@ function getPointChargeList(token, page) {
 function getPointList(token, page) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/points/change?page=${page}`,
+        url: getUrl() + `/api/v1/points/change?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
