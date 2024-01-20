@@ -28,6 +28,9 @@ $(document).ready(function () {
     if ($('body').hasClass('zoneGradeClass')) {
         if (zonesData.length === 0 || gradesData.length === 0) {
             var goodsId = localStorage.getItem('goodsId');
+            if (localStorage.getItem("zoneGradeResponses") !== null) {
+                localStorage.removeItem("zoneGradeResponses");
+            }
             loadZoneAndGradeData(goodsId);
         }
     }

@@ -74,3 +74,10 @@ label {
 #add-zone-button:hover {
     background-color: #0056b3;
 }
+
+#goToPlacePage {
+    /* 여기에 특정 스타일을 추가하세요. 예: */
+    font-weight: bold; /* 글자 두껍게 */
+    margin-top: 20px; /* 상단 여백 추가 */
+    /* 기타 필요한 스타일 */
+}

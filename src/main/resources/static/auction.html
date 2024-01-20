@@ -40,10 +40,19 @@
         <!-- 경매 좌석 번호 행이 여기에 추가됩니다 -->
         </tbody>
     </table>
+    <button id="goToPlacePage">공연장 추가 페이지로 이동</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
+    });
+    $("#goToPlacePage").on("click", function () {
+        var userConfirmed = confirm("공연장 추가 페이지로 이동하시겠습니까?");
+
+        // 사용자가 '확인'을 클릭했을 경우
+        if (userConfirmed) {
+            movePageWithToken("/place.html");
+        }
     });
 </script>
 </body>
