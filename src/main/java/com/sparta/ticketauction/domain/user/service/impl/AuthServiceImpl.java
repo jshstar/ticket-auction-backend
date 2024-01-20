@@ -83,11 +83,12 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public SmsResponse verifyPhone(UserForVerificationRequest userForVerificationRequest) {
+	public Date verifyPhone(UserForVerificationRequest userForVerificationRequest) {
 		if (userService.isExistedPhoneNumber(userForVerificationRequest.getTo())) {
 			throw new ApiException(EXISTED_USER_PHONE_NUMBER);
 		}
 
+		Date expiredTime = new Date();
 		Random random = new Random();
 		int verificationNumber = random.nextInt(888888) + 111111;
 
@@ -137,13 +138,14 @@ public class AuthServiceImpl implements AuthService {
 			throw new ApiException(INTERNAL_SERVER_ERROR);
 		}
 
+		expiredTime = new Date(new Date().getTime() + (5 * 60000));
 		lettuceUtils.save(
 			"[Verification]" + userForVerificationRequest.getTo(),
 			String.valueOf(verificationNumber),
 			VERIFY_TIME
 		);
 
-		return smsResponse;
+		return expiredTime;
 	}
 
 	@Override

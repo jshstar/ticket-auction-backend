@@ -1,8 +1,9 @@
 package com.sparta.ticketauction.domain.user.service;
 
+import java.util.Date;
+
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.request.sms.UserForVerificationRequest;
-import com.sparta.ticketauction.domain.user.response.SmsResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,8 +22,9 @@ public interface AuthService {
 	 * 핸드폰 번호 인증
 	 *
 	 * @param UserForSmsRequest 인증 번호를 받을 전화번호
+	 * @return 인증번호 만료 시간
 	 * */
-	SmsResponse verifyPhone(UserForVerificationRequest request);
+	Date verifyPhone(UserForVerificationRequest request);
 
 	/*
 	 * 토큰 재빌급

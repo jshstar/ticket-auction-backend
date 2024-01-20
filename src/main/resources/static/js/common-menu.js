@@ -29,7 +29,10 @@ function verificationPhone() {
         data: JSON.stringify({
             to: phoneNumber
         }),
-        success: function (data) {
+        success: function (response) {
+            let endTime = new Date(response.data);
+            displayRemainingTime(endTime, "update-remaining-time", "update-verification-btn");
+            $("#update-verification-btn").addClass("disabled");
             alert("인증 번호를 발송했습니다.");
         },
         error: function (jqXHR, textStatus) {
