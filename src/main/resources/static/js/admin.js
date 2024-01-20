@@ -261,7 +261,7 @@ function submitGoodsInfo(token) {
         success: function (response) {
             alert('공연 정보가 성공적으로 추가되었습니다.');
             console.log(response);
-            movePageWithToken("/goods.html");
+            movePageWithToken("/admin/goods.html");
         },
         error: function (xhr, status, error) {
             alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
@@ -367,7 +367,7 @@ function submitGoodsAndSchedule(token) {
             if (response && response.data.goodsId) {
                 localStorage.setItem('goodsId', response.data.goodsId);
             }
-            movePageWithToken("/grade.html");
+            movePageWithToken("/admin/grade.html");
         },
         error: function (xhr, status, error) {
             alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
@@ -385,7 +385,7 @@ function goToNextPage() {
     if (totalCount > 0 && savedCount !== totalCount) {
         alert('모든 좌석 정보가 저장되지 않았습니다. 저장을 완료해 주세요.');
     } else {
-        movePageWithToken("/zone-grade.html");
+        movePageWithToken("/admin/zone-grade.html");
     }
 }
 
@@ -572,7 +572,7 @@ function updateNextPageButtonState() {
 // 스케줄 목록을 가져오는 함수
 function fetchSchedules(goodsId) {
     $.ajax({
-        url: `/api/v1/goods/${goodsId}/schedules`,
+        url: getUrl() + `/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (response) {
             const schedules = response.data;
@@ -592,7 +592,7 @@ function fetchSchedules(goodsId) {
 // 구역 목록을 가져오는 함수
 function fetchZones(goodsId) {
     $.ajax({
-        url: `/api/v1/zones?goodsId=${goodsId}`,
+        url: getUrl() + `/api/v1/zones?goodsId=${goodsId}`,
         type: 'GET',
         success: function (response) {
             response.data.forEach(zone => {
@@ -632,8 +632,8 @@ function addAuctionSeatRow(zoneName, zoneId) {
             <td>${zoneName}</td>
             <td><input type="number" class="seat-number-input" /></td>
             <td>
-                <button class="save-button">저장</button>
-                <button class="delete-button">삭제</button>
+                <button class="save-button btn" id="auction-seat-save-btn">저장</button>
+                <button class="delete-button btn btn-danger">삭제</button>
             </td>
         </tr>
     `);
@@ -647,7 +647,7 @@ function saveAuctionSeat(scheduleId, zoneId, seatNumber, rowElement, token) {
     };
 
     $.ajax({
-        url: `/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
+        url: getUrl() + `/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(auctionCreateRequest),

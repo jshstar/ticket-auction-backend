@@ -57,7 +57,6 @@
         const json = await response.json();
 
         if (!response.ok) {
-            console.log(json);
             window.location.href = `/payment/fail.html?message=${json.message}&code=${json.code}`;
         }
 

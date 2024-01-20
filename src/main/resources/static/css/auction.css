@@ -32,8 +32,8 @@
 button {
     padding: 8px 12px; /* 버튼 패딩 설정 */
     border: none; /* 버튼 경계선 제거 */
-    background-color: #007bff; /* 버튼 배경색 설정 */
-    color: white; /* 버튼 글자색 설정 */
+    /*background-color: #007bff; !* 버튼 배경색 설정 *!*/
+    /*color: white; !* 버튼 글자색 설정 *!*/
     border-radius: 4px; /* 버튼 테두리 둥글게 설정 */
     cursor: pointer; /* 마우스 오버 시 커서 변경 */
     font-size: 14px; /* 버튼 폰트 사이즈 설정 */
@@ -41,7 +41,7 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3; /* 마우스 오버 시 버튼 배경색 변경 */
+    /*background-color: #0056b3; !* 마우스 오버 시 버튼 배경색 변경 *!*/
 }
 
 button:disabled {
@@ -63,7 +63,7 @@ label {
 
 #add-zone-button {
     padding: 8px 12px;
-    background-color: #007bff;
+    background-color: #D1C2E9;
     color: white;
     border: none;
     border-radius: 4px;
@@ -72,7 +72,7 @@ label {
 }
 
 #add-zone-button:hover {
-    background-color: #0056b3;
+    background-color: #D1C2E9;
 }
 
 #goToPlacePage {
@@ -80,4 +80,11 @@ label {
     font-weight: bold; /* 글자 두껍게 */
     margin-top: 20px; /* 상단 여백 추가 */
     /* 기타 필요한 스타일 */
+    background-color: #A9BCD0;
+    color: white;
+}
+
+#auction-seat-save-btn {
+    background-color: #A9BCD0;
+    color: white;
 }
