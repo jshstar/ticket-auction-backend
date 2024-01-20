@@ -21,8 +21,8 @@
 </head>
 <body>
 
-<div class="row mt-5 justify-content-center">
-    <div class="col-8">
+<div class="row mt-5 justify-content-center w-60">
+    <div>
         <div>
             <div class="list-group" id="settings-menu">
                 <a class="list-group-item list-group-item-action" href="#" id="get-user-info">
@@ -40,7 +40,7 @@
                 <a class="list-group-item list-group-item-action" href="#" id="point-list">
                     포인트 변동 내역
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
+                <a class="list-group-item list-group-item-action" href="#" id="reservation-list">
                     예매 내역
                 </a>
                 <a class="list-group-item list-group-item-action" href="#">
@@ -72,6 +72,9 @@
     });
     $("#point-list").on("click", function () {
         movePageWithToken(`/user/point-list.html`);
+    });
+    $("#reservation-list").on("click", function () {
+        movePageWithToken(`/reservation-list.html`);
     });
 </script>
 </body>

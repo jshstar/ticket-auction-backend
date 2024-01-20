@@ -100,7 +100,7 @@ function checkPasswordMatch() {
     let password = $(".password").val();
     let confirmPassword = $(".password-check").val();
     let messageElement = $(".passwordMatchMessage");
-    
+
 
     // 비밀번호와 비밀번호 확인 값이 동일한지 확인
     if (password === confirmPassword) {
@@ -187,7 +187,7 @@ function getPointChargeList(token, page) {
             "page": page
         },
         success: function (data) {
-            $(".list-tb-body").empty();
+            $(".list-tb-body").empt();
             $(".pagination").empty();
 
             if (data.code === "P00000" && data.data.content) {
