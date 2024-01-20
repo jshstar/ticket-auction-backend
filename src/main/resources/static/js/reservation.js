@@ -32,12 +32,13 @@ function displayReservation(data) {
     let curIndex = data.number;
 
     for (let i = 0; i < data.content.length; i++) {
-        let id = $('<td>').text(data.content[i].reservationId);
+        let ei = encode(data.content[i].reservationId);
+        let id = $('<td>').text(ei);
         var dateObject = formatDateTime(new Date(data.content[i].reservationDate));
         let date = $('<td>').text(dateObject);
         let title = $('<td>').text(data.content[i].title.split(" - ")[0]);
         dateObject = formatDateTime(new Date(data.content[i].useDate));
-        let useDate = $('<td>').text(`${dateObject} / ${data.content[i].numberOfTicket}매`);
+        let useDate = $('<td>').text(`${dateObject}\n${data.content[i].numberOfTicket}매`);
         let cancelDate = $('<td>').text(formatDateTime(new Date(data.content[i].cancelDeadline)));
         let status = $('<td>');
         if (data.content[i].status === "OK") {
@@ -53,7 +54,7 @@ function displayReservation(data) {
                 redirectToPageWithParameter(
                     "/reservation/reservation-detail.html",
                     "reservationId",
-                    data.content[i].reservationId
+                    ei
                 );
             });
 
@@ -99,9 +100,10 @@ function getReservationDetail() {
     let queryParams = getQueryParams();
 
     if (queryParams["reservationId"]) {
+        let id = decode(queryParams["reservationId"]);
         $.ajax({
             type: "GET",
-            url: getUrl() + `/api/v1/reservations/${queryParams["reservationId"]}`,
+            url: getUrl() + `/api/v1/reservations/${id}`,
             headers: {
                 "Authorization": token
             },
@@ -110,7 +112,7 @@ function getReservationDetail() {
 
                 $(".reserved-goods-title").text(data.title.split(" - ")[0]);
                 $(".reservation-user").text(data.username);
-                $(".reservation-id").text(data.reservationId);
+                $(".reservation-id").text(encode(data.reservationId));
 
                 let t = formatDateTime(new Date(data.useDate));
                 $(".reservation-date").text(t);
@@ -127,7 +129,11 @@ function getReservationDetail() {
                 $(".reservation-seat").text(stext);
                 $(".reservation-qr").append($('<button>').text("QR 생성").addClass("detail-btn btn"))
                     .on("click", function () {
-                        redirectToPageWithParameter("/reservation/qr.html", "reservationId", data.reservationId);
+                        redirectToPageWithParameter(
+                            "/reservation/qr.html",
+                            "reservationId",
+                            encode(data.reservationId)
+                        );
                     });
             },
             error: function (jqXHR, textStatus) {
@@ -144,9 +150,10 @@ function getQrCode() {
 
     let queryParams = getQueryParams();
     if (queryParams["reservationId"]) {
+        let id = decode(queryParams["reservationId"]);
         $.ajax({
             type: "POST",
-            url: getUrl() + `/api/v1/reservations/${queryParams["reservationId"]}/qrcode`,
+            url: getUrl() + `/api/v1/reservations/${id}/qrcode`,
             headers: {
                 "Authorization": token
             },

@@ -40,7 +40,7 @@
                 <a class="list-group-item list-group-item-action" href="#" id="reservation-list">
                     예매 내역
                 </a>
-                <a class="list-group-item list-group-item-action" href="#">
+                <a class="list-group-item list-group-item-action" href="#" id="auction-list">
                     참여 경매 내역
                 </a>
                 <a class="list-group-item list-group-item-action list-group-item-danger" href="#" id="withdraw-user">
@@ -72,6 +72,9 @@
     });
     $("#reservation-list").on("click", function () {
         movePageWithToken(`/reservation/reservation-list.html`);
+    });
+    $("#auction-list").on("click", function () {
+        movePageWithToken(`/auction/auction-list.html`);
     });
 </script>
 </body>
