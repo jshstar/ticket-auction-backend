@@ -1,48 +1,78 @@
 body {
-    margin: 0;
-    padding: 0;
+
+    /*font-family: 'Arial', sans-serif;*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*background-color: #f4f4f4;*/
 }
+
 
 .container-flex {
     display: flex;
-    width: 100%; /* 전체 너비를 사용 */
+    /*width: 100%; !* 전체 너비를 사용 *!*/
     margin: 20px auto;
 }
 
+#goods-info-container {
+    flex: 0 0 70%;
+
+}
+
 #goods-container {
-    flex: 0 0 70%; /* 상품 정보 컨테이너의 너비를 70%로 고정 */
+    /*flex: 0 0 70%; !* 상품 정보 컨테이너의 너비를 70%로 고정 *!*/
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    /*background-color: #ffffff;*/
 }
 
 
-.goods-info-box {
-    width: auto;
-    display: flex;
-}
+/*.goods-info-box {*/
+/*    width: auto;*/
+/*    display: flex;*/
+/*}*/
 
 .image-container {
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding-right: 20px;
+    /*align-items: flex-start;*/
+    /*justify-content: flex-start;*/
+    /*padding-right: 20px;*/
+    margin-right: 20px;
+    width: 400px;
 }
 
-.goods-info, .image-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
+/*.goods-info, .image-container {*/
+/*    flex: 1;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*}*/
 
 #goodsTitle {
-    order: 1;
-    margin-bottom: 10px;
+    /*order: 1;*/
+    margin-bottom: 20px;
+    /*font-weight: 700;*/
 }
 
 #main-image {
-    width: 100%;
+    /*width: 400px;*/
+    max-width: 100%;
     height: auto;
-    order: 2;
+    border-radius: 15px;
+    /*order: 2;*/
+}
+
+.goods-info > table {
+    border: none;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.goods-info > table > tbody > tr {
+    /*padding-bottom: 15px;*/
+}
+
+.goods-info > table > tbody > tr > .col-title {
+    width: 200px;
+    height: 50px;
+
 }
 
 #schedule-container {
@@ -57,7 +87,7 @@ body {
 #images-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    /*align-items: flex-start;*/
     gap: 10px;
     margin-top: 20px;
     padding-left: 20px;
@@ -65,8 +95,9 @@ body {
 
 .images-title {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bolder;
     margin-bottom: 10px;
+    border-bottom: 0.1rem solid #b6bdc7;
 }
 
 .images-list {
@@ -76,23 +107,28 @@ body {
 }
 
 .images-list img {
-    width: 80px;
+    width: 750px;
     height: auto;
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;*/
+}
+
+.images-title {
+    border-bottom: 0.1rem solid black;
 }
 
 #book-btn {
-    background-color: #007bff;
+    background-color: #D1C2E9;
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
+    width: 200px;
 }
 
 #book-btn:hover {
-    background-color: #0056b3;
+    background-color: #D1C2E9;
 }
 
 /* FullCalendar 스타일링 */
@@ -105,7 +141,7 @@ body {
 }
 
 .fc-button {
-    background-color: #007bff;
+    background-color: #A9BCD0;
     color: white;
     margin-right: 5px;
     padding: 5px 10px;
@@ -113,10 +149,11 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+    width: 100px;
 }
 
 .fc-button:hover {
-    background-color: #0056b3;
+    background-color: #A9BCD0;
 }
 
 .fc {

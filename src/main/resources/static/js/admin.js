@@ -445,7 +445,9 @@ function populateZones(zones) {
                     </select>
                 </td>
                 <td class="price-info"></td>
-                <td><button class="save-btn" disabled>저장</button></td>
+                <td>
+                    <button class="save-btn btn" style="background-color: #A9BCD0; color: white;" disabled>저장</button>
+                </td>
             </tr>
         `);
     });

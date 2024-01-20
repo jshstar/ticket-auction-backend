@@ -22,44 +22,75 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/goods-details.js"></script>
-    <link rel="stylesheet" href="/css/goods-details.css">
+    <link href="/css/goods-details.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
 <div class="container-flex">
-    <div id="goods-container">
-        <h1 id="goodsTitle">공연 제목</h1>
-        <div class="goods-info-box">
-            <div class="image-container">
-                <img id="main-image" src="" alt="대표 이미지"/>
+
+    <div id="goods-info-container">
+        <div class="px-5" id="goods-container">
+            <div class="goods-info-box container mx-5 ">
+                <h1 class="fw-bolder" id="goodsTitle">공연 제목</h1>
+                <div class="d-flex  mt-4">
+                    <div class="image-container">
+                        <img alt="대표 이미지" id="main-image" src=""/>
+                    </div>
+                    <div class="goods-info mx-5">
+                        <table>
+                            <tr>
+                                <td class="col-title">장소</td>
+                                <td id="placeFullName"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">주소</td>
+                                <td id="placeLocationAddress"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">공연 기간</td>
+                                <td id="goodsDate"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">공연 시간</td>
+                                <td id="goodsTime"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-title">관람 연령</td>
+                                <td id="goodsAge"></td>
+                            </tr>
+                            <!--                        <p id="placeFullName">장소</p>-->
+                            <!--                        <p id="placeLocationAddress">주소: </p>-->
+                            <!--                        <p id="goodsDate">공연 기간: </p>-->
+                            <!--                        <p id="goodsTime">공연 시간: </p>-->
+                            <!--                        <p id="goodsAge">관람 연령: </p>-->
+                        </table>
+                        <div id="grades-container">
+                            <button class="btn" onclick="showGrades()">전체 가격 보기</button>
+                            <div id="grades-list" style="display:none;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="goods-info">
-                <p id="placeFullName">장소: </p>
-                <p id="placeLocationAddress">주소: </p>
-                <p id="goodsDate">공연 기간: </p>
-                <p id="goodsTime">공연 시간: </p>
-                <p id="goodsAge">관람 연령: </p>
-                <div id="grades-container">
-                    <button onclick="showGrades()">전체 가격 보기</button>
-                    <div id="grades-list" style="display:none;"></div>
+            <div class="px-5 my-5" id="images-container">
+                <div class="images-title my-5">
+                    공연 상세정보
+                </div>
+                <div class="images-list ">
+                    <!-- JavaScript를 통해 동적으로 이미지들이 추가될 위치 -->
                 </div>
             </div>
         </div>
     </div>
-    <div id="schedule-container">
+
+    <div class="px-5" id="schedule-container">
         <h2>일정</h2>
         <div id="calendar"></div>
         <div id="schedule-details"></div> <!-- 일정 세부정보 표시 -->
-        <div>
+        <div class="d-flex justify-content-center my-4">
             <button id="book-btn">예매하기</button>
         </div>
     </div>
-</div>
-<div id="images-container">
-    <div class="images-title">공연 상세정보</div>
-    <div class="images-list">
-        <!-- JavaScript를 통해 동적으로 이미지들이 추가될 위치 -->
-    </div>
+
 </div>
 
 
