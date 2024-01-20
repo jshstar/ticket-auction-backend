@@ -37,7 +37,7 @@ public class Zone extends BaseEntity {
 
 	@Comment("공연장")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "palce_id")
+	@JoinColumn(name = "place_id")
 	private Place place;
 
 	@Builder
