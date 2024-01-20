@@ -1,0 +1,75 @@
+name: CICD
+
+on:
+  push:
+    branches: [ "dev" ]
+
+env:
+  PROJECT_NAME: ticket-auction
+  BUCKET_NAME: ticket-auction-deploy
+  CODE_DEPLOY_APP_NAME: ticket-auction-deploy-app
+  DEPLOYMENT_GROUP_NAME: ticket-auction-deploy-group
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: make application-prod.yml
+        if: contains(github.ref, 'develop') || contains(github.ref, 'main')
+        run: |
+          touch ./src/main/resources/application-prod.yml
+          echo "${{ secrets.YML_PROD }}" > ./src/main/resources/application-prod.yml
+        shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        env:
+          SPRING_PROFILES_ACTIVE: prod
+        run: ./gradlew clean build --stacktrace
+        shell: bash
+
+      - name: aws configure
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: build docker file and setting deploy files
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ticket-auction
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          mkdir scripts
+          touch scripts/deploy.sh
+          echo "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY" >> scripts/deploy.sh
+          echo "docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
+          echo "docker run -p 8080:8080 --restart always --name csbroker-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
+
+      - name: upload to s3
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          zip -r $IMAGE_TAG.zip ./scripts appspec.yml
+          aws s3 cp --region ap-northeast-2 --acl private ./$IMAGE_TAG.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
+
+      - name: start deploy
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-group-name $DEPLOYMENT_GROUP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$IMAGE_TAG.zip
