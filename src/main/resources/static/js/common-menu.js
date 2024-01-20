@@ -187,7 +187,7 @@ function getPointChargeList(token, page) {
             "page": page
         },
         success: function (data) {
-            $(".list-tb-body").empt();
+            $(".list-tb-body").empty();
             $(".pagination").empty();
 
             if (data.code === "P00000" && data.data.content) {

@@ -6,19 +6,22 @@
 // });
 
 
-let urlData;
-(function () {
-    const hostname = window.location.hostname;
-
-    // API 경로 설정
-    const apiPath = '/api/v1/users/signup';
-
-    // 도메인 설정
-    urlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
-})();
+// let urlData;
+// (function () {
+//     const hostname = window.location.hostname;
+//
+//     // API 경로 설정
+//     const apiPath = '/api/v1/users/signup';
+//
+//     // 도메인 설정
+//     returnurlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
+// })();
 
 function getUrl() {
-    return urlData;
+    const hostname = window.location.hostname;
+
+    // 도메인 설정
+    return hostname === 'localhost' ? `http://${hostname}:8080` : ``;
 }
 
 function checkLoginStatus() {
@@ -41,7 +44,7 @@ function updateLoginStatus(token, stat) {
     }
 
     $.ajax({
-        url: urlData + "/api/v1/auth/status",
+        url: getUrl() + "/api/v1/auth/status",
         type: "GET",
         headers: {
             "Authorization": token
@@ -91,7 +94,7 @@ function confirmFuncLogout() {
 function requestLogout() {
     let token = Cookies.get('Authorization');
     $.ajax({
-        url: urlData + "/api/v1/auth/logout",
+        url: getUrl() + "/api/v1/auth/logout",
         type: "POST",
         headers: {
             "Authorization": token
@@ -118,7 +121,7 @@ function requestLogin() {
 
     $.ajax({
         type: "POST",
-        url: urlData + `/api/v1/auth/login`,
+        url: getUrl() + `/api/v1/auth/login`,
         contentType: "application/json",
         data: JSON.stringify({email: email, password: password}),
     })
@@ -155,7 +158,7 @@ function redirectToPageWithToken(pageUrl, token) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = urlData + pageUrl;
+                window.location.href = getUrl() + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -174,7 +177,7 @@ function redirectToPage(pageUrl) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = urlData + pageUrl;
+                window.location.href = getUrl() + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -193,7 +196,7 @@ function redirectToPageWithParameter(pageUrl, parameter, value) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = pageUrl + `?${parameter}=${value}`;
+                window.location.href = getUrl() + pageUrl + `?${parameter}=${value}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }

@@ -1,7 +1,7 @@
 function getReservationList(token, page) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/reservations`,
+        url: getUrl() + `/api/v1/reservations`,
         data: {
             page: page,
             size: 15
@@ -36,7 +36,7 @@ function displayReservation(data) {
         let id = $('<td>').text(data.content[i].reservationId);
         var dateObject = formatDateTime(new Date(data.content[i].reservationDate));
         let date = $('<td>').text(dateObject);
-        let title = $('<td>').text(data.content[i].title);
+        let title = $('<td>').text(data.content[i].title.split(" - ")[0]);
         dateObject = formatDateTime(new Date(data.content[i].useDate));
         let useDate = $('<td>').text(`${dateObject} / ${data.content[i].numberOfTicket}매`);
         let cancelDate = $('<td>').text(formatDateTime(new Date(data.content[i].cancelDeadline)));
@@ -49,7 +49,15 @@ function displayReservation(data) {
             status.text("사용 완료");
         }
 
-        let btn = $('<button>').addClass("detail-btn btn").text("상세");
+        let btn = $('<button>').addClass("detail-btn btn").text("상세")
+            .on("click", function () {
+                redirectToPageWithParameter(
+                    "/reservation-detail.html",
+                    "reservationId",
+                    data.content[i].reservationId
+                );
+            });
+
         let tr = $('<tr>').append(id)
             .append(date)
             .append(title)
@@ -99,5 +107,127 @@ function formatDateTime(date) {
 
 
 function getReservationDetail() {
-    
+    let token = Cookies.get("Authorization");
+
+    let queryParams = getQueryParams();
+
+    if (queryParams["reservationId"]) {
+        $.ajax({
+            type: "GET",
+            url: getUrl() + `/api/v1/reservations/${queryParams["reservationId"]}`,
+            headers: {
+                "Authorization": token
+            },
+            success: function (response) {
+                let data = response.data;
+
+                $(".reserved-goods-title").text(data.title.split(" - ")[0]);
+                $(".reservation-user").text(data.username);
+                $(".reservation-id").text(data.reservationId);
+
+                let t = formatDateTime(new Date(data.useDate));
+                $(".reservation-date").text(t);
+                $(".reservation-place").text(data.address);
+
+                let stext = "";
+                let seats = data.seats;
+                for (let i = 0; i < seats.length; i++) {
+                    let z = seats[i].zone;
+                    let n = seats[i].seatNumber;
+
+                    stext += `${z} 구역 ${n} 번 좌석\n`;
+                }
+                $(".reservation-seat").text(stext);
+                $(".reservation-qr").append($('<button>').text("QR 생성").addClass("detail-btn btn"))
+                    .on("click", function () {
+                        redirectToPageWithParameter("/qr.html", "reservationId", data.reservationId);
+                    });
+            },
+            error: function (jqXHR, textStatus) {
+                console.log(jqXHR);
+                console.log(textStatus);
+            }
+        });
+    }
+}
+
+function getQrCode() {
+
+    let token = Cookies.get("Authorization");
+
+    let queryParams = getQueryParams();
+    if (queryParams["reservationId"]) {
+        $.ajax({
+            type: "POST",
+            url: getUrl() + `/api/v1/reservations/${queryParams["reservationId"]}/qrcode`,
+            headers: {
+                "Authorization": token
+            },
+            success: function (response) {
+                let now = new Date();
+                let endTime = new Date(now.getTime() + 60000);
+
+                if (response.code === "R00004") {
+                    $("#qr-code").empty();
+                    $("#remaining-time-div")
+                        .empty()
+                        .append($('<div>').addClass("me-4").text("남은 시간"))
+                        .append($('<div>').attr("id", "remaining-time"));
+
+                    displayQrCode(response.data, endTime);
+                }
+            },
+            error: function (jqXHR, textStatus) {
+                console.log(jqXHR);
+                console.log(textStatus);
+            }
+        });
+    }
+
+}
+
+function displayQrCode(data, endTime) {
+    // 여기서 서버에서 받아온 Base64 인코딩된 QR 코드 이미지를 설정하세요.
+    // QR 코드를 표시할 div 요소를 가져옵니다.
+    // QR 코드 이미지를 생성하고 div에 추가합니다.
+    $("#qr-code").append($('<img>').attr("src", `data:image/png;base64, ${data}`));
+    displayRemainingTime(endTime);
+}
+
+function displayRemainingTime(endTime) {
+    let now = new Date();
+    let timeDiff = endTime - now;
+
+    if (timeDiff <= 0) {
+        $("#remaining-time-div").empty();
+        $("#remaining-time-div").append(
+            $('<button>').text("QR 코드 재발급").addClass("btn qr-btn")
+                .on("click", function () {
+                        getQrCode();
+                    }
+                )
+        );
+    } else {
+        // 남은 시간을 초로 변환
+        let secondsRemaining = Math.floor(timeDiff / 1000);
+
+        // 분과 초 계산
+        let minutes = Math.floor(secondsRemaining / 60);
+        let seconds = secondsRemaining % 60;
+
+        // 시간 표시를 위해 2자리로 포맷팅
+        let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+
+        // 화면에 남은 시간 표시
+        $("#remaining-time").text(`  ${formattedTime}`);
+
+        setTimeout(function () {
+            displayRemainingTime(endTime);
+        }, 1000);
+    }
+}
+
+// 10 미만의 숫자에 0을 붙이는 함수
+function padZero(number) {
+    return number < 10 ? `0${number}` : number;
 }

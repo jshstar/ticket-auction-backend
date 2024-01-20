@@ -74,7 +74,7 @@ public class ReservationQueryRepositoryImpl implements ReservationQueryRepositor
 		Schedule schedule1 = reservationSeats.get(0).getSchedule();
 		Place place1 = reservationSeats.get(0).getSchedule().getGoods().getPlace();
 
-		ReservationDetailResponse.builder()
+		ReservationDetailResponse response = ReservationDetailResponse.builder()
 			.username(reservation1.getUser().getName())
 			.title(schedule1.getGoods().getTitle())
 			.seats(seatInfos)
@@ -83,7 +83,7 @@ public class ReservationQueryRepositoryImpl implements ReservationQueryRepositor
 			.address(place1.getAddress())
 			.build();
 
-		return null;
+		return Optional.ofNullable(response);
 	}
 
 	@Override

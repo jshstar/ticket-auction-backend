@@ -97,10 +97,35 @@ th, td {
     color: white;
 }
 
+#reservation-detail-table > tbody > tr > .detail-menu-name {
+    font-weight: 500;
+}
+
 #reservation-detail-table > tbody > tr {
     height: 100px;
 }
 
 #reservation-detail-table > tbody > tr > td:first-child {
     border-right: 1px solid #dddddd;
+}
+
+#reservation-detail-table > tbody > tr > td > .detail-btn {
+    background-color: #D1C2E9;
+    color: white;
+}
+
+#reservation-detail-table > tbody > tr > .reservation-detail-info {
+    font-size: 20px;
+}
+
+#remaining-time-div {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#remaining-time-div > .qr-btn {
+    background-color: #A9BCD0;
+    color: white;
+    width: 200px;
+    height: 50px;
 }
