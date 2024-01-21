@@ -2,7 +2,7 @@ function getUrl() {
     const hostname = window.location.hostname;
 
     // 도메인 설정
-    return hostname === 'localhost' ? `http://${hostname}:8080` : ``;
+    return hostname === 'localhost' ? `http://${hostname}:8080` : `https://ticket-auction.kro.kr`;
 }
 
 function checkLoginStatus() {
@@ -25,7 +25,7 @@ function updateLoginStatus(token, stat) {
     }
 
     $.ajax({
-        url: getUrl() + "/api/v1/auth/status",
+        url: `${getUrl()}/api/v1/auth/status`,
         type: "GET",
         headers: {
             "Authorization": token
@@ -75,7 +75,7 @@ function confirmFuncLogout() {
 function requestLogout() {
     let token = Cookies.get('Authorization');
     $.ajax({
-        url: getUrl() + "/api/v1/auth/logout",
+        url: `${getUrl()}/api/v1/auth/logout`,
         type: "POST",
         headers: {
             "Authorization": token
@@ -102,7 +102,7 @@ function requestLogin() {
 
     $.ajax({
         type: "POST",
-        url: getUrl() + `/api/v1/auth/login`,
+        url: `${getUrl()}/api/v1/auth/login`,
         contentType: "application/json",
         data: JSON.stringify({email: email, password: password}),
     })
@@ -111,7 +111,7 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.location.href = getUrl() + `/index.html`
+            window.location.href = `/index.html`
         })
         .fail(function (jqXHR, textStatus) {
             alert("fail");
@@ -139,7 +139,7 @@ function redirectToPageWithToken(pageUrl, token) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl;
+                window.location.href = pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -158,7 +158,7 @@ function redirectToPage(pageUrl) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl;
+                window.location.href = pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -177,7 +177,7 @@ function redirectToPageWithParameter(pageUrl, parameter, value) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl + `?${parameter}=${value}`;
+                window.location.href = `${pageUrl}?${parameter}=${value}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -199,7 +199,7 @@ function redirectToPageWithParameters(pageUrl, paramValueMap) {
                 for (const key of Object.keys(paramValueMap)) {
                     queryString += `${key}=${paramValueMap[key]}&`
                 }
-                window.location.href = getUrl() + pageUrl + '?' + queryString;
+                window.location.href = `${pageUrl}?${queryString}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -286,6 +286,17 @@ function encode(input) {
 }
 
 function decode(input) {
+    if (isNumeric(input)) {
+        return input;
+    }
     let decodedString = atob(input);
+    if (!decodedString.includes("rOnIOuBneuCnOuLpC4uLi4u")) {
+        return input;
+    }
+
     return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
+}
+
+function isNumeric(input) {
+    return /^[0-9]+$/.test(input);
 }

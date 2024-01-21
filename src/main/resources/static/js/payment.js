@@ -13,7 +13,7 @@ let key;
 let tossPayments;
 // AJAX 요청이 완료된 후에 TossPayments 초기화
 $.ajax({
-    url: getUrl() + "/api/v1/payments/getKey",
+    url: `${getUrl()}/api/v1/payments/getKey`,
     type: "GET",
     headers: {
         "Authorization": token,
@@ -43,7 +43,7 @@ function getRequest(callback) {
     let orderName = "포인트 충전";
 
     $.ajax({
-        url: getUrl() + "/api/v1/payments",
+        url: `${getUrl()}/api/v1/payments`,
         type: "POST",
         headers: {
             "Authorization": token,

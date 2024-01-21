@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>Ticket Auction</title>
 
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-          name="viewport">
+    <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
     <script crossorigin="anonymous"
@@ -45,7 +44,7 @@
         };
 
         var token = Cookies.get("Authorization");
-        const response = await fetch("/api/v1/payments/success", {
+        const response = await fetch(`${getUrl()}/api/v1/payments/success`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

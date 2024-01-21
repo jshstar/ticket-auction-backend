@@ -15,7 +15,7 @@ var selectScheduleId = -1;
 
 function fetchGoodsInfo(goodsId) {
     $.ajax({
-        url: getUrl() + `/api/v1/goods/${goodsId}`,
+        url: `${getUrl()}/api/v1/goods/${goodsId}`,
         type: 'GET',
         success: function (data) {
             var response = data.data;
@@ -47,7 +47,7 @@ function fetchGoodsInfo(goodsId) {
 
 function fetchGradesInfo(goodsId) {
     $.ajax({
-        url: getUrl() + `/api/v1/goods/${goodsId}/grade`,
+        url: `${getUrl()}/api/v1/goods/${goodsId}/grade`,
         type: 'GET',
         success: function (data) {
             var response = data.data; // 가정: 응답이 { data: List<GradeGetResponse> } 형태라고 가정
@@ -68,7 +68,7 @@ function fetchGradesInfo(goodsId) {
 
 function fetchScheduleInfo(goodsId) {
     $.ajax({
-        url: getUrl() + `/api/v1/goods/${goodsId}/schedules`,
+        url: `${getUrl()}/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (data) {
             var events = data.data.map(function (schedule) {
