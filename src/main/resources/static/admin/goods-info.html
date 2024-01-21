@@ -18,7 +18,7 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/goods-info.css">
+    <link href="/css/goods-info.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
@@ -65,7 +65,7 @@
         }));
     });
     $("#goodsPage").on("click", function () {
-        movePageWithToken("/goods.html");
+        movePageWithToken("/admin/goods.html");
     });
 </script>
 </body>

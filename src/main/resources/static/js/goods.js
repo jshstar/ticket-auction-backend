@@ -60,14 +60,15 @@ function clickOnCategoryBtn(name) {
             for (let i = 0; i , response.data.goodsSlice.content.length; i++) {
                 let d = response.data.goodsSlice.content[i];
 
+                let eid = encode(d.goodsId);
                 let pd = $('<div>')
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("goods-poster-img")
                             .on("click", function () {
                                 redirectToPageWithParameter(
-                                    "/goods-details.html",
+                                    "/goods/goods-details.html",
                                     "goodsId",
-                                    d.goodsId
+                                    eid
                                 );
                             })
                     )

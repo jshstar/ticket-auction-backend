@@ -77,8 +77,7 @@ $(document).ready(function () {
         const scheduleId = $('#sequence-select').val();
         const zoneGradeName = rowElement.data('zone-name');
         const zoneGradeId = rowElement.data('zone-id');
-        console.log(scheduleId)
-        console.log(zoneGradeId);
+
         reissueToken((token) => {
             if (validateZoneNameAndSeatNumber(zonesInfo, seatNumber, zoneGradeName) &&
                 !isSeatAlreadySaved(scheduleId, zoneGradeName, seatNumber)) {
@@ -162,7 +161,7 @@ function submitPlace(token) {
         alert('모든 구역에 유효한 좌석 수를 입력해야 합니다.');
         return;
     }
-    console.log(validZones)
+
     const placeCreateRequest = {
         name: name,
         address: address,
@@ -261,7 +260,7 @@ function submitGoodsInfo(token) {
         success: function (response) {
             alert('공연 정보가 성공적으로 추가되었습니다.');
             console.log(response);
-            movePageWithToken("/goods.html");
+            movePageWithToken("/admin/goods.html");
         },
         error: function (xhr, status, error) {
             alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
@@ -292,7 +291,6 @@ function fetchGoodsInfos(token) {
             }
         },
         success: function (response) {
-            console.log(response);
             $('#goodsInfoLabel').empty(); // 셀렉트 박스 초기화
             var option = new Option("공연 정보를 선택해 주세요");
             $('#goodsInfoLabel').append(option);
@@ -317,7 +315,6 @@ function fetchPlace() {
         url: getUrl() + '/api/v1/places',
         type: 'GET',
         success: function (response) {
-            console.log(response);
             $('#placeLabel').empty(); // 셀렉트 박스 초기화
             var option = new Option("공연장을 선택해 주세요");
             $('#placeLabel').append(option);
@@ -363,11 +360,10 @@ function submitGoodsAndSchedule(token) {
         },
         success: function (response) {
             alert('공연 정보가 성공적으로 추가되었습니다.');
-            console.log(response);
             if (response && response.data.goodsId) {
                 localStorage.setItem('goodsId', response.data.goodsId);
             }
-            movePageWithToken("/grade.html");
+            movePageWithToken("/admin/grade.html");
         },
         error: function (xhr, status, error) {
             alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
@@ -385,7 +381,7 @@ function goToNextPage() {
     if (totalCount > 0 && savedCount !== totalCount) {
         alert('모든 좌석 정보가 저장되지 않았습니다. 저장을 완료해 주세요.');
     } else {
-        movePageWithToken("/zone-grade.html");
+        movePageWithToken("/admin/zone-grade.html");
     }
 }
 
@@ -461,7 +457,6 @@ function loadZoneAndGradeData(goodsId) {
             type: 'GET',
             success: function (response) {
                 zonesData = response.data;
-                console.log('Zones Data:', zonesData);
                 populateZones(zonesData);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -477,7 +472,6 @@ function loadZoneAndGradeData(goodsId) {
             type: 'GET',
             success: function (response) {
                 gradesData = response.data;
-                console.log('Grades Data:', gradesData);
                 populateGrades(gradesData);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -536,7 +530,6 @@ function sendCreateRequest(zoneId, gradeId, $row, token) {
             }
         },
         success: function (response) {
-            console.log('Zone-Grade created:', response);
             $row.find('.save-btn').prop('disabled', true);
             updateNextPageButtonState(); // 저장 버튼 상태 업데이트
             saveResponse(response);
@@ -572,7 +565,7 @@ function updateNextPageButtonState() {
 // 스케줄 목록을 가져오는 함수
 function fetchSchedules(goodsId) {
     $.ajax({
-        url: `/api/v1/goods/${goodsId}/schedules`,
+        url: getUrl() + `/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (response) {
             const schedules = response.data;
@@ -592,7 +585,7 @@ function fetchSchedules(goodsId) {
 // 구역 목록을 가져오는 함수
 function fetchZones(goodsId) {
     $.ajax({
-        url: `/api/v1/zones?goodsId=${goodsId}`,
+        url: getUrl() + `/api/v1/zones?goodsId=${goodsId}`,
         type: 'GET',
         success: function (response) {
             response.data.forEach(zone => {
@@ -632,8 +625,8 @@ function addAuctionSeatRow(zoneName, zoneId) {
             <td>${zoneName}</td>
             <td><input type="number" class="seat-number-input" /></td>
             <td>
-                <button class="save-button">저장</button>
-                <button class="delete-button">삭제</button>
+                <button class="save-button btn" id="auction-seat-save-btn">저장</button>
+                <button class="delete-button btn btn-danger">삭제</button>
             </td>
         </tr>
     `);
@@ -647,7 +640,7 @@ function saveAuctionSeat(scheduleId, zoneId, seatNumber, rowElement, token) {
     };
 
     $.ajax({
-        url: `/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
+        url: getUrl() + `/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(auctionCreateRequest),

@@ -1,22 +1,3 @@
-// $(document).ready(function () {
-//     // 페이지 로드 시 로그인 상태 확인 후 UI 업데이트
-//     $("#headers").load("/header.html", function (response, status, xhr) {
-//         checkLoginStatus();
-//     })
-// });
-
-
-// let urlData;
-// (function () {
-//     const hostname = window.location.hostname;
-//
-//     // API 경로 설정
-//     const apiPath = '/api/v1/users/signup';
-//
-//     // 도메인 설정
-//     returnurlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
-// })();
-
 function getUrl() {
     const hostname = window.location.hostname;
 
@@ -265,4 +246,24 @@ function displayRemainingTime(endTime, tag, btn) {
 // 10 미만의 숫자에 0을 붙이는 함수
 function padZero(number) {
     return number < 10 ? `0${number}` : number;
+}
+
+// 날짜와 시간을 원하는 형식으로 변환하는 함수
+function formatDateTime(date) {
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+    var hours = String(date.getHours()).padStart(2, '0');
+    var minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
+}
+
+function encode(input) {
+    return btoa(input + "rOnIOuBneuCnOuLpC4uLi4u");
+}
+
+function decode(input) {
+    let decodedString = atob(input);
+    return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
 }

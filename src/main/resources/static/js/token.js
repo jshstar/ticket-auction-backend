@@ -56,7 +56,6 @@ function refreshToken() {
         credentials: 'include'
     })
         .then(response => {
-            console.log(response.json());
             if (response.status !== 201) {
                 throw new Error('Token refresh failed');
             }

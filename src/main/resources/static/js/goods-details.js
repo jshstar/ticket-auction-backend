@@ -1,9 +1,10 @@
 $(document).ready(function () {
     var queryParams = getQueryParams();
     if (queryParams["goodsId"]) {
-        fetchGoodsInfo(queryParams["goodsId"]);
-        fetchGradesInfo(queryParams["goodsId"]);
-        fetchScheduleInfo(queryParams["goodsId"]);
+        let id = decode(queryParams["goodsId"]);
+        fetchGoodsInfo(id);
+        fetchGradesInfo(id);
+        fetchScheduleInfo(id);
     } else {
         // goodsId가 없다면 에러 처리
         console.error('No goodsId found');
