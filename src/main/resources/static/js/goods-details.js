@@ -11,6 +11,8 @@ $(document).ready(function () {
     }
 });
 
+var selectScheduleId = -1;
+
 function fetchGoodsInfo(goodsId) {
     $.ajax({
         url: getUrl() + `/api/v1/goods/${goodsId}`,
@@ -90,33 +92,27 @@ function initCalendar(events) {
         events: events,
         eventClick: function (calEvent) {
             $('#schedule-details').text('선택하신 회차: ' + calEvent.title);
-            localStorage.setItem('selectedScheduleId', calEvent.id);
+            selectScheduleId = calEvent.id;
         }
     });
 }
 
 $('#book-btn').click(function () {
-    var selectedScheduleId = localStorage.getItem('selectedScheduleId');
-    if (selectedScheduleId) {
-        alert('Booking for schedule ID: ' + selectedScheduleId);
-        // 여기에 예매 로직 추가
+    if (selectScheduleId !== -1) {
+        const queryParams = getQueryParams();
+        const goodsId = decode(queryParams["goodsId"]);
+        const paramValueMap = {
+            goodsId: goodsId,
+            scheduleId: selectScheduleId
+        };
+        redirectToPageWithParameters('/reservation/goods_reserve.html', paramValueMap);
     } else {
-        alert('No schedule selected.');
+        alert('선택한 회차가 없습니다');
     }
 });
 
 function showGrades() {
     $('#grades-list').toggle(); // show와 hide를 toggle로 변경
-}
-
-$('#book-btn').click(function () {
-    // 예매하기 버튼 클릭 이벤트
-    bookTickets();
-});
-
-function bookTickets() {
-    // 예매 로직 작성
-    alert('예매가 완료되었습니다.'); // 여기에 실제 예매 처리 로직을 구현해야 합니다.
 }
 
 function formatDate(dateString) {

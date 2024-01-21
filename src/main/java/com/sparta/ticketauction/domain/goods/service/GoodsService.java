@@ -11,10 +11,12 @@ import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
+import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.place.entity.Place;
 
 public interface GoodsService {
@@ -57,4 +59,9 @@ public interface GoodsService {
 
 	// 공연 조회
 	Goods findByGoodsId(Long goodsId);
+
+	// 공연 좌석 정보 조회
+	GoodsSeatInfoResponse findGoodsSeatInfo(Long goodsId);
+
+	GoodsAuctionSeatInfoResponse findGoodsAuctionSeatInfo(Long scheduleId, Long goodsId);
 }

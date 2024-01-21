@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
+import com.sparta.ticketauction.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
+import com.sparta.ticketauction.domain.seat.response.ReservedSeatResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.response.ApiResponse;
@@ -29,6 +33,8 @@ import lombok.RequiredArgsConstructor;
 public class GoodsController {
 
 	private final GoodsService goodsService;
+
+	private final ReservationSeatRepository reservationSeatRepository;
 
 	// 공연 정보 전체 조회
 	@GetMapping("goods-infos")
@@ -89,5 +95,45 @@ public class GoodsController {
 					SUCCESS_GET_ALL_GOODS_CATEGORY.getMessage(),
 					goodsCategoryGetResponseList));
 
+	}
+
+	@GetMapping("/goods/{goodsId}/seats")
+	public ResponseEntity<ApiResponse<GoodsSeatInfoResponse>> getGoodsSeatInfo(@PathVariable Long goodsId) {
+		GoodsSeatInfoResponse response = goodsService.findGoodsSeatInfo(goodsId);
+		return ResponseEntity
+			.status(SUCCESS_GET_GOODS_SEAT_INFO.getHttpStatus())
+			.body(ApiResponse.of(
+				SUCCESS_GET_GOODS_SEAT_INFO.getCode(),
+				SUCCESS_GET_GOODS_SEAT_INFO.getMessage(),
+				response
+			));
+	}
+
+	@GetMapping("/goods/{goodsId}/auction-seats")
+	public ResponseEntity<ApiResponse<GoodsAuctionSeatInfoResponse>> getGoodsAuctionSeatInfo(
+		@PathVariable Long goodsId,
+		@RequestParam Long scheduleId
+	) {
+		GoodsAuctionSeatInfoResponse response = goodsService.findGoodsAuctionSeatInfo(scheduleId, goodsId);
+		return ResponseEntity
+			.status(SUCCESS_GET_GOODS_AUCTION_INFO.getHttpStatus())
+			.body(ApiResponse.of(
+				SUCCESS_GET_GOODS_AUCTION_INFO.getCode(),
+				SUCCESS_GET_GOODS_AUCTION_INFO.getMessage(),
+				response
+			));
+	}
+
+	@GetMapping("/goods/{scheduleId}/reserved-seats")
+	public ResponseEntity<ApiResponse<List<ReservedSeatResponse>>> getReservedSeats(@PathVariable Long scheduleId) {
+		List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeats(scheduleId);
+
+		return ResponseEntity
+			.status(SUCCESS_GET_GOODS_RESERVED_SEAT_INFO.getHttpStatus())
+			.body(ApiResponse.of(
+				SUCCESS_GET_GOODS_RESERVED_SEAT_INFO.getCode(),
+				SUCCESS_GET_GOODS_RESERVED_SEAT_INFO.getMessage(),
+				response
+			));
 	}
 }

@@ -44,7 +44,7 @@ public class Goods extends BaseEntity {
 
 	@Comment("공연")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "goods_info")
+	@JoinColumn(name = "goods_info_id")
 	private GoodsInfo goodsInfo;
 
 	@Comment("공연장")

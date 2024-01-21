@@ -1,0 +1,62 @@
+.theater-layout {
+    width: 70%;
+    height: 1000px;
+    display: inline-block;
+    border: black 1px solid;
+}
+
+.seat-info {
+    width: 30%;
+    height: 1000px;
+    float: right;
+    border: black 1px solid;
+    border-left-width: 0;
+}
+
+.stage {
+    width: 60%;
+    height: 100px;
+    margin: 50px auto 0 auto;
+    background-color: beige;
+}
+
+.section {
+    width: 70%;
+    height: auto;
+    margin: 50px auto 0 auto;
+    border: black 1px solid;
+}
+
+.info {
+    width: 70%;
+    height: 150px;
+    margin: 20px auto 0 auto;
+    border: black solid 1px;
+}
+
+.info-button {
+    width: 70%;
+    margin: 20px auto 0 auto;
+    display: block;
+}
+
+#seat-map {
+    width: 80%;
+    margin: 20px auto 0 auto;
+}
+
+.A-class {
+    background-color: coral !important;
+}
+
+.B-class {
+    background-color: yellowgreen !important;
+}
+
+.C-class {
+    background-color: dodgerblue !important;
+}
+
+.D-class {
+    background-color: #D1C2E9 !important;
+}
