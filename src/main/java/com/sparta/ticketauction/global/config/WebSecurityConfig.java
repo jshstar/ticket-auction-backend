@@ -44,6 +44,9 @@ public class WebSecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("*"));
 		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
+		configuration.setExposedHeaders(Arrays.asList("Authorization"));
+		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
@@ -79,7 +82,7 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.cors(cors->cors.configurationSource(corsConfigurationSource()))
+			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(
 				(sessionManagement) ->

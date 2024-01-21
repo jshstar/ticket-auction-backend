@@ -2,7 +2,7 @@ function getUrl() {
     const hostname = window.location.hostname;
 
     // 도메인 설정
-    return hostname === 'localhost' ? `http://${hostname}:8080` : ``;
+    return hostname === 'localhost' ? `http://${hostname}:8080` : `http://ticket-auction-alb-prod-170161396.ap-northeast-2.elb.amazonaws.com`;
 }
 
 function checkLoginStatus() {
@@ -286,6 +286,13 @@ function encode(input) {
 }
 
 function decode(input) {
+    if (isNumeric(input)) {
+        return input;
+    }
     let decodedString = atob(input);
+    if (!decodedString.includes("rOnIOuBneuCnOuLpC4uLi4u")) {
+        return input;
+    }
+
     return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
 }
