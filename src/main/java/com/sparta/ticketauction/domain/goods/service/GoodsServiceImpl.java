@@ -24,10 +24,12 @@ import com.sparta.ticketauction.domain.goods.repository.GoodsCategoryRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsImageRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
+import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.place.entity.Place;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.S3Uploader;
@@ -180,5 +182,19 @@ public class GoodsServiceImpl implements GoodsService {
 	public Goods findByGoodsId(Long goodsId) {
 		return goodsRepository.findById(goodsId)
 			.orElseThrow(() -> new ApiException(NOT_FOUND_GOODS));
+	}
+
+	@Override
+	public GoodsSeatInfoResponse findGoodsSeatInfo(Long goodsId) {
+		return GoodsSeatInfoResponse.builder()
+			.seatInfos(goodsRepository.findGoodsSeatInfo(goodsId))
+			.build();
+	}
+
+	@Override
+	public GoodsAuctionSeatInfoResponse findGoodsAuctionSeatInfo(Long scheduleId, Long goodsId) {
+		return GoodsAuctionSeatInfoResponse.builder()
+			.seatInfos(goodsRepository.findGoodsAuctionSeatInfo(scheduleId, goodsId))
+			.build();
 	}
 }

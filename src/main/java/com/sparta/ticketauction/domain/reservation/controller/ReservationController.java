@@ -20,8 +20,6 @@ import com.sparta.ticketauction.domain.reservation.service.ReservationService;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
 import com.sparta.ticketauction.global.dto.EmptyObject;
-import com.sparta.ticketauction.global.exception.ApiException;
-import com.sparta.ticketauction.global.exception.ErrorCode;
 import com.sparta.ticketauction.global.response.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,19 +37,15 @@ public class ReservationController {
 		@RequestBody ReservationCreateRequest request,
 		@CurrentUser User user
 	) {
-		try {
-			ReservationDetailResponse response = reservationService.reserve(user, request);
-			return ResponseEntity
-				.status(SUCCESS_RESERVE.getHttpStatus())
-				.body(
-					ApiResponse.of(
-						SUCCESS_RESERVE.getCode(),
-						SUCCESS_RESERVE.getMessage(),
-						response)
-				);
-		} catch (Exception e) {
-			throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
-		}
+		ReservationDetailResponse response = reservationService.reserve(user, request);
+		return ResponseEntity
+			.status(SUCCESS_RESERVE.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_RESERVE.getCode(),
+					SUCCESS_RESERVE.getMessage(),
+					response)
+			);
 	}
 
 	@GetMapping("/{reservationId}")
