@@ -187,6 +187,28 @@ function redirectToPageWithParameter(pageUrl, parameter, value) {
         });
 }
 
+function redirectToPageWithParameters(pageUrl, paramValueMap) {
+    fetch(pageUrl, {
+        method: 'GET'
+    })
+        .then(response => {
+            // 응답을 확인하고, 필요한 처리를 수행
+            if (response.ok) {
+                // 페이지 이동 또는 다른 동작 수행
+                let queryString = '';
+                for (const key of Object.keys(paramValueMap)) {
+                    queryString += `${key}=${paramValueMap[key]}&`
+                }
+                window.location.href = getUrl() + pageUrl + '?' + queryString;
+            } else {
+                console.error('페이지 이동 실패:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('페이지 이동 실패:', error);
+        });
+}
+
 function getQueryParams() {
     var queryParams = {};
     var queryString = window.location.search.substring(1); // ? 제외한 쿼리 문자열
@@ -273,9 +295,4 @@ function decode(input) {
     }
 
     return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
-}
-
-
-function isNumeric(input) {
-    return /^[0-9]+$/.test(input);
 }

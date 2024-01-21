@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 
-public interface GoodsRepository extends JpaRepository<Goods, Long> {
+public interface GoodsRepository extends JpaRepository<Goods, Long>, GoodsRepositoryCustom {
 
 	@Query("select g from Goods g "
 		+ "left join fetch g.goodsInfo gi "

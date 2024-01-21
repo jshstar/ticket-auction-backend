@@ -94,6 +94,7 @@ public class ReservationQueryRepositoryImpl implements ReservationQueryRepositor
 			.from(reservation)
 			.innerJoin(reservation.user, user)
 			.where(reservation.user.id.eq(userId))
+			.orderBy(reservation.createdAt.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();

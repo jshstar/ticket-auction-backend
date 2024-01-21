@@ -11,6 +11,8 @@ import com.sparta.ticketauction.global.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +36,7 @@ public class GoodsInfo extends BaseEntity {
 	private Long id;
 
 	@Comment("공연 제목")
-	@Column(name = "name", length = 30, nullable = false)
+	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
 	@Comment("공연 내용")
@@ -48,6 +50,7 @@ public class GoodsInfo extends BaseEntity {
 
 	@Comment("연령대")
 	@Column(name = "age_grade", nullable = false)
+	@Enumerated(EnumType.STRING)
 	private AgeGrade ageGrade;
 
 	@Comment("공연 카테고리")

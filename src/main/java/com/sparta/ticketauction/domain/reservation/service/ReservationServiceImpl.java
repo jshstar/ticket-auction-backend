@@ -175,8 +175,12 @@ public class ReservationServiceImpl implements ReservationService {
 		addReservationSeat(reservation, seatCreateRequest);
 
 		// 예매, 예매 좌석 Entity 생성
-		Reservation savedReservation = reservationRepository.saveAndFlush(reservation);
-
+		Reservation savedReservation;
+		try {
+			savedReservation = reservationRepository.saveAndFlush(reservation);
+		} catch (Exception e) {
+			throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
+		}
 		// 포인트 사용
 		pointService.usePoint(savedUser, reservation.getPrice());
 

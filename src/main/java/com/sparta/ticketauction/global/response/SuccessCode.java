@@ -24,6 +24,9 @@ public enum SuccessCode {
 	SUCCESS_GET_SLICE_GOODS(HttpStatus.OK, "G00100", "공연 페이징 조회 성공했습니다."),
 	SUCCESS_GET_GOODS(HttpStatus.OK, "G00200", "공연 단건 조회 성공했습니다."),
 	SUCCESS_GET_ALL_GOODS_CATEGORY(HttpStatus.OK, "G00300", "카테고리 전체 조회 성공했습니다."),
+	SUCCESS_GET_GOODS_SEAT_INFO(HttpStatus.OK, "G00900", "공연 좌석등급 정보 조회 성공했습니다."),
+	SUCCESS_GET_GOODS_AUCTION_INFO(HttpStatus.OK, "G00900", "공연 경매좌석 정보 조회 성공했습니다."),
+	SUCCESS_GET_GOODS_RESERVED_SEAT_INFO(HttpStatus.OK, "G00901", "공연 예매된 좌석 정보 조회 성공했습니다."),
 
 	/* PLACE */
 	SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),
