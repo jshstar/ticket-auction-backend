@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>공연장 좌석 예약 시스템</title>
+    <link rel="stylesheet" href="/css/jquery.seat-charts.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/goods-reserve.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.seat-charts.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/token.js"></script>
+</head>
+<body>
+<header id="headers"></header>
+
+<div class="theater-layout">
+    <div class="stage">
+        <h3 class="stage-text text-center">STAGE</h3>
+    </div>
+    <div id="seat-map">
+    </div>
+    <div id="legend"></div>
+</div>
+<aside class="seat-info" id="seat-info">
+    <div class="info">
+        <h2>경매 현황</h2>
+        <span>선택한 좌석: </span> <span id="bid-select-seat">정보 없음</span> <br>
+        <span>현재 최고가: </span> <span id="bid-current-price">정보 없음</span> <br>
+        <span>시작가: </span> <span id="bid-start-price">정보 없음</span> <br>
+        <span>경매 종료일: </span> <span id="bid-end-date">정보 없음</span>
+    </div>
+    <div class="info">
+        <h2>입찰하기</h2>
+        <span>입찰가:</span><input id="bid-input" placeholder="100000"/>
+    </div>
+    <button type="button" id="bid-btn" class="btn btn-secondary info-button" style="display: block">입찰하기
+    </button>
+    <div class="info">
+        <h2>잔여석</h2>
+        <div id="remaining-seat-info">
+        </div>
+    </div>
+    <div class="info">
+        <h3> 선택한 좌석 (<span id="counter">0</span>)</h3>
+        <div id="select-seat-info">
+            <ul id="selected-seats">
+            </ul>
+            금액: <b><span id="total">0</span>₩</b>
+        </div>
+    </div>
+    <button type="button" id="reserve-btn" class="btn btn-secondary info-button" style="display: block">좌석 예매
+    </button>
+    <button type="button" class="btn btn-secondary info-button" style="display: block" onclick="window.history.back();">
+        뒤로 가기
+    </button>
+</aside>
+</body>
+<script>
+    $(document).ready(function () {
+        var token; // jwt 토큰
+        var placeInfo = { // 공연장 정보 초기 설정
+            1: { // 공연장 id. 수동으로 관리해야함
+                map: [ // 공연장 좌석 배치도. 수동으로 관리해야함
+                    'AAAAAAAAAA',
+                    'BBBBBBBBBB',
+                    'BBBBBBBBBB',
+                    'CCCCCCCCCC',
+                    'CCCCCCCCCC',
+                    'CCCCCCCCCC',
+                    'DDDDDDDDDD',
+                    'DDDDDDDDDD',
+                    'DDDDDDDDDD',
+                    'DDDDDDDDDD'
+                ],
+                zoneTypes: ['A', 'B', 'C', 'D'], // 공연장 구역 목록. 수동으로 관리해야함
+                seats: {},
+                legend: {
+                    node: $('#legend'),
+                    items: []
+                }
+            }
+        };
+        var currentPlaceId = 1; // 현재 공연장 id
+        var seatCount = placeInfo[currentPlaceId]['zoneTypes'].reduce((obj, key) => { // 좌석 만들어줄때 좌석등급마다 번호 지정용
+            obj[key] = 1;
+            return obj;
+        }, {});
+        var zoneGradeInfo = {}; // 현재 공연의 좌석등급 정보
+        var scheduleId, goodsId; // 회차 id, 공연 id
+        var currentViewAuctionLabel = -1; // 현재 보는중인 경매 좌석의 label
+        var auctionSeats = []; // 경매 좌석 목록
+        var auctionSeatsInfo = {}; // 경매 좌석 상세 정보 {A-2: {}}
+        var reservedSeats = []; // 예약된 좌석 목록
+        var selectSeats = []; // 선택한 좌석 목록 '1-1-1' -> {scheduleId:1, zoneGradeId:1, seatNumber:1}
+        function initQueryParams() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+
+            scheduleId = urlParams.get('scheduleId');
+            goodsId = urlParams.get('goodsId');
+        }
+
+        $("#headers").load("/header.html", function (response, status, xhr) {
+            checkLoginStatus();
+        });
+        token = Cookies.get('Authorization');
+
+        initRequiredData();
+
+        var $cart = $('#selected-seats'),
+            $counter = $('#counter'),
+            $total = $('#total'),
+            sc = $('#seat-map').seatCharts({
+                map: placeInfo[currentPlaceId].map,
+                seats: placeInfo[currentPlaceId].seats,
+                naming: {
+                    top: false,
+                    getLabel: function (character, row, column) {
+                        return `${character}-${seatCount[character]++}`;
+                    },
+                    getId: function (character, row, column) {
+                        return `${character}-${seatCount[character]}`;
+                    }
+                },
+                legend: {
+                    node: $('#legend'),
+                    items: placeInfo[currentPlaceId].legend.items
+                },
+                click: function () {
+                    if (this.status() == 'available') {
+                        if (selectSeats.length >= 2) {
+                            alert('좌석 선택은 최대 2개 까지만 가능합니다.');
+                            return 'available';
+                        }
+                        $('<li>' + this.data().category + ' 좌석 # ' + this.settings.label + ': <b>' + this.data().price + '₩</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+                            .attr('id', 'cart-item-' + this.settings.id)
+                            .data('seatId', this.settings.id)
+                            .appendTo($cart);
+
+                        const [zoneName, seatNumber] = this.settings.label.split('-');
+                        selectSeats.push(`${scheduleId}-${zoneGradeInfo[zoneName]['zoneGradeId']}-${seatNumber}`); // 선택한 좌석 장바구니에 넣기
+                        $counter.text(sc.find('selected').length + 1);
+                        $total.text(recalculateTotal(sc) + this.data().price);
+                        return 'selected';
+                    } else if (this.status() == 'selected') {
+                        $counter.text(sc.find('selected').length - 1);
+                        $total.text(recalculateTotal(sc) - this.data().price);
+                        const [zoneName, seatNumber] = this.settings.label.split('-');
+                        $('#cart-item-' + this.settings.id).remove();
+                        selectSeats = selectSeats.filter((value) => { // 선택한 좌석 장바구니에서 빼기
+                            return value !== `${scheduleId}-${zoneGradeInfo[zoneName]['zoneGradeId']}-${seatNumber}`;
+                        });
+
+                        return 'available';
+                    } else if (this.status() == 'unavailable') {
+                        return 'unavailable';
+                    } else if (this.status() == 'auction') {
+                        currentViewAuctionLabel = this.settings.label;
+                        // 경매 정보 받아오기
+                        $.ajax({
+                            url: getUrl() + `/api/v1/auctions/${auctionSeatsInfo[currentViewAuctionLabel].auctionId}`,
+                            type: "GET",
+                            headers: {
+                                "Authorization": token
+                            },
+                            success: function (data) {
+                                // 경매 정보 갱신
+                                data = data['data'];
+                                $('#bid-select-seat').text(currentViewAuctionLabel);
+                                $('#bid-current-price').text(data['bidPrice']);
+                                $('#bid-start-price').text(data['startPrice']);
+                                $('#bid-end-date').text(data['endDateTime']);
+                            },
+                            error: function (jqXHR, textStatus) {
+                                alert('경매 정보 갱신 중 오류가 발생했습니다.');
+                            }
+                        });
+                        // http://localhost:8080/api/v1/auctions/1/bids/sse
+                        // SSE 설정
+                        const requestUrl = getUrl() + `/api/v1/auctions/${auctionSeatsInfo[currentViewAuctionLabel].auctionId}/bids/sse`;
+                        const eventSource = new EventSource(requestUrl);
+                        eventSource.onmessage = function (event) {
+                            // 경매 현재가 갱신
+                            $('#bid-current-price').text(event.data);
+                            console.log('Received data: ', event);
+                        };
+                        eventSource.onerror = function (error) {
+                            console.error('EventSource failed:', error);
+                            eventSource.close(); // 연결 종료
+                        };
+                        return 'auction';
+                    } else {
+                        return this.style();
+                    }
+                }
+            });
+
+        // 좌석 예매 버튼 클릭
+        $('#reserve-btn').click(function () {
+            const requestData = {
+                price: $('#total').text(),
+                reservationSeats: []
+            };
+            if (selectSeats.length === 0) {
+                alert('좌석을 선택해주세요!');
+                return;
+            }
+            for (const selectSeat of selectSeats) {
+                const [scheduleId, zoneGradeId, seatNumber] = selectSeat.split('-');
+                requestData['reservationSeats'].push({
+                    scheduleId: scheduleId,
+                    zoneGradeId: zoneGradeId,
+                    seatNumber: seatNumber
+                });
+            }
+            $.ajax({
+                url: getUrl() + `/api/v1/reservations`,
+                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                headers: {
+                    "Authorization": token
+                },
+                data: JSON.stringify(requestData),
+                success: function (data) {
+                    console.log(data);
+                    alert('예매 성공했습니다.');
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        });
+
+        // 경매 입찰 버튼 클릭
+        $('#bid-btn').click(function () {
+            const price = parseInt($('#bid-input').val());
+            const bidCurrentPrice = parseInt($('#bid-current-price').text());
+            if (isNaN(price) || isNaN(bidCurrentPrice)) {
+                alert('경매 가격이 올바르지 않습니다.');
+                return;
+            }
+
+            if (price < bidCurrentPrice * 1.05) {
+                alert('최소 현재 입찰가의 5%보다 높게 입찰해야 합니다.');
+                return;
+            }
+            const requestData = {
+                price: price
+            };
+            $.ajax({
+                url: getUrl() + `/api/v1/auctions/${auctionSeatsInfo[currentViewAuctionLabel].auctionId}/bids`,
+                contentType: "application/json; charset=utf-8",
+                type: "POST",
+                headers: {
+                    "Authorization": token
+                },
+                data: JSON.stringify(requestData),
+                success: function (data) {
+                    alert('입찰 성공했습니다.');
+                },
+                error: function (jqXHR, textStatus) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        })
+
+        // 좌석 선택 취소
+        $('#selected-seats').on('click', '.cancel-cart-item', function () {
+            sc.get($(this).parents('li:first').data('seatId')).click();
+        });
+        initAuctionSeats(scheduleId, goodsId);
+
+        // 선택한 좌석 카운팅
+        function recalculateTotal(sc) {
+            var total = 0;
+
+            //basically find every selected seat and sum its price
+            sc.find('selected').each(function () {
+                total += this.data().price;
+            });
+
+            return total;
+        }
+
+        // 필요한 정보 초기화
+        function initRequiredData() {
+            initQueryParams();
+            initZoneGradeInfo(goodsId);
+        }
+
+        // 좌석등급정보 동기로 불러옴
+        function initZoneGradeInfo(goodsId) {
+            $.ajax({
+                url: getUrl() + `/api/v1/goods/${goodsId}/seats`,
+                type: "GET",
+                async: false,
+                headers: {
+                    "Authorization": token
+                },
+                success: function (data) {
+                    const seatInfos = data['data']['seatInfos'];
+                    for (const seatInfo of seatInfos) {
+                        zoneGradeInfo[seatInfo['zoneName']] = {
+                            zoneGradeId: seatInfo['zoneGradeId'],
+                            price: seatInfo['price'],
+                            gradeName: seatInfo['gradeName']
+                        }
+                    }
+
+                    for (const zoneType of placeInfo[currentPlaceId].zoneTypes) {
+                        placeInfo[currentPlaceId].seats[zoneType] = {
+                            price: zoneGradeInfo[zoneType].price,
+                            classes: `${zoneType}-class`,
+                            category: `${zoneGradeInfo[zoneType].gradeName}`
+                        };
+                        placeInfo[currentPlaceId].legend.items.push(
+                            [`${zoneType}`, 'available', `${zoneGradeInfo[zoneType].gradeName}`],
+                        )
+                    }
+                    placeInfo[currentPlaceId].legend.items.push(
+                        ['', 'unavailable', '예약된 좌석'],
+                        ['', 'available', '경매 좌석']
+                    );
+                },
+                error: function (jqXHR, textStatus) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        // 좌석 설정 끝나면 경매좌석 설정 시작
+        function initAuctionSeats(scheduleId, goodsId) {
+            $.ajax({
+                url: getUrl() + `/api/v1/goods/${goodsId}/auction-seats?scheduleId=${scheduleId}`,
+                type: "GET",
+                headers: {
+                    "Authorization": token
+                },
+                success: function (data) {
+                    console.log(data);
+                    for (const seatInfo of data['data']['seatInfos']) {
+                        const seatLabel = `${seatInfo.zoneName}-${seatInfo.seatNumber}`;
+                        auctionSeats.push(seatLabel);
+                        auctionSeatsInfo[seatLabel] = {
+                            "zoneName": seatInfo.zoneName,
+                            "gradeName": seatInfo.gradeName,
+                            "price": seatInfo.price,
+                            "zoneGradeId": seatInfo.zoneGradeId,
+                            "auctionId": seatInfo.auctionId,
+                            "seatNumber": seatInfo.seatNumber,
+                            "deadline": seatInfo.deadline,
+                            "isEnded": seatInfo.isEnded
+                        }
+                    }
+                    // 경매 좌석 상태 auction으로 변경
+                    sc.get(auctionSeats).status('auction');
+                    initReservedSeats(scheduleId);
+                },
+                error: function (jqXHR, textStatus) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        // 경매좌석 설정 끝나면 예약된 좌석 설정
+        function initReservedSeats(scheduleId) {
+            $.ajax({
+                url: getUrl() + `/api/v1/goods/${scheduleId}/reserved-seats`,
+                type: "GET",
+                headers: {
+                    "Authorization": token
+                },
+                success: function (data) {
+                    for (const {zoneGradeId, seatNumber} of data['data']) {
+                        for (const key of Object.keys(zoneGradeInfo)) {
+                            if (zoneGradeInfo[key].zoneGradeId === zoneGradeId) {
+                                reservedSeats.push(`${key}-${seatNumber}`);
+                                break;
+                            }
+                        }
+                    }
+                    // 이미 예매된 좌석 비활성화
+                    sc.get(reservedSeats).status('unavailable');
+                    const reservedSeatCount = {}
+                    for (const seat of reservedSeats) {
+                        const [zoneName, _] = seat;
+                        reservedSeatCount[zoneName] = (reservedSeatCount[zoneName] + 1) || 1;
+                    }
+                    // 잔여석 계산
+                    for (const zone of placeInfo[currentPlaceId].zoneTypes) {
+                        const remainSeatCount = (seatCount[zone] - 1) - (reservedSeatCount[zone] || 0);
+                        $(`<span>${zoneGradeInfo[zone].gradeName}: ${remainSeatCount}석</span><br>`).appendTo('#remaining-seat-info');
+                    }
+                },
+                error: function (jqXHR, textStatus) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+    })
+</script>
+</html>
