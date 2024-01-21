@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>Ticket Auction</title>
 
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-          name="viewport">
+    <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
     <script crossorigin="anonymous"
@@ -33,7 +32,7 @@
             <input class="form-control" id="password" name="비밀번호" placeholder="Password" type="password">
         </div>
         <div class="form-group user-input-div">
-            <button class="btn user-input-btn w-100" onclick="requestLogin()" style="height: 50px;" type="submit">로그인
+            <button class="btn user-input-btn w-100" id="login-btn" style="height: 50px;" type="submit">로그인
             </button>
         </div>
 
@@ -49,6 +48,10 @@
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     })
+
+    $("#login-btn").on("click", function () {
+        requestLogin();
+    });
 </script>
 
 </html>

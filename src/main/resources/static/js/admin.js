@@ -172,7 +172,7 @@ function submitPlace(token) {
     };
 
     $.ajax({
-        url: getUrl() + '/api/v1/admin/places',
+        url: `${getUrl()}/api/v1/admin/places`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(placeCreateRequest),
@@ -247,7 +247,7 @@ function submitGoodsInfo(token) {
     }));
 
     $.ajax({
-        url: getUrl() + '/api/v1/admin/goods-infos',
+        url: `${getUrl()}/api/v1/admin/goods-infos`,
         type: 'POST',
         contentType: false, // multipart/form-data를 위해 false로 설정
         processData: false, // jQuery가 데이터를 처리하지 않도록 설정
@@ -283,7 +283,7 @@ function isValidPerformanceInput(title, content, time, age, category) {
 // 페이지 로드시 공연정보 가져오기
 function fetchGoodsInfos(token) {
     $.ajax({
-        url: getUrl() + '/api/v1/goods-infos',
+        url: `${getUrl()}/api/v1/goods-infos`,
         type: 'GET',
         beforeSend: function (xhr) {
             if (token) {
@@ -312,7 +312,7 @@ function fetchGoodsInfos(token) {
 //페이지 로드시 공연장 조회 정보 가져오기
 function fetchPlace() {
     $.ajax({
-        url: getUrl() + '/api/v1/places',
+        url: `${getUrl()}/api/v1/places`,
         type: 'GET',
         success: function (response) {
             $('#placeLabel').empty(); // 셀렉트 박스 초기화
@@ -349,7 +349,7 @@ function submitGoodsAndSchedule(token) {
 
     // 상품 정보 생성 및 스케줄 추가 AJAX 요청
     $.ajax({
-        url: getUrl() + `/api/v1/admin/goods-infos/${goodsInfoId}/goods?placeId=${placeId}`,
+        url: `${getUrl()}/api/v1/admin/goods-infos/${goodsInfoId}/goods?placeId=${placeId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(goodsCreateRequest),
@@ -424,7 +424,7 @@ function saveGradeData(button, token) {
 
     // 서버로 데이터 전송
     $.ajax({
-        url: getUrl() + `/api/v1/admin/goods/${goodsId}/grades`,
+        url: `${getUrl()}/api/v1/admin/goods/${goodsId}/grades`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({name: gradeName, normalPrice: normalPrice, auctionPrice: auctionPrice}),
@@ -453,7 +453,7 @@ function loadZoneAndGradeData(goodsId) {
     // Zones 데이터를 가져옵니다.
     if (zonesData.length === 0) {
         $.ajax({
-            url: getUrl() + `/api/v1/zones?goodsId=${goodsId}`,
+            url: `${getUrl()}/api/v1/zones?goodsId=${goodsId}`,
             type: 'GET',
             success: function (response) {
                 zonesData = response.data;
@@ -468,7 +468,7 @@ function loadZoneAndGradeData(goodsId) {
     // Grades 데이터를 가져옵니다.
     if (gradesData.length === 0) {
         $.ajax({
-            url: getUrl() + `/api/v1/goods/${goodsId}/grade`,
+            url: `${getUrl()}/api/v1/goods/${goodsId}/grade`,
             type: 'GET',
             success: function (response) {
                 gradesData = response.data;
@@ -520,7 +520,7 @@ function populateGrades(grades) {
 // 저장시 서버에 생성 요청
 function sendCreateRequest(zoneId, gradeId, $row, token) {
     $.ajax({
-        url: getUrl() + '/api/v1/admin/zone-grades',
+        url: `${getUrl()}/api/v1/admin/zone-grades`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({zoneId: zoneId, gradeId: gradeId}),
@@ -640,7 +640,7 @@ function saveAuctionSeat(scheduleId, zoneId, seatNumber, rowElement, token) {
     };
 
     $.ajax({
-        url: getUrl() + `/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
+        url: `${getUrl()}/api/v1/admin/schedules/${scheduleId}/auctions?zoneGradeId=${zoneId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(auctionCreateRequest),

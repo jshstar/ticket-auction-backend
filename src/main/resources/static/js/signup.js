@@ -120,7 +120,7 @@ function verificationPhone() {
     let phoneNumber = $("#signup-phone").val();
     $.ajax({
         type: "POST",
-        url: getUrl() + `/api/v1/auth/sms`,
+        url: `${getUrl()}/api/v1/auth/sms`,
         contentType: "application/json",
         data: JSON.stringify({
             to: phoneNumber

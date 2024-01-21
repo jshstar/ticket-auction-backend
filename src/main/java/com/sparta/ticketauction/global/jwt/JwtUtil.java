@@ -166,6 +166,7 @@ public class JwtUtil {
 			.replaceAll("\\+", "%20");
 
 		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		cookie.setDomain("https://ticket-auction.kro.kr");
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
