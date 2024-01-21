@@ -98,6 +98,7 @@
         var currentViewAuctionLabel = -1; // 현재 보는중인 경매 좌석의 label
         var auctionSeats = []; // 경매 좌석 목록
         var auctionSeatsInfo = {}; // 경매 좌석 상세 정보 {A-2: {}}
+        var auctionSSEConnection; // 경매 sse 연결 객체
         var reservedSeats = []; // 예약된 좌석 목록
         var selectSeats = []; // 선택한 좌석 목록 '1-1-1' -> {scheduleId:1, zoneGradeId:1, seatNumber:1}
         function initQueryParams() {
@@ -186,6 +187,9 @@
                         // http://localhost:8080/api/v1/auctions/1/bids/sse
                         // SSE 설정
                         const requestUrl = `${getUrl()}/api/v1/auctions/${auctionSeatsInfo[currentViewAuctionLabel].auctionId}/bids/sse`;
+                        if (auctionSSEConnection !== undefined) {
+                            auctionSSEConnection.close();
+                        }
                         const eventSource = new EventSource(requestUrl);
                         eventSource.onmessage = function (event) {
                             // 경매 현재가 갱신
@@ -196,6 +200,7 @@
                             console.error('EventSource failed:', error);
                             eventSource.close(); // 연결 종료
                         };
+                        auctionSSEConnection = eventSource;
                         return 'auction';
                     } else {
                         return this.style();
