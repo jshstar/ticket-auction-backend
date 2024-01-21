@@ -1,7 +1,7 @@
 function getReservationList(token, page) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/reservations`,
+        url: `${getUrl()}/api/v1/reservations`,
         data: {
             page: page,
             size: 15
@@ -103,7 +103,7 @@ function getReservationDetail() {
         let id = decode(queryParams["reservationId"]);
         $.ajax({
             type: "GET",
-            url: getUrl() + `/api/v1/reservations/${id}`,
+            url: `${getUrl()}/api/v1/reservations/${id}`,
             headers: {
                 "Authorization": token
             },
@@ -153,7 +153,7 @@ function getQrCode() {
         let id = decode(queryParams["reservationId"]);
         $.ajax({
             type: "POST",
-            url: getUrl() + `/api/v1/reservations/${id}/qrcode`,
+            url: `${getUrl()}/api/v1/reservations/${id}/qrcode`,
             headers: {
                 "Authorization": token
             },

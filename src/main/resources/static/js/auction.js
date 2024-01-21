@@ -1,7 +1,7 @@
 function getJoinedAuctionList(token, page) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/auctions?page=${page}`,
+        url: `${getUrl()}/api/v1/auctions?page=${page}`,
         headers: {
             "Authorization": token
         },
@@ -91,7 +91,7 @@ function getBidList(token, page) {
         console.log(id);
         $.ajax({
             type: "GET",
-            url: getUrl() + `/api/v1/auctions/${id}/bids?page=${page}`,
+            url: `${getUrl()}/api/v1/auctions/${id}/bids?page=${page}`,
             headers: {
                 "Authorization": token
             },
