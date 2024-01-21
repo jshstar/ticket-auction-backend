@@ -80,6 +80,7 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/zones/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/v1/auctions/*/bids/sse").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
