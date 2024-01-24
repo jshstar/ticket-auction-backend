@@ -23,14 +23,7 @@
 <body>
 <header id="headers"></header>
 
-<nav class="goods-menu">
-    <div class="d-flex flex-wrap goods-menu-div">
-        <ul class="nav goods-menu-ul fs-5"></ul>
-    </div>
-</nav>
-
 <div class="container mt-5">
-    <div class="text-center mb-5"><h1>장르별</h1></div>
     <div class="btn-by-category d-flex justify-content-center"></div>
     <div id="goods-poster-by-category"></div>
 
@@ -44,7 +37,7 @@
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    
+
     $(document).ready(function () {
         getGoodsCategories();
         clickOnCategoryBtn("연극");
