@@ -161,7 +161,7 @@ public class JwtUtil {
 		response.setHeader(ACCESS_TOKEN_HEADER, accessToken);
 	}
 
-	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
+	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken, String domain) {
 		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
 			.replaceAll("\\+", "%20");
 
@@ -169,7 +169,8 @@ public class JwtUtil {
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
-
+		cookie.setDomain(domain);
+		
 		response.addCookie(cookie);
 	}
 }
