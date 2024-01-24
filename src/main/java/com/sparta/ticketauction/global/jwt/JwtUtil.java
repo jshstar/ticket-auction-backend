@@ -172,10 +172,11 @@ public class JwtUtil {
 
 		ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
 			.path("/")
-			.sameSite("none")
+			.sameSite("None")
 			.httpOnly(true)
 			.secure(true)
 			.domain(domain)
+			.maxAge(REFRESH_TOKEN_TIME)
 			.build();
 
 		/*Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
