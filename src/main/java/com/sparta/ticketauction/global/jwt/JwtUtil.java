@@ -173,7 +173,7 @@ public class JwtUtil {
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
-		// cookie.setDomain(domain);
+		cookie.setDomain(domain);
 
 		response.addCookie(cookie);
 	}
