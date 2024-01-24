@@ -44,6 +44,10 @@ public class JwtUtil {
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
+
+	@Value("${server.host.front}")
+	private String domain;
+
 	private Key key;
 	private JwtParser jwtParser;
 
@@ -161,7 +165,7 @@ public class JwtUtil {
 		response.setHeader(ACCESS_TOKEN_HEADER, accessToken);
 	}
 
-	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken, String domain) {
+	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
 		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
 			.replaceAll("\\+", "%20");
 
@@ -170,7 +174,7 @@ public class JwtUtil {
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		cookie.setDomain(domain);
-		
+
 		response.addCookie(cookie);
 	}
 }

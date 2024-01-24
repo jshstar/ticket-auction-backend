@@ -26,7 +26,6 @@ import com.sparta.ticketauction.global.jwt.JwtAuthenticationFilter;
 import com.sparta.ticketauction.global.jwt.JwtAuthorizationFilter;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
-import com.sparta.ticketauction.global.util.UrlUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +36,6 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
-	private final UrlUtil urlUtil;
 	private final AccessDeniedHandler accessDeniedHandler;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -61,7 +59,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, lettuceUtils, urlUtil);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, lettuceUtils);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}

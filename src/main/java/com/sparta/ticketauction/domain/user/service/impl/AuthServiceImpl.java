@@ -38,7 +38,6 @@ import com.sparta.ticketauction.domain.user.service.UserService;
 import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
-import com.sparta.ticketauction.global.util.UrlUtil;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,7 +55,6 @@ public class AuthServiceImpl implements AuthService {
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
 	private final UserService userService;
-	private final UrlUtil urlUtil;
 
 	@Value("${naver-cloud.access-key}")
 	private String accessKey;
@@ -174,8 +172,8 @@ public class AuthServiceImpl implements AuthService {
 		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
 		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
-		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken, urlUtil.getCurrentServerUrl(request));
-		
+		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
+
 		lettuceUtils.delete(REFRESH_TOKEN_HEADER + " " + username);
 		lettuceUtils.save(
 			REFRESH_TOKEN_HEADER + " " + username,
