@@ -20,6 +20,7 @@ import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.response.ApiResponse;
 import com.sparta.ticketauction.global.security.UserDetailsImpl;
 import com.sparta.ticketauction.global.util.LettuceUtils;
+import com.sparta.ticketauction.global.util.UrlUtil;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
@@ -35,6 +36,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
+	private final UrlUtil urlUtil;
+
 	private final ObjectMapper mapper = new ObjectMapper();
 
 	@PostConstruct
@@ -89,7 +92,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		);
 
 		jwtUtil.setAccessTokenInHeader(response, accessToken);
-		jwtUtil.setRefreshTokenInCookie(response, refreshToken);
+		jwtUtil.setRefreshTokenInCookie(response, refreshToken, urlUtil.getCurrentServerUrl(request));
 
 		response.setStatus(SUCCESS_USER_LOGIN.getHttpStatus().value());
 

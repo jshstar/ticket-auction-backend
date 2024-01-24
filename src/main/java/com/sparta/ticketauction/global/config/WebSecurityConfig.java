@@ -26,6 +26,7 @@ import com.sparta.ticketauction.global.jwt.JwtAuthenticationFilter;
 import com.sparta.ticketauction.global.jwt.JwtAuthorizationFilter;
 import com.sparta.ticketauction.global.jwt.JwtUtil;
 import com.sparta.ticketauction.global.util.LettuceUtils;
+import com.sparta.ticketauction.global.util.UrlUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +37,7 @@ public class WebSecurityConfig {
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
+	private final UrlUtil urlUtil;
 	private final AccessDeniedHandler accessDeniedHandler;
 	private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -59,7 +61,7 @@ public class WebSecurityConfig {
 
 	@Bean
 	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, lettuceUtils);
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, lettuceUtils, urlUtil);
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
@@ -103,13 +105,6 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET, "/api/v1/auctions/*/bids/sse").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
-		);
-
-		http.formLogin((formLogin) ->
-			formLogin
-				.loginPage("/login.html")
-				.defaultSuccessUrl("/index.html")
-				.permitAll()
 		);
 
 		http
