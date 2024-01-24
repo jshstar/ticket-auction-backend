@@ -184,7 +184,6 @@ public class JwtUtil {
 		cookie.setPath("/");
 		cookie.setDomain(domain);*/
 
-		response.setHeader("Access-Control-Allow-Origin", domain);
 		response.addHeader("Set-Cookie", cookie.toString());
 		// response.addCookie(cookie);
 	}
