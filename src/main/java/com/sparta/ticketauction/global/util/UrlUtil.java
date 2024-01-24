@@ -15,7 +15,7 @@ public class UrlUtil {
 		StringBuilder sb = new StringBuilder();
 		sb.append(protocol);
 		sb.append("://");
-		sb.append(serverName).append(":");
+		sb.append(serverName);
 		sb.append(serverPort);
 		return sb.toString();
 	}
