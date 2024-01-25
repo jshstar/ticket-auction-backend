@@ -43,6 +43,7 @@ function clickOnCategoryBtn(name) {
             categoryName: name
         },
         success: function (response) {
+            console.log(response);
             $(".btn-div button").removeClass("active");
             $(`.${name}`).addClass("active");
             $("#goods-posters").empty();

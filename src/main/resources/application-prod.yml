@@ -1,45 +1,58 @@
-spring:
-  profiles:
-    active: local
-
----
-
+server:
+  host:
+    api: api.ticket-auction.kro.kr
+    front: ticket-auction.kro.kr
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: prod
   data:
     redis:
-      host: localhost
+      host: ticket-auction-redis-prod.u9nze2.clustercfg.apn2.cache.amazonaws.com
       port: 6379
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${db_username}
-    password: ${db_password}
-    url: jdbc:mysql://localhost:3306/ticket_auction
+    username: admin
+    password: ticketauctionadmin
+    url: jdbc:mysql://ticket-auction-rds-prod-1.clu0u4o4e43h.ap-northeast-2.rds.amazonaws.com:3306/ticket_auction
   jpa:
     hibernate:
       ddl-auto: none
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+    defer-datasource-initialization: true
+    show_sql: true
+    format_sql: true
+  sql:
+    init:
+      mode: never
   jackson:
     serialization:
       fail-on-empty-beans: false
-
 jwt:
   secret:
-    key: ${jwt_secret_key}
-
+    key: 7J6g7J2AIOyZhOyEse2VmOqzoCDrgpjshJwg7J6Q66m065Cc64ukIQ==
 cloud: # S3
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
+      access-key: AKIAUX2ZOAVLKULGFEFJ
+      secret-key: 28/ynrBjFFGXfOFx/KivQ33yIARcetcShqru02f
     s3:
-      bucket: ${s3_bucket_name}
+      bucket: auction-ticket
     region:
       static: ap-northeast-2
     stack:
       auto: false
+naver-cloud:
+  access-key: kIxDn5AA4bgOFCNtTIFh
+  secret-key: YcVeJV23OpiZFV2OopV0UvKj6WFUn4gKsETgp01H
+  service-id: ncp:sms:kr:296460637836:pog
+  sender-phone: 01062062579
+payment:
+  toss:
+    client-key: test_ck_GjLJoQ1aVZq4w21BDdAP3w6KYe2R
+    secret-key: test_sk_DnyRpQWGrND2z1EQoR0y3Kwv1M9E
+    success-url: https://www.ticket-auction.kro.kr/payment/success.html
+    fail-url: https://www.ticket-auction.kro.kr/payment/fail.html
+logging:
+  level:
+    root: error
+    com.sparta.ticketauction: debug

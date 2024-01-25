@@ -199,7 +199,7 @@ function redirectToPageWithParameters(pageUrl, paramValueMap) {
                 for (const key of Object.keys(paramValueMap)) {
                     queryString += `${key}=${paramValueMap[key]}&`
                 }
-                window.location.href = pageUrl + '?' + queryString;
+                window.location.href = `${pageUrl}?${queryString}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }

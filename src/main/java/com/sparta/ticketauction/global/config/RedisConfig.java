@@ -34,8 +34,9 @@ public class RedisConfig {
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
-		config.useSingleServer()
-			.setAddress("redis://" + host + ":" + port);
+		config.useClusterServers()
+			.setScanInterval(3000)
+			.addNodeAddress("redis://" + host + ":" + port);
 		return Redisson.create(config);
 	}
 
