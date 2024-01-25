@@ -33,7 +33,7 @@ function fetchGoodsInfo(goodsId) {
 
             $('#placeFullName').text(response.placeName);
             $('#placeLocationAddress').text(response.placeAddress);
-            $('#goodsDate').text(formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
+            $('#goodsDate').text(response.startDate + ' ~ ' + response.endDate);
             $('#goodsTime').text(response.runningTime + '분');
             $('#goodsAge').text(response.ageGrade);
 
@@ -52,12 +52,9 @@ function fetchGradesInfo(goodsId) {
         success: function (data) {
             var response = data.data; // 가정: 응답이 { data: List<GradeGetResponse> } 형태라고 가정
             response.forEach(function (grade) {
-                $('#grades-list').append(
-                    $('<div>').append(
-                        $('<span>').text(grade.name + ': '),
-                        $('<span>').text(grade.normalPrice + '원 ')
-                    )
-                );
+                $('#grades-table').append($('<tr>')
+                    .append($('<td>').text(grade.name))
+                    .append($('<td>').text(grade.normalPrice.toLocaleString() + '원')));
             });
         },
         error: function (error) {
@@ -89,6 +86,11 @@ function fetchScheduleInfo(goodsId) {
 function initCalendar(events) {
     $('#calendar').fullCalendar({
         defaultView: 'month',
+        header: {
+            left: 'prev',
+            center: 'title',
+            right: 'next'
+        },
         events: events,
         eventClick: function (calEvent) {
             $('#schedule-details').text('선택하신 회차: ' + calEvent.title);
@@ -117,5 +119,5 @@ function showGrades() {
 
 function formatDate(dateString) {
     var date = new Date(dateString);
-    return date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
+    return date.getFullYear() + '.' + (date.getMonth() + 1) + '.' + date.getDate() + '.';
 }

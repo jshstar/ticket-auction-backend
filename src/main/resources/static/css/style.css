@@ -3,6 +3,7 @@
     font-family: 'IBM Plex Sans KR', sans-serif;
 }
 
+
 a {
     color: black;
 }
@@ -11,9 +12,6 @@ body {
     background-color: white;
 }
 
-#headers {
-    background-color: #D1C2E9;
-}
 
 .dropdown-item {
     cursor: pointer;
@@ -24,20 +22,15 @@ body {
     color: white !important;
 }
 
-.goods-menu-ul {
-    padding-left: 20px;
-    font-weight: bold;
-    font-size: 15px;
-}
 
 .round-btn {
     padding-right: 10px;
     border-radius: 20px;
-    font-size: 20px;
+    font-size: 15px;
     border-color: #D1C2E9;
     background-color: inherit;
     color: black;
-    width: 150px;
+    width: 100px;
 }
 
 .round-btn:hover {
@@ -56,16 +49,14 @@ body {
     border-color: #D1C2E9;
 }
 
-.goods-poster-img {
-    width: 240px;
-}
 
 .goods-posters-row {
     width: 100%;
 }
 
 .pd {
-    margin-left: 40px;
+    width: 150px;
+    margin-left: 10px;
     text-align: center;
     margin-bottom: 20px;
     display: flex;
@@ -74,7 +65,6 @@ body {
 }
 
 .goods-poster-img {
-    width: 240px;
     height: auto;
     flex: 1;
     border-radius: 10px;
@@ -87,7 +77,7 @@ body {
 .goods-title {
     padding-top: 10px;
     margin-top: auto;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
 }
 
