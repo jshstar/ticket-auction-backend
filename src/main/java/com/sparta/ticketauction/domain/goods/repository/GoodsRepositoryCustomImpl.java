@@ -1,16 +1,25 @@
 package com.sparta.ticketauction.domain.goods.repository;
 
 import static com.sparta.ticketauction.domain.auction.entity.QAuction.*;
+import static com.sparta.ticketauction.domain.goods.entity.QGoods.*;
+import static com.sparta.ticketauction.domain.goods.entity.QGoodsCategory.*;
+import static com.sparta.ticketauction.domain.goods.entity.QGoodsInfo.*;
 import static com.sparta.ticketauction.domain.grade.entity.QGrade.*;
 import static com.sparta.ticketauction.domain.grade.entity.QZoneGrade.*;
 import static com.sparta.ticketauction.domain.place.entity.QZone.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.ticketauction.domain.goods.entity.ImageType;
+import com.sparta.ticketauction.domain.goods.entity.QGoodsImage;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetQueryResponse;
 import com.sparta.ticketauction.domain.seat.response.AuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.seat.response.SeatInfoResponse;
 
@@ -61,5 +70,42 @@ public class GoodsRepositoryCustomImpl implements GoodsRepositoryCustom {
 			.where(grade.goods.id.eq(goodsId))
 			.fetch();
 		return seatInfos;
+	}
+
+	@Override
+	public List<GoodsGetQueryResponse> findAllByGoodsAndCategoryName(
+		Long cursorId, int size, String categoryName) {
+
+		QGoodsImage goodsImageSubQuery = new QGoodsImage("goodsImageSub");
+		JPAQuery<GoodsGetQueryResponse> query = this.query
+			.select(
+				Projections.constructor(
+					GoodsGetQueryResponse.class,
+					goods.id,
+					goods.title,
+					JPAExpressions
+						.select(goodsImageSubQuery.s3Key)
+						.from(goodsImageSubQuery)
+						.where(goodsImageSubQuery.goodsInfo.id.eq(goods.goodsInfo.id)
+							.and(goodsImageSubQuery.type.eq(ImageType.POSTER_IMG)))
+						.limit(1)
+				))
+			.from(goods)
+			.leftJoin(goods.goodsInfo, goodsInfo)
+			.leftJoin(goodsInfo.goodsCategory, goodsCategory)
+			.where(goods.endDate.after(LocalDate.now()));
+
+		if (categoryName != null) {
+			query.where(goodsCategory.name.eq(categoryName));
+		}
+
+		if (cursorId != null) {
+			query.where(goods.id.lt(cursorId));
+		}
+
+		return query
+			.limit(size)
+			.orderBy(goods.id.desc())
+			.fetch();
 	}
 }

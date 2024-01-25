@@ -15,10 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.ticketauction.domain.goods.entity.Goods;
@@ -27,8 +23,9 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetCursorResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetQueryResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
-import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.place.entity.Place;
 
@@ -182,41 +179,49 @@ public class GoodsServiceTest {
 	}
 
 	@Test
-	void 공연_페이징_전체_조회_테스트() {
+	void 공연_커서_전체_조회_테스트() {
 		//given
-		int page = 0;
+		Long cursorId = 0L;
 		int size = 2;
-		Pageable pageable = PageRequest.of(page, size);
-
-		List<Goods> filteredGoods = this.goodsList.stream()
-			.filter(goods -> goods.getGoodsInfo().getGoodsCategory().getName().equals("연극"))
-			.toList();
-
-		int start = (int)pageable.getOffset();
-		int end = Math.min((start + pageable.getPageSize()), filteredGoods.size());
-		List<Goods> pageContent = filteredGoods.subList(start, end);
-
-		Slice<Goods> goodsSlice = new PageImpl<>(pageContent, pageable, filteredGoods.size());
+		String categoryName = "연극";
+		List<GoodsGetQueryResponse> goodsGetQueryResponses = new ArrayList<>();
+		goodsGetQueryResponses.add(
+			new GoodsGetQueryResponse(
+				goodsList.get(1).getId(),
+				goodsList.get(1).getTitle(),
+				goodsList.get(1).getGoodsInfo().getGoodsImage().get(1).getS3Key())
+		);
+		goodsGetQueryResponses.add(
+			new GoodsGetQueryResponse(
+				goodsList.get(0).getId(),
+				goodsList.get(0).getTitle(),
+				goodsList.get(0).getGoodsInfo().getGoodsImage().get(0).getS3Key())
+		);
 		// when
-		given(
-			goodsRepository
-				.findAllByGoodsAndCategoryName(any(Pageable.class), any(String.class)))
-			.willReturn(goodsSlice);
-		GoodsGetSliceResponse goodsGetSliceResponse = goodsService.getSliceGoods(pageable, "연극");
+		given(goodsRepository.findAllByGoodsAndCategoryName(
+			cursorId,
+			size,
+			categoryName
+		))
+			.willReturn(
+				goodsGetQueryResponses
+			);
+		GoodsGetCursorResponse goodsGetCursorResponse = goodsService.getGoodsWithCursor(cursorId, size, categoryName);
 
 		// then
-		verify(
-			goodsRepository, times(1))
-			.findAllByGoodsAndCategoryName(any(Pageable.class), any(String.class));
+		assertEquals(goodsGetCursorResponse.getNextCursorId(), 1);
 		assertEquals(
-			goodsGetSliceResponse.getGoodsSlice().getContent().get(0).getGoodsId(),
-			this.goodsList.get(0).getId());
+			goodsGetCursorResponse.getGoodsResponses().get(0).getGoodsId(),
+			goodsGetQueryResponses.get(0).getGoodsId()
+		);
 		assertEquals(
-			goodsGetSliceResponse.getGoodsSlice().getContent().get(0).getS3Url(),
-			S3_PATH + this.goodsList.get(0).getGoodsInfo().getGoodsImage().get(0).getS3Key());
-		assertEquals(goodsGetSliceResponse.getGoodsSlice().getContent().get(0).getTitle(),
-			this.goodsList.get(0).getTitle());
-
+			goodsGetCursorResponse.getGoodsResponses().get(0).getTitle(),
+			goodsGetQueryResponses.get(0).getTitle()
+		);
+		assertEquals(
+			goodsGetCursorResponse.getGoodsResponses().get(0).getS3Url(),
+			goodsGetQueryResponses.get(0).getS3Url()
+		);
 	}
 
 }

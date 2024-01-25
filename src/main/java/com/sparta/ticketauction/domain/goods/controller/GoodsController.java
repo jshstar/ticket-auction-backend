@@ -4,7 +4,6 @@ import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetCursorResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
-import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.service.GoodsService;
@@ -67,17 +66,19 @@ public class GoodsController {
 
 	// 공연 페이징 전체 조회
 	@GetMapping("/goods")
-	public ResponseEntity<ApiResponse<GoodsGetSliceResponse>> getAllGoods(
-		Pageable pageable,
-		@RequestParam(value = "categoryName", required = false) String categoryName) {
-		GoodsGetSliceResponse goodsGetSliceResponse = goodsService.getSliceGoods(pageable, categoryName);
+	public ResponseEntity<ApiResponse<GoodsGetCursorResponse>> getAllGoods(
+		@RequestParam(value = "cursorId", required = false) Long cursorId,
+		@RequestParam(value = "size", defaultValue = "10") int size,
+		@RequestParam(value = "categoryName", required = false) String categoryName
+	) {
+		GoodsGetCursorResponse goodsGetCursorResponse = goodsService.getGoodsWithCursor(cursorId, size, categoryName);
 		return ResponseEntity
 			.status(SUCCESS_GET_SLICE_GOODS.getHttpStatus())
 			.body(
 				ApiResponse.of(
 					SUCCESS_GET_SLICE_GOODS.getCode(),
 					SUCCESS_GET_SLICE_GOODS.getMessage(),
-					goodsGetSliceResponse)
+					goodsGetCursorResponse)
 			);
 	}
 
