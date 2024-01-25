@@ -3,7 +3,7 @@ div.seatCharts-container {
 }
 
 div.seatCharts-cell {
-
+    position: relative; /* Badge의 위치를 조정하기 위해 relative 설정 */
     height: 16px;
     width: 46px;
     margin: 3px;
