@@ -6,10 +6,6 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,8 +22,8 @@ import com.sparta.ticketauction.domain.goods.repository.GoodsInfoRepository;
 import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
 import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetCursorResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
-import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.place.entity.Place;
@@ -153,15 +149,18 @@ public class GoodsServiceImpl implements GoodsService {
 	// 공연 정보 카테고리별 페이징 페이징 조회
 	@Override
 	@Transactional(readOnly = true)
-	public GoodsGetSliceResponse getSliceGoods(Pageable pageable, String categoryName) {
-		Sort sort = pageable.getSort();
-		Sort additionalSort = Sort.by(Sort.Direction.ASC, "startDate");
-		Sort finalSort = sort.and(additionalSort);
-		Pageable addFinalPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), finalSort);
+	public GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName) {
+		List<Goods> goodsList = goodsRepository.findAllByGoodsAndCategoryName(cursorId, size, categoryName);
+		Long nextCursorId = null;
+		boolean hasNext = false;
 
-		Slice<Goods> goodsSlice = goodsRepository.findAllByGoodsAndCategoryName(addFinalPageable, categoryName);
-		return new GoodsGetSliceResponse(goodsSlice);
+		if (goodsList.size() > size) {
+			hasNext = true;
+			nextCursorId = goodsList.get(size - 1).getId();
+			goodsList = goodsList.subList(0, size);
+		}
 
+		return new GoodsGetCursorResponse(goodsList, nextCursorId, hasNext);
 	}
 
 	// 공연 카테고리 전체 조회
