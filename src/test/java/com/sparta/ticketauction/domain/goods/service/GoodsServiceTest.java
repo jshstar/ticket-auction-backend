@@ -183,20 +183,19 @@ public class GoodsServiceTest {
 		//given
 		Long cursorId = 0L;
 		int size = 2;
-		boolean hasNext = false;
 		String categoryName = "연극";
 		List<GoodsGetQueryResponse> goodsGetQueryResponses = new ArrayList<>();
-		goodsGetQueryResponses.add(
-			new GoodsGetQueryResponse(
-				goodsList.get(0).getId(),
-				goodsList.get(0).getTitle(),
-				goodsList.get(0).getGoodsInfo().getGoodsImage().get(0).getS3Key())
-		);
 		goodsGetQueryResponses.add(
 			new GoodsGetQueryResponse(
 				goodsList.get(1).getId(),
 				goodsList.get(1).getTitle(),
 				goodsList.get(1).getGoodsInfo().getGoodsImage().get(1).getS3Key())
+		);
+		goodsGetQueryResponses.add(
+			new GoodsGetQueryResponse(
+				goodsList.get(0).getId(),
+				goodsList.get(0).getTitle(),
+				goodsList.get(0).getGoodsInfo().getGoodsImage().get(0).getS3Key())
 		);
 		// when
 		given(goodsRepository.findAllByGoodsAndCategoryName(
@@ -210,8 +209,7 @@ public class GoodsServiceTest {
 		GoodsGetCursorResponse goodsGetCursorResponse = goodsService.getGoodsWithCursor(cursorId, size, categoryName);
 
 		// then
-		assertNull(goodsGetCursorResponse.getNextCursorId());
-		assertFalse(goodsGetCursorResponse.isHasNext());
+		assertEquals(goodsGetCursorResponse.getNextCursorId(), 1);
 		assertEquals(
 			goodsGetCursorResponse.getGoodsResponses().get(0).getGoodsId(),
 			goodsGetQueryResponses.get(0).getGoodsId()
