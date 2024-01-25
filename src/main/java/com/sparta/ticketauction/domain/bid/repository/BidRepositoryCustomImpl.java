@@ -17,7 +17,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.bid.constant.BidStatus;
+import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
+import com.sparta.ticketauction.domain.bid.response.BidInfoWithNickname;
 import com.sparta.ticketauction.domain.user.entity.User;
 
 @Repository
@@ -77,5 +80,32 @@ public class BidRepositoryCustomImpl implements BidRepositoryCustom {
 			}
 		}
 		return orderSpecifier;
+	}
+
+	@Override
+	public boolean isUserBidHighest(Long userId, Long auctionId) {
+		Bid highestBid = jpaQueryFactory
+			.select(bid)
+			.from(bid)
+			.where(bid.auction.id.eq(auctionId), bid.status.eq(BidStatus.PROCESS))
+			.orderBy(bid.price.desc())
+			.fetchFirst();
+
+		return highestBid != null && userId.equals(highestBid.getUser().getId());
+	}
+
+	@Override
+	public List<BidInfoWithNickname> getLastBidsNicknameAndPrice(Long auctionId, Long limit) {
+		return jpaQueryFactory
+			.select(Projections.constructor(BidInfoWithNickname.class,
+				bid.user.nickname,
+				bid.price
+			))
+			.from(bid)
+			.join(bid.user)
+			.where(bid.auction.id.eq(auctionId))
+			.orderBy(bid.price.desc())
+			.limit(limit)
+			.fetch();
 	}
 }

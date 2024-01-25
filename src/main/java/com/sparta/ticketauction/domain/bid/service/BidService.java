@@ -1,5 +1,6 @@
 package com.sparta.ticketauction.domain.bid.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
+import com.sparta.ticketauction.domain.bid.response.BidInfoWithNickname;
 import com.sparta.ticketauction.domain.user.entity.User;
 
 public interface BidService {
@@ -48,4 +50,20 @@ public interface BidService {
 	 * @return - 해당 경매의 최고 입찰가
 	 */
 	Optional<Long> getMaxBidPrice(Auction auction);
+
+	/**
+	 * 유저가 해당 경매의 최상위 입찰자인지 검사
+	 * @param userId
+	 * @param auctionId
+	 * @return 맞다면 true, 아니라면 false
+	 */
+	boolean isUserBidHighest(Long userId, Long auctionId);
+
+	/**
+	 * 해당 경매의 최근 입찰 내역 n 개의 유저 닉네임과 가격을 조회한다.
+	 * @param auctionId 경매 id
+	 * @param limit 조회할 양
+	 * @return List<BidInfoWithUserResponse>
+	 */
+	List<BidInfoWithNickname> getLastBidsNicknameAndPrice(Long auctionId, Long limit);
 }

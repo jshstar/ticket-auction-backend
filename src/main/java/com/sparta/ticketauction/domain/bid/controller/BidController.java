@@ -3,6 +3,8 @@ package com.sparta.ticketauction.domain.bid.controller;
 import static com.sparta.ticketauction.domain.bid.constant.BidConstant.*;
 import static com.sparta.ticketauction.global.response.SuccessCode.*;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.ticketauction.domain.bid.redis.RedisPublisher;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
+import com.sparta.ticketauction.domain.bid.response.BidInfoWithNickname;
 import com.sparta.ticketauction.domain.bid.service.BidService;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.global.annotaion.CurrentUser;
@@ -71,5 +75,38 @@ public class BidController {
 	@GetMapping(value = "/sse", produces = "text/event-stream")
 	public SseEmitter subscribe(@PathVariable Long auctionId) {
 		return bidService.subscribe(auctionId);
+	}
+
+	@GetMapping("/is-highest")
+	public ResponseEntity<ApiResponse<Boolean>> isMyBidHighest(
+		@PathVariable Long auctionId,
+		@CurrentUser User loginUser
+	) {
+		boolean response = bidService.isUserBidHighest(loginUser.getId(), auctionId);
+		return ResponseEntity.status(SUCCESS_GET_MY_BID_IS_HIGHEST.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GET_MY_BID_IS_HIGHEST.getCode(),
+					SUCCESS_GET_MY_BID_IS_HIGHEST.getMessage(),
+					response
+				)
+			);
+	}
+
+	@GetMapping("/last")
+	public ResponseEntity<ApiResponse<List<BidInfoWithNickname>>> getLastBids(
+		@PathVariable Long auctionId,
+		@RequestParam Long limit
+	) {
+		List<BidInfoWithNickname> response = bidService.getLastBidsNicknameAndPrice(auctionId, limit);
+
+		return ResponseEntity.status(SUCCESS_GET_LAST_BIDS.getHttpStatus())
+			.body(
+				ApiResponse.of(
+					SUCCESS_GET_LAST_BIDS.getCode(),
+					SUCCESS_GET_LAST_BIDS.getMessage(),
+					response
+				)
+			);
 	}
 }
