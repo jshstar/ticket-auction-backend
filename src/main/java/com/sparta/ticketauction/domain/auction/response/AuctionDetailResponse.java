@@ -1,7 +1,5 @@
 package com.sparta.ticketauction.domain.auction.response;
 
-import java.time.LocalDateTime;
-
 import com.sparta.ticketauction.domain.auction.entity.Auction;
 
 import lombok.Getter;
@@ -15,15 +13,15 @@ public class AuctionDetailResponse {
 	private final Long bidPrice;
 	//시작가
 	private final Long startPrice;
-	//종료일자
-	private final LocalDateTime endDateTime;
+	//남은시간
+	private final Long remainTimeMilli;
 
-	public static AuctionDetailResponse from(Auction entity, Long bidPrice) {
+	public static AuctionDetailResponse from(Auction entity, Long bidPrice, Long remainTimeMilli) {
 		return new AuctionDetailResponse(
 			entity.getId(),
 			bidPrice,
 			entity.getStartPrice(),
-			entity.getEndDateTime()
+			remainTimeMilli
 		);
 	}
 }
