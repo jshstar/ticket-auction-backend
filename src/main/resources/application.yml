@@ -3,7 +3,9 @@ spring:
     active: local
 
 ---
-
+server:
+  host:
+    front: localhost:8080
 spring:
   config:
     activate:
@@ -36,7 +38,7 @@ spring:
       fail-on-empty-beans: false
   sql:
     init:
-      mode: always
+      mode: never
 
 jwt:
   secret:

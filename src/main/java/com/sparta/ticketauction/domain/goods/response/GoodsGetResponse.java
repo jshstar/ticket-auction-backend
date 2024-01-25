@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.goods.entity.Goods;
 import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 
@@ -17,8 +18,10 @@ public class GoodsGetResponse {
 
 	private final String title;
 
+	@JsonFormat(pattern = "yyyy.MM.dd")
 	private final LocalDate startDate;
 
+	@JsonFormat(pattern = "yyyy.MM.dd")
 	private final LocalDate endDate;
 
 	private final Integer runningTime;

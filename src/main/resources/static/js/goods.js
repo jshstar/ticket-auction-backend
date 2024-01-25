@@ -7,16 +7,6 @@ function getGoodsCategories() {
                 let name = response.data[i].categoryName;
                 if (name === "서커스마술") name = "서커스/마술";
 
-                let a = $('<a>').text(name)
-                    .addClass("nav-link link-dark category-a")
-                    .on("click", function () {
-                        // 카테고리별 공연 리스트 페이지로 이동
-                    });
-
-                let li = $('<li>').append(a);
-                $(".goods-menu-ul").append(li);
-
-
                 let div = $('<div>').addClass("btn-div")
                 let btn = $('<button>').text(name)
                     .addClass("btn round-btn")
@@ -62,7 +52,7 @@ function clickOnCategoryBtn(name) {
                 let d = response.data.goodsSlice.content[i];
 
                 let eid = encode(d.goodsId);
-                let pd = $('<div>')
+                let pd = $('<div>').addClass("col")
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("goods-poster-img")
                             .on("click", function () {

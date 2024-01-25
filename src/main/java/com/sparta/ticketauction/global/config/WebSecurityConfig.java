@@ -43,9 +43,9 @@ public class WebSecurityConfig {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
-		configuration.setExposedHeaders(Arrays.asList("Authorization"));
+		configuration.setExposedHeaders(Arrays.asList("*"));
 		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
@@ -93,9 +93,9 @@ public class WebSecurityConfig {
 			(request) ->
 				request
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+					.requestMatchers("/*/*.html", "/*.html").permitAll()
 					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
-					.requestMatchers("/*.html", "/*/*.html").permitAll()
-					.requestMatchers("/api/v1/users/signup").permitAll()
+					.requestMatchers("/api/v1/users/signup", "/api/v1/auth/login").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods-categorys/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
@@ -103,13 +103,6 @@ public class WebSecurityConfig {
 					.requestMatchers(HttpMethod.GET, "/api/v1/auctions/*/bids/sse").permitAll()
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
-		);
-
-		http.formLogin((formLogin) ->
-			formLogin
-				.loginPage("/login.html")
-				.defaultSuccessUrl("/index.html")
-				.permitAll()
 		);
 
 		http

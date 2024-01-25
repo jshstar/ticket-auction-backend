@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	private final JwtUtil jwtUtil;
 	private final LettuceUtils lettuceUtils;
+
 	private final ObjectMapper mapper = new ObjectMapper();
 
 	@PostConstruct
@@ -84,7 +85,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		lettuceUtils.save(
 			JwtUtil.REFRESH_TOKEN_HEADER + " " + username,
-			jwtUtil.substringToken(refreshToken),
+			refreshToken,
 			JwtUtil.REFRESH_TOKEN_TIME
 		);
 

@@ -2,7 +2,7 @@ function getUrl() {
     const hostname = window.location.hostname;
 
     // 도메인 설정
-    return hostname === 'localhost' ? `http://${hostname}:8080` : `https://ticket-auction.kro.kr`;
+    return hostname === 'localhost' ? `http://${hostname}:8080` : `https://api.ticket-auction.kro.kr`;
 }
 
 function checkLoginStatus() {
@@ -86,7 +86,7 @@ function requestLogout() {
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
 
-            window.location.href = getUrl() + `/index.html`
+            window.location.href = `/index.html`
         },
         error: function (jqXHR, textStatus) {
             // 로그아웃에 실패한 경우 처리
@@ -114,7 +114,7 @@ function requestLogin() {
             window.location.href = `/index.html`
         })
         .fail(function (jqXHR, textStatus) {
-            alert("fail");
+            alert("로그인에 실패했습니다. 다시 시도해주세요.");
         });
 }
 

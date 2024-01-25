@@ -28,6 +28,9 @@ public class RedisConfig {
 	@Value("${spring.data.redis.port}")
 	private int port;
 
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
+
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
@@ -39,16 +42,20 @@ public class RedisConfig {
 
 	@Bean
 	public LettuceConnectionFactory lettuceConnectionFactory() {
-		RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
-		clusterConfiguration.clusterNode(host, port);
-		LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
-			.clientOptions(ClientOptions.builder()
-				.socketOptions(SocketOptions.builder()
-					.connectTimeout(Duration.ofMillis(5000L)).build())
-				.build())
-			.commandTimeout(Duration.ofSeconds(5000L))
-			.build();
-		return new LettuceConnectionFactory(clusterConfiguration, clientConfiguration);
+		if (activeProfile.equals("local")) {
+			return new LettuceConnectionFactory(host, port);
+		} else {
+			RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
+			clusterConfiguration.clusterNode(host, port);
+			LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
+				.clientOptions(ClientOptions.builder()
+					.socketOptions(SocketOptions.builder()
+						.connectTimeout(Duration.ofMillis(5000L)).build())
+					.build())
+				.commandTimeout(Duration.ofSeconds(5000L))
+				.build();
+			return new LettuceConnectionFactory(clusterConfiguration, clientConfiguration);
+		}
 	}
 
 	@Bean
