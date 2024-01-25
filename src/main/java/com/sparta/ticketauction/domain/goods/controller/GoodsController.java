@@ -69,8 +69,8 @@ public class GoodsController {
 	public ResponseEntity<ApiResponse<GoodsGetCursorResponse>> getAllGoods(
 		@RequestParam(value = "cursorId", required = false) Long cursorId,
 		@RequestParam(value = "size", defaultValue = "10") int size,
-		@RequestParam(value = "categoryName", required = false) String categoryName) {
-
+		@RequestParam(value = "categoryName", required = false) String categoryName
+	) {
 		GoodsGetCursorResponse goodsGetCursorResponse = goodsService.getGoodsWithCursor(cursorId, size, categoryName);
 		return ResponseEntity
 			.status(SUCCESS_GET_SLICE_GOODS.getHttpStatus())

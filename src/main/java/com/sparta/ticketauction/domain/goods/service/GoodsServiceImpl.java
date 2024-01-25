@@ -151,14 +151,18 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	@Transactional(readOnly = true)
 	public GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName) {
-		List<GoodsGetQueryResponse> goodsGetQueryResponses = goodsRepository.findAllByGoodsAndCategoryName(
-			cursorId, size, categoryName);
+		List<GoodsGetQueryResponse> goodsGetQueryResponses =
+			goodsRepository.findAllByGoodsAndCategoryName(
+				cursorId,
+				size,
+				categoryName
+			);
 		Long nextCursorId = null;
 		boolean hasNext = false;
 
 		if (goodsGetQueryResponses.size() > size) {
 			hasNext = true;
-			nextCursorId = goodsGetQueryResponses.get(size - 1).getGoodsId();
+			nextCursorId = goodsGetQueryResponses.get(size).getGoodsId();
 			goodsGetQueryResponses = goodsGetQueryResponses.subList(0, size);
 		}
 

@@ -104,7 +104,7 @@ public class GoodsRepositoryCustomImpl implements GoodsRepositoryCustom {
 		}
 
 		return query
-			.limit(size)
+			.limit(size + 1)
 			.orderBy(goods.id.asc())
 			.fetch();
 	}
