@@ -85,7 +85,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		lettuceUtils.save(
 			JwtUtil.REFRESH_TOKEN_HEADER + " " + username,
-			jwtUtil.substringToken(refreshToken),
+			refreshToken,
 			JwtUtil.REFRESH_TOKEN_TIME
 		);
 
