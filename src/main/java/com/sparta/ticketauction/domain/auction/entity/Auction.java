@@ -71,9 +71,8 @@ public class Auction extends BaseEntity {
 	private Boolean isEnded = false;
 
 	@Comment("입찰")
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
 	private List<Bid> bids = new ArrayList<>();
-
 
 	@Builder
 	private Auction(
@@ -91,7 +90,6 @@ public class Auction extends BaseEntity {
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 	}
-
 
 	public void ended() {
 		this.isEnded = true;
