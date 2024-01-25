@@ -78,16 +78,15 @@ public class JwtUtil {
 	public String createRefreshToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
-		return BEARER_PREFIX +
-			Jwts.builder()
-				.setSubject(email)
-				.claim(AUTHORIZATION_KEY, role)
-				.claim("identify", id)
-				.claim("nickname", nickname)
-				.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
-				.setIssuedAt(now)
-				.signWith(key, SignatureAlgorithm.HS256)
-				.compact();
+		return Jwts.builder()
+			.setSubject(email)
+			.claim(AUTHORIZATION_KEY, role)
+			.claim("identify", id)
+			.claim("nickname", nickname)
+			.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
+			.setIssuedAt(now)
+			.signWith(key, SignatureAlgorithm.HS256)
+			.compact();
 	}
 
 	/* JWT 토큰 substring */
