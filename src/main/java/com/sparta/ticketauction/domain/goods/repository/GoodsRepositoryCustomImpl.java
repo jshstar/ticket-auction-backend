@@ -100,12 +100,12 @@ public class GoodsRepositoryCustomImpl implements GoodsRepositoryCustom {
 		}
 
 		if (cursorId != null) {
-			query.where(goods.id.gt(cursorId));
+			query.where(goods.id.lt(cursorId));
 		}
 
 		return query
-			.limit(size + 1)
-			.orderBy(goods.id.asc())
+			.limit(size)
+			.orderBy(goods.id.desc())
 			.fetch();
 	}
 }

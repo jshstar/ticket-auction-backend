@@ -157,16 +157,14 @@ public class GoodsServiceImpl implements GoodsService {
 				size,
 				categoryName
 			);
-		Long nextCursorId = null;
-		boolean hasNext = false;
+		Long nextCursorId = -1L;
 
-		if (goodsGetQueryResponses.size() > size) {
-			hasNext = true;
-			nextCursorId = goodsGetQueryResponses.get(size).getGoodsId();
-			goodsGetQueryResponses = goodsGetQueryResponses.subList(0, size);
+		if (!goodsGetQueryResponses.isEmpty()) {
+			int lastSize = goodsGetQueryResponses.size() - 1;
+			nextCursorId = goodsGetQueryResponses.get(lastSize).getGoodsId();
 		}
 
-		return new GoodsGetCursorResponse(goodsGetQueryResponses, nextCursorId, hasNext);
+		return new GoodsGetCursorResponse(goodsGetQueryResponses, nextCursorId);
 	}
 
 	// 공연 카테고리 전체 조회
