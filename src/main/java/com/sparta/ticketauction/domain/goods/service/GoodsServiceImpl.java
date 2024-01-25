@@ -23,6 +23,7 @@ import com.sparta.ticketauction.domain.goods.repository.GoodsRepository;
 import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetCursorResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetQueryResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
@@ -150,17 +151,18 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	@Transactional(readOnly = true)
 	public GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName) {
-		List<Goods> goodsList = goodsRepository.findAllByGoodsAndCategoryName(cursorId, size, categoryName);
+		List<GoodsGetQueryResponse> goodsGetQueryResponses = goodsRepository.findAllByGoodsAndCategoryName(
+			cursorId, size, categoryName);
 		Long nextCursorId = null;
 		boolean hasNext = false;
 
-		if (goodsList.size() > size) {
+		if (goodsGetQueryResponses.size() > size) {
 			hasNext = true;
-			nextCursorId = goodsList.get(size - 1).getId();
-			goodsList = goodsList.subList(0, size);
+			nextCursorId = goodsGetQueryResponses.get(size - 1).getGoodsId();
+			goodsGetQueryResponses = goodsGetQueryResponses.subList(0, size);
 		}
 
-		return new GoodsGetCursorResponse(goodsList, nextCursorId, hasNext);
+		return new GoodsGetCursorResponse(goodsGetQueryResponses, nextCursorId, hasNext);
 	}
 
 	// 공연 카테고리 전체 조회
