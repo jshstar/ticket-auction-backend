@@ -174,7 +174,7 @@ public class JwtUtil {
 			.sameSite("None")
 			.httpOnly(true)
 			.secure(true)
-			.maxAge(REFRESH_TOKEN_TIME)
+			.domain("www.ticket-auction.kro.kr")
 			.build();
 
 		// Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
