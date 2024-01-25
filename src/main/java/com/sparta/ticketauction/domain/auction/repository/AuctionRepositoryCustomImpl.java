@@ -13,9 +13,11 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.ticketauction.domain.auction.entity.Auction;
 import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
 import com.sparta.ticketauction.domain.user.entity.User;
 
@@ -51,6 +53,20 @@ public class AuctionRepositoryCustomImpl implements AuctionRepositoryCustom {
 		// 1. 첫 번째 페이지이면서 content 크기가 한 페이지의 사이즈보다 작을 때 (ex, content:3개, page 크기: 10)
 		// 2. 마지막 페이지일 때 (getOffset이 0이 아니면서, content 크기가 한 페이지의 사이즈보다 작을 때)
 		return PageableExecutionUtils.getPage(myAuctions, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public boolean exists(Auction pAuction) {
+		Integer result = jpaQueryFactory.selectOne().from(auction)
+			.where(searchAuction(pAuction))
+			.fetchFirst();
+		return result != null;
+	}
+
+	private Predicate searchAuction(Auction pAuction) {
+		return auction.seatNumber.eq(pAuction.getSeatNumber())
+			.and(auction.zoneGrade.eq(pAuction.getZoneGrade()))
+			.and(auction.schedule.eq(pAuction.getSchedule()));
 	}
 
 	private OrderSpecifier<?> sortAuction(Pageable pageable) {
