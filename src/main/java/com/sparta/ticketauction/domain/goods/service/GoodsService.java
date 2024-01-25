@@ -2,7 +2,6 @@ package com.sparta.ticketauction.domain.goods.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sparta.ticketauction.domain.admin.request.GoodsCreateRequest;
@@ -13,8 +12,8 @@ import com.sparta.ticketauction.domain.goods.entity.GoodsImage;
 import com.sparta.ticketauction.domain.goods.entity.GoodsInfo;
 import com.sparta.ticketauction.domain.goods.response.GoodsAuctionSeatInfoResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsCategoryGetResponse;
+import com.sparta.ticketauction.domain.goods.response.GoodsGetCursorResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsGetResponse;
-import com.sparta.ticketauction.domain.goods.response.GoodsGetSliceResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsInfoGetResponse;
 import com.sparta.ticketauction.domain.goods.response.GoodsSeatInfoResponse;
 import com.sparta.ticketauction.domain.place.entity.Place;
@@ -46,7 +45,7 @@ public interface GoodsService {
 	List<GoodsInfoGetResponse> getAllGoodsInfo();
 
 	// 전체 공연 페이징 조회
-	GoodsGetSliceResponse getSliceGoods(Pageable pageable, String categoryName);
+	GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName);
 
 	// 공연 단건 조회
 	GoodsGetResponse getGoods(Long goodsId);
