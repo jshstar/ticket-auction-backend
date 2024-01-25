@@ -2,7 +2,7 @@ function getUrl() {
     const hostname = window.location.hostname;
 
     // 도메인 설정
-    return hostname === 'localhost' ? `http://${hostname}:8080` : `http://ticket-auction-alb-prod-170161396.ap-northeast-2.elb.amazonaws.com`;
+    return hostname === 'localhost' ? `http://${hostname}:8080` : `https://api.ticket-auction.kro.kr`;
 }
 
 function checkLoginStatus() {
@@ -25,7 +25,7 @@ function updateLoginStatus(token, stat) {
     }
 
     $.ajax({
-        url: getUrl() + "/api/v1/auth/status",
+        url: `${getUrl()}/api/v1/auth/status`,
         type: "GET",
         headers: {
             "Authorization": token
@@ -75,7 +75,7 @@ function confirmFuncLogout() {
 function requestLogout() {
     let token = Cookies.get('Authorization');
     $.ajax({
-        url: getUrl() + "/api/v1/auth/logout",
+        url: `${getUrl()}/api/v1/auth/logout`,
         type: "POST",
         headers: {
             "Authorization": token
@@ -86,7 +86,7 @@ function requestLogout() {
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
 
-            window.location.href = getUrl() + `/index.html`
+            window.location.href = `/index.html`
         },
         error: function (jqXHR, textStatus) {
             // 로그아웃에 실패한 경우 처리
@@ -102,7 +102,7 @@ function requestLogin() {
 
     $.ajax({
         type: "POST",
-        url: getUrl() + `/api/v1/auth/login`,
+        url: `${getUrl()}/api/v1/auth/login`,
         contentType: "application/json",
         data: JSON.stringify({email: email, password: password}),
     })
@@ -111,10 +111,10 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.location.href = getUrl() + `/index.html`
+            window.location.href = `/index.html`
         })
         .fail(function (jqXHR, textStatus) {
-            alert("fail");
+            alert("로그인에 실패했습니다. 다시 시도해주세요.");
         });
 }
 
@@ -139,7 +139,7 @@ function redirectToPageWithToken(pageUrl, token) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl;
+                window.location.href = pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -158,7 +158,7 @@ function redirectToPage(pageUrl) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl;
+                window.location.href = pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -177,7 +177,7 @@ function redirectToPageWithParameter(pageUrl, parameter, value) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = getUrl() + pageUrl + `?${parameter}=${value}`;
+                window.location.href = `${pageUrl}?${parameter}=${value}`;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -199,7 +199,7 @@ function redirectToPageWithParameters(pageUrl, paramValueMap) {
                 for (const key of Object.keys(paramValueMap)) {
                     queryString += `${key}=${paramValueMap[key]}&`
                 }
-                window.location.href = getUrl() + pageUrl + '?' + queryString;
+                window.location.href = pageUrl + '?' + queryString;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -295,4 +295,8 @@ function decode(input) {
     }
 
     return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
+}
+
+function isNumeric(input) {
+    return /^[0-9]+$/.test(input);
 }

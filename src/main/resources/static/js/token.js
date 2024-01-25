@@ -101,7 +101,8 @@ function reissueToken(callback) {
             }).catch((error) => {
                 // 토큰 갱신 실패 시 로그아웃 처리
                 console.error('Token refresh failed:', error);
-                requestLogout();
+                Cookies.remove("Authorization");
+                // requestLogout();
             }).finally(() => {
                 setIsRefreshingToken(false); // 토큰 갱신 완료 후 상태 업데이트
                 deferred.resolve();

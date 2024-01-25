@@ -1,21 +1,11 @@
 function getGoodsCategories() {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/goods-categorys`,
+        url: `${getUrl()}/api/v1/goods-categorys`,
         success: function (response) {
             for (let i = 0; i < response.data.length; i++) {
                 let name = response.data[i].categoryName;
                 if (name === "서커스마술") name = "서커스/마술";
-
-                let a = $('<a>').text(name)
-                    .addClass("nav-link link-dark category-a")
-                    .on("click", function () {
-                        // 카테고리별 공연 리스트 페이지로 이동
-                    });
-
-                let li = $('<li>').append(a);
-                $(".goods-menu-ul").append(li);
-
 
                 let div = $('<div>').addClass("btn-div")
                 let btn = $('<button>').text(name)
@@ -45,7 +35,7 @@ function getGoodsCategories() {
 function clickOnCategoryBtn(name) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/goods`,
+        url: `${getUrl()}/api/v1/goods`,
         data: {
             page: 0,
             size: 5,
@@ -61,7 +51,7 @@ function clickOnCategoryBtn(name) {
                 let d = response.data.goodsSlice.content[i];
 
                 let eid = encode(d.goodsId);
-                let pd = $('<div>')
+                let pd = $('<div>').addClass("col")
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("goods-poster-img")
                             .on("click", function () {

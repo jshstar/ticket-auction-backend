@@ -1,100 +1,75 @@
-body {
-
-    /*font-family: 'Arial', sans-serif;*/
-    /*margin: 0;*/
-    /*padding: 0;*/
-    /*background-color: #f4f4f4;*/
-}
-
 
 .container-flex {
     display: flex;
-    /*width: 100%; !* 전체 너비를 사용 *!*/
     margin: 20px auto;
 }
 
 #goods-info-container {
-    flex: 0 0 70%;
-
+    flex: 0 0 60%;
 }
 
 #goods-container {
-    /*flex: 0 0 70%; !* 상품 정보 컨테이너의 너비를 70%로 고정 *!*/
     padding: 20px;
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-    /*background-color: #ffffff;*/
 }
 
 
-/*.goods-info-box {*/
-/*    width: auto;*/
-/*    display: flex;*/
-/*}*/
-
 .image-container {
-    /*align-items: flex-start;*/
-    /*justify-content: flex-start;*/
-    /*padding-right: 20px;*/
     margin-right: 20px;
     width: 400px;
 }
 
-/*.goods-info, .image-container {*/
-/*    flex: 1;*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*}*/
-
 #goodsTitle {
-    /*order: 1;*/
     margin-bottom: 20px;
-    /*font-weight: 700;*/
 }
 
 #main-image {
-    /*width: 400px;*/
-    max-width: 100%;
+    width: 250px;
     height: auto;
     border-radius: 15px;
-    /*order: 2;*/
 }
 
 .goods-info > table {
     border: none;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 500;
 }
 
-.goods-info > table > tbody > tr {
-    /*padding-bottom: 15px;*/
+#post-image-div {
+    flex: 0 0 20%;
 }
 
+
 .goods-info > table > tbody > tr > .col-title {
-    width: 200px;
+    width: 90px;
     height: 50px;
 
 }
 
+#grades-container > .btn {
+    background-color: #D1C2E9;
+    color: white;
+}
+
+#grades-container > #grades-list > #grades-table > tr > td:first-child {
+    width: 80px;
+    color: darkgray;
+}
+
 #schedule-container {
-    flex: 0 0 30%; /* 캘린더 컨테이너의 너비를 30%로 고정 */
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 0 0 40%;
     background-color: #ffffff;
-    /* 캘린더의 최소 너비를 설정하여 내용이 잘리지 않도록 합니다. 필요에 따라 조절하세요. */
-    min-width: 300px;
+    min-width: 150px;
 }
 
 #images-container {
     display: flex;
     flex-direction: column;
-    /*align-items: flex-start;*/
     gap: 10px;
     margin-top: 20px;
-    padding-left: 20px;
 }
 
 .images-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bolder;
     margin-bottom: 10px;
     border-bottom: 0.1rem solid #b6bdc7;
@@ -107,7 +82,7 @@ body {
 }
 
 .images-list img {
-    width: 750px;
+    width: 600px;
     height: auto;
     /*border: 1px solid #ddd;*/
 }
@@ -132,12 +107,20 @@ body {
 }
 
 /* FullCalendar 스타일링 */
+#calendar {
+    width: 100%;
+}
+
 #calendar-container {
     width: 100%; /* 캘린더의 너비를 조정 */
 }
 
 .fc-header-toolbar {
     margin-bottom: 10px;
+}
+
+.fc-header-toolbar > .fc-left > .fc-button {
+    background-color: #A9BCD0 !important;
 }
 
 .fc-button {
@@ -148,12 +131,7 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1rem;
-    width: 100px;
-}
-
-.fc-button:hover {
-    background-color: #A9BCD0;
+    width: 50px;
 }
 
 .fc {
