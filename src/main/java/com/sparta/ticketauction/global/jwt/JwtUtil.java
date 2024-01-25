@@ -10,7 +10,6 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -170,22 +169,22 @@ public class JwtUtil {
 		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
 			.replaceAll("\\+", "%20");
 
-		ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
-			.path("/")
-			.sameSite("None")
-			.httpOnly(true)
-			.secure(true)
-			.domain(domain)
-			.maxAge(REFRESH_TOKEN_TIME)
-			.build();
+		// ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
+		// 	.path("/")
+		// 	.sameSite("None")
+		// 	.httpOnly(true)
+		// 	.secure(true)
+		// 	.domain(domain)
+		// 	.maxAge(REFRESH_TOKEN_TIME)
+		// 	.build();
 
-		/*Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
-		cookie.setDomain(domain);*/
+		// cookie.setDomain(domain);
 
-		response.addHeader("Set-Cookie", cookie.toString());
-		// response.addCookie(cookie);
+		// response.add("Set-Cookie", cookie.toString());
+		response.addCookie(cookie);
 	}
 }
