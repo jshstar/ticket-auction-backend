@@ -40,6 +40,7 @@ public enum ErrorCode {
 	/* AUCTION */
 	NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "A10000", "해당하는 경매를 찾지 못했습니다."),
 	ENDED_AUCTION(HttpStatus.BAD_REQUEST, "A10001", "경매가 종료되었습니다."),
+	ALREADY_EXIST_AUCTION(HttpStatus.CONFLICT, "A10002", "이미 경매가 등록되어있습니다."),
 
 	/* BID */
 	NOT_FOUND_BID(HttpStatus.NOT_FOUND, "B10000", "입찰을 찾지 못했습니다."),

@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -20,6 +22,7 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
 
 @Configuration
+@EnableRedisRepositories(enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
 public class RedisConfig {
 
 	@Value("${spring.data.redis.host}")
@@ -34,9 +37,14 @@ public class RedisConfig {
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
-		config.useClusterServers()
-			.setScanInterval(3000)
-			.addNodeAddress("redis://" + host + ":" + port);
+		if (activeProfile.equals("local")) {
+			config.useSingleServer()
+				.setAddress("redis://" + host + ":" + port);
+		} else {
+			config.useClusterServers()
+				.setScanInterval(3000)
+				.addNodeAddress("redis://" + host + ":" + port);
+		}
 		return Redisson.create(config);
 	}
 

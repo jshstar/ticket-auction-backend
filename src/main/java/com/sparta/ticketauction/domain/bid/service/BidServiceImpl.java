@@ -13,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.sparta.ticketauction.domain.auction.entity.Auction;
-import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
+import com.sparta.ticketauction.domain.auction.service.AuctionService;
+import com.sparta.ticketauction.domain.bid.constant.BidStatus;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.bid.redis.RedisSubscriber;
 import com.sparta.ticketauction.domain.bid.repository.BidRepository;
@@ -36,9 +37,9 @@ public class BidServiceImpl implements BidService {
 	private static final Long DEFAULT_SSE_TIMEOUT = 30 * 60 * 1000L;
 	private static final String CONNECTED = "CONNECTED";
 
-	private final AuctionRepository auctionRepository;
 	private final BidRepository bidRepository;
 	private final BidRedisService bidRedisService;
+	private final AuctionService auctionService;
 	private final PointService pointService;
 	private final UserService userService;
 
@@ -49,7 +50,7 @@ public class BidServiceImpl implements BidService {
 	@Override
 	@DistributedLock(key = "#auctionId")
 	public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
-		Auction auction = getAuction(auctionId);
+		Auction auction = auctionService.getAuction(auctionId);
 		boolean isEnded = auction.getIsEnded();
 
 		if (isEnded) {
@@ -72,8 +73,10 @@ public class BidServiceImpl implements BidService {
 			bidRedisService.setBidPrice(auctionId, currentBidPrice);
 		}
 
+		Optional<Bid> currentBid = getCurrentBid(auction);
 		validateBid(currentBidPrice, newBidPrice);
-		updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
+		updateBidderPoints(bidder, newBidPrice, currentBidPrice, currentBid);
+		updateBidStatus(currentBid);
 		saveBid(bidder, newBidPrice, auction);
 	}
 
@@ -113,8 +116,11 @@ public class BidServiceImpl implements BidService {
 		return sseEmitter;
 	}
 
-	public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Auction auction) {
-		Optional<Bid> currentBid = getCurrentBid(auction);
+	public void updateBidStatus(Optional<Bid> currentBid) {
+		currentBid.ifPresent(bid -> bid.updateStatus(BidStatus.FAILED));
+	}
+
+	public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Optional<Bid> currentBid) {
 		if (currentBid.isPresent()) {
 			User currentBidder = currentBid.get().getUser();
 			pointService.refundPoint(currentBidder, currentBidPrice);
@@ -133,11 +139,6 @@ public class BidServiceImpl implements BidService {
 
 		bidRepository.save(newBid);
 		bidRedisService.setBidPrice(auction.getId(), newBidPrice);
-	}
-
-	public Auction getAuction(Long auctionId) {
-		return auctionRepository.findById(auctionId)
-			.orElseThrow(() -> new ApiException(NOT_FOUND_AUCTION));
 	}
 
 	public Optional<Bid> getCurrentBid(Auction auction) {

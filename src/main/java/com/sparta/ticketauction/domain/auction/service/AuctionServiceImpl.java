@@ -12,9 +12,10 @@ import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
 import com.sparta.ticketauction.domain.auction.request.AuctionCreateRequest;
 import com.sparta.ticketauction.domain.auction.response.AuctionDetailResponse;
 import com.sparta.ticketauction.domain.auction.response.AuctionInfoResponse;
+import com.sparta.ticketauction.domain.bid.constant.BidStatus;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
+import com.sparta.ticketauction.domain.bid.repository.BidRepository;
 import com.sparta.ticketauction.domain.bid.service.BidRedisService;
-import com.sparta.ticketauction.domain.bid.service.BidService;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.repository.ZoneGradeRepository;
 import com.sparta.ticketauction.domain.reservation.service.ReservationService;
@@ -34,7 +35,7 @@ public class AuctionServiceImpl implements AuctionService {
 	private final AuctionRepository auctionRepository;
 	private final ScheduleRepository scheduleRepository;
 	private final ZoneGradeRepository zoneGradeRepository;
-	private final BidService bidService;
+	private final BidRepository bidRepository;
 	private final BidRedisService bidRedisService;
 	private final ReservationService reservationService;
 
@@ -46,6 +47,9 @@ public class AuctionServiceImpl implements AuctionService {
 		ZoneGrade zoneGrade = zoneGradeRepository.getReferenceById(zoneGradeId);
 
 		Auction auction = request.toEntity(schedule, zoneGrade);
+		if (auctionRepository.exists(auction)) {
+			throw new ApiException(ErrorCode.ACCESS_DENIED);
+		}
 		auctionRepository.save(auction);
 		bidRedisService.saveWithExpire(auction);
 	}
@@ -58,8 +62,12 @@ public class AuctionServiceImpl implements AuctionService {
 		auction.ended();
 
 		//경매 종료 시 입찰자가 없으면 예매 x
-		Optional<Bid> bidOptional = bidService.getCurrentBid(auction);
-		bidOptional.ifPresent(bid -> reservationService.reserve(bid, auction));
+		Optional<Bid> bidOptional = bidRepository.findTopByAuctionOrderByIdDesc(auction);
+		bidOptional.ifPresent(bid -> {
+			bid.updateStatus(BidStatus.SUCCESS);
+			reservationService.reserve(bid, auction);
+
+		});
 	}
 
 	@Override
@@ -69,7 +77,7 @@ public class AuctionServiceImpl implements AuctionService {
 		long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
 		long bidPrice = bidRedisService.getBidPrice(auctionId)
 			.orElseGet(() ->
-				bidService.getMaxBidPrice(auction).orElse(auction.getStartPrice())
+				bidRepository.getMaxBidPrice(auction).orElse(auction.getStartPrice())
 			);
 		return AuctionDetailResponse.from(auction, bidPrice, remainTimeMilli);
 	}
