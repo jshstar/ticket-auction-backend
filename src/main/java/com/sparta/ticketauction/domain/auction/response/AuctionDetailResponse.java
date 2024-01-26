@@ -14,14 +14,14 @@ public class AuctionDetailResponse {
 	//시작가
 	private final Long startPrice;
 	//남은시간
-	private final Long remainTimeMilli;
+	private final Long remainTimeSeconds;
 
-	public static AuctionDetailResponse from(Auction entity, Long bidPrice, Long remainTimeMilli) {
+	public static AuctionDetailResponse from(Auction entity, Long bidPrice) {
 		return new AuctionDetailResponse(
 			entity.getId(),
 			bidPrice,
 			entity.getStartPrice(),
-			remainTimeMilli
+			entity.genRemainSeconds()
 		);
 	}
 }
