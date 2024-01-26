@@ -87,7 +87,6 @@ function getBidList(token, page) {
 
     if (queryParams["auctionId"]) {
         let id = decode(queryParams["auctionId"]);
-        console.log(id);
         $.ajax({
             type: "GET",
             url: `${getUrl()}/api/v1/auctions/${id}/bids?page=${page}`,
@@ -120,7 +119,7 @@ function displayBid(data) {
         let index = $('<td>').text(i + 1);
         let date = $('<td>').text(data.content[i].createdAt);
         let status = $('<td>').text(data.content[i].status);
-        let price = $('<td>').text(data.content[i].price);
+        let price = $('<td>').text(`${data.content[i].price.toLocaleString()}원`);
 
 
         let tr = $('<tr>').append(index)

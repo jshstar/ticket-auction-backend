@@ -191,7 +191,6 @@ function submitPlace(token) {
 
 
     function handleSuccess(response) {
-        console.log('Success:', response);
         okAlert('공연장이 성공적으로 추가되었습니다.');
         $('#zonesTable tbody').empty(); // 테이블 내용 초기화
         zones = []; // zones 배열 초기화

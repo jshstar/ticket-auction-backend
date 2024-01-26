@@ -1,4 +1,5 @@
 var white_list = {
+    "/": true,
     "/index.html": true,
     "/login.html": true,
     "/user/signup.html": true,
@@ -9,7 +10,6 @@ function getUrl() {
     const hostname = window.location.hostname;
     const url = hostname === 'localhost' ? 'http://localhost:8080' : 'https://api.ticket-auction.shop';
 
-    console.log(url);
     return url;
 }
 

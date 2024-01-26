@@ -328,7 +328,6 @@ function initGoodsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                console.log(data);
                 for (const seatInfo of data['data']['seatInfos']) {
                     const seatLabel = `${seatInfo.zoneName}-${seatInfo.seatNumber}`;
                     auctionSeats.push(seatLabel);
@@ -440,7 +439,6 @@ function initGoodsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                console.log(data);
                 for (let i = 0; i < 3; i++) {
                     $(`#bid-last-${i + 1}-info`).text('정보 없음');
                 }

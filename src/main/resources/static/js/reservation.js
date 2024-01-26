@@ -30,7 +30,6 @@ function displayReservation(data) {
     let size = data.pageable.pageSize;
     let curIndex = data.number;
 
-    console.log(data);
     for (let i = 0; i < data.content.length; i++) {
         let ei = encode(data.content[i].reservationId);
         let id = $('<td>').text(ei);

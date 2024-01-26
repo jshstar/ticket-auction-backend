@@ -91,6 +91,12 @@ th, td {
     margin-right: 10px;
 }
 
+.table-d2-list > table > .list-tb-body > tr > td > .detail-btn {
+    background-color: #D1C2E9;
+    color: white;
+    margin-right: 10px;
+}
+
 #reservation-detail-table > tbody > tr > .detail-menu-name {
     font-weight: 500;
 }
