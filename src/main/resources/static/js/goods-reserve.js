@@ -75,8 +75,11 @@ function initGoodsReservePage() {
                 // 경매 정보 갱신
                 data = data['data'];
                 $('#bid-select-seat').text(currentViewAuctionLabel);
-                $('#bid-current-price').text(data['bidPrice']);
-                $('#bid-start-price').text(data['startPrice']);
+                var currentPrice = data['bidPrice'].toLocaleString('ko-KR');
+                var startPrice = data['startPrice'].toLocaleString('ko-KR');
+
+                $('#bid-current-price').text(`${currentPrice}원`);
+                $('#bid-start-price').text(`${startPrice}원`);
                 let leftTime = Math.floor(data['remainTimeSeconds']);
                 auctionCloseCountdownStart(leftTime);
                 initMyBidStatus();
@@ -120,7 +123,8 @@ function initGoodsReservePage() {
                         errorAlert('좌석은 최대 2개까지 선택할 수 있습니다.');
                         return 'available';
                     }
-                    $('<li>' + this.data().category + ' 좌석 # ' + this.settings.label + ': <b>' + this.data().price + '₩</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
+                    let seatPrice = this.data().price;
+                    $('<li>' + this.data().category + ' 좌석 # ' + this.settings.label + ': <b>' + seatPrice.toLocaleString('ko-KR') + '원</b> <a href="#" class="cancel-cart-item">[cancel]</a></li>')
                         .attr('id', 'cart-item-' + this.settings.id)
                         .data('seatId', this.settings.id)
                         .appendTo($cart);
@@ -128,7 +132,8 @@ function initGoodsReservePage() {
                     const [zoneName, seatNumber] = this.settings.label.split('-');
                     selectSeats.push(`${scheduleId}-${zoneGradeInfo[zoneName]['zoneGradeId']}-${seatNumber}`); // 선택한 좌석 장바구니에 넣기
                     $counter.text(sc.find('selected').length + 1);
-                    $total.text(recalculateTotal(sc) + this.data().price);
+                    let totalPrice = recalculateTotal(sc) + this.data().price;
+                    $total.text(totalPrice.toLocaleString('ko-KR'));
                     return 'selected';
                 } else if (this.status() == 'selected') {
                     $counter.text(sc.find('selected').length - 1);
@@ -154,10 +159,11 @@ function initGoodsReservePage() {
                     const eventSource = new EventSource(requestUrl);
                     eventSource.onmessage = function (event) {
                         // 경매 현재가 갱신
-                        $('#bid-current-price').text(event.data);
+                        $('#bid-current-price').text(`${event.data}원`);
                         // 내가 최고 입찰인지 갱신
-
+                        initMyBidStatus();
                         // 경매 최근 입찰 내역 갱신
+                        getLast3Bids();
                     };
                     eventSource.onerror = function (error) {
                         console.error('EventSource failed:', error);
@@ -174,7 +180,7 @@ function initGoodsReservePage() {
     // 좌석 예매 버튼 클릭
     $('#reserve-btn').click(function () {
         const requestData = {
-            price: $('#total').text(),
+            price: parseInt($('#total').text().replace(/,/g, '')),
             reservationSeats: []
         };
         if (selectSeats.length === 0) {
@@ -218,6 +224,11 @@ function initGoodsReservePage() {
 
         if (price < bidCurrentPrice * 1.05) {
             errorAlert('최소 현재 입찰가의 5%보다 높게 입찰해야 합니다.');
+            return;
+        }
+
+        if (price % 1000 !== 0) {
+            errorAlert('입찰은 최소 1,000원 단위로 입찰해야 합니다.');
             return;
         }
         const requestData = {
@@ -386,7 +397,7 @@ function initGoodsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                $("#my-point").text(data['data']);
+                $("#my-point").text(data['data'].toLocaleString('ko-KR') + '원');
             },
             error: function (jqXHR, textStatus) {
                 errorAlert(jqXHR.responseJSON.message);
@@ -435,7 +446,7 @@ function initGoodsReservePage() {
                 }
                 var bids = data['data'];
                 for (let i = 0; i < bids.length; i++) {
-                    $(`#bid-last-${i + 1}-info`).text(`${bids[i].nickname}님 ${bids[i].price}원`);
+                    $(`#bid-last-${i + 1}-info`).text(`${bids[i].nickname}님 ${bids[i].price.toLocaleString('ko-KR')}원`);
                 }
             },
             error: function (jqXHR, textStatus) {
