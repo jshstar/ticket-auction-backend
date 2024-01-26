@@ -1,8 +1,13 @@
 .container {
-    align-items: center;
-    display: flex;
-    min-height: 70vh;
-    width: 100%;
+    /*align-items: center;*/
+    /*display: flex;*/
+    /*min-height: 70vh;*/
+    /*width: 100%;*/
+}
+
+.container > .signup-form {
+    width: 70%;
+
 }
 
 .form-group {
@@ -14,18 +19,11 @@
     margin-top: 10px;
 }
 
-input {
-    height: 50px;
-}
 
 .input-group-text {
-    height: 50px;
     margin-top: 10px;
 }
 
-.custom-btn {
-    height: 50px;
-}
 
 .logo {
     width: 16px;

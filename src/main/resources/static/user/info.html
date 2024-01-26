@@ -22,37 +22,40 @@
 
 <header id="headers"></header>
 
-<div class="row mt-5 justify-content-center">
-    <div class="col-2 wrap" id="menu"></div>
-    <div class="col-8 wrap ms-4">
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2" id="menu"></div>
+        <div class="col-8">
 
-        <div class="row page-name">
-            <h2 class="col-sm-12">내 정보</h2>
-        </div>
-        <div class="form-control px-4 py-3">
-            <div class="form-group row">
-                <label class="fs-4 col-md-4"><img class="logo" src="/images/mail-icon.png"/>이메일</label>
-                <div class="col-md-8 fs-5" id="info-email"></div>
+            <div class="row page-name">
+                <h2 class="col-sm-12">내 정보</h2>
             </div>
-            <div class="form-group row">
-                <label class="fs-4 col-md-4"><img class="logo" src="/images/email-icon.png"/>이름</label>
-                <div class="col-md-8 fs-5" id="info-name"></div>
-            </div>
-            <div class="form-group row">
-                <label class="fs-4 col-md-4"><img class="logo" src="/images/email-icon.png"/>닉네임</label>
-                <div class="col-md-8 fs-5" id="info-nickname"></div>
-            </div>
-            <div class="form-group row">
-                <label class="fs-4 col-md-4"><img class="logo" src="/images/birth-icon.png"/>생년월일</label>
-                <div class="col-md-8 fs-5" id="info-birth"></div>
-            </div>
-            <div class="form-group row">
-                <label class="fs-4 col-md-4"><img class="logo" src="/images/phone-icon.png"/>핸드폰 번호</label>
-                <div class="col-md-8 fs-5" id="info-phone"></div>
+            <div class="form-control px-4 py-3">
+                <div class="form-group row">
+                    <label class="fs-5 col-md-4"><img class="logo" src="/images/mail-icon.png"/>이메일</label>
+                    <div class="col-md-8 fs-6" id="info-email"></div>
+                </div>
+                <div class="form-group row">
+                    <label class="fs-5 col-md-4"><img class="logo" src="/images/email-icon.png"/>이름</label>
+                    <div class="col-md-8 fs-6" id="info-name"></div>
+                </div>
+                <div class="form-group row">
+                    <label class="fs-5 col-md-4"><img class="logo" src="/images/email-icon.png"/>닉네임</label>
+                    <div class="col-md-8 fs-6" id="info-nickname"></div>
+                </div>
+                <div class="form-group row">
+                    <label class="fs-5 col-md-4"><img class="logo" src="/images/birth-icon.png"/>생년월일</label>
+                    <div class="col-md-8 fs-6" id="info-birth"></div>
+                </div>
+                <div class="form-group row">
+                    <label class="fs-5 col-md-4"><img class="logo" src="/images/phone-icon.png"/>핸드폰 번호</label>
+                    <div class="col-md-8 fs-6" id="info-phone"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 </body>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {

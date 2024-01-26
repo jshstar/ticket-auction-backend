@@ -5,7 +5,7 @@ spring:
 ---
 server:
   host:
-    front: localhost:8080
+    front: localhost8080
 spring:
   config:
     activate:

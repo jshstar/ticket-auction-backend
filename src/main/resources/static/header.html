@@ -21,11 +21,11 @@
     </a>
 
     <ul class="nav nav-pills me-5 fs-6">
-        <li class="nav-item" id="login" style="display: none;">
-            <a class="nav-link" href="" style="color: black;">로그인</a>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="login" style="display: none; color: black;">로그인</a>
         </li>
-        <li class="nav-item" id="signup" style="display: none;">
-            <a class="nav-link" href="" style="color: black;">회원가입</a>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="signup" style="color: black;display: none;">회원가입</a>
         </li>
         <li class="nav-item dropdown" id="login-user-set"
             style="float:right; list-style-type: none; margin-left: 20px; display: none;">
@@ -67,7 +67,7 @@
         movePage();
     });
     $("#login").on("click", function () {
-        redirectToPage(`/login.html`);
+        redirectToPage('/login.html');
     });
 
     $("#charge-point").on("click", function () {

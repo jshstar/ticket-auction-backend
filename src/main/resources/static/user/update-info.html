@@ -23,52 +23,53 @@
 
 <header id="headers"></header>
 
-<div class="row mt-5 justify-content-center">
-    <div class="col-2 wrap" id="menu"></div>
-    <div class="col-8 wrap ms-4">
-        <div class="row page-name">
-            <h2 class="col-sm-12">정보 수정</h2>
-        </div>
-        <div class="form-control px-4 py-3">
-            <div class="form-group">
-                <label class="fs-5" for="update-nickname">
-                    <img class="logo" src="/images/email-icon.png"/>닉네임
-                </label>
-                <input class="form-control" id="update-nickname" name="nickname" type="text">
-                <span id="update-nickname-span" style="color: red;"></span>
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2" id="menu"></div>
+        <div class="col-8">
+            <div class="row page-name">
+                <h2 class="col-sm-12">정보 수정</h2>
             </div>
-            <div class="form-group">
-                <label class="fs-5" for="update-phone">
-                    <img class="logo" src="/images/phone-icon.png"/>핸드폰 번호
+            <div class="form-control px-4 py-3">
+                <div class="form-group">
+                    <label class="fs-6" for="update-nickname">
+                        <img class="logo" src="/images/email-icon.png"/>닉네임
+                    </label>
+                    <input class="form-control" id="update-nickname" name="nickname" type="text">
+                    <span id="update-nickname-span" style="color: red;"></span>
+                </div>
+                <div class="form-group">
+                    <label class="fs-6" for="update-phone">
+                        <img class="logo" src="/images/phone-icon.png"/>핸드폰 번호
+                    </label>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input class="form-control" id="update-phone" name="phone" type="tel">
+                        </div>
+                        <div class="col-md-3 user-input-div-2">
+                            <button class="btn  mt-2 custom-btn user-input-btn-2" id="update-verification-btn"
+                                    type="submit">
+                                인증번호 발송
+                            </button>
+                        </div>
+                    </div>
+                    <span id="update-phoneNumber-span" style="color: red;"></span>
+                </div>
+                <label class="fs-6" for="update-verificationCode">
+                    <img class="logo" src="/images/phone-icon.png"/>인증번호
                 </label>
                 <div class="row">
-                    <div class="col-md-9">
-                        <input class="form-control" id="update-phone" name="phone" type="tel">
+                    <div class=" col-5">
+                        <input class="form-control" id="update-verificationCode" name="verificationCode" type="text">
                     </div>
-                    <div class="col-md-3 user-input-div-2">
-                        <button class="btn  mt-2 custom-btn user-input-btn-2" id="update-verification-btn"
-                                type="submit">
-                            인증번호 발송
-                        </button>
-                    </div>
+                    <div class="col-7 mt-3 fs-6" id="update-remaining-time"></div>
                 </div>
-                <span id="update-phoneNumber-span" style="color: red;"></span>
-            </div>
-            <label class="fs-5" for="update-verificationCode">
-                <img class="logo" src="/images/phone-icon.png"/>인증번호
-            </label>
-            <div class="row">
-                <div class=" col-5">
-                    <input class="form-control" id="update-verificationCode" name="verificationCode" type="text">
+                <span id="update-verificationNumber-span" style="color: red;"></span>
+                <div class="form-group user-input-div mt-3">
+                    <button class="btn user-input-btn w-100 custom-btn" id="update-info-btn" type="submit">수정</button>
                 </div>
-                <div class="col-7 mt-3 fs-5" id="update-remaining-time"></div>
-            </div>
-            <span id="update-verificationNumber-span" style="color: red;"></span>
-            <div class="form-group user-input-div mt-3">
-                <button class="btn user-input-btn w-100 custom-btn" id="update-info-btn" type="submit">수정</button>
             </div>
         </div>
-
     </div>
 </div>
 </body>

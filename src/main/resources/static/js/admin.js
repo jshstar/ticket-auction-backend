@@ -564,7 +564,7 @@ function updateNextPageButtonState() {
 // 스케줄 목록을 가져오는 함수
 function fetchSchedules(goodsId) {
     $.ajax({
-        url: `${getUrl}/api/v1/goods/${goodsId}/schedules`,
+        url: `${getUrl()}/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (response) {
             const schedules = response.data;
@@ -584,7 +584,7 @@ function fetchSchedules(goodsId) {
 // 구역 목록을 가져오는 함수
 function fetchZones(goodsId) {
     $.ajax({
-        url: `${getUrl}/api/v1/zones?goodsId=${goodsId}`,
+        url: `${getUrl()}/api/v1/zones?goodsId=${goodsId}`,
         type: 'GET',
         success: function (response) {
             response.data.forEach(zone => {

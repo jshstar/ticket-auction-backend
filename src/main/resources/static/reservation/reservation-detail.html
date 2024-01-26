@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ticket Auction</title>
-    
+
     <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
@@ -24,42 +24,44 @@
 
 <header id="headers"></header>
 
-<div class="row mt-5 justify-content-center">
-    <div class="col-2" id="menu"></div>
-    <div class="col-8 m">
-        <div class="row page-name">
-            <h2 class="col-sm-12 reserved-goods-title">TITLE</h2>
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2" id="menu"></div>
+        <div class="col-8">
+            <div class="row page-name">
+                <h2 class="col-sm-12 reserved-goods-title">TITLE</h2>
+            </div>
+            <table class="text-center" id="reservation-detail-table">
+                <colgroup>
+                    <col style="width: 30%;">
+                    <col style="width: 70%">
+                </colgroup>
+                <tr>
+                    <td class="fs-6 detail-menu-name">예매자</td>
+                    <td class="reservation-user reservation-detail-info"></td>
+                </tr>
+                <tr>
+                    <td class="fs-6 detail-menu-name">예매 번호</td>
+                    <td class="reservation-id reservation-detail-info"></td>
+                </tr>
+                <tr>
+                    <td class="fs-6 detail-menu-name">이용일</td>
+                    <td class="reservation-date reservation-detail-info"></td>
+                </tr>
+                <tr>
+                    <td class="fs-6 detail-menu-name">장소</td>
+                    <td class="reservation-place reservation-detail-info"></td>
+                </tr>
+                <tr>
+                    <td class="fs-6 detail-menu-name">좌석</td>
+                    <td class="reservation-seat reservation-detail-info"></td>
+                </tr>
+                <tr>
+                    <td class="fs-6 detail-menu-name">QR 코드</td>
+                    <td class="reservation-qr reservation-detail-info"></td>
+                </tr>
+            </table>
         </div>
-        <table class="text-center" id="reservation-detail-table">
-            <colgroup>
-                <col style="width: 30%;">
-                <col style="width: 70%">
-            </colgroup>
-            <tr>
-                <td class="fs-5 detail-menu-name">예매자</td>
-                <td class="reservation-user reservation-detail-info"></td>
-            </tr>
-            <tr>
-                <td class="fs-5 detail-menu-name">예매 번호</td>
-                <td class="reservation-id reservation-detail-info"></td>
-            </tr>
-            <tr>
-                <td class="fs-5 detail-menu-name">이용일</td>
-                <td class="reservation-date reservation-detail-info"></td>
-            </tr>
-            <tr>
-                <td class="fs-5 detail-menu-name">장소</td>
-                <td class="reservation-place reservation-detail-info"></td>
-            </tr>
-            <tr>
-                <td class="fs-5 detail-menu-name">좌석</td>
-                <td class="reservation-seat reservation-detail-info"></td>
-            </tr>
-            <tr>
-                <td class="fs-5 detail-menu-name">QR 코드</td>
-                <td class="reservation-qr reservation-detail-info"></td>
-            </tr>
-        </table>
     </div>
 </div>
 
