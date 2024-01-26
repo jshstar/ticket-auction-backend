@@ -1,5 +1,6 @@
 var white_list = {
     "/": true,
+    "/#": true,
     "/index.html": true,
     "/login.html": true,
     "/user/signup.html": true,
