@@ -4,6 +4,7 @@ import static com.sparta.ticketauction.domain.bid.constant.BidConstant.*;
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import com.sparta.ticketauction.domain.bid.repository.BidRepository;
 import com.sparta.ticketauction.domain.bid.repository.SseRepository;
 import com.sparta.ticketauction.domain.bid.request.BidRequest;
 import com.sparta.ticketauction.domain.bid.response.BidInfoResponse;
+import com.sparta.ticketauction.domain.bid.response.BidInfoWithNickname;
 import com.sparta.ticketauction.domain.user.entity.User;
 import com.sparta.ticketauction.domain.user.service.PointService;
 import com.sparta.ticketauction.domain.user.service.UserService;
@@ -156,5 +158,15 @@ public class BidServiceImpl implements BidService {
 		if (currentBidPrice > bidPrice) {
 			throw new ApiException(BAD_REQUEST_BID);
 		}
+	}
+
+	@Override
+	public boolean isUserBidHighest(Long userId, Long auctionId) {
+		return bidRepository.isUserBidHighest(userId, auctionId);
+	}
+
+	@Override
+	public List<BidInfoWithNickname> getLastBidsNicknameAndPrice(Long auctionId, Long limit) {
+		return bidRepository.getLastBidsNicknameAndPrice(auctionId, limit);
 	}
 }

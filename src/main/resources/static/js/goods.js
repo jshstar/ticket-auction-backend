@@ -48,8 +48,8 @@ function clickOnCategoryBtn(name) {
             $(`.${name}`).addClass("active");
             $("#goods-posters").empty();
 
-            for (let i = 0; i , response.data.goodsSlice.content.length; i++) {
-                let d = response.data.goodsSlice.content[i];
+            for (let i = 0; i < response.data.goodsResponses.length; i++) {
+                let d = response.data.goodsResponses[i];
 
                 let eid = encode(d.goodsId);
                 let pd = $('<div>').addClass("col")

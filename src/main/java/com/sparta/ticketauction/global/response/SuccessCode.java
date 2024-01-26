@@ -17,6 +17,7 @@ public enum SuccessCode {
 	SUCCESS_UPDATE_USER_INFO(HttpStatus.OK, "U00400", "회원 정보 수정에 성공했습니다."),
 	SUCCESS_UPDATE_USER_PASSWORD(HttpStatus.OK, "U00401", "비밀 번호 변경에 성공했습니다."),
 	SUCCESS_GET_USER_INFO(HttpStatus.OK, "U00500", "회원 정보 조회에 성공했습니다."),
+	SUCCESS_GET_USER_POINT(HttpStatus.OK, "U00501", "회원 포인트 조회에 성공했습니다."),
 	SUCCESS_DELETE_USER(HttpStatus.OK, "U00600", "회원 탈퇴에 성공했습니다."),
 
 	/* GOODS */
@@ -48,8 +49,8 @@ public enum SuccessCode {
 	/* BID */
 	SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
 	SUCCESS_BID(HttpStatus.CREATED, "B00100", "입찰에 성공했습니다."),
-
-
+	SUCCESS_GET_MY_BID_IS_HIGHEST(HttpStatus.OK, "B00200", "내 최상위 입찰 상태 조회에 성공했습니다."),
+	SUCCESS_GET_LAST_BIDS(HttpStatus.OK, "B00400", "마지막 입찰 목록 조회에 성공했습니다."),
 
 
 

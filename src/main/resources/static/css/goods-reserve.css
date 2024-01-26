@@ -60,3 +60,16 @@
 .D-class {
     background-color: #D1C2E9 !important;
 }
+
+.badge {
+    position: absolute; /* 컨테이너 내에서의 절대 위치 설정 */
+    top: -20px; /* 상단에서 0px의 위치 */
+    width: 50px;
+    padding-left: 0;
+    padding-right: 0;
+    right: 0; /* 오른쪽에서 0px의 위치 */
+    background-color: darkgrey; /* 배경 색상 */
+    color: white; /* 글자 색상 */
+    /*padding: 5px; !* 안쪽 여백 *!*/
+    border-radius: 50%; /* 원형 모양 */
+}

@@ -300,3 +300,37 @@ function decode(input) {
 function isNumeric(input) {
     return /^[0-9]+$/.test(input);
 }
+
+/**
+ * 예쁜 비동기 alert
+ * @param title 제목
+ * @param text 메세지
+ * @param type 아이콘 타입
+ * @param confirmButtonText 확인 버튼 텍스트
+ */
+function asyncAlert(title, text, type, confirmButtonText) {
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: type,
+        confirmButtonText: confirmButtonText
+    });
+}
+
+function okAlert(text) {
+    Swal.fire({
+        title: '알림!',
+        text: text,
+        icon: 'info',
+        confirmButtonText: '확인'
+    })
+}
+
+function errorAlert(text) {
+    Swal.fire({
+        title: '알림!',
+        text: text,
+        icon: 'error',
+        confirmButtonText: '확인'
+    })
+}
