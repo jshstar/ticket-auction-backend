@@ -74,12 +74,11 @@ public class AuctionServiceImpl implements AuctionService {
 	@Transactional(readOnly = true)
 	public AuctionDetailResponse getAuctionInfo(Long auctionId) {
 		Auction auction = getAuction(auctionId);
-		long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
 		long bidPrice = bidRedisService.getBidPrice(auctionId)
 			.orElseGet(() ->
 				bidRepository.getMaxBidPrice(auction).orElse(auction.getStartPrice())
 			);
-		return AuctionDetailResponse.from(auction, bidPrice, remainTimeMilli);
+		return AuctionDetailResponse.from(auction, bidPrice);
 	}
 
 	@Override
