@@ -87,9 +87,9 @@ function pay(method) {
         tossPayments.requestPayment(method, json)
             .catch(function (error) {
                 if (error.code === "USER_CANCEL") {
-                    alert('결제를 취소했습니다.');
+                    errorAlert('결제를 취소했습니다.');
                 } else {
-                    alert(error.message);
+                    errorAlert(error.message);
                 }
             });
     });

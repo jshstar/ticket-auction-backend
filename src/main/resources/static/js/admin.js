@@ -83,7 +83,7 @@ $(document).ready(function () {
                 !isSeatAlreadySaved(scheduleId, zoneGradeName, seatNumber)) {
                 saveAuctionSeat(scheduleId, zoneGradeId, seatNumber, rowElement, token);
             } else {
-                alert('유효하지 않은 좌석 번호이거나 이미 저장된 좌석 번호입니다.');
+                errorAlert('유효하지 않은 좌석 번호이거나 이미 저장된 좌석 번호입니다.');
             }
         });
     });
@@ -119,7 +119,7 @@ function addZone() {
 
     // 입력 유효성 검사
     if (!zoneName || !zoneSeats || isNaN(parseInt(zoneSeats, 10))) {
-        alert('유효한 구역명과 좌석 수를 입력해주세요.');
+        errorAlert('유효한 구역명과 좌석 수를 입력해주세요.');
         return;
     }
 
@@ -158,7 +158,7 @@ function submitPlace(token) {
     // 입력 유효성 검사
     let validZones = zones.filter(zone => zone.zoneSeats && !isNaN(zone.zoneSeats));
     if (validZones.length !== zones.length) {
-        alert('모든 구역에 유효한 좌석 수를 입력해야 합니다.');
+        errorAlert('모든 구역에 유효한 좌석 수를 입력해야 합니다.');
         return;
     }
 
@@ -192,7 +192,7 @@ function submitPlace(token) {
 
     function handleSuccess(response) {
         console.log('Success:', response);
-        alert('공연장이 성공적으로 추가되었습니다.');
+        okAlert('공연장이 성공적으로 추가되었습니다.');
         $('#zonesTable tbody').empty(); // 테이블 내용 초기화
         zones = []; // zones 배열 초기화
     }
@@ -200,7 +200,7 @@ function submitPlace(token) {
 // 에러 핸들러
     function handleError(xhr, status, error) {
         console.error('Error:', error);
-        alert('오류가 발생했습니다. 공연장을 추가하지 못했습니다. 오류: ' + error);
+        errorAlert('오류가 발생했습니다. 공연장을 추가하지 못했습니다. 오류: ' + error);
     }
 
 }
@@ -258,12 +258,11 @@ function submitGoodsInfo(token) {
             }
         },
         success: function (response) {
-            alert('공연 정보가 성공적으로 추가되었습니다.');
-            console.log(response);
+            okAlert('공연 정보가 성공적으로 추가되었습니다.');
             movePageWithToken("/admin/goods.html");
         },
         error: function (xhr, status, error) {
-            alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
+            errorAlert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
         },
     });
 }
@@ -271,7 +270,7 @@ function submitGoodsInfo(token) {
 // 공연 정보 유효성 검사
 function isValidPerformanceInput(title, content, time, age, category) {
     if (!title || !content || !time || !age || !category) {
-        alert('모든 필드를 채워주세요.');
+        errorAlert('모든 필드를 채워주세요.');
         return false;
     }
     // 여기에 추가 유효성 검사 로직을 구현할 수 있습니다.
@@ -304,7 +303,7 @@ function fetchGoodsInfos(token) {
             });
         },
         error: function (xhr, status, error) {
-            alert('상품 정보를 가져오는 데 실패했습니다: ' + error);
+            errorAlert('상품 정보를 가져오는 데 실패했습니다: ' + error);
         }
     });
 }
@@ -324,7 +323,7 @@ function fetchPlace() {
             });
         },
         error: function (xhr, status, error) {
-            alert('공연장 정보를 가져오는 데 실패했습니다: ' + error);
+            errorAlert('공연장 정보를 가져오는 데 실패했습니다: ' + error);
         }
     });
 }
@@ -359,14 +358,14 @@ function submitGoodsAndSchedule(token) {
             }
         },
         success: function (response) {
-            alert('공연 정보가 성공적으로 추가되었습니다.');
+            okAlert('공연 정보가 성공적으로 추가되었습니다.');
             if (response && response.data.goodsId) {
                 localStorage.setItem('goodsId', response.data.goodsId);
             }
             movePageWithToken("/admin/grade.html");
         },
         error: function (xhr, status, error) {
-            alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
+            errorAlert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
         }
     });
 }
@@ -379,7 +378,7 @@ function goToNextPage() {
     var totalCount = $('#gradesTable .saveRowBtn').length;
 
     if (totalCount > 0 && savedCount !== totalCount) {
-        alert('모든 좌석 정보가 저장되지 않았습니다. 저장을 완료해 주세요.');
+        errorAlert('모든 좌석 정보가 저장되지 않았습니다. 저장을 완료해 주세요.');
     } else {
         movePageWithToken("/admin/zone-grade.html");
     }
@@ -392,7 +391,7 @@ function addRowToGradeTable() {
 
     $("#gradesTable tbody").append(newRow);
     if (!gradeName || !normalPrice || !auctionPrice) {
-        alert("모든 필드를 채워주세요.");
+        errorAlert("모든 필드를 채워주세요.");
         return;
     }
 
@@ -433,14 +432,14 @@ function saveGradeData(button, token) {
             xhr.setRequestHeader('Authorization', token);
         },
         success: function (response) {
-            alert('저장 성공!');
+            okAlert('저장 성공!');
             var row = $(button).closest('tr');
             row.find('.saveRowBtn').prop('disabled', true).addClass('saved'); // 저장 버튼 비활성화 및 클래스 추가
             row.find('.deleteRowBtn').prop('disabled', true); // 삭제 버튼 비활성화
             saveRequested = true; // 저장 요청 플래그를 true로 설정
         },
         error: function (xhr, status, error) {
-            alert('저장 실패: ' + error);
+            errorAlert('저장 실패: ' + error);
         }
     });
 }
@@ -565,7 +564,7 @@ function updateNextPageButtonState() {
 // 스케줄 목록을 가져오는 함수
 function fetchSchedules(goodsId) {
     $.ajax({
-        url: getUrl() + `/api/v1/goods/${goodsId}/schedules`,
+        url: `${getUrl}/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (response) {
             const schedules = response.data;
@@ -585,7 +584,7 @@ function fetchSchedules(goodsId) {
 // 구역 목록을 가져오는 함수
 function fetchZones(goodsId) {
     $.ajax({
-        url: getUrl() + `/api/v1/zones?goodsId=${goodsId}`,
+        url: `${getUrl}/api/v1/zones?goodsId=${goodsId}`,
         type: 'GET',
         success: function (response) {
             response.data.forEach(zone => {
@@ -655,7 +654,7 @@ function saveAuctionSeat(scheduleId, zoneId, seatNumber, rowElement, token) {
             alert('저장에 성공했습니다.');
         },
         error: function (xhr, status, error) {
-            alert('저장에 실패했습니다: ' + xhr.responseText);
+            errorAlert('저장에 실패했습니다: ' + xhr.responseText);
         }
     });
 }

@@ -66,10 +66,12 @@ function setTokenInCookie(data) {
 }
 
 function confirmFuncLogout() {
-    let result = confirm("로그아웃 하시겠습니까?");
-    if (result) {
-        requestLogout();
-    }
+    confirmAlert("로그아웃 하시겠습니까?")
+        .then((result) => {
+            if (result) {
+                requestLogout();
+            }
+        });
 }
 
 function requestLogout() {
@@ -86,7 +88,7 @@ function requestLogout() {
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
 
-            window.location.href = `/index.html`
+            redirectToPage("/index.html");
         },
         error: function (jqXHR, textStatus) {
             // 로그아웃에 실패한 경우 처리
@@ -111,10 +113,10 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.location.href = `/index.html`
+            redirectToPageWithToken("/index.html", token);
         })
         .fail(function (jqXHR, textStatus) {
-            alert("로그인에 실패했습니다. 다시 시도해주세요.");
+            errorAlert("로그인에 실패했습니다. 다시 시도해주세요.");
         });
 }
 
@@ -333,4 +335,21 @@ function errorAlert(text) {
         icon: 'error',
         confirmButtonText: '확인'
     })
+}
+
+async function confirmAlert(text) {
+    const result = await Swal.fire({
+        title: text,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "예",
+        cancelButtonText: "아니요",
+        closeOnConfirm: false,
+        closeOnCancel: true
+    });
+
+    // result.value 가 true일 때는 "예" 버튼이 클릭된 경우
+    // result.dismiss 가 "cancel"일 때는 "아니요" 버튼이 클릭된 경우
+    return result.isConfirmed ? true : false;
 }
