@@ -149,6 +149,7 @@ public class ReservationServiceImpl implements ReservationService {
 			.reservationId(savedReservation.getId())
 			.address(schedule.getGoods().getPlace().getName() + " / " + schedule.getGoods().getPlace().getAddress())
 			.seats(seatInfos)
+			.price(reservation.getPrice())
 			.title(schedule.getGoods().getTitle())
 			.useDate(schedule.getStartDateTime())
 			.username(savedUser.getName())
@@ -204,6 +205,7 @@ public class ReservationServiceImpl implements ReservationService {
 						auction.getSeatNumber())
 				)
 			)
+			.price(savedReservation.getPrice())
 			.title(schedule.getGoods().getTitle())
 			.useDate(schedule.getStartDateTime())
 			.username(savedUser.getName())
@@ -225,14 +227,15 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 
 	@Override
+	@Transactional
 	public void cancelReservation(User user, Long reservationId) {
-
+		User savedUser = userService.findByUserId(user.getId());
 		// 유저 취소 권한 확인
-		checkReservationOwner(user, reservationId);
+		checkReservationOwner(savedUser, reservationId);
 
 		// 포인트 환불
 		Reservation reservation = reservationRepository.getById(reservationId);
-		pointService.refundPoint(user, reservation.getPrice());
+		pointService.refundPoint(savedUser, reservation.getPrice());
 
 		// 예매 취소(예매 seat 삭제, 예매 상태 변경, redis 캐시 삭제)
 		List<ReservationSeat> seats = reservationSeatRepository.findReservationSeatsByReservationId(reservationId);
