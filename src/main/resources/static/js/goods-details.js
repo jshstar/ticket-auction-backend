@@ -101,6 +101,12 @@ function initCalendar(events) {
 
 $('#book-btn').click(function () {
     if (selectScheduleId !== -1) {
+        if (!isLogined()) {
+            errorAlert("로그인이 필요합니다.");
+            redirectToPage("/login.html");
+            return;
+        }
+        
         const queryParams = getQueryParams();
         const goodsId = decode(queryParams["goodsId"]);
         const paramValueMap = {
@@ -109,7 +115,7 @@ $('#book-btn').click(function () {
         };
         redirectToPageWithParameters('/reservation/goods_reserve.html', paramValueMap);
     } else {
-        alert('선택한 회차가 없습니다');
+        errorAlert('선택한 회차가 없습니다');
     }
 });
 

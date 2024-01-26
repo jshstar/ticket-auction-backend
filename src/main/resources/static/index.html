@@ -26,8 +26,7 @@
     <div class="btn-by-category d-flex justify-content-center"></div>
     <div id="goods-poster-by-category"></div>
 
-    <div class="row goods-posters-row">
-        <div class="d-flex justify-content-around posters-div col-md-12" id="goods-posters"></div>
+    <div class="goods-posters-row">
     </div>
 </div>
 </body>
@@ -39,7 +38,13 @@
 
     $(document).ready(function () {
         getGoodsCategories();
-        clickOnCategoryBtn("연극");
+        loadGoods();
+    });
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            loadGoods();
+        }
     });
 </script>
 

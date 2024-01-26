@@ -12,6 +12,14 @@ function parseJwt(token) {
     }
 }
 
+function isLogined() {
+    let token = Cookies.get('Authorization');
+    if (!token) {
+        return false;
+    }
+    return true;
+}
+
 function getUserId() {
     let token = Cookies.get('Authorization');
     const decodedToken = parseJwt(token);
