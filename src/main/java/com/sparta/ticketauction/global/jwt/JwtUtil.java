@@ -172,7 +172,7 @@ public class JwtUtil {
 		ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
 			.path("/")
 			.httpOnly(true)
-			.domain(".ticket-auction.kro.kr")
+			.domain(domain)
 			.build();
 
 		// Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
