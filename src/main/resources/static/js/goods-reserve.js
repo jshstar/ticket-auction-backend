@@ -7,7 +7,7 @@ function initGoodsReservePage() {
         checkLoginStatus();
     });
     token = Cookies.get('Authorization');
-
+    console.log(token);
     var placeInfo = { // 공연장 정보 초기 설정
         1: { // 공연장 id. 수동으로 관리해야함
             map: [ // 공연장 좌석 배치도. 수동으로 관리해야함
