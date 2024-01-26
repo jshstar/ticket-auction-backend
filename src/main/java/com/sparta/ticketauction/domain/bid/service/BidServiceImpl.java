@@ -99,9 +99,9 @@ public class BidServiceImpl implements BidService {
 		redisSubscriber.createChannel(channelName);
 
 		SseEmitter sseEmitter = new SseEmitter(DEFAULT_SSE_TIMEOUT);
-		sseEmitter.onCompletion(() -> sseRepository.deleteAll(channelName));
+		sseEmitter.onCompletion(() -> sseRepository.delete(channelName, sseEmitter));
 		sseEmitter.onTimeout(() -> {
-			sseRepository.deleteAll(channelName);
+			sseRepository.delete(channelName, sseEmitter);
 			sseEmitter.complete();
 		});
 		sseRepository.save(channelName, sseEmitter);
