@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.user.response;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Getter;
 @Getter
 public class PointChargeResponse {
 	private Long id;
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime time;
 	private Long amount;
 	private String orderId;

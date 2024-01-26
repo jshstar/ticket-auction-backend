@@ -32,15 +32,15 @@ function signup() {
     let verificationNumber = $("#verificationCode").val();
 
     if (!email | !password | !name | !nickname | !phoneNumber | !verificationNumber | !birth) {
-        alert('입력란을 모두 입력해주세요.');
+        errorAlert('입력란을 모두 입력해주세요.');
         return;
     } else if (password && !readyToSignup) {
-        alert('비밀번호가 일치하지 않습니다.');
+        errorAlert('비밀번호가 일치하지 않습니다.');
         return;
     }
     $.ajax({
         type: "POST",
-        url: getUrl() + `/api/v1/users/signup`,
+        url: `${getUrl}/api/v1/users/signup`,
         contentType: "application/json",
         data: JSON.stringify({
             email: email,
@@ -52,8 +52,8 @@ function signup() {
             verificationNumber: verificationNumber
         }),
         success: function (data) {
-            alert("회원 가입에 성공했습니다.");
-            window.location.href = `/login.html`;
+            okAlert("회원 가입에 성공했습니다.");
+            redirectToPage("/login.html");
         },
         error: function (jqXHR, textStatus) {
             resetValidationMessages();
@@ -130,7 +130,7 @@ function verificationPhone() {
             displayRemainingTime(endTime, "signup-remaining-time", "verification-btn");
             $("#verification-btn").addClass("disabled");
 
-            alert("인증 번호를 발송했습니다.");
+            okAlert("인증 번호를 발송했습니다.");
         },
         error: function (jqXHR, textStatus) {
 

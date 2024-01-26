@@ -67,7 +67,6 @@ function loadGoods() {
 }
 
 function displayPosters(data) {
-    console.log(data)
     var div = $(".goods-posters-row")
     var row = $('<div>').addClass("d-flex justify-content-start posters-div row goods-posters");
 

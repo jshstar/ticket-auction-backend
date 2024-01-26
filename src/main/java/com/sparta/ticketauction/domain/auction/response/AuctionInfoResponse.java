@@ -13,7 +13,7 @@ public class AuctionInfoResponse {
 
 	private final Boolean isEnded;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy.MM.dd")
 	private final LocalDateTime startDateTime;
 
 	@QueryProjection

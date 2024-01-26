@@ -14,7 +14,7 @@ public class BidInfoResponse {
 	private final Long auctionId;
 	private final Long price;
 	private final String status;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm:ss")
 	private final LocalDateTime createdAt;
 
 	@QueryProjection

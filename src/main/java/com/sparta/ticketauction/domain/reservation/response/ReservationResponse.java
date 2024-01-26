@@ -2,6 +2,7 @@ package com.sparta.ticketauction.domain.reservation.response;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.reservation.entity.ReservationStatus;
 
 import lombok.AccessLevel;
@@ -22,10 +23,12 @@ public class ReservationResponse {
 
 	private String title; // 상품명
 
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime useDate; // 이용일
 
 	private Integer numberOfTicket; // 매수
 
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime cancelDeadline; // 취소가능일
 
 	private ReservationStatus status; // 상태

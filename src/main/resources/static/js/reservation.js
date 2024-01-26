@@ -21,8 +21,7 @@ function getReservationList(token, page) {
             }
         },
         fail: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            errorAlert("예매 목록 조회에 오류가 발생했습니다.");
         },
     });
 }
@@ -37,9 +36,8 @@ function displayReservation(data) {
         var dateObject = formatDateTime(new Date(data.content[i].reservationDate));
         let date = $('<td>').text(dateObject);
         let title = $('<td>').text(data.content[i].title.split(" - ")[0]);
-        dateObject = formatDateTime(new Date(data.content[i].useDate));
-        let useDate = $('<td>').text(`${dateObject}\n${data.content[i].numberOfTicket}매`);
-        let cancelDate = $('<td>').text(formatDateTime(new Date(data.content[i].cancelDeadline)));
+        let useDate = $('<td>').text(`${data.content[i].useDate}\n${data.content[i].numberOfTicket}매`);
+        let cancelDate = $('<td>').text(data.content[i].cancelDeadline);
         let status = $('<td>');
         if (data.content[i].status === "OK") {
             status.text("예매");
@@ -114,8 +112,7 @@ function getReservationDetail() {
                 $(".reservation-user").text(data.username);
                 $(".reservation-id").text(encode(data.reservationId));
 
-                let t = formatDateTime(new Date(data.useDate));
-                $(".reservation-date").text(t);
+                $(".reservation-date").text(data.useDate);
                 $(".reservation-place").text(data.address);
 
                 let stext = "";
@@ -137,8 +134,7 @@ function getReservationDetail() {
                     });
             },
             error: function (jqXHR, textStatus) {
-                console.log(jqXHR);
-                console.log(textStatus);
+                errorAlert("예약 상세 조회에 오류가 발생했습니다.");
             }
         });
     }
@@ -172,8 +168,7 @@ function getQrCode() {
                 }
             },
             error: function (jqXHR, textStatus) {
-                console.log(jqXHR);
-                console.log(textStatus);
+                errorAlert("QR 코드 생성에 오류가 발생했습니다.");
             }
         });
     }

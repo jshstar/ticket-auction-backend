@@ -106,7 +106,7 @@ $('#book-btn').click(function () {
             redirectToPage("/login.html");
             return;
         }
-        
+
         const queryParams = getQueryParams();
         const goodsId = decode(queryParams["goodsId"]);
         const paramValueMap = {
@@ -121,9 +121,4 @@ $('#book-btn').click(function () {
 
 function showGrades() {
     $('#grades-list').toggle(); // show와 hide를 toggle로 변경
-}
-
-function formatDate(dateString) {
-    var date = new Date(dateString);
-    return date.getFullYear() + '.' + (date.getMonth() + 1) + '.' + date.getDate() + '.';
 }

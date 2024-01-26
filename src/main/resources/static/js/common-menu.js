@@ -33,7 +33,7 @@ function verificationPhone() {
             let endTime = new Date(response.data);
             displayRemainingTime(endTime, "update-remaining-time", "update-verification-btn");
             $("#update-verification-btn").addClass("disabled");
-            alert("인증 번호를 발송했습니다.");
+            okAlert("인증 번호를 발송했습니다.");
         },
         error: function (jqXHR, textStatus) {
 
@@ -71,7 +71,7 @@ function updateUserInfo(token, id) {
             verificationNumber: verificationNumber
         }),
         success: function (data) {
-            alert("회원 정보를 수정했습니다.")
+            okAlert("회원 정보를 수정했습니다.")
             movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
@@ -131,7 +131,7 @@ function updatePassword(token, id) {
             password: password
         }),
         success: function (data) {
-            alert("비밀 번호 변경이 완료되었습니다.");
+            okAlert("비밀 번호 변경이 완료되었습니다.");
             movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
@@ -164,7 +164,7 @@ function withdrawUser(token) {
             password: password
         }),
         success: function (data) {
-            alert('탈퇴가 완료되었습니다.');
+            okAlert('탈퇴가 완료되었습니다.');
             requestLogout();
         },
         error: function (jqXHR, textStatus) {
@@ -198,8 +198,7 @@ function getPointChargeList(token, page) {
             }
         },
         error: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            errorAlert("포인트 충전 목록 조회에 오류가 발생했습니다.");
         },
     });
 }
@@ -224,8 +223,7 @@ function getPointList(token, page) {
             }
         },
         error: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            errorAlert("포인트 목록 조회에 오류가 발생했습니다.");
         },
     });
 }

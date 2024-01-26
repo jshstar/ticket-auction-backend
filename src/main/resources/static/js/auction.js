@@ -16,9 +16,8 @@ function getJoinedAuctionList(token, page) {
                 displayAuction(data);
             }
         },
-        fail: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+        error: function (jqXHR, textStatus) {
+            errorAlert("참여 경매 목록 조회에 에러가 발생했습니다.");
         },
     })
 }
@@ -105,9 +104,8 @@ function getBidList(token, page) {
                     displayBid(data);
                 }
             },
-            fail: function (jqXHR, textStatus) {
-                console.log(jqXHR);
-                console.log(textStatus);
+            error: function (jqXHR, textStatus) {
+                errorAlert("입찰 내역 조회에 에러가 발생했습니다.");
             }
         })
 

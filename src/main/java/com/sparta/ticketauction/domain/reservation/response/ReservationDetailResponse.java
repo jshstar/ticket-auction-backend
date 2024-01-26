@@ -3,6 +3,7 @@ package com.sparta.ticketauction.domain.reservation.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.ticketauction.domain.reservation.dto.ReservationSeatInfo;
 
 import lombok.AccessLevel;
@@ -23,6 +24,7 @@ public class ReservationDetailResponse {
 
 	private String title; // 제목
 
+	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime useDate; // 이용일
 
 	private String address; // 공연 장소
