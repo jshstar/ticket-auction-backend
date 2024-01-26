@@ -2,6 +2,7 @@ var white_list = {
     "/": true,
     "/#": true,
     "/index.html": true,
+    "/index.html#": true,
     "/login.html": true,
     "/user/signup.html": true,
     "/goods/goods-details.html": true,
@@ -127,12 +128,17 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.history.back();
-            // redirectToPageWithToken("/index.html", token);
+            // backPageWithToken();
+            redirectToPageWithToken("/index.html", token);
         })
         .fail(function (jqXHR, textStatus) {
             errorAlert("로그인에 실패했습니다. 다시 시도해주세요.");
         });
+}
+
+function backPageWithToken() {
+    window.history.back();
+    checkLoginStatus();
 }
 
 /* 토큰이 필요한 페이지로 이동 시 함수*/
