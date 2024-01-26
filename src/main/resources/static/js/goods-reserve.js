@@ -77,7 +77,7 @@ function initGoodsReservePage() {
                 $('#bid-select-seat').text(currentViewAuctionLabel);
                 $('#bid-current-price').text(data['bidPrice']);
                 $('#bid-start-price').text(data['startPrice']);
-                let leftTime = Math.floor(data['remainTimeMilli'] / 1000);
+                let leftTime = Math.floor(data['remainTimeSeconds']);
                 auctionCloseCountdownStart(leftTime);
                 initMyBidStatus();
                 getLast3Bids();
