@@ -10,7 +10,6 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -41,6 +40,7 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
 	public static final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
+	public static final int COOKIE_REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60; // 한 달
 	private static final Long ACCESS_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
 
 	@Value("${jwt.secret.key}")
@@ -169,19 +169,22 @@ public class JwtUtil {
 		refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
 			.replaceAll("\\+", "%20");
 
-		ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
-			.path("/")
-			.httpOnly(true)
-			.domain(domain)
-			.build();
+		// ResponseCookie cookie = ResponseCookie.from(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken)
+		// 	.path("/")
+		// 	.httpOnly(true)
+		// 	.sameSite("None")
+		// 	.secure(true)
+		// 	.domain(domain)
+		// 	.build();
+		//
+		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
+		cookie.setSecure(true);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(COOKIE_REFRESH_TOKEN_TIME);
+		cookie.setDomain(domain);
 
-		// Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
-		// cookie.setSecure(true);
-		// cookie.setHttpOnly(true);
-		// cookie.setPath("/");
-		// cookie.setDomain(domain);
-
-		response.addHeader("Set-Cookie", cookie.toString());
-		// response.addCookie(cookie);
+		// response.addHeader("Set-Cookie", cookie.toString());
+		response.addCookie(cookie);
 	}
 }
