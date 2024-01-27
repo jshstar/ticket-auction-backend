@@ -7,7 +7,7 @@ function initGoodsReservePage() {
         checkLoginStatus();
     });
     token = Cookies.get('Authorization');
-    console.log(token);
+
     var placeInfo = { // 공연장 정보 초기 설정
         1: { // 공연장 id. 수동으로 관리해야함
             map: [ // 공연장 좌석 배치도. 수동으로 관리해야함
@@ -166,7 +166,6 @@ function initGoodsReservePage() {
                         getLast3Bids();
                     };
                     eventSource.onerror = function (error) {
-                        console.error('EventSource failed:', error);
                         eventSource.close(); // 연결 종료
                     };
                     auctionSSEConnection = eventSource;
@@ -328,7 +327,6 @@ function initGoodsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                console.log(data);
                 for (const seatInfo of data['data']['seatInfos']) {
                     const seatLabel = `${seatInfo.zoneName}-${seatInfo.seatNumber}`;
                     auctionSeats.push(seatLabel);
@@ -440,7 +438,6 @@ function initGoodsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                console.log(data);
                 for (let i = 0; i < 3; i++) {
                     $(`#bid-last-${i + 1}-info`).text('정보 없음');
                 }
