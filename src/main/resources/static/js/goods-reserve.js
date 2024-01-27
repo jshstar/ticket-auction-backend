@@ -166,7 +166,6 @@ function initGoodsReservePage() {
                         getLast3Bids();
                     };
                     eventSource.onerror = function (error) {
-                        console.error('EventSource failed:', error);
                         eventSource.close(); // 연결 종료
                     };
                     auctionSSEConnection = eventSource;

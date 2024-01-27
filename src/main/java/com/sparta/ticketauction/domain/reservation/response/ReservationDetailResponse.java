@@ -24,6 +24,8 @@ public class ReservationDetailResponse {
 
 	private String title; // 제목
 
+	private Long price; // 가격
+
 	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime useDate; // 이용일
 

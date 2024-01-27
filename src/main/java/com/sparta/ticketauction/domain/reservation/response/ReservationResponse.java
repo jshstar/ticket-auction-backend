@@ -28,6 +28,8 @@ public class ReservationResponse {
 
 	private Integer numberOfTicket; // 매수
 
+	private Long price; // 가격
+
 	@JsonFormat(pattern = "yyyy.MM.dd HH:mm")
 	private LocalDateTime cancelDeadline; // 취소가능일
 
