@@ -93,7 +93,7 @@ function initCalendar(events) {
         },
         events: events,
         eventClick: function (calEvent) {
-            $('#schedule-details').text('선택하신 회차: ' + calEvent.title);
+            $('#selected-scheduled-fix').text(calEvent.title);
             selectScheduleId = calEvent.id;
         }
     });

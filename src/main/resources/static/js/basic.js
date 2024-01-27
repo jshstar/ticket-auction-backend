@@ -1,13 +1,28 @@
+var white_list = {
+    "/": true,
+    "/#": true,
+    "/index.html": true,
+    "/index.html#": true,
+    "/login.html": true,
+    "/user/signup.html": true,
+    "/goods/goods-details.html": true,
+};
+
 function getUrl() {
     const hostname = window.location.hostname;
+    const url = hostname === 'localhost' ? 'http://localhost:8080' : 'https://api.ticket-auction.shop';
 
-    // 도메인 설정
-    return hostname === 'localhost' ? `http://${hostname}:8080` : `https://api.ticket-auction.kro.kr`;
+    return url;
 }
 
+
 function checkLoginStatus() {
+    var curHtml = window.location.pathname;
     let token = Cookies.get('Authorization');
-    if (token == null) {
+
+    if (token == null && !white_list[curHtml]) {
+        // 토큰도 없고, 접근 권한 없는 페이지에 접근 시
+        redirectToPage('/login.html');
         updateLoginStatus(null, false);
     } else {
         reissueToken((token) => {
@@ -113,11 +128,17 @@ function requestLogin() {
 
             Cookies.set('Authorization', token, {path: '/'})
 
+            // backPageWithToken();
             redirectToPageWithToken("/index.html", token);
         })
         .fail(function (jqXHR, textStatus) {
             errorAlert("로그인에 실패했습니다. 다시 시도해주세요.");
         });
+}
+
+function backPageWithToken() {
+    window.history.back();
+    checkLoginStatus();
 }
 
 /* 토큰이 필요한 페이지로 이동 시 함수*/
@@ -153,21 +174,21 @@ function redirectToPageWithToken(pageUrl, token) {
 
 // 권한(토큰)이 필요 없는 페이지 이동 시 호출 함수
 function redirectToPage(pageUrl) {
-    fetch(pageUrl, {
-        method: 'GET'
-    })
-        .then(response => {
-            // 응답을 확인하고, 필요한 처리를 수행
-            if (response.ok) {
-                // 페이지 이동 또는 다른 동작 수행
-                window.location.href = pageUrl;
-            } else {
-                console.error('페이지 이동 실패:', response.statusText);
-            }
-        })
-        .catch(error => {
-            console.error('페이지 이동 실패:', error);
-        });
+    // fetch(pageUrl, {
+    //     method: 'GET'
+    // })
+    //     .then(response => {
+    //         // 응답을 확인하고, 필요한 처리를 수행
+    //         if (response.ok) {
+    //             // 페이지 이동 또는 다른 동작 수행
+    window.location.href = pageUrl;
+//             } else {
+//                 console.error('페이지 이동 실패:', response.statusText);
+//             }
+//         })
+//         .catch(error => {
+//             console.error('페이지 이동 실패:', error);
+//         });
 }
 
 // 쿼리 파라미터와 함께 보내기

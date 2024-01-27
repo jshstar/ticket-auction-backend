@@ -124,7 +124,7 @@
 }
 
 .fc-button {
-    background-color: #A9BCD0;
+    background-color: #A9BCD0 !important;
     color: white;
     margin-right: 5px;
     padding: 5px 10px;
@@ -136,4 +136,21 @@
 
 .fc {
     width: 100%; /* FullCalendar의 너비를 조정 */
+}
+
+#schedule-details {
+    margin-top: 20px;
+    padding: 20px;
+
+    border: 2px solid #A593E0;
+    border-radius: 20px;
+}
+
+.fc-time {
+    visibility: hidden;
+}
+
+.fc-day-grid-event {
+    background-color: #A593E0;
+    border: 1px solid #A593E0;
 }

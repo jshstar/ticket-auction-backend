@@ -191,7 +191,6 @@ function submitPlace(token) {
 
 
     function handleSuccess(response) {
-        console.log('Success:', response);
         okAlert('공연장이 성공적으로 추가되었습니다.');
         $('#zonesTable tbody').empty(); // 테이블 내용 초기화
         zones = []; // zones 배열 초기화
@@ -564,7 +563,7 @@ function updateNextPageButtonState() {
 // 스케줄 목록을 가져오는 함수
 function fetchSchedules(goodsId) {
     $.ajax({
-        url: `${getUrl}/api/v1/goods/${goodsId}/schedules`,
+        url: `${getUrl()}/api/v1/goods/${goodsId}/schedules`,
         type: 'GET',
         success: function (response) {
             const schedules = response.data;
@@ -584,7 +583,7 @@ function fetchSchedules(goodsId) {
 // 구역 목록을 가져오는 함수
 function fetchZones(goodsId) {
     $.ajax({
-        url: `${getUrl}/api/v1/zones?goodsId=${goodsId}`,
+        url: `${getUrl()}/api/v1/zones?goodsId=${goodsId}`,
         type: 'GET',
         success: function (response) {
             response.data.forEach(zone => {

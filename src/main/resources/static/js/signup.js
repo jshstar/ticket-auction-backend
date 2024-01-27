@@ -38,9 +38,10 @@ function signup() {
         errorAlert('비밀번호가 일치하지 않습니다.');
         return;
     }
+
     $.ajax({
         type: "POST",
-        url: `${getUrl}/api/v1/users/signup`,
+        url: `${getUrl()}/api/v1/users/signup`,
         contentType: "application/json",
         data: JSON.stringify({
             email: email,

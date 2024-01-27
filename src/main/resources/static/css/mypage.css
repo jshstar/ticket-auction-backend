@@ -21,7 +21,7 @@
 }
 
 .page-name {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .page-name > h2 {
@@ -33,13 +33,6 @@
     margin-top: 10px;
 }
 
-input {
-    height: 50px;
-}
-
-.custom-btn {
-    height: 50px;
-}
 
 .table-d2-list {
     margin-top: 10px;
@@ -53,7 +46,7 @@ table {
 }
 
 thead {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 th, td {
@@ -92,9 +85,16 @@ th, td {
     cursor: pointer;
 }
 
+.table-d2-list > table > .list-tb-body > tr > td > div > .detail-btn {
+    background-color: #D1C2E9;
+    color: white;
+    margin-right: 10px;
+}
+
 .table-d2-list > table > .list-tb-body > tr > td > .detail-btn {
     background-color: #D1C2E9;
     color: white;
+    margin-right: 10px;
 }
 
 #reservation-detail-table > tbody > tr > .detail-menu-name {
@@ -102,7 +102,7 @@ th, td {
 }
 
 #reservation-detail-table > tbody > tr {
-    height: 100px;
+    height: 80px;
 }
 
 #reservation-detail-table > tbody > tr > td:first-child {
@@ -114,8 +114,9 @@ th, td {
     color: white;
 }
 
+
 #reservation-detail-table > tbody > tr > .reservation-detail-info {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 #remaining-time-div {

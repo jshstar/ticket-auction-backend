@@ -51,8 +51,8 @@ function loadGoods() {
 
     loading = true;
     var apiUrl = cursorId === null
-        ? `${getUrl()}/api/v1/goods?categoryName=${curCategoryName}`
-        : `${getUrl()}/api/v1/goods?cursorId=${cursorId}&categoryName=${curCategoryName}`;
+        ? `${getUrl()}/api/v1/goods?categoryName=${curCategoryName}&size=20`
+        : `${getUrl()}/api/v1/goods?cursorId=${cursorId}&categoryName=${curCategoryName}&size=20`;
 
     $.ajax({
         type: "GET",

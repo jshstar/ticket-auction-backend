@@ -41,7 +41,7 @@ function displayReservation(data) {
         let status = $('<td>');
         if (data.content[i].status === "OK") {
             status.text("예매");
-        } else if (date.content[i].status === "CANCEL") {
+        } else if (data.content[i].status === "CANCEL") {
             status.text("취소");
         } else {
             status.text("사용 완료");
@@ -56,13 +56,30 @@ function displayReservation(data) {
                 );
             });
 
+        let cancelBtn = $('<button>').addClass("btn-danger btn").text("취소")
+            .on("click", function () {
+                var now = new Date();
+                if (now.getTime() > data.content[i].canelDeadline) {
+                    errorAlert("취소 가능한 날짜가 지났습니다.");
+                    return;
+                }
+                cancelReservation(ei);
+            });
+
         let tr = $('<tr>').append(id)
             .append(date)
             .append(title)
             .append(useDate)
             .append(cancelDate)
-            .append(status)
-            .append($('<td>').append(btn));
+            .append(status);
+
+
+        if (data.content[i].status === "OK") {
+            tr.append($('<td>').append($('<div>').append(btn).append(cancelBtn)));
+        } else {
+            tr.append($('<td>'));
+        }
+
         $(".list-tb-body").append(tr);
     }
 
@@ -214,6 +231,31 @@ function displayRemainingTimeInQr(endTime) {
             displayRemainingTimeInQr(endTime);
         }, 1000);
     }
+}
+
+function cancelReservation(id) {
+    var reservationId = decode(id);
+    let token = Cookies.get("Authorization");
+
+    confirmAlert("해당 예매를 취소하시겠습니까?")
+        .then((result) => {
+            if (result) {
+
+                $.ajax({
+                    type: "DELETE",
+                    url: `${getUrl()}/api/v1/reservations/${reservationId}`,
+                    headers: {
+                        "Authorization": token
+                    },
+                    success: function () {
+                        okAlert("해당 예매가 취소되었습니다.");
+                    },
+                    error: function () {
+                        errorAlert("예매 취소 중 에러가 발생했습니다.");
+                    },
+                });
+            }
+        });
 }
 
 // 10 미만의 숫자에 0을 붙이는 함수

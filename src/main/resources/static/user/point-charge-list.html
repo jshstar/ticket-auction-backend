@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Ticket Auction</title>
-    
+
     <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
@@ -23,43 +23,45 @@
 
 <header id="headers"></header>
 
-<div class="row mt-5 justify-content-center">
-    <div class="col-2 wrap" id="menu"></div>
-    <div class="col-8 wrap ms-4">
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2" id="menu"></div>
+        <div class="col-8">
 
-        <div class="row page-name">
-            <h2 class="col-sm-12">포인트 충전 내역</h2>
+            <div class="row page-name">
+                <h3 class="col-sm-12">포인트 충전 내역</h3>
+            </div>
+            <div class="table-d2-list text-center">
+                <table>
+                    <colgroup>
+                        <col style="width: 10%;">
+                        <col style="width: 50%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th scope="row">
+                            번호
+                        </th>
+                        <th scope="row">
+                            결제 번호
+                        </th>
+                        <th scope="row">
+                            충전 일자
+                        </th>
+                        <th scope="row">
+                            충전 금액
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="list-tb-body">
+                    <tr class="list-tb-tr"></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination d-flex justify-content-center"></div>
         </div>
-        <div class="table-d2-list text-center">
-            <table>
-                <colgroup>
-                    <col style="width: 10%;">
-                    <col style="width: 50%;">
-                    <col style="width: 20%;">
-                    <col style="width: 20%;">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th scope="row">
-                        번호
-                    </th>
-                    <th scope="row">
-                        결제 번호
-                    </th>
-                    <th scope="row">
-                        충전 일자
-                    </th>
-                    <th scope="row">
-                        충전 금액
-                    </th>
-                </tr>
-                </thead>
-                <tbody class="list-tb-body">
-                <tr class="list-tb-tr"></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination d-flex justify-content-center"></div>
     </div>
 </div>
 </body>
