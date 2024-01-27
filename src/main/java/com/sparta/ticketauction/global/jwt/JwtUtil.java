@@ -178,11 +178,11 @@ public class JwtUtil {
 		// 	.build();
 		//
 		Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, refreshToken);
-		cookie.setSecure(true);
+		// cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
 		cookie.setMaxAge(COOKIE_REFRESH_TOKEN_TIME);
-		cookie.setDomain(domain);
+		// cookie.setDomain(domain);
 
 		// response.addHeader("Set-Cookie", cookie.toString());
 		response.addCookie(cookie);
