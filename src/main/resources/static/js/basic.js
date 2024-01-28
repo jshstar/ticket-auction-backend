@@ -102,7 +102,8 @@ function requestLogout() {
             console.log("Logout successful");
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
-
+            localStorage.removeItem('RefreshToken');
+            
             redirectToPage("/index.html");
         },
         error: function (jqXHR, textStatus) {
@@ -125,8 +126,10 @@ function requestLogin() {
     })
         .done(function (res, status, xhr) {
             const token = xhr.getResponseHeader('Authorization');
+            const refreshToken = xhr.getResponseHeader('RefreshToken');
 
             Cookies.set('Authorization', token, {path: '/'})
+            localStorage.setItem('RefreshToken', refreshToken);
 
             // backPageWithToken();
             redirectToPageWithToken("/index.html", token);
@@ -261,32 +264,6 @@ function movePage() {
     }
 }
 
-function displayRemainingTime(endTime, tag, btn) {
-    let now = new Date();
-    let timeDiff = endTime - now;
-
-    if (timeDiff <= 0) {
-        $(`#${tag}`).empty();
-        $(`#${btn}`).removeClass("disabled");
-    } else {
-        // 남은 시간을 초로 변환
-        let secondsRemaining = Math.floor(timeDiff / 1000);
-
-        // 분과 초 계산
-        let minutes = Math.floor(secondsRemaining / 60);
-        let seconds = secondsRemaining % 60;
-
-        // 시간 표시를 위해 2자리로 포맷팅
-        let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
-
-        // 화면에 남은 시간 표시
-        $(`#${tag}`).text(`  ${formattedTime}`);
-
-        setTimeout(function () {
-            displayRemainingTime(endTime);
-        }, 1000);
-    }
-}
 
 // 10 미만의 숫자에 0을 붙이는 함수
 function padZero(number) {

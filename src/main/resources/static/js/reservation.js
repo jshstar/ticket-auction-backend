@@ -249,6 +249,7 @@ function cancelReservation(id) {
                     },
                     success: function () {
                         okAlert("해당 예매가 취소되었습니다.");
+                        window.location.reload();
                     },
                     error: function () {
                         errorAlert("예매 취소 중 에러가 발생했습니다.");

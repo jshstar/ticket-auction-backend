@@ -2,7 +2,6 @@ package com.sparta.ticketauction.global.jwt;
 
 import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -40,8 +39,7 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
 	public static final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
-	public static final int COOKIE_REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60; // 한 달
-	private static final Long ACCESS_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
+	private static final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 한 달
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -79,15 +77,16 @@ public class JwtUtil {
 	public String createRefreshToken(Long id, String email, Role role, String nickname) {
 		Date now = new Date();
 
-		return Jwts.builder()
-			.setSubject(email)
-			.claim(AUTHORIZATION_KEY, role)
-			.claim("identify", id)
-			.claim("nickname", nickname)
-			.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
-			.setIssuedAt(now)
-			.signWith(key, SignatureAlgorithm.HS256)
-			.compact();
+		return BEARER_PREFIX +
+			Jwts.builder()
+				.setSubject(email)
+				.claim(AUTHORIZATION_KEY, role)
+				.claim("identify", id)
+				.claim("nickname", nickname)
+				.setExpiration(new Date(now.getTime() + REFRESH_TOKEN_TIME))
+				.setIssuedAt(now)
+				.signWith(key, SignatureAlgorithm.HS256)
+				.compact();
 	}
 
 	/* JWT 토큰 substring */
@@ -128,24 +127,29 @@ public class JwtUtil {
 	}
 
 	public String resolveRefreshToken(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
+		// Cookie[] cookies = request.getCookies();
+		//
+		// if (cookies == null) {
+		// 	return null;
+		// }
+		//
+		// String refreshToken = null;
+		// for (Cookie cookie : cookies) {
+		// 	if (cookie.getName().equals(REFRESH_TOKEN_HEADER)) {
+		// 		refreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+		// 		break;
+		// 	}
+		// }
+		//
+		// if (refreshToken != null && refreshToken.startsWith(BEARER_PREFIX)) {
+		// 	return substringToken(refreshToken);
+		// }
 
-		if (cookies == null) {
+		String refreshToken = request.getHeader(REFRESH_TOKEN_HEADER);
+		if (!StringUtils.hasText(refreshToken)) {
 			return null;
 		}
-
-		String refreshToken = null;
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals(REFRESH_TOKEN_HEADER)) {
-				refreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-				break;
-			}
-		}
-
-		if (refreshToken != null && refreshToken.startsWith(BEARER_PREFIX)) {
-			return substringToken(refreshToken);
-		}
-		return refreshToken;
+		return substringToken(refreshToken);
 	}
 
 	public String getAccessTokenFromRequestHeader(HttpServletRequest request) {
@@ -161,8 +165,9 @@ public class JwtUtil {
 		return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
 	}
 
-	public void setAccessTokenInHeader(HttpServletResponse response, String accessToken) {
+	public void setTokenInHeader(HttpServletResponse response, String accessToken, String refreshToken) {
 		response.setHeader(ACCESS_TOKEN_HEADER, accessToken);
+		response.setHeader(REFRESH_TOKEN_HEADER, refreshToken);
 	}
 
 	public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
@@ -181,7 +186,6 @@ public class JwtUtil {
 		// cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
-		cookie.setMaxAge(COOKIE_REFRESH_TOKEN_TIME);
 		// cookie.setDomain(domain);
 
 		// response.addHeader("Set-Cookie", cookie.toString());

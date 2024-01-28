@@ -128,10 +128,9 @@ function verificationPhone() {
         }),
         success: function (response) {
             let endTime = new Date(response.data);
-            displayRemainingTime(endTime, "signup-remaining-time", "verification-btn");
             $("#verification-btn").addClass("disabled");
-
             okAlert("인증 번호를 발송했습니다.");
+            displayRemainingTimeOfSignup(endTime);
         },
         error: function (jqXHR, textStatus) {
 
@@ -155,6 +154,32 @@ function verificationPhone() {
     });
 }
 
+function displayRemainingTimeOfSignup(endTime) {
+    let now = new Date();
+    let timeDiff = endTime - now;
+
+    if (timeDiff <= 0) {
+        $("#signup-remaining-time").empty();
+        $("#verification-btn").removeClass("disabled");
+    } else {
+        // 남은 시간을 초로 변환
+        let secondsRemaining = Math.floor(timeDiff / 1000);
+
+        // 분과 초 계산
+        let minutes = Math.floor(secondsRemaining / 60);
+        let seconds = secondsRemaining % 60;
+
+        // 시간 표시를 위해 2자리로 포맷팅
+        let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+
+        // 화면에 남은 시간 표시
+        $("#signup-remaining-time").text(`  ${formattedTime}`);
+
+        setTimeout(function () {
+            displayRemainingTimeOfSignup(endTime);
+        }, 1000);
+    }
+}
 
 function resetValidationMessages() {
     $("#email-span, #password-span, #name-span, #nickname-span, #birth-span, #phoneNumber-span, #verificationNumber-span")
