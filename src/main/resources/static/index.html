@@ -37,9 +37,12 @@
     });
 
     $(document).ready(function () {
-        getGoodsCategories();
-        loadGoods();
+        getGoodsCategories()
+            .then(function (data) {
+                loadGoods();
+            });
     });
+
 
     $(window).scroll(function () {
         if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {

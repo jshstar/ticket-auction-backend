@@ -1,45 +1,48 @@
-var curCategoryName = "연극";
+var curCategoryName = null;
 var cursorId = null;
 var index = 0;
 var loading = false;
 
 function getGoodsCategories() {
-    $.ajax({
-        type: "GET",
-        url: `${getUrl()}/api/v1/goods-categorys`,
-        success: function (response) {
-            for (let i = 0; i < response.data.length; i++) {
-                let name = response.data[i].categoryName;
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "GET",
+            url: `${getUrl()}/api/v1/goods-categorys`,
+            success: function (response) {
+                for (let i = 0; i < response.data.length; i++) {
+                    let name = response.data[i].categoryName;
 
-                let div = $('<div>').addClass("btn-div")
-                let btn = $('<button>').text(name)
-                    .addClass("btn round-btn")
-                    .addClass(response.data[i].categoryName);
-
-                if (name === '연극') {
-                    btn = $('<button>').text(response.data[i].categoryName)
-                        .addClass("btn round-btn active")
+                    let div = $('<div>').addClass("btn-div")
+                    let btn = $('<button>').text(name)
+                        .addClass("btn round-btn")
                         .addClass(response.data[i].categoryName);
+
+                    if (curCategoryName === null && i === 0) {
+                        btn.addClass("active");
+                        curCategoryName = response.data[i].categoryName;
+                    }
+
+                    btn.on("click", function () {
+                        $(".btn-div button").removeClass("active");
+                        $(`.${name}`).addClass("active");
+
+                        curCategoryName = response.data[i].categoryName;
+                        cursorId = null;
+                        $(".goods-posters-row").empty();
+
+                        loadGoods();
+                    });
+
+                    let db = div.append(btn);
+                    $(".btn-by-category").append(db);
                 }
-
-                btn.on("click", function () {
-                    $(".btn-div button").removeClass("active");
-                    $(`.${name}`).addClass("active");
-
-                    curCategoryName = response.data[i].categoryName;
-                    cursorId = null;
-                    $(".goods-posters-row").empty();
-
-                    loadGoods();
-                });
-
-                let db = div.append(btn);
-                $(".btn-by-category").append(db);
+                resolve(response.data);
+            },
+            error: function (qXHR, textStatus) {
+                reject(qXHR);
+                console.log(qXHR);
             }
-        },
-        error: function (qXHR, textStatus) {
-            console.log(qXHR);
-        }
+        });
     });
 }
 
