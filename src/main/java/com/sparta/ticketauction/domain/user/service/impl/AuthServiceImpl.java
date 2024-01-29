@@ -171,8 +171,8 @@ public class AuthServiceImpl implements AuthService {
 		String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
 		String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
-		jwtUtil.setAccessTokenInHeader(response, newAccessToken);
-		jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
+		jwtUtil.setTokenInHeader(response, newAccessToken, newRefreshToken);
+		// jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
 
 		lettuceUtils.delete(REFRESH_TOKEN_HEADER + " " + username);
 		lettuceUtils.save(
