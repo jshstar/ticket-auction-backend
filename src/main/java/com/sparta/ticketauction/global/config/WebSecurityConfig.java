@@ -96,11 +96,13 @@ public class WebSecurityConfig {
 					.requestMatchers("/*/*.html", "/*.html").permitAll()
 					.requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
 					.requestMatchers("/api/v1/users/signup", "/api/v1/auth/login").permitAll()
+					.requestMatchers("/app/actuator/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods-categorys/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/goods/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/places/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/zones/**").permitAll()
 					.requestMatchers(HttpMethod.GET, "/api/v1/auctions/*/bids/sse").permitAll()
+
 					.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 					.anyRequest().authenticated()
 		);
