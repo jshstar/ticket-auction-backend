@@ -4,12 +4,14 @@ spring:
 
 ---
 server:
+  port: 8080
   host:
     front: localhost8080
 spring:
   config:
     activate:
       on-profile: local
+
   data:
     redis:
       host: localhost
@@ -19,6 +21,7 @@ spring:
     username: ${db_username}
     password: ${db_password}
     url: jdbc:mysql://localhost:3306/ticket_auction
+
     hikari:
       connection-timeout: 3000
       validation-timeout: 3000
@@ -69,23 +72,3 @@ payment:
     secret-key: ${TOSS_SECRET_KEY}
     success-url: ${SUCCESS_URL}
     fail-url: ${FAIL_URL}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-        exclude:
-          - "bean"
-          - "dev"
-      base-path: "/secure/actuator"
-
-
-
-log:
-  config:
-    path: ./logs
-    filename: ticket-auction-local
-    maxHistory: 7 # 7일
-    maxFileSize: 100MB
-    totalSizeCap: 1GB # 로그 파일 사이즈
