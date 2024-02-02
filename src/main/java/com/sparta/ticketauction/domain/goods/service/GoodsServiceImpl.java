@@ -6,6 +6,7 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +33,11 @@ import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GoodsServiceImpl implements GoodsService {
 
 	private final GoodsInfoRepository goodsInfoRepository;
@@ -150,6 +153,7 @@ public class GoodsServiceImpl implements GoodsService {
 	// 공연 정보 카테고리별 페이징 페이징 조회
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "goodsGlobalCache", key = "{#cursorId ?: 'default', #categoryName}", cacheManager = "redisCacheManager")
 	public GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName) {
 		List<GoodsGetQueryResponse> goodsGetQueryResponses =
 			goodsRepository.findAllByGoodsAndCategoryName(
@@ -158,7 +162,7 @@ public class GoodsServiceImpl implements GoodsService {
 				categoryName
 			);
 		Long nextCursorId = -1L;
-
+		log.info("공연 정보 페이징 조회 캐쉬 저장 안됨");
 		if (!goodsGetQueryResponses.isEmpty()) {
 			int lastSize = goodsGetQueryResponses.size() - 1;
 			nextCursorId = goodsGetQueryResponses.get(lastSize).getGoodsId();
