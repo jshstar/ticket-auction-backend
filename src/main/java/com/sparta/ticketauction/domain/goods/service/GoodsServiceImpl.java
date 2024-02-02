@@ -5,6 +5,7 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -173,9 +174,15 @@ public class GoodsServiceImpl implements GoodsService {
 
 	// 공연 카테고리 전체 조회
 	@Override
+	@Cacheable(value = "goodsCategoryGlobalCache", cacheManager = "redisCacheManager")
 	public List<GoodsCategoryGetResponse> getAllGoodsCategory() {
 		List<GoodsCategory> goodsCategorieList = goodsCategoryRepository.findAll();
-		return goodsCategorieList.stream().map(GoodsCategoryGetResponse::new).toList();
+		return goodsCategorieList
+			.stream()
+			.map(category -> new GoodsCategoryGetResponse(category.getName()))
+			.collect(
+				Collectors.toList()
+			);
 	}
 
 	// 공연 정보 조회

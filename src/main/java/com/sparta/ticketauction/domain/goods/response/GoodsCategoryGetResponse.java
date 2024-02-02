@@ -1,6 +1,7 @@
 package com.sparta.ticketauction.domain.goods.response;
 
-import com.sparta.ticketauction.domain.goods.entity.GoodsCategory;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 
@@ -8,7 +9,8 @@ import lombok.Getter;
 public class GoodsCategoryGetResponse {
 	private final String categoryName;
 
-	public GoodsCategoryGetResponse(GoodsCategory goodsCategory) {
-		this.categoryName = goodsCategory.getName();
+	@JsonCreator
+	public GoodsCategoryGetResponse(@JsonProperty("goodsCategory") String goodsCategory) {
+		this.categoryName = goodsCategory;
 	}
 }
