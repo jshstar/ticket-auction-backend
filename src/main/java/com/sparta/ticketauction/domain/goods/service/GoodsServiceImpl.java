@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public final GoodsRepository goodsRepository;
 
+	// 공연 생성
 	@Override
 	public Goods createGoods(GoodsCreateRequest goodsCreateRequest, Place place, GoodsInfo goodsInfo) {
 		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
@@ -163,7 +165,6 @@ public class GoodsServiceImpl implements GoodsService {
 				categoryName
 			);
 		Long nextCursorId = -1L;
-		log.info("공연 정보 페이징 조회 캐쉬 저장 안됨");
 		if (!goodsGetQueryResponses.isEmpty()) {
 			int lastSize = goodsGetQueryResponses.size() - 1;
 			nextCursorId = goodsGetQueryResponses.get(lastSize).getGoodsId();
@@ -210,5 +211,17 @@ public class GoodsServiceImpl implements GoodsService {
 		return GoodsAuctionSeatInfoResponse.builder()
 			.seatInfos(goodsRepository.findGoodsAuctionSeatInfo(scheduleId, goodsId))
 			.build();
+	}
+
+	// Redis에 저장되어 있는 공연 캐쉬 정보 삭제
+	@CacheEvict(value = "goodsGlobalCache", allEntries = true)
+	public void clearGoodsCache() {
+
+	}
+
+	// Redis에 저장되어 있는 공연카테고리 캐쉬 정보 삭제
+	@CacheEvict(value = "goodsCategoryGlobalCache", allEntries = true)
+	public void clearGoodsCategoryCache() {
+
 	}
 }
