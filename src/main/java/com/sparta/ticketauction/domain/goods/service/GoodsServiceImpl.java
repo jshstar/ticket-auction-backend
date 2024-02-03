@@ -5,10 +5,12 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +53,8 @@ public class GoodsServiceImpl implements GoodsService {
 	private final GoodsCategoryRepository goodsCategoryRepository;
 
 	public final GoodsRepository goodsRepository;
+
+	private final StringRedisTemplate stringRedisTemplate;
 
 	// 공연 생성
 	@Override
@@ -223,5 +227,18 @@ public class GoodsServiceImpl implements GoodsService {
 	@CacheEvict(value = "goodsCategoryGlobalCache", allEntries = true)
 	public void clearGoodsCategoryCache() {
 
+	}
+
+	/**
+	 * 특정 카테고리에 해당하는 캐시를 삭제합니다.
+	 *
+	 * @param categoryName 삭제할 캐시의 카테고리 이름
+	 */
+	public void evictCacheForCategory(String categoryName) {
+		String pattern = "goodsGlobalCache::*," + categoryName;
+		Set<String> keys = stringRedisTemplate.keys(pattern);
+		if (keys != null && !keys.isEmpty()) {
+			stringRedisTemplate.delete(keys);
+		}
 	}
 }

@@ -124,7 +124,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Goods goods = goodsService.createGoods(goodsCreateRequest, place, goodsInfo);
 		goodsInfo.addGoods(goods);
-		goodsService.clearGoodsCache();
+		goodsService.evictCacheForCategory(goodsInfo.getGoodsCategory().getName());
 
 		LocalTime startTime = goodsCreateRequest.getStartTime();
 

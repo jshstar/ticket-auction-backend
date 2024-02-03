@@ -65,7 +65,7 @@ public interface GoodsService {
 	GoodsAuctionSeatInfoResponse findGoodsAuctionSeatInfo(Long scheduleId, Long goodsId);
 
 	// Redis에 저장되어 있는 공연 캐쉬 정보 삭제
-	void clearGoodsCache();
+	void evictCacheForCategory(String categoryName);
 
 	// Redis에 저장되어 있는 공연카테고리 캐쉬 정보 삭제
 	void clearGoodsCategoryCache();
