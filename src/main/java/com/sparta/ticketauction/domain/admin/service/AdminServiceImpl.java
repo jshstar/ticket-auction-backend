@@ -104,6 +104,7 @@ public class AdminServiceImpl implements AdminService {
 
 		GoodsCategory goodsCategory = goodsService.createGoodsCategory(goodsInfoCreateRequest.getCategoryName());
 		goodsInfo.updateGoodsCategory(goodsCategory);
+		goodsService.clearGoodsCategoryCache();
 
 		return new GoodsInfoCreateResponse(goodsInfo.getId());
 
@@ -123,6 +124,7 @@ public class AdminServiceImpl implements AdminService {
 
 		Goods goods = goodsService.createGoods(goodsCreateRequest, place, goodsInfo);
 		goodsInfo.addGoods(goods);
+		goodsService.evictCacheForCategory(goodsInfo.getGoodsCategory().getName());
 
 		LocalTime startTime = goodsCreateRequest.getStartTime();
 
@@ -160,4 +162,5 @@ public class AdminServiceImpl implements AdminService {
 	public void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest auctionCreateRequest) {
 		auctionService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
 	}
+
 }

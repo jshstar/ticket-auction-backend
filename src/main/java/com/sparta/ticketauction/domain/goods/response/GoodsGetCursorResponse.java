@@ -1,22 +1,23 @@
 package com.sparta.ticketauction.domain.goods.response;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 
 @Getter
 public class GoodsGetCursorResponse {
-	private final List<GoodsResponse> goodsResponses;
+	private final List<GoodsGetQueryResponse> goodsResponses;
 	private final Long nextCursorId;
 
+	@JsonCreator
 	public GoodsGetCursorResponse(
-		List<GoodsGetQueryResponse> goodsGetQueryResponses,
-		Long nextCursorId
+		@JsonProperty("goodsGetQueryResponses") List<GoodsGetQueryResponse> goodsGetQueryResponses,
+		@JsonProperty("nextCursorId") Long nextCursorId
 	) {
-		this.goodsResponses = goodsGetQueryResponses.stream()
-			.map(GoodsResponse::new)
-			.collect(Collectors.toList());
+		this.goodsResponses = goodsGetQueryResponses;
 		this.nextCursorId = nextCursorId;
 	}
 

@@ -5,7 +5,12 @@ import static com.sparta.ticketauction.global.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +37,11 @@ import com.sparta.ticketauction.global.exception.ApiException;
 import com.sparta.ticketauction.global.util.S3Uploader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GoodsServiceImpl implements GoodsService {
 
 	private final GoodsInfoRepository goodsInfoRepository;
@@ -47,6 +54,9 @@ public class GoodsServiceImpl implements GoodsService {
 
 	public final GoodsRepository goodsRepository;
 
+	private final StringRedisTemplate stringRedisTemplate;
+
+	// 공연 생성
 	@Override
 	public Goods createGoods(GoodsCreateRequest goodsCreateRequest, Place place, GoodsInfo goodsInfo) {
 		Goods goods = goodsCreateRequest.toEntity(place, goodsInfo);
@@ -150,6 +160,7 @@ public class GoodsServiceImpl implements GoodsService {
 	// 공연 정보 카테고리별 페이징 페이징 조회
 	@Override
 	@Transactional(readOnly = true)
+	@Cacheable(value = "goodsGlobalCache", key = "{#cursorId ?: 'default', #categoryName}", cacheManager = "redisCacheManager")
 	public GoodsGetCursorResponse getGoodsWithCursor(Long cursorId, int size, String categoryName) {
 		List<GoodsGetQueryResponse> goodsGetQueryResponses =
 			goodsRepository.findAllByGoodsAndCategoryName(
@@ -158,7 +169,6 @@ public class GoodsServiceImpl implements GoodsService {
 				categoryName
 			);
 		Long nextCursorId = -1L;
-
 		if (!goodsGetQueryResponses.isEmpty()) {
 			int lastSize = goodsGetQueryResponses.size() - 1;
 			nextCursorId = goodsGetQueryResponses.get(lastSize).getGoodsId();
@@ -169,9 +179,15 @@ public class GoodsServiceImpl implements GoodsService {
 
 	// 공연 카테고리 전체 조회
 	@Override
+	@Cacheable(value = "goodsCategoryGlobalCache", cacheManager = "redisCacheManager")
 	public List<GoodsCategoryGetResponse> getAllGoodsCategory() {
 		List<GoodsCategory> goodsCategorieList = goodsCategoryRepository.findAll();
-		return goodsCategorieList.stream().map(GoodsCategoryGetResponse::new).toList();
+		return goodsCategorieList
+			.stream()
+			.map(category -> new GoodsCategoryGetResponse(category.getName()))
+			.collect(
+				Collectors.toList()
+			);
 	}
 
 	// 공연 정보 조회
@@ -199,5 +215,30 @@ public class GoodsServiceImpl implements GoodsService {
 		return GoodsAuctionSeatInfoResponse.builder()
 			.seatInfos(goodsRepository.findGoodsAuctionSeatInfo(scheduleId, goodsId))
 			.build();
+	}
+
+	// Redis에 저장되어 있는 공연 캐쉬 정보 삭제
+	@CacheEvict(value = "goodsGlobalCache", allEntries = true)
+	public void clearGoodsCache() {
+
+	}
+
+	// Redis에 저장되어 있는 공연카테고리 캐쉬 정보 삭제
+	@CacheEvict(value = "goodsCategoryGlobalCache", allEntries = true)
+	public void clearGoodsCategoryCache() {
+
+	}
+
+	/**
+	 * 특정 카테고리에 해당하는 캐시를 삭제합니다.
+	 *
+	 * @param categoryName 삭제할 캐시의 카테고리 이름
+	 */
+	public void evictCacheForCategory(String categoryName) {
+		String pattern = "goodsGlobalCache::*," + categoryName;
+		Set<String> keys = stringRedisTemplate.keys(pattern);
+		if (keys != null && !keys.isEmpty()) {
+			stringRedisTemplate.delete(keys);
+		}
 	}
 }
