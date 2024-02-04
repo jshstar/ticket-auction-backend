@@ -23,10 +23,4 @@ public interface ReservationSeatQueryRepository {
 	 * @return
 	 */
 	List<ReservedSeatResponse> findReservedSeatsFromCache(Long scheduleId);
-
-	/**
-	 * 시작하지 않은 회차들에 예매된 좌석을 모두 조회한다.
-	 * @return
-	 */
-	List<ReservationSeat> findActiveScheduleSeats();
 }
