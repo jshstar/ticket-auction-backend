@@ -17,7 +17,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -44,13 +43,13 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 		// 워밍업 작업은 한 인스턴스만 실행하도록 한다.
 		String lockKey = "SEAT_WARM_UP_LOCK";
 		String lockValue = "locked";
-		Boolean acquired = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, 15, TimeUnit.MINUTES);
+		Boolean acquired = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, 20, TimeUnit.MINUTES);
 		if (Boolean.FALSE.equals(acquired)) {
 			return;
 		}
 
 		int pageNumber = 0;
-		int pageSize = 5000; // 페이지 당 요소 수
+		int pageSize = 1000; // 페이지 당 요소 수
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		LocalDateTime now = LocalDateTime.now();
 		Slice<ReservationSeat> slice;
@@ -89,46 +88,31 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 			// schedule에 포함된 zoneGradeId 목록 redis에 등록
 			Set<Map.Entry<String, Set<Long>>> szEntry = scheduleZoneGrades.entrySet();
 
-			List<Object> szResult = redisTemplate.executePipelined((RedisConnection connection) -> {
-				StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
-				Jackson2JsonRedisSerializer<Set<Long>> valueSerializer =
-					new Jackson2JsonRedisSerializer<>((Class)Set.class);
+			StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
+			Jackson2JsonRedisSerializer<Set<Long>> valueSerializer =
+				new Jackson2JsonRedisSerializer<>((Class)Set.class);
 
-				szEntry.forEach(entry -> {
-					String scheduleId = entry.getKey().substring(
-						entry.getKey().indexOf(":") + 1,
-						entry.getKey().indexOf("}")
-					);
-					Duration between = Duration.between(now, timeMap.get(scheduleId));
-					long ttl = TimeUnit.SECONDS.toSeconds(between.getSeconds()); // TTL 값 설정
-					byte[] keyByte = keySerializer.serialize(entry.getKey());
-					byte[] valueByte = valueSerializer.serialize(entry.getValue());
-					connection.set(keyByte, valueByte);
-					connection.expire(keyByte, ttl);
-				});
-				return null;
+			szEntry.forEach(entry -> {
+				String scheduleId = entry.getKey().substring(
+					entry.getKey().indexOf(":") + 1,
+					entry.getKey().indexOf("}")
+				);
+				Duration between = Duration.between(now, timeMap.get(scheduleId));
+				long ttl = TimeUnit.SECONDS.toSeconds(between.getSeconds()); // TTL 값 설정
+
+				redisTemplate.opsForValue().set(entry.getKey(), entry.getValue(), ttl, TimeUnit.SECONDS);
 			});
 
 			// 캐시 redis에 등록
-			List<Object> cacheResult = redisTemplate.executePipelined((RedisConnection connection) -> {
-				StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
-				Jackson2JsonRedisSerializer<List<Integer>> valueSerializer =
-					new Jackson2JsonRedisSerializer<>((Class)List.class);
-
-				Set<Map.Entry<String, List<Integer>>> cacheEntry = cache.entrySet();
-				cacheEntry.forEach(entry -> {
-					String scheduleId = entry.getKey().substring(
-						entry.getKey().indexOf(":") + 1,
-						entry.getKey().indexOf("}")
-					);
-					byte[] keyByte = keySerializer.serialize(entry.getKey());
-					byte[] valueByte = valueSerializer.serialize(entry.getValue());
-					Duration between = Duration.between(now, timeMap.get(scheduleId));
-					long ttl = TimeUnit.SECONDS.toSeconds(between.getSeconds()); // TTL 값 설정
-					connection.set(keyByte, valueByte);
-					connection.expire(keyByte, ttl);
-				});
-				return null;
+			Set<Map.Entry<String, List<Integer>>> cacheEntry = cache.entrySet();
+			cacheEntry.forEach(entry -> {
+				String scheduleId = entry.getKey().substring(
+					entry.getKey().indexOf(":") + 1,
+					entry.getKey().indexOf("}")
+				);
+				Duration between = Duration.between(now, timeMap.get(scheduleId));
+				long ttl = TimeUnit.SECONDS.toSeconds(between.getSeconds()); // TTL 값 설정
+				redisTemplate.opsForValue().set(entry.getKey(), entry.getValue(), ttl, TimeUnit.SECONDS);
 			});
 
 			pageable = slice.nextPageable(); // 다음 페이지를 위한 Pageable 객체 준비
