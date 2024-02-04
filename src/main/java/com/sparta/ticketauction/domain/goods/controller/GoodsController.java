@@ -127,7 +127,8 @@ public class GoodsController {
 
 	@GetMapping("/goods/{scheduleId}/reserved-seats")
 	public ResponseEntity<ApiResponse<List<ReservedSeatResponse>>> getReservedSeats(@PathVariable Long scheduleId) {
-		List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeats(scheduleId);
+		// List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeats(scheduleId);
+		List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeatsFromCache(scheduleId);
 
 		return ResponseEntity
 			.status(SUCCESS_GET_GOODS_RESERVED_SEAT_INFO.getHttpStatus())

@@ -1,13 +1,16 @@
 package com.sparta.ticketauction.domain.reservation.service;
 
+import static com.sparta.ticketauction.domain.reservation.reservation_seat.repository.ReservationSeatQueryRepositoryImpl.*;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +29,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.sparta.ticketauction.domain.auction.entity.Auction;
+import com.sparta.ticketauction.domain.auction.repository.AuctionRepository;
 import com.sparta.ticketauction.domain.bid.entity.Bid;
 import com.sparta.ticketauction.domain.grade.entity.ZoneGrade;
 import com.sparta.ticketauction.domain.grade.service.ZoneGradeService;
@@ -78,7 +82,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	private final String RESERVATION_AUTH_PREFIX = "ReservationAuth: ";
 
-	private final String RESERVATION_CACHE_PREFIX = "Seat:";
+	private final AuctionRepository auctionRepository;
 
 	@Override
 	@Transactional
@@ -309,6 +313,9 @@ public class ReservationServiceImpl implements ReservationService {
 			if (reservationSeatRepository.existsById(request.toId())) {
 				throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
 			}
+			if (isAuctionSeat(request.getScheduleId(), request.getZoneGradeId(), request.getSeatNumber())) {
+				throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
+			}
 		});
 	}
 
@@ -420,17 +427,13 @@ public class ReservationServiceImpl implements ReservationService {
 		LocalDateTime goodsStartDateTime
 	) {
 		// 키 조합
-		StringBuilder sb = new StringBuilder(RESERVATION_CACHE_PREFIX);
-		sb.append(scheduleId);
-		sb.append("-");
-		sb.append(zoneGradeId);
-		String key = sb.toString();
+		String key = "{%s%d}:%d".formatted(SEAT_CACHE_PREFIX, scheduleId, zoneGradeId);
 
-		HashMap<String, String> hashMap = (HashMap<String, String>)redisTemplate.opsForValue().get(key);
-		if (hashMap == null) {
-			hashMap = new HashMap<>();
+		List<Integer> seatNumbers = (List<Integer>)redisTemplate.opsForValue().get(key);
+		if (seatNumbers == null) {
+			seatNumbers = new ArrayList<>();
 		}
-		hashMap.put(seatNumber.toString(), "OK");
+		seatNumbers.add(seatNumber);
 
 		// 공연 시작 시간 지났으면 예외처리
 		LocalDateTime now = LocalDateTime.now();
@@ -438,7 +441,7 @@ public class ReservationServiceImpl implements ReservationService {
 			throw new ApiException(ErrorCode.ALREADY_START_SCHEDULE);
 		}
 		Duration between = Duration.between(now, goodsStartDateTime);
-		redisTemplate.opsForValue().set(key, hashMap, between.getSeconds(), TimeUnit.SECONDS);
+		redisTemplate.opsForValue().set(key, seatNumbers, between.getSeconds(), TimeUnit.SECONDS);
 	}
 
 	private void deleteReservationSeatInfoToRedis(
@@ -448,19 +451,21 @@ public class ReservationServiceImpl implements ReservationService {
 		LocalDateTime goodsStartDateTime
 	) {
 		// 키 조합
-		StringBuilder sb = new StringBuilder(RESERVATION_CACHE_PREFIX);
-		sb.append(scheduleId);
-		sb.append("-");
-		sb.append(zoneGradeId);
-		String key = sb.toString();
+		String key = "{%s%d}:%d".formatted(SEAT_CACHE_PREFIX, scheduleId, zoneGradeId);
 
-		HashMap<String, String> hashMap = (HashMap<String, String>)redisTemplate.opsForValue().get(key);
-		if (hashMap == null) {
+		List<Integer> seatNumbers = (List<Integer>)redisTemplate.opsForValue().get(key);
+		if (seatNumbers == null) {
 			throw new ApiException(ErrorCode.NOT_FOUND_SCHEDULE);
 		}
-		hashMap.remove(seatNumber.toString());
+		seatNumbers.remove(seatNumber);
 		LocalDateTime now = LocalDateTime.now();
 		Duration between = Duration.between(now, goodsStartDateTime);
-		redisTemplate.opsForValue().set(key, hashMap, between.getSeconds(), TimeUnit.SECONDS);
+		redisTemplate.opsForValue().set(key, seatNumbers, between.getSeconds(), TimeUnit.SECONDS);
+	}
+
+	// 경매 좌석은 예매 못하도록 체크하는 메서드
+	private boolean isAuctionSeat(Long scheduleId, Long zoneGradeId, Integer seatNumber) {
+		Optional<Auction> seat = auctionRepository.findBySeatInfo(scheduleId, zoneGradeId, seatNumber);
+		return seat.isPresent();
 	}
 }

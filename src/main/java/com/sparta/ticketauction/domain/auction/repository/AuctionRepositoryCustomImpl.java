@@ -4,6 +4,7 @@ import static com.sparta.ticketauction.domain.auction.entity.QAuction.*;
 import static com.sparta.ticketauction.domain.bid.entity.QBid.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,18 @@ public class AuctionRepositoryCustomImpl implements AuctionRepositoryCustom {
 			.where(searchAuction(pAuction))
 			.fetchFirst();
 		return result != null;
+	}
+
+	@Override
+	public Optional<Auction> findBySeatInfo(Long scheduleId, Long zoneGradeId, Integer seatNumber) {
+		Auction auction1 = jpaQueryFactory
+			.select(auction)
+			.from(auction)
+			.where(auction.schedule.id.eq(scheduleId),
+				auction.zoneGrade.id.eq(zoneGradeId),
+				auction.seatNumber.eq(seatNumber))
+			.fetchOne();
+		return Optional.ofNullable(auction1);
 	}
 
 	private Predicate searchAuction(Auction pAuction) {
