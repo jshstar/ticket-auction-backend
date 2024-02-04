@@ -44,18 +44,20 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 		int pageNumber = 0;
 		int pageSize = 50000; // 페이지 당 요소 수
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
+		LocalDateTime now = LocalDateTime.now();
 		Slice<ReservationSeat> slice;
 		do {
-			slice = seatRepository.findByScheduleStartDateTimeGreaterThan(LocalDateTime.now(), pageable);
+			slice = seatRepository.findByScheduleStartDateTimeGreaterThan(now, pageable);
+			if (slice.isEmpty()) {
+				break;
+			}
 
 			List<ReservationSeat> seats = slice.getContent();
-
 			Map<String, List<Integer>> cache = new HashMap<>(); //
 			Map<String, Set<Long>> scheduleZoneGrades = new HashMap<>();
 			Map<String, LocalDateTime> timeMap = new HashMap<>();
 
-			// 모든 좌석 순회하면서 각 좌석을 Schedule:ZoneGradeId 형식의 key에, value는 seatNumber list
+			// 모든 좌석 순회하면서 각 좌석을 Schedule:ZoneGradeId 형식의 key에, value는 seatNumbers
 			seats.forEach((seat) -> {
 				Long scheduleId = seat.getId().getScheduleId();
 				Long zoneGradeId = seat.getId().getZoneGradeId();
@@ -78,7 +80,6 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 
 			// schedule에 포함된 zoneGradeId 목록 redis에 등록
 			Set<Map.Entry<String, Set<Long>>> szEntry = scheduleZoneGrades.entrySet();
-			LocalDateTime now = LocalDateTime.now();
 
 			List<Object> szResult = redisTemplate.executePipelined((RedisConnection connection) -> {
 				StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
@@ -108,9 +109,16 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 
 				Set<Map.Entry<String, List<Integer>>> cacheEntry = cache.entrySet();
 				cacheEntry.forEach(entry -> {
+					String scheduleId = entry.getKey().substring(
+						entry.getKey().indexOf(":") + 1,
+						entry.getKey().indexOf("}")
+					);
 					byte[] keyByte = keySerializer.serialize(entry.getKey());
 					byte[] valueByte = valueSerializer.serialize(entry.getValue());
+					Duration between = Duration.between(now, timeMap.get(scheduleId));
+					long ttl = TimeUnit.SECONDS.toSeconds(between.getSeconds()); // TTL 값 설정
 					connection.set(keyByte, valueByte);
+					connection.expire(keyByte, ttl);
 				});
 				return null;
 			});
