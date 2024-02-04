@@ -9,9 +9,11 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -442,6 +444,15 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 		Duration between = Duration.between(now, goodsStartDateTime);
 		redisTemplate.opsForValue().set(key, seatNumbers, between.getSeconds(), TimeUnit.SECONDS);
+
+		// 구역 정보 추가
+		String szKey = "{%s%d}".formatted(SEAT_CACHE_PREFIX, scheduleId);
+		Set<Long> zoneGradeIds = new HashSet<>((List<Long>)redisTemplate.opsForValue().get(szKey));
+		if (zoneGradeIds == null) {
+			zoneGradeIds = new HashSet<>();
+		}
+		zoneGradeIds.add(zoneGradeId);
+		redisTemplate.opsForValue().set(szKey, zoneGradeIds, between.getSeconds(), TimeUnit.SECONDS);
 	}
 
 	private void deleteReservationSeatInfoToRedis(
