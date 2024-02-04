@@ -76,7 +76,7 @@ jobs:
             fi \n' >> scripts/deploy.sh  
           echo "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY" >> scripts/deploy.sh
           echo "docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
-          echo "docker run -p 8080:8080 -p 6379:6379 -p 3306:3306 -v /home/ubuntu/ticket-auction/logs:/logs -d --restart always --name ticket-auction-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
+          echo "docker run -p 8080:8080 -p 6379:6379 -p 3306:3306 -v /home/ubuntu/ticket-auction/logs:/logs -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul -d --restart always --name ticket-auction-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
       - name: upload to s3
         env:
           IMAGE_TAG: ${{ github.sha }}
