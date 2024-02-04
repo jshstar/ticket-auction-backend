@@ -18,16 +18,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.ticketauction.domain.reservation.reservation_seat.entity.ReservationSeat;
 import com.sparta.ticketauction.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,12 +32,8 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final ReservationSeatRepository seatRepository;
 
-	@PersistenceContext
-	private final EntityManager em;
-
 	@Override
 	@EventListener(ApplicationReadyEvent.class) // 서버 모든 준비가 끝나면 캐시 업로드
-	@Transactional(readOnly = true)
 	public void seatCacheWarmUp() {
 
 		// 워밍업 작업은 한 인스턴스만 실행하도록 한다.
@@ -93,10 +84,6 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 			// schedule에 포함된 zoneGradeId 목록 redis에 등록
 			Set<Map.Entry<String, Set<Long>>> szEntry = scheduleZoneGrades.entrySet();
 
-			StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
-			Jackson2JsonRedisSerializer<Set<Long>> valueSerializer =
-				new Jackson2JsonRedisSerializer<>((Class)Set.class);
-
 			szEntry.forEach(entry -> {
 				String scheduleId = entry.getKey().substring(
 					entry.getKey().indexOf(":") + 1,
@@ -121,7 +108,6 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 			});
 
 			pageable = slice.nextPageable(); // 다음 페이지를 위한 Pageable 객체 준비
-			em.clear(); // 영속성 컨텍스트 초기화
 		} while (slice.hasNext()); // 다음 페이지가 있는지 확인
 	}
 }
