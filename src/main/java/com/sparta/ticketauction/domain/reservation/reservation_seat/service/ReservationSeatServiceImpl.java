@@ -50,7 +50,7 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 		}
 
 		int pageNumber = 0;
-		int pageSize = 50000; // 페이지 당 요소 수
+		int pageSize = 30000; // 페이지 당 요소 수
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		LocalDateTime now = LocalDateTime.now();
 		Slice<ReservationSeat> slice;
