@@ -41,6 +41,14 @@ public class ReservationSeatServiceImpl implements ReservationSeatService {
 	@Transactional(readOnly = true)
 	public void seatCacheWarmUp() {
 
+		// 워밍업 작업은 한 인스턴스만 실행하도록 한다.
+		String lockKey = "SEAT_WARM_UP_LOCK";
+		String lockValue = "locked";
+		Boolean acquired = redisTemplate.opsForValue().setIfAbsent(lockKey, lockValue, 15, TimeUnit.MINUTES);
+		if (Boolean.FALSE.equals(acquired)) {
+			return;
+		}
+
 		int pageNumber = 0;
 		int pageSize = 50000; // 페이지 당 요소 수
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
