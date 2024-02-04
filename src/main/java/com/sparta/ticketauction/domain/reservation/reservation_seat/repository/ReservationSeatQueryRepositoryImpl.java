@@ -1,9 +1,7 @@
 package com.sparta.ticketauction.domain.reservation.reservation_seat.repository;
 
 import static com.sparta.ticketauction.domain.reservation.reservation_seat.entity.QReservationSeat.*;
-import static com.sparta.ticketauction.domain.schedule.entity.QSchedule.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,18 +59,16 @@ public class ReservationSeatQueryRepositoryImpl implements ReservationSeatQueryR
 			.toList();
 
 		// // {SEAT:scheduleId}:zoneGradeId 키 조합으로 파이프라인 추가
-		// List<Object> results = redisTemplate.executePipelined(new RedisCallback<Object>() {
-		// 	public Object doInRedis(RedisConnection connection) throws DataAccessException {
+		// List<Object> results = redisTemplate.executePipelined((RedisCallback<?>)connection -> {
 		// 		zoneGradeIds.forEach(zoneGradeId -> { // 파이프라인 get
 		// 			StringRedisSerializer keySerializer = (StringRedisSerializer)redisTemplate.getKeySerializer();
 		// 			String key = "{%s%d}:%d".formatted(SEAT_CACHE_PREFIX, scheduleId, zoneGradeId);
 		// 			byte[] keyByte = keySerializer.serialize(key);
 		// 			connection.get(keyByte);
 		// 		});
-		// 		connection.close();
 		// 		return null;
 		// 	}
-		// });
+		// );
 		//
 		// // 결과 변환해서 리턴
 		// for (int i = 0; i < results.size(); i++) {
@@ -90,17 +86,5 @@ public class ReservationSeatQueryRepositoryImpl implements ReservationSeatQueryR
 			});
 		});
 		return seats;
-	}
-
-	@Override
-	public List<ReservationSeat> findActiveScheduleSeats() {
-		List<ReservationSeat> reservationSeats = query
-			.select(reservationSeat)
-			.from(reservationSeat)
-			.innerJoin(reservationSeat.schedule, schedule).fetchJoin()
-			.where(schedule.startDateTime.gt(LocalDateTime.now()))
-			.fetch();
-
-		return reservationSeats;
 	}
 }
