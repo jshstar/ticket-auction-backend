@@ -5,8 +5,9 @@
 
 암표 문제를 방지하기 위해 양도 불가능하며 어차피 비싸게 살 티켓을 합법적으로 경매로 살 수 있는 티켓 예매 서비스 개발
 
+
 ## 🧑‍💻팀원
-|임시|<img src="https://github.com/jshstar/ticket-auction-backend/assets/17760465/337d188f-af3f-4e78-9345-14023612c855" style="width:200px; height:200px;">|<img src="https://github.com/jshstar/ticket-auction-backend/assets/17760465/f42b7841-54dc-4beb-b662-d6e15f6c9290" style="width:200px; height:200px;">|<img src="https://github.com/jshstar/ticket-auction-backend/assets/50236501/61a3d287-d8bf-4004-8f8e-274a5027c88b" style="width:200px; height:200px;">|
+|<img src="https://github.com/jshstar/ticket-auction-backend/assets/17760465/33b3a12b-cc14-4962-91b5-11dde59a5cba" style="width:200px; height:200px;">|<img src="https://github.com/jshstar/ticket-auction-backend/assets/17760465/337d188f-af3f-4e78-9345-14023612c855" style="width:200px; height:200px;">|<img src="https://github.com/jshstar/ticket-auction-backend/assets/17760465/f42b7841-54dc-4beb-b662-d6e15f6c9290" style="width:200px; height:200px;">|<img src="https://github.com/jshstar/ticket-auction-backend/assets/50236501/61a3d287-d8bf-4004-8f8e-274a5027c88b" style="width:200px; height:200px;">|
 |:--:|:--:|:--:|:--:|
 |[정성호](https://github.com/jshstar?tab=repositories)|[김진훈](https://github.com/ouohoon?tab=repositories)|[김민중](https://github.com/kmiss?tab=repositories)|[김혜윤](https://github.com/kimhyeyun?tab=repositories)|
 |리더|부리더|팀원|팀원|
