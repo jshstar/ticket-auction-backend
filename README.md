@@ -1,79 +1,92 @@
 # Ticket Auction(T.A)
 
 ## 소개
+**🎟️ 서비스 주소** : [Ticket Auction 서비스 주소](https://ticket-auction.shop/index.html)
+
 암표 문제를 방지하기 위해 양도 불가능하며 어차피 비싸게 살 티켓을 합법적으로 경매로 살 수 있는 티켓 예매 서비스 개발
 
-## Code Convention 
-### Naver-Coding-Convention
-[네이버 자바 코딩 컨벤션](https://naver.github.io/hackday-conventions-java/) 기준으로 한다.
-### Entity
-- `@Setter` 사용 금지
-- `@Builder` 패턴 ?
-- 팩토리 메서드 ?
+## 🧑‍💻팀원
+|임시|임시|임시|<img src="https://github.com/jshstar/ticket-auction-backend/assets/50236501/61a3d287-d8bf-4004-8f8e-274a5027c88b" style="width:200px; height:200px;">|
+|:--:|:--:|:--:|:--:|
+|[정성호](https://github.com/jshstar?tab=repositories)|[김진훈](https://github.com/ouohoon?tab=repositories)|[김민중](https://github.com/kmiss?tab=repositories)|[김혜윤](https://github.com/kimhyeyun?tab=repositories)|
+|리더|부리더|팀원|팀원|
+|공연장/공연/공연 정보/등급<br>API성능<br>테스트 캐싱 기능|예매 API<br>동시성 테스트<br>성능 테스트<br>캐싱 기능|경매/입찰 API<br>동시성 테스트<br>CI/CD 구성<br>인프라 설계/구성|회원/결제 API<br>인증/인가 처리<br>전반 프론트 구현<br>성능 테스트|
 
-### Response
-- Custom ResultCode 사용
-    - Custom ResponseEntity 사용
-        - code : 서비스 코드값
-            - 도메인 첫 글자 대문자 + 0(성공) / 1 (실패) + XX ( 0~99 하위 기능) + XX (0~99 식별자값 )
-            예시 : 회원가입 성공 - U00100 / 실패 (아이디 중복) - U10100
-                         로그인 성공 - U00200 / 실패 (로그인 정보 다름) - U10200
-        - message : 응답 메시지
-        - data : 응답 데이터
-- api 1개당 dto 1개씩 (req, res)
-    - 단건 조회 `@Pathvariable` 사용
-        - 요청할 데이터가 1개일 경우만 해당
-        - 2개 이상은 Dto에 담아서 요청
 
-## 이름 (Naming)
-1. 식별자에는 영문/숫자/언더스코어만 허용
-2. 한국어 발음대로의 표기 금지
-3. 패키지 이름은 소문자로 구성
-4. 클래스/인터페이스 이름에 대문자 카멜표기법 적용
-5. 클래스 이름에 명사 사용
-6. 인터페이스 이름에 명사/형용사 사용
-7. 테스트 클래스는 'Test’로 끝남
-8. 메서드 이름에 소문자 카멜표기법 적용
-9. 메서드 이름은 동사/전치사로 시작
-10. 상수는 대문자와 언더스코어로 구성
-11. 변수에 소문자 카멜표기법 적용
-12. 임시 변수 외에는 1 글자 이름 사용 금지
-13. **static import에만 와일드 카드 허용**
+## 🏗 아키텍쳐
+![t-a_구조_최종 drawio](https://github.com/jshstar/ticket-auction-backend/assets/50236501/1616782d-1939-42e2-a4d8-dc72488ecf60)
 
-## Git 규칙
-### 협업 **규칙**
+## Backend CI/CD
+![image](https://github.com/jshstar/ticket-auction-backend/assets/50236501/ffb381e7-5ac9-4b87-94e5-076e017a8275)
 
-- 슬랙으로 공유 후에 **Git Issue** 생성하기
-- 커밋 메세지는 자세히 구분해서 작성하기
-- Pull Request 작성 후, 다른 팀원들에게 코드 리뷰 받은 후에 merge 하기
-    - 통과시킨 코드에서 문제가 발생하면 모두의 책임이라는 생각하기
-    - 테스트 코드 작성 후 PR 하기
 
-### **[PR과 커밋은 최대한 작은 단위로 쪼개기]**
+## 🛠️ 사용 기술
 
-PR과 커밋은 최소 작업단위를 기준으로 작으면 작을수록 좋습니다.
+### Backend
 
-- 1개의 커밋에는 1개의 행위만 들어 있는게 좋습니다
-- 1개의 PR에는 1개의 작업만 들어 있는게 좋습니다
+- Java 17
+- Spring Boot 3.2.1
+- Spring Data JPA
+- Spring Data Redis
+- QueryDsl
 
-### Branch 이름 규칙
+- Lombok
+- Jwt
+- Zxing (QR Code)
+- Spring Security
+- Spring Validation
 
-- **Branch 이름 예시:** feat/#1-user-signup
+### Frontend
 
-### Commit 메시지 규칙
+- HTML 5
+- CSS
+- JQuery
+- Javascript
 
-| 작업 타입 | 작업내용 |
-| --- | --- |
-| 🎉 init | 없던 파일을 생성함, 초기 세팅 |
-| ✨ update   | 해당 도메인에 새로운 기능이 생김 |
-| ♻️ refactor | 코드 리팩토링 |
-| 🩹 fix | 코드 수정 → 알고리즘이나 로직 같이 변경됨 |
-| 🐛 bugfix | 버그 수정 |
-| 🚚 move | 파일 옮김/정리 |
-| 🔥 del | 기능/파일을 삭제 |
-| 🍻 test | 테스트 코드를 작성 |
-| 💄 style | css |
-| 🙈 docs | gitignore, readme 등 문서 수정 |
-| 🔨script | package.json 변경(npm 설치 등) |
-| 🐻gradle | build.gradle 수정 |
-- **Commit 메시지 예시:** #1 [update-유저] 회원가입 구현
+- Bootstrap
+- sweetalert
+- js-cookie
+- fullcalendar
+- jQuery Seat Charts
+
+### Infrastructure
+
+- EC2
+- Application Load Balancer
+- S3
+- CloudFront
+- RDS
+- Docker
+
+- Elastic Cache for Redis
+- Prometheus
+- Grafana
+- Promtail
+- Loki
+
+## 🍀 주요 기술
+
+### **서비스**
+
+- 동시성 제어 - (Unique Index, Distribution Lock)
+- Redis 캐시 서버
+- Server-Sent-Events
+- 토스 결제 API
+
+### 성능 개선
+
+- 서비스 성능 테스트 - nGrinder
+- CI/CD - Github Actions
+
+### 인프라
+
+- CI/CD
+    - GitHubActions
+    - Code Deploy - Blue Green Deploy
+    - ECR
+- 모니터링
+    - Prometheus
+    - grafana
+- 분산처리
+    - Application Load Balancer
+    - Auto Scaling group
