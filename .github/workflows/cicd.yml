@@ -2,7 +2,7 @@ name: CICD
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 env:
   PROJECT_NAME: ticket-auction
@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
 
       - name: make application-prod.yml
-        if: contains(github.ref, 'dev') || contains(github.ref, 'main')
+        if: contains(github.ref, 'main')
         run: |
           cd ./src/main/resources
           touch ./application-prod.yml
