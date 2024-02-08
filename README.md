@@ -11,7 +11,7 @@
 |:--:|:--:|:--:|:--:|
 |[정성호](https://github.com/jshstar?tab=repositories)|[김진훈](https://github.com/ouohoon?tab=repositories)|[김민중](https://github.com/kmiss?tab=repositories)|[김혜윤](https://github.com/kimhyeyun?tab=repositories)|
 |리더|부리더|팀원|팀원|
-|공연장/공연/공연 정보/등급<br>API성능<br>테스트 캐싱 기능|예매 API<br>동시성 테스트<br>성능 테스트<br>캐싱 기능|경매/입찰 API<br>동시성 테스트<br>CI/CD 구성<br>인프라 설계/구성|회원/결제 API<br>인증/인가 처리<br>전반 프론트 구현<br>성능 테스트|
+|공연장/공연/공연 정보/등급 API<br>성능테스트<br>캐싱 기능|예매 API<br>동시성 테스트<br>성능 테스트<br>캐싱 기능|경매/입찰 API<br>동시성 테스트<br>CI/CD 구성<br>인프라 설계/구성|회원/결제 API<br>인증/인가 처리<br>전반 프론트 구현<br>성능 테스트|
 
 
 ## 🏗 아키텍쳐
@@ -19,6 +19,9 @@
 
 ## Backend CI/CD
 ![image](https://github.com/jshstar/ticket-auction-backend/assets/50236501/ffb381e7-5ac9-4b87-94e5-076e017a8275)
+
+## Monitoring
+![image](https://github.com/jshstar/ticket-auction-backend/assets/17760465/b9df5605-7ad3-478c-b632-bc390b6a539c)
 
 
 ## 🛠️ 사용 기술
